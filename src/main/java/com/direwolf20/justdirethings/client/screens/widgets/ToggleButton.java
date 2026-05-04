@@ -51,7 +51,7 @@ public class ToggleButton extends BaseButton {
 
     @Override
     public boolean mouseClicked(double x, double y, int button) {
-        if (isValidClickButton(button)) {
+        if (isValidClickButton(button) && clicked(x, y)) {
             if (button == 1)
                 previousTexturePosition();
             else
