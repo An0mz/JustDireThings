@@ -2,11 +2,11 @@ package com.direwolf20.justdirethings.common.items.interfaces;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.capabilities.Capabilities;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public interface PoweredItem {
     default int getAvailableEnergy(ItemStack stack) {
-        var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+        var energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (energy == null) {
             return -1;
         }
@@ -14,7 +14,7 @@ public interface PoweredItem {
     }
 
     default boolean isPowerBarVisible(ItemStack stack) {
-        var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+        var energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (energy == null) {
             return false;
         }
@@ -22,7 +22,7 @@ public interface PoweredItem {
     }
 
     default int getPowerBarWidth(ItemStack stack) {
-        var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+        var energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (energy == null) {
             return 13;
         }
@@ -30,7 +30,7 @@ public interface PoweredItem {
     }
 
     default int getPowerBarColor(ItemStack stack) {
-        var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+        var energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (energy == null) {
             return -1; //Tell caller to call super
         }

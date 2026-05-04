@@ -29,9 +29,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.Tags;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.common.Tags;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -116,7 +116,7 @@ public class ThingFinder {
         if (!blockState.getTags().anyMatch(tag -> tag.equals(Tags.Blocks.ORES)))
             return false;
         if (itemStack.getItem() instanceof TieredItem tieredItem) {
-            return net.neoforged.neoforge.common.TierSortingRegistry.isCorrectTierForDrops(tieredItem.getTier(), blockState);
+            return net.minecraftforge.common.TierSortingRegistry.isCorrectTierForDrops(tieredItem.getTier(), blockState);
         }
         return true;
     }

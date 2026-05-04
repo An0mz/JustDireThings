@@ -4,10 +4,11 @@ import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
 import com.direwolf20.justdirethings.common.network.data.ToggleToolPayload;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import java.util.Optional;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
 public class ToggleToolPacket {
     public static final ToggleToolPacket INSTANCE = new ToggleToolPacket();
 
@@ -15,12 +16,11 @@ public class ToggleToolPacket {
         return INSTANCE;
     }
 
-    public void handle(final ToggleToolPayload payload, final PlayPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            Optional<Player> senderOptional = context.player();
-            if (senderOptional.isEmpty())
+    public static void handle(final ToggleToolPayload payload, final Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null)
                 return;
-            Player player = senderOptional.get();
 
 
             ItemStack toggleableItem = ToggleableItem.getToggleableItem(player);
@@ -29,5 +29,6 @@ public class ToggleToolPacket {
             }
 
         });
+        ctx.get().setPacketHandled(true);
     }
 }

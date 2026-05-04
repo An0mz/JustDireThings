@@ -1,6 +1,6 @@
 package com.direwolf20.justdirethings.common.capabilities;
 
-import net.neoforged.neoforge.energy.EnergyStorage;
+import net.minecraftforge.energy.EnergyStorage;
 
 public class MachineEnergyStorage extends EnergyStorage {
 

@@ -21,14 +21,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @JeiPlugin
 public class JEIIntegration implements IModPlugin {
@@ -40,21 +37,20 @@ public class JEIIntegration implements IModPlugin {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         IRecipeManager recipeRegistry = jeiRuntime.getRecipeManager();
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        List<RecipeHolder<CraftingRecipe>> hiddenRecipes = new ArrayList<>();
+        List<CraftingRecipe> hiddenRecipes = new ArrayList<>();
         for (var sidedBlock : Registration.SIDEDBLOCKS.getEntries()) {
-            if (sidedBlock.get() instanceof BaseMachineBlock baseMachineBlock) {
-                Optional<RecipeHolder<?>> recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
-                recipe.ifPresent(recipeHolder -> hiddenRecipes.add((RecipeHolder<CraftingRecipe>) recipeHolder));
+            if (sidedBlock.get() instanceof BaseMachineBlock) {
+                var recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
+                recipe.ifPresent(r -> { if (r instanceof CraftingRecipe cr) hiddenRecipes.add(cr); });
             }
         }
         for (var sidedBlock : Registration.BLOCKS.getEntries()) {
-            if (sidedBlock.get() instanceof BaseMachineBlock baseMachineBlock) {
-                Optional<RecipeHolder<?>> recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
-                recipe.ifPresent(recipeHolder -> hiddenRecipes.add((RecipeHolder<CraftingRecipe>) recipeHolder));
+            if (sidedBlock.get() instanceof BaseMachineBlock) {
+                var recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
+                recipe.ifPresent(r -> { if (r instanceof CraftingRecipe cr) hiddenRecipes.add(cr); });
             }
         }
 
@@ -75,8 +71,7 @@ public class JEIIntegration implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         assert Minecraft.getInstance().level != null;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        List<GooSpreadRecipe> goospreadrecipes = recipeManager.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get())
-                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        List<GooSpreadRecipe> goospreadrecipes = recipeManager.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get());
 
         registration.addRecipes(GooSpreadRecipeCategory.TYPE, goospreadrecipes);
     }

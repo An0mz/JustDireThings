@@ -8,8 +8,8 @@ import com.direwolf20.justdirethings.common.network.data.DirectionSettingPayload
 import com.direwolf20.justdirethings.util.MiscHelpers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class BlockPlacerT1Screen extends BaseMachineScreen<BlockPlacerT1Container> {
     public BlockPlacerT1Screen(BlockPlacerT1Container container, Inventory inv, Component name) {
         super(container, inv, name);
@@ -20,7 +20,7 @@ public class BlockPlacerT1Screen extends BaseMachineScreen<BlockPlacerT1Containe
         super.init();
         addRenderableWidget(ToggleButtonFactory.DIRECTIONBUTTON(getGuiLeft() + 122, topSectionTop + 38, direction, b -> {
             direction = ((ToggleButton) b).getTexturePosition();
-            PacketDistributor.SERVER.noArg().send(new DirectionSettingPayload(direction));
+            PacketHandler.CHANNEL.sendToServer(new DirectionSettingPayload(direction));
         }));
     }
 

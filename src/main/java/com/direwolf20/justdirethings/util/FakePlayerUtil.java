@@ -13,8 +13,8 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.NeoForgeMod;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -125,7 +125,7 @@ public class FakePlayerUtil {
         player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
         //if (!player.getInventory().isEmpty()) player.getInventory().dropAll(); //Disabed for now, since I have no plans to give these players anything besides a mainhand
         player.setShiftKeyDown(false);
-        player.setReach(player.getAttributeValue(NeoForgeMod.BLOCK_REACH));
+        player.setReach(player.getAttributeValue(ForgeMod.BLOCK_REACH.get()));
     }
 
     public static FakePlayerResult clickEntityInDirection(UsefulFakePlayer player, Level world, LivingEntity entity, int clickType, int maxHold) {
@@ -390,7 +390,7 @@ public class FakePlayerUtil {
                 if (action == InteractionType.INTERACT) {
                     return player.interactOn(entity, InteractionHand.MAIN_HAND) == InteractionResult.SUCCESS;
                 } else if (action == InteractionType.INTERACT_AT) {
-                    if (CommonHooks.onInteractEntityAt(player, entity, result.getLocation(), InteractionHand.MAIN_HAND) != null)
+                    if (ForgeHooks.onInteractEntityAt(player, entity, result.getLocation(), InteractionHand.MAIN_HAND) != null)
                         return false;
                     return entity.interactAt(player, result.getLocation(), InteractionHand.MAIN_HAND) == InteractionResult.SUCCESS;
                 } else if (action == InteractionType.ATTACK) {

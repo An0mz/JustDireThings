@@ -3,8 +3,8 @@ package com.direwolf20.justdirethings.common.blockentities.basebe;
 import com.direwolf20.justdirethings.common.capabilities.MachineEnergyStorage;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public interface PoweredMachineBE {
     default int getMaxEnergy() {
@@ -38,7 +38,7 @@ public interface PoweredMachineBE {
     }
 
     default void chargeItemStack(ItemStack itemStack) {
-        IEnergyStorage slotEnergy = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
+        IEnergyStorage slotEnergy = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (slotEnergy != null) {
             int acceptedEnergy = slotEnergy.receiveEnergy(500, true); //Todo Config?
             if (acceptedEnergy > 0) {

@@ -16,10 +16,10 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Arrays;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class BlockSwapperT1Screen extends BaseMachineScreen<BlockSwapperT1Container> {
     protected final ResourceLocation ACTIVE = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/active.png");
     protected final ResourceLocation INACTIVE = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/inactive.png");
@@ -107,6 +107,6 @@ public class BlockSwapperT1Screen extends BaseMachineScreen<BlockSwapperT1Contai
     @Override
     public void saveSettings() {
         super.saveSettings();
-        PacketDistributor.SERVER.noArg().send(new SwapperPayload(swapBlocks, swap_entity_type));
+        PacketHandler.CHANNEL.sendToServer(new SwapperPayload(swapBlocks, swap_entity_type));
     }
 }

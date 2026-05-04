@@ -8,13 +8,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandler;
 
 public class GooSoilBE extends BlockEntity {
     private NBTHelpers.BoundInventory boundInventory;
-    protected BlockCapabilityCache<IItemHandler, Direction> attachedInventory;
 
     public GooSoilBE(BlockPos pos, BlockState state) {
         super(Registration.GooSoilBE.get(), pos, state);
@@ -27,17 +25,11 @@ public class GooSoilBE extends BlockEntity {
 
     public IItemHandler getAttachedInventory(ServerLevel serverLevel) {
         if (boundInventory == null) return null;
-        if (attachedInventory == null) {
-            ServerLevel boundLevel = serverLevel.getServer().getLevel(boundInventory.globalPos().dimension());
-            if (boundLevel == null) return null;
-            attachedInventory = BlockCapabilityCache.create(
-                    Capabilities.ItemHandler.BLOCK, // capability to cache
-                    boundLevel, // level
-                    boundInventory.globalPos().pos(), // target position
-                    boundInventory.direction() // context (The side of the block we're trying to pull/push from?)
-            );
-        }
-        return attachedInventory.getCapability();
+        ServerLevel boundLevel = serverLevel.getServer().getLevel(boundInventory.globalPos().dimension());
+        if (boundLevel == null) return null;
+        BlockEntity be = boundLevel.getBlockEntity(boundInventory.globalPos().pos());
+        if (be == null) return null;
+        return be.getCapability(ForgeCapabilities.ITEM_HANDLER, boundInventory.direction()).orElse(null);
     }
 
     @Override

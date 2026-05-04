@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.common.util.ITeleporter;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.OptionalInt;
 
@@ -24,7 +24,7 @@ public class UsefulFakePlayer extends FakePlayer {
 
     public UsefulFakePlayer(Level world, GameProfile name) {
         super((ServerLevel) world, name);
-        setReach(getAttributeValue(NeoForgeMod.BLOCK_REACH));
+        setReach(getAttributeValue(ForgeMod.BLOCK_REACH.get()));
     }
 
     @Override

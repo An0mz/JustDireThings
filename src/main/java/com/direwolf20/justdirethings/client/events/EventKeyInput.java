@@ -17,17 +17,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent;
 
 import java.util.Set;
 
 import static com.direwolf20.justdirethings.util.MiscTools.getHitResult;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 @Mod.EventBusSubscriber(modid = JustDireThings.MODID, value = Dist.CLIENT)
 public class EventKeyInput {
 
@@ -40,7 +40,7 @@ public class EventKeyInput {
         ItemStack toggleableItem = ToggleableItem.getToggleableItem(mc.player);
         if (!toggleableItem.isEmpty()) {
             if (KeyBindings.toggleTool.consumeClick()) {
-                PacketDistributor.SERVER.noArg().send(new ToggleToolPayload("enabled"));
+                PacketHandler.CHANNEL.sendToServer(new ToggleToolPayload("enabled"));
             }
         }
     }
@@ -100,7 +100,7 @@ public class EventKeyInput {
                 UseOnContext useoncontext = new UseOnContext(player.level(), player, InteractionHand.MAIN_HAND, itemStack, blockHitResult);
                 toggleableTool.useOnAbility(useoncontext, itemStack, key, isMouse);
             }
-            PacketDistributor.SERVER.noArg().send(new LeftClickPayload(0, false, BlockPos.ZERO, -1, invSlot, key, isMouse)); //Type 0 == air
+            PacketHandler.CHANNEL.sendToServer(new LeftClickPayload(0, false, BlockPos.ZERO, -1, invSlot, key, isMouse)); //Type 0 == air
         }
     }
 }

@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.CommonHooks;
+import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -120,7 +120,7 @@ public class FuelCanister extends Item {
 
     public static void incrementFuel(ItemStack stack, ItemStack fuelStack) {
         int currentFuel = getFuelLevel(stack);
-        int fuelPerPiece = CommonHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
+        int fuelPerPiece = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
         if (fuelPerPiece == 0) return;
         double currentBurnSpeedMultiplier = getBurnSpeed(stack);
         int fuelMultiplier = 1;

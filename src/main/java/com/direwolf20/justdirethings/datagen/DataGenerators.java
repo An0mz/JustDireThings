@@ -6,9 +6,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.data.event.GatherDataEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +29,6 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), blockTags);
         JustDireItemTags itemTags = new JustDireItemTags(packOutput, lookupProvider, blockTags, event.getExistingFileHelper());
         generator.addProvider(event.includeServer(), itemTags);
-        JustDireDataMaps dataMaps = new JustDireDataMaps(packOutput, lookupProvider);
-        generator.addProvider(event.includeServer(), dataMaps);
         JustDireEntityTags entityTags = new JustDireEntityTags(packOutput, lookupProvider, event.getExistingFileHelper());
         generator.addProvider(event.includeServer(), entityTags);
 

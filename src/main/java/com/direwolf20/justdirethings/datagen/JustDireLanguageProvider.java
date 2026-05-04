@@ -7,7 +7,7 @@ import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.data.PackOutput;
 
 
-public class JustDireLanguageProvider extends net.neoforged.neoforge.common.data.LanguageProvider {
+public class JustDireLanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
     public JustDireLanguageProvider(PackOutput output, String locale) {
         super(output, JustDireThings.MODID, locale);
     }

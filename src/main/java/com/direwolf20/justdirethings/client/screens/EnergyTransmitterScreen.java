@@ -8,8 +8,8 @@ import com.direwolf20.justdirethings.common.containers.EnergyTransmitterContaine
 import com.direwolf20.justdirethings.common.network.data.EnergyTransmitterSettingPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class EnergyTransmitterScreen extends BaseMachineScreen<EnergyTransmitterContainer> {
     public boolean showParticles;
     public EnergyTransmitterScreen(EnergyTransmitterContainer container, Inventory inv, Component name) {
@@ -48,6 +48,6 @@ public class EnergyTransmitterScreen extends BaseMachineScreen<EnergyTransmitter
     @Override
     public void saveSettings() {
         super.saveSettings();
-        PacketDistributor.SERVER.noArg().send(new EnergyTransmitterSettingPayload(showParticles));
+        PacketHandler.CHANNEL.sendToServer(new EnergyTransmitterSettingPayload(showParticles));
     }
 }

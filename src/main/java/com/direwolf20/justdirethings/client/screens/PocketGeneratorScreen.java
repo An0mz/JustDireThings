@@ -22,8 +22,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +39,7 @@ public class PocketGeneratorScreen extends AbstractContainerScreen<PocketGenerat
         super(container, inv, name);
         this.container = container;
         this.pocketGenerator = container.playerEntity.getMainHandItem();
-        this.energyStorage = pocketGenerator.getCapability(Capabilities.EnergyStorage.ITEM);
+        this.energyStorage = pocketGenerator.getCapability(ForgeCapabilities.ENERGY).orElse(null);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PocketGeneratorScreen extends AbstractContainerScreen<PocketGenerat
         this.pocketGenerator = container.playerEntity.getMainHandItem();
         if (pocketGenerator.isEmpty() || !(pocketGenerator.getItem() instanceof PocketGenerator))
             return;
-        this.energyStorage = pocketGenerator.getCapability(Capabilities.EnergyStorage.ITEM);
+        this.energyStorage = pocketGenerator.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (energyStorage == null)
             return;
         int maxBurn = NBTHelpers.getIntValue(pocketGenerator, PocketGenerator.MAXBURN);

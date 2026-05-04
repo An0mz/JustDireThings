@@ -6,10 +6,11 @@ import com.direwolf20.justdirethings.common.network.data.FilterSettingPayload;
 import com.direwolf20.justdirethings.util.interfacehelpers.FilterData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import java.util.Optional;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
 public class FilterSettingPacket {
     public static final FilterSettingPacket INSTANCE = new FilterSettingPacket();
 
@@ -17,17 +18,17 @@ public class FilterSettingPacket {
         return INSTANCE;
     }
 
-    public void handle(final FilterSettingPayload payload, final PlayPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            Optional<Player> senderOptional = context.player();
-            if (senderOptional.isEmpty())
+    public static void handle(final FilterSettingPayload payload, final Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer sender = ctx.get().getSender();
+            if (sender == null)
                 return;
-            Player sender = senderOptional.get();
             AbstractContainerMenu container = sender.containerMenu;
 
             if (container instanceof BaseMachineContainer baseMachineContainer && baseMachineContainer.baseMachineBE instanceof FilterableBE filterableBE) {
                 filterableBE.setFilterSettings(new FilterData(payload.allowList(), payload.compareNBT(), payload.blockItemFilter()));
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

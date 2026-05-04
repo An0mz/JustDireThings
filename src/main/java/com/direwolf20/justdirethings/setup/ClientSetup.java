@@ -21,29 +21,29 @@ import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.gui.overlay.VanillaGuiOverlay;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterMenuScreensEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.energy.IEnergyStorage;
 
 @Mod.EventBusSubscriber(modid = JustDireThings.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
     public static void init(final FMLClientSetupEvent event) {
-        NeoForge.EVENT_BUS.addListener(KeyBindings::onClientInput);
+        MinecraftForge.EVENT_BUS.addListener(KeyBindings::onClientInput);
 
         //Register our Render Events Class
-        NeoForge.EVENT_BUS.register(RenderLevelLast.class);
-        NeoForge.EVENT_BUS.register(EventKeyInput.class);
-        NeoForge.EVENT_BUS.register(RenderHighlight.class);
-        NeoForge.EVENT_BUS.register(PlayerEvents.class);
+        MinecraftForge.EVENT_BUS.register(RenderLevelLast.class);
+        MinecraftForge.EVENT_BUS.register(EventKeyInput.class);
+        MinecraftForge.EVENT_BUS.register(RenderHighlight.class);
+        MinecraftForge.EVENT_BUS.register(PlayerEvents.class);
 
         //Item Properties
         event.enqueueWork(() -> {
@@ -65,7 +65,7 @@ public class ClientSetup {
                     new ResourceLocation(JustDireThings.MODID, "enabled"), (stack, level, living, id) -> {
                         if (stack.getItem() instanceof PocketGenerator) {
                             if (!toggleableItem.getEnabled(stack)) return 0.0f;
-                            IEnergyStorage energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+                            IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
                             if (energyStorage == null) return 0.0f;
                             if (energyStorage.getEnergyStored() > 0) return 1.0f;
                             if (!(NBTHelpers.getIntValue(stack, PocketGenerator.COUNTER) > 0)) return 0.0f;

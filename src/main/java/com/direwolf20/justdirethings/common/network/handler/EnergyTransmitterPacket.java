@@ -5,10 +5,11 @@ import com.direwolf20.justdirethings.common.containers.basecontainers.BaseMachin
 import com.direwolf20.justdirethings.common.network.data.EnergyTransmitterSettingPayload;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-import java.util.Optional;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
 public class EnergyTransmitterPacket {
     public static final EnergyTransmitterPacket INSTANCE = new EnergyTransmitterPacket();
 
@@ -16,17 +17,17 @@ public class EnergyTransmitterPacket {
         return INSTANCE;
     }
 
-    public void handle(final EnergyTransmitterSettingPayload payload, final PlayPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            Optional<Player> senderOptional = context.player();
-            if (senderOptional.isEmpty())
+    public static void handle(final EnergyTransmitterSettingPayload payload, final Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer sender = ctx.get().getSender();
+            if (sender == null)
                 return;
-            Player sender = senderOptional.get();
             AbstractContainerMenu container = sender.containerMenu;
 
             if (container instanceof BaseMachineContainer baseMachineContainer && baseMachineContainer.baseMachineBE instanceof EnergyTransmitterBE energyTransmitterBE) {
                 energyTransmitterBE.setEnergyTransmitterSettings(payload.showParticles());
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

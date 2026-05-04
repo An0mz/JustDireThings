@@ -8,11 +8,11 @@ import mezz.jei.api.ingredients.ITypedIngredient;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class GhostFilterBasic implements IGhostIngredientHandler<BaseScreen> {
     @Override
     public <I> List<Target<I>> getTargetsTyped(BaseScreen gui, ITypedIngredient<I> ingredient, boolean doStart) {
@@ -31,7 +31,7 @@ public class GhostFilterBasic implements IGhostIngredientHandler<BaseScreen> {
                     @Override
                     public void accept(I ingredient) {
                         slot.set((ItemStack) ingredient);
-                        PacketDistributor.SERVER.noArg().send(new GhostSlotPayload(slot.index, (ItemStack) ingredient, ((ItemStack) ingredient).getCount(), -1));
+                        PacketHandler.CHANNEL.sendToServer(new GhostSlotPayload(slot.index, (ItemStack) ingredient, ((ItemStack) ingredient).getCount(), -1));
                     }
                 });
             }

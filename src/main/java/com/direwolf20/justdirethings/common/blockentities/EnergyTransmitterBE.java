@@ -26,9 +26,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,8 +35,6 @@ import java.util.stream.Collectors;
 public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneControlledBE, PoweredMachineBE, AreaAffectingBE, FilterableBE {
     public RedstoneControlData redstoneControlData = new RedstoneControlData();
     public final PoweredMachineContainerData poweredMachineData;
-    private final Map<BlockPos, BlockCapabilityCache<IEnergyStorage, Direction>> energyHandlers = new HashMap<>();
-    private final Map<BlockPos, BlockCapabilityCache<IEnergyStorage, Direction>> transmitterHandlers = new HashMap<>();
     private final Set<BlockPos> blocksToCharge = new HashSet<>();
     private final Set<BlockPos> transmitters = new HashSet<>();
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
@@ -252,7 +249,7 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     public void drainFromSlot() {
         ItemStack itemStack = getMachineHandler().getStackInSlot(0);
         if (itemStack.isEmpty()) return;
-        IEnergyStorage energyStorage = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
+        IEnergyStorage energyStorage = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
         if (energyStorage == null) return;
         if (itemStack.getItem() instanceof PocketGenerator pocketGenerator) {
             pocketGenerator.tryBurn((EnergyStorageNoReceive) energyStorage, itemStack);
@@ -263,26 +260,15 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     }
 
     public IEnergyStorage getHandler(BlockPos blockPos) {
-        var tempStorage = energyHandlers.get(blockPos);
-        if (tempStorage == null) {
-            boolean foundAcceptableSide = false;
-            for (Direction direction : Direction.values()) {
-                tempStorage = BlockCapabilityCache.create(
-                        Capabilities.EnergyStorage.BLOCK, // capability to cache
-                        (ServerLevel) level, // level
-                        blockPos, // target position
-                        direction // context (The side of the block we're trying to pull/push from?)
-                );
-                if (tempStorage.getCapability() != null && tempStorage.getCapability().canReceive()) {
-                    energyHandlers.put(blockPos, tempStorage);
-                    foundAcceptableSide = true;
-                    break;
-                }
+        BlockEntity be = level.getBlockEntity(blockPos);
+        if (be == null) return null;
+        for (Direction direction : Direction.values()) {
+            IEnergyStorage cap = be.getCapability(ForgeCapabilities.ENERGY, direction).orElse(null);
+            if (cap != null && cap.canReceive()) {
+                return cap;
             }
-            if (!foundAcceptableSide)
-                energyHandlers.put(blockPos, tempStorage); //Put the last one we checked, even if it can't receive!
         }
-        return tempStorage.getCapability();
+        return be.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
     }
 
     public TransmitterEnergyStorage getTransmitterEnergyHandler(BlockPos blockPos) {
@@ -293,24 +279,14 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     }
 
     public IEnergyStorage getTransmitterHandler(BlockPos blockPos) {
-        var tempStorage = transmitterHandlers.get(blockPos);
-        if (tempStorage == null) {
-            BlockState blockState = level.getBlockState(blockPos);
-            if (blockState.is(Registration.EnergyTransmitter.get())) {
-                tempStorage = BlockCapabilityCache.create(
-                        Capabilities.EnergyStorage.BLOCK, // capability to cache
-                        (ServerLevel) level, // level
-                        blockPos, // target position
-                        blockState.getValue(BlockStateProperties.FACING) // context (The side of the block we're trying to pull/push from?)
-                );
-                if (tempStorage.getCapability() != null) { //This should always be true?
-                    transmitterHandlers.put(blockPos, tempStorage);
-                    return tempStorage.getCapability();
-                }
-            }
-            energyHandlers.put(blockPos, tempStorage); //This should never ever run?
+        BlockState blockState = level.getBlockState(blockPos);
+        if (blockState.is(Registration.EnergyTransmitter.get())) {
+            BlockEntity be = level.getBlockEntity(blockPos);
+            if (be == null) return null;
+            Direction facing = blockState.getValue(BlockStateProperties.FACING);
+            return be.getCapability(ForgeCapabilities.ENERGY, facing).orElse(null);
         }
-        return tempStorage.getCapability();
+        return null;
     }
 
     public void providePower() {
@@ -362,8 +338,9 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
                     if (blockState.isAir() || level.getBlockEntity(blockPos) == null) return;
 
                     boolean foundAcceptableSide = false;
+                    BlockEntity targetBe = level.getBlockEntity(blockPos);
                     for (Direction direction : Direction.values()) {
-                        var cap = level.getCapability(Capabilities.EnergyStorage.BLOCK, blockPos, direction);
+                        IEnergyStorage cap = targetBe.getCapability(ForgeCapabilities.ENERGY, direction).orElse(null);
                         if (cap != null && cap.canReceive()) {
                             foundAcceptableSide = true;
                             break;
@@ -380,8 +357,6 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
                     else
                         blocksToCharge.add(blockPos);
                 });
-        energyHandlers.entrySet().removeIf(entry -> !blocksToCharge.contains(entry.getKey()));
-        transmitterHandlers.entrySet().removeIf(entry -> !transmitters.contains(entry.getKey()));
     }
 
     public int fePerTick() {

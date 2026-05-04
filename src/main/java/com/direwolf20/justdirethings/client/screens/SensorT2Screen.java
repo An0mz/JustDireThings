@@ -26,10 +26,10 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.*;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class SensorT2Screen extends BaseMachineScreen<SensorT2Container> implements SensorScreenInterface {
     public int senseTarget;
     public boolean strongSignal;
@@ -105,7 +105,7 @@ public class SensorT2Screen extends BaseMachineScreen<SensorT2Container> impleme
     @Override
     public void saveSettings() {
         super.saveSettings();
-        PacketDistributor.SERVER.noArg().send(new SensorPayload(senseTarget, strongSignal, senseAmount, equality));
+        PacketHandler.CHANNEL.sendToServer(new SensorPayload(senseTarget, strongSignal, senseAmount, equality));
     }
 
     public Comparable<?> getValue(Property<?> property) {
@@ -155,7 +155,7 @@ public class SensorT2Screen extends BaseMachineScreen<SensorT2Container> impleme
         CompoundTag tag = new CompoundTag();
         ListTag listTag = SensorT1BE.saveBlockStateProperty(props);
         tag.put("tagList", listTag);
-        PacketDistributor.SERVER.noArg().send(new BlockStateFilterPayload(slot, tag));
+        PacketHandler.CHANNEL.sendToServer(new BlockStateFilterPayload(slot, tag));
     }
 
     @Override

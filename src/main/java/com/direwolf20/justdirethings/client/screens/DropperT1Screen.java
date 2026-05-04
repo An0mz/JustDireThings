@@ -11,8 +11,8 @@ import com.direwolf20.justdirethings.common.network.data.DropperSettingPayload;
 import com.direwolf20.justdirethings.util.MiscHelpers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.network.PacketDistributor;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
     protected int dropCount;
     public DropperT1Screen(DropperT1Container container, Inventory inv, Component name) {
@@ -27,7 +27,7 @@ public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
         super.init();
         addRenderableWidget(ToggleButtonFactory.DIRECTIONBUTTON(getGuiLeft() + 122, topSectionTop + 38, direction, b -> {
             direction = ((ToggleButton) b).getTexturePosition();
-            PacketDistributor.SERVER.noArg().send(new DirectionSettingPayload(direction));
+            PacketHandler.CHANNEL.sendToServer(new DirectionSettingPayload(direction));
         }));
 
         addRenderableWidget(new NumberButton(getGuiLeft() + 50, topSectionTop + 41, 24, 12, dropCount, 1, 64, Component.translatable("justdirethings.screen.dropcount"), b -> {
@@ -53,6 +53,6 @@ public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
     @Override
     public void saveSettings() {
         super.saveSettings();
-        PacketDistributor.SERVER.noArg().send(new DropperSettingPayload(dropCount));
+        PacketHandler.CHANNEL.sendToServer(new DropperSettingPayload(dropCount));
     }
 }

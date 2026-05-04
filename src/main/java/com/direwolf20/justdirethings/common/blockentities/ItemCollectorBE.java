@@ -20,17 +20,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 
 import static net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
 
 public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, AreaAffectingBE, RedstoneControlledBE {
-    protected BlockCapabilityCache<IItemHandler, Direction> attachedInventory;
     public FilterData filterData = new FilterData();
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public RedstoneControlData redstoneControlData = new RedstoneControlData();
@@ -112,18 +110,12 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
     }
 
     private IItemHandler getAttachedInventory() {
-        if (attachedInventory == null) {
-            assert this.level != null;
-            BlockState state = level.getBlockState(getBlockPos());
-            Direction facing = state.getValue(BlockStateProperties.FACING);
-            BlockPos inventoryPos = getBlockPos().relative(facing);
-            attachedInventory = BlockCapabilityCache.create(
-                    Capabilities.ItemHandler.BLOCK, // capability to cache
-                    (ServerLevel) this.level, // level
-                    inventoryPos, // target position
-                    facing.getOpposite() // context (The side of the block we're trying to pull/push from?)
-            );
-        }
-        return attachedInventory.getCapability();
+        assert this.level != null;
+        BlockState state = level.getBlockState(getBlockPos());
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        BlockPos inventoryPos = getBlockPos().relative(facing);
+        BlockEntity be = level.getBlockEntity(inventoryPos);
+        if (be == null) return null;
+        return be.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
     }
 }

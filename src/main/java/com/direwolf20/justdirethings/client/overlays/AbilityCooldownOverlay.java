@@ -11,8 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class AbilityCooldownOverlay implements IGuiOverlay {
     public static final AbilityCooldownOverlay INSTANCE = new AbilityCooldownOverlay();
@@ -20,7 +20,7 @@ public class AbilityCooldownOverlay implements IGuiOverlay {
     protected final ResourceLocation INVULNERABILITY_ICON = new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/invulnerability.png");
 
     @Override
-    public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
+    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         int xPosition = screenWidth / 2 - 91;

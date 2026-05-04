@@ -1,37 +1,37 @@
 package com.direwolf20.justdirethings.setup;
 
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class Config {
-    public static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
-    public static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
-    public static final ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+    public static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+    public static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+    public static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 
     public static final String CATEGORY_GENERAL = "general";
-    public static ModConfigSpec.IntValue MINIMUM_MACHINE_TICK_SPEED;
+    public static ForgeConfigSpec.IntValue MINIMUM_MACHINE_TICK_SPEED;
 
     public static final String CATEGORY_GENERATOR_T1 = "generator_t1";
-    public static ModConfigSpec.IntValue GENERATOR_T1_FE_PER_FUEL_TICK;
-    public static ModConfigSpec.IntValue GENERATOR_T1_BURN_SPEED_MULTIPLIER;
-    public static ModConfigSpec.IntValue GENERATOR_T1_MAX_FE;
-    public static ModConfigSpec.IntValue GENERATOR_T1_FE_PER_TICK;
+    public static ForgeConfigSpec.IntValue GENERATOR_T1_FE_PER_FUEL_TICK;
+    public static ForgeConfigSpec.IntValue GENERATOR_T1_BURN_SPEED_MULTIPLIER;
+    public static ForgeConfigSpec.IntValue GENERATOR_T1_MAX_FE;
+    public static ForgeConfigSpec.IntValue GENERATOR_T1_FE_PER_TICK;
 
     public static final String CATEGORY_FUEL_CANISTER = "fuel_canister";
-    public static ModConfigSpec.IntValue FUEL_CANISTER_MINIMUM_TICKS_CONSUMED;
-    public static ModConfigSpec.IntValue FUEL_CANISTER_MAXIMUM_FUEL;
+    public static ForgeConfigSpec.IntValue FUEL_CANISTER_MINIMUM_TICKS_CONSUMED;
+    public static ForgeConfigSpec.IntValue FUEL_CANISTER_MAXIMUM_FUEL;
 
     public static final String ENERGY_TRANSMITTER_T1 = "energy_transmitter_t1";
-    public static ModConfigSpec.DoubleValue ENERGY_TRANSMITTER_T1_LOSS_PER_BLOCK;
-    public static ModConfigSpec.IntValue ENERGY_TRANSMITTER_T1_MAX_RF;
-    public static ModConfigSpec.IntValue ENERGY_TRANSMITTER_T1_RF_PER_TICK;
+    public static ForgeConfigSpec.DoubleValue ENERGY_TRANSMITTER_T1_LOSS_PER_BLOCK;
+    public static ForgeConfigSpec.IntValue ENERGY_TRANSMITTER_T1_MAX_RF;
+    public static ForgeConfigSpec.IntValue ENERGY_TRANSMITTER_T1_RF_PER_TICK;
 
     public static final String CATEGORY_POCKET_GENERATOR = "pocket_generator";
-    public static ModConfigSpec.IntValue POCKET_GENERATOR_FE_PER_FUEL_TICK;
-    public static ModConfigSpec.IntValue POCKET_GENERATOR_BURN_SPEED_MULTIPLIER;
-    public static ModConfigSpec.IntValue POCKET_GENERATOR_MAX_FE;
-    public static ModConfigSpec.IntValue POCKET_GENERATOR_FE_PER_TICK;
+    public static ForgeConfigSpec.IntValue POCKET_GENERATOR_FE_PER_FUEL_TICK;
+    public static ForgeConfigSpec.IntValue POCKET_GENERATOR_BURN_SPEED_MULTIPLIER;
+    public static ForgeConfigSpec.IntValue POCKET_GENERATOR_MAX_FE;
+    public static ForgeConfigSpec.IntValue POCKET_GENERATOR_FE_PER_TICK;
 
     public static void register() {
         //registerServerConfigs();

@@ -30,12 +30,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraftforge.client.gui.widget.ForgeSlider;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContainer> {
     private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/settings.png");
 
@@ -47,7 +47,7 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
     int buttonsStartY = getGuiTop() + 15;
     int toolSlot;
     protected Button shownAbilityButton;
-    protected final Map<Button, ExtendedSlider> sliders = new HashMap<>();
+    protected final Map<Button, ForgeSlider> sliders = new HashMap<>();
     protected final Map<Button, ToggleButton> leftRightClickButtons = new HashMap<>();
     protected final Map<Button, GrayscaleButton> bindingButtons = new HashMap<>();
     protected final Map<Button, GrayscaleButton> hideRenderButtons = new HashMap<>();
@@ -119,7 +119,7 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
                 AbilityParams abilityParams = ((ToggleableTool) tool.getItem()).getAbilityParams(toolAbility);
                 int currentValue = ToggleableTool.getToolValue(tool, toolAbility.getName());
                 if (abilityParams.minSlider != abilityParams.maxSlider) {
-                    ExtendedSlider slider = new ExtendedSlider(buttonsStartX + 20, buttonsStartY - 18, 100, 15, Component.translatable(toolAbility.getLocalization()).append(": "), Component.empty(), abilityParams.minSlider, abilityParams.maxSlider, currentValue, true) {
+                    ForgeSlider slider = new ForgeSlider(buttonsStartX + 20, buttonsStartY - 18, 100, 15, Component.translatable(toolAbility.getLocalization()).append(": "), Component.empty(), abilityParams.minSlider, abilityParams.maxSlider, currentValue, true) {
                         @Override
                         protected void applyValue() {
                             setSetting(toolAbility.getName(), this.getValueInt());
@@ -185,7 +185,7 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
     }
 
     protected void sendBinding(String abilityName, int buttonType, int keyCode, boolean isMouse) {
-        PacketDistributor.SERVER.noArg().send(new ToggleToolLeftRightClickPayload(toolSlot, abilityName, buttonType, keyCode, isMouse));
+        PacketHandler.CHANNEL.sendToServer(new ToggleToolLeftRightClickPayload(toolSlot, abilityName, buttonType, keyCode, isMouse));
     }
 
     protected void collectButtonsToRemove() {
@@ -196,15 +196,15 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
     }
 
     public void toggleSetting(String settingName) {
-        PacketDistributor.SERVER.noArg().send(new ToggleToolSlotPayload(settingName, toolSlot, 0, -1));
+        PacketHandler.CHANNEL.sendToServer(new ToggleToolSlotPayload(settingName, toolSlot, 0, -1));
     }
 
     public void cycleSetting(String settingName) {
-        PacketDistributor.SERVER.noArg().send(new ToggleToolSlotPayload(settingName, toolSlot, 1, -1));
+        PacketHandler.CHANNEL.sendToServer(new ToggleToolSlotPayload(settingName, toolSlot, 1, -1));
     }
 
     public void setSetting(String settingName, int value) {
-        PacketDistributor.SERVER.noArg().send(new ToggleToolSlotPayload(settingName, toolSlot, 2, value));
+        PacketHandler.CHANNEL.sendToServer(new ToggleToolSlotPayload(settingName, toolSlot, 2, value));
     }
 
     @Override
@@ -217,7 +217,7 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
             int j1 = x + y * this.imageWidth;
             int k = tool.getMaxStackSize();
             String s = ChatFormatting.YELLOW.toString() + k;
-            guiGraphics.renderFakeItem(tool, x, y, j1);
+            guiGraphics.renderFakeItem(tool, x, y);
             guiGraphics.renderItemDecorations(this.font, tool, x, y, null);
         }
     }

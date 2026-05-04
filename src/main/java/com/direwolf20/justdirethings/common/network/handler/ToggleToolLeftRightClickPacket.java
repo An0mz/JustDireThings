@@ -5,11 +5,12 @@ import com.direwolf20.justdirethings.common.items.interfaces.LeftClickableTool;
 import com.direwolf20.justdirethings.common.network.data.ToggleToolLeftRightClickPayload;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 import java.util.Locale;
-import java.util.Optional;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
 public class ToggleToolLeftRightClickPacket {
     public static final ToggleToolLeftRightClickPacket INSTANCE = new ToggleToolLeftRightClickPacket();
 
@@ -17,12 +18,11 @@ public class ToggleToolLeftRightClickPacket {
         return INSTANCE;
     }
 
-    public void handle(final ToggleToolLeftRightClickPayload payload, final PlayPayloadContext context) {
-        context.workHandler().submitAsync(() -> {
-            Optional<Player> senderOptional = context.player();
-            if (senderOptional.isEmpty())
+    public static void handle(final ToggleToolLeftRightClickPayload payload, final Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayer player = ctx.get().getSender();
+            if (player == null)
                 return;
-            Player player = senderOptional.get();
 
 
             ItemStack stack = player.getInventory().getItem(payload.slot());
@@ -41,5 +41,6 @@ public class ToggleToolLeftRightClickPacket {
                 }
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

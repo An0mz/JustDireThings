@@ -33,13 +33,13 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -60,7 +60,7 @@ public class Helpers {
         List<ItemStack> drops = new ArrayList<>();
         if (pPlayer instanceof Player player) {
             BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(level, pos, level.getBlockState(pos), player);
-            if (NeoForge.EVENT_BUS.post(event).isCanceled()) return drops;
+            if (MinecraftForge.EVENT_BUS.post(event)) return drops;
 
             BlockState state = level.getBlockState(pos);
             BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -120,7 +120,7 @@ public class Helpers {
 
     public static int testUseTool(ItemStack stack) {
         if (stack.getItem() instanceof PoweredTool poweredTool) {
-            IEnergyStorage energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             if (energyStorage == null) return -1; //Shouldn't Happen!
             return energyStorage.getEnergyStored() - poweredTool.getBlockBreakFECost();
         } else {
@@ -130,7 +130,7 @@ public class Helpers {
 
     public static int testUseTool(ItemStack stack, int cost) {
         if (stack.getItem() instanceof PoweredItem) {
-            IEnergyStorage energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             if (energyStorage == null) return -1; //Shouldn't Happen!
             return energyStorage.getEnergyStored() - cost;
         } else {
@@ -140,7 +140,7 @@ public class Helpers {
 
     public static int testUseTool(ItemStack stack, Ability ability) {
         if (stack.getItem() instanceof PoweredItem) {
-            IEnergyStorage energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             if (energyStorage == null) return -1; //Shouldn't Happen!
             return energyStorage.getEnergyStored() - ability.getFeCost();
         } else {
@@ -150,7 +150,7 @@ public class Helpers {
 
     public static int testUseTool(ItemStack stack, Ability ability, int multiplier) {
         if (stack.getItem() instanceof PoweredItem) {
-            IEnergyStorage energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+            IEnergyStorage energyStorage = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             if (energyStorage == null) return -1; //Shouldn't Happen!
             return energyStorage.getEnergyStored() - (ability.getFeCost() * multiplier);
         } else {
@@ -193,9 +193,9 @@ public class Helpers {
         RegistryAccess registryAccess = level.registryAccess();
         RecipeManager recipeManager = level.getRecipeManager();
         ItemStack returnStack = ItemStack.EMPTY;
-        Optional<RecipeHolder<SmeltingRecipe>> smeltingRecipe = recipeManager.getRecipeFor(RecipeType.SMELTING, new SimpleContainer(itemStack), level);
+        Optional<SmeltingRecipe> smeltingRecipe = recipeManager.getRecipeFor(RecipeType.SMELTING, new SimpleContainer(itemStack), level);
         if (smeltingRecipe.isPresent() && !itemStack.is(JustDireItemTags.AUTO_SMELT_DENY))
-            returnStack = smeltingRecipe.get().value().getResultItem(registryAccess);
+            returnStack = smeltingRecipe.get().getResultItem(registryAccess);
         if (returnStack.isEmpty()) return itemStack;
         return returnStack;
     }
@@ -207,11 +207,11 @@ public class Helpers {
         didISmelt[0] = false;
         for (ItemStack drop : drops) {
             // Check if there's a smelting recipe for the drop
-            Optional<RecipeHolder<SmeltingRecipe>> smeltingRecipe = recipeManager.getRecipeFor(RecipeType.SMELTING, new SimpleContainer(drop), level);
+            Optional<SmeltingRecipe> smeltingRecipe = recipeManager.getRecipeFor(RecipeType.SMELTING, new SimpleContainer(drop), level);
 
             if (smeltingRecipe.isPresent() && !drop.is(JustDireItemTags.AUTO_SMELT_DENY)) {
                 // Get the result of the smelting recipe
-                ItemStack smeltedResult = smeltingRecipe.get().value().getResultItem(registryAccess);
+                ItemStack smeltedResult = smeltingRecipe.get().getResultItem(registryAccess);
 
                 if (!smeltedResult.isEmpty() && (testUseTool(tool, Ability.SMELTER, drop.getCount()) >= 0)) {
                     // If the smelting result is valid, prepare to replace the original drop with the smelted result
@@ -237,11 +237,11 @@ public class Helpers {
         didISmoke[0] = false;
         
         // Check if there's a smoking recipe for the drop
-        Optional<RecipeHolder<SmokingRecipe>> smokingRecipe = recipeManager.getRecipeFor(RecipeType.SMOKING, new SimpleContainer(drop.getItem()), level);
+        Optional<SmokingRecipe> smokingRecipe = recipeManager.getRecipeFor(RecipeType.SMOKING, new SimpleContainer(drop.getItem()), level);
 
         if (smokingRecipe.isPresent() && !drop.getItem().is(JustDireItemTags.AUTO_SMOKE_DENY)) {
             // Get the result of the smoking recipe
-            ItemStack smokedResults = smokingRecipe.get().value().getResultItem(registryAccess);
+            ItemStack smokedResults = smokingRecipe.get().getResultItem(registryAccess);
 
             if (!smokedResults.isEmpty() && (testUseTool(tool, Ability.SMOKER, drop.getItem().getCount()) >= 0)) {
             	didISmoke[0] = true;

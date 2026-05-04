@@ -14,7 +14,6 @@ import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -22,12 +21,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-
-import java.util.HashMap;
-import java.util.Map;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE, PoweredMachineBE {
     public RedstoneControlData redstoneControlData = new RedstoneControlData();
@@ -36,7 +31,6 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     public int maxBurn = 0;
     public int burnRemaining = 0;
     public int feRemaining = 0;
-    private final Map<Direction, BlockCapabilityCache<IEnergyStorage, Direction>> energyHandlers = new HashMap<>();
     int fuelBurnMultiplier = 1;
 
     public GeneratorT1BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
@@ -121,18 +115,10 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     }
 
     public IEnergyStorage getHandler(Direction direction) {
-        var tempStorage = energyHandlers.get(direction);
-        if (tempStorage == null) {
-            BlockPos targetPos = getBlockPos().relative(direction);
-            tempStorage = BlockCapabilityCache.create(
-                    Capabilities.EnergyStorage.BLOCK, // capability to cache
-                    (ServerLevel) level, // level
-                    targetPos, // target position
-                    direction.getOpposite() // context (The side of the block we're trying to pull/push from?)
-            );
-            energyHandlers.put(direction, tempStorage);
-        }
-        return tempStorage.getCapability();
+        BlockPos targetPos = getBlockPos().relative(direction);
+        BlockEntity be = level.getBlockEntity(targetPos);
+        if (be == null) return null;
+        return be.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).orElse(null);
     }
 
     public void providePowerAdjacent() {
