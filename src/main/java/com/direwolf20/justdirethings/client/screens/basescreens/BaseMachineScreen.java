@@ -37,6 +37,7 @@ import java.util.List;
 
 public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends BaseScreen<T> {
     protected final ResourceLocation JUSTSLOT = new ResourceLocation(JustDireThings.MODID, "textures/gui/justslot.png");
+    protected final ResourceLocation JUSTINV = new ResourceLocation(JustDireThings.MODID, "textures/gui/justinv.png");
     protected final ResourceLocation POWERBAR = new ResourceLocation(JustDireThings.MODID, "textures/gui/powerbar.png");
     protected final ResourceLocation SOCIALBACKGROUND = new ResourceLocation(JustDireThings.MODID, "background");
     protected BaseMachineContainer container;
@@ -230,11 +231,14 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
+        // Main top section - gray panel with border
+        guiGraphics.fill(topSectionLeft, topSectionTop, topSectionLeft + topSectionWidth, topSectionTop + topSectionHeight, 0xFF373737);
+        guiGraphics.fill(topSectionLeft + 1, topSectionTop + 1, topSectionLeft + topSectionWidth - 1, topSectionTop + topSectionHeight - 1, 0xFFC6C6C6);
+        // Notch above main panel - drawn on top so it merges flush with the main panel
+        guiGraphics.fill(topSectionLeft + 20, topSectionTop - 20, topSectionLeft + topSectionWidth - 20, topSectionTop + 1, 0xFF373737);
+        guiGraphics.fill(topSectionLeft + 21, topSectionTop - 19, topSectionLeft + topSectionWidth - 21, topSectionTop + 1, 0xFFC6C6C6);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        guiGraphics.fillGradient(topSectionLeft + 20, topSectionTop - 20, topSectionLeft + 20 + topSectionWidth - 40, topSectionTop - 20 + 20, 0xC0101010, 0xD0101010);
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        guiGraphics.fillGradient(topSectionLeft, topSectionTop, topSectionLeft + topSectionWidth, topSectionTop + topSectionHeight, 0xC0101010, 0xD0101010);
-        guiGraphics.fillGradient(relX, relY + 83 - 8, relX + this.imageWidth, relY + 83 - 8 + this.imageHeight - 73, 0xC0101010, 0xD0101010); //Inventory Section
+        guiGraphics.blit(JUSTINV, relX, relY + 83 - 8, 0, 0, this.imageWidth, this.imageHeight - 73); //Inventory Section
         for (Slot slot : container.slots) {
             guiGraphics.blit(JUSTSLOT, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 0, 0, 18, 18);
         }

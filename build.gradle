@@ -53,7 +53,7 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = "[Forge] ${mod_id}"
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
