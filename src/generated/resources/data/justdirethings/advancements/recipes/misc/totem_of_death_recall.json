@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_blazegold_ingot"
+      "has_blazegold_ingot",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:totem_of_death_recall"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

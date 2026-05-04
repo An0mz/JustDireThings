@@ -26,5 +26,6 @@
   ],
   "result": {
     "item": "justdirethings:sensort1"
-  }
+  },
+  "show_notification": true
 }

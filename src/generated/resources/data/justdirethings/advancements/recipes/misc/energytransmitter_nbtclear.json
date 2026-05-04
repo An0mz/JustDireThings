@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_energytransmitter"
+      "has_energytransmitter",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:energytransmitter_nbtclear"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

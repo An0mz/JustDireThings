@@ -99,14 +99,7 @@ public class GooSpreadRecipeBuilder implements RecipeBuilder {
     @Override
     public void save(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ResourceLocation pId) {
         this.ensureValid(pId);
-        Advancement.Builder advancementBuilder = Advancement.Builder.advancement()
-                .parent(new ResourceLocation("recipes/root"))
-                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId))
-                .rewards(AdvancementRewards.Builder.recipe(pId))
-                .requirements(RequirementsStrategy.OR);
-        this.criteria.forEach((k, v) -> advancementBuilder.addCriterion(k, v));
-        pFinishedRecipeConsumer.accept(new FinishedGooSpreadRecipe(pId, this.input, this.output, this.tierRequirement, this.craftingDuration,
-                advancementBuilder.build(pId.withPrefix("recipes/" + RecipeCategory.MISC.getFolderName() + "/"))));
+        pFinishedRecipeConsumer.accept(new FinishedGooSpreadRecipe(pId, this.input, this.output, this.tierRequirement, this.craftingDuration));
     }
 
     private void ensureValid(ResourceLocation pId) {

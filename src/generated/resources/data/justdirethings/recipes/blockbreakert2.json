@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:blockbreakert2"
-  }
+  },
+  "show_notification": true
 }

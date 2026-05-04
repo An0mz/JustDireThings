@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "justdirethings:ferricore_boots"
-  }
+  },
+  "show_notification": true
 }

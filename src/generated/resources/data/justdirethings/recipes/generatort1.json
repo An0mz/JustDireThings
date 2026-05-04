@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:generatort1"
-  }
+  },
+  "show_notification": true
 }

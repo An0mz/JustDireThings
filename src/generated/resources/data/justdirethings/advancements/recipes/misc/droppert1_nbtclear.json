@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_droppert1"
+      "has_droppert1",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:droppert1_nbtclear"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

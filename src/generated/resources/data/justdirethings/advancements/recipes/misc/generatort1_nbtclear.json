@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_generatort1"
+      "has_generatort1",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:generatort1_nbtclear"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -19,14 +19,14 @@ public class FinishedGooSpreadRecipe implements FinishedRecipe {
     private final Advancement.Builder advancement;
     private final ResourceLocation advancementId;
 
-    public FinishedGooSpreadRecipe(ResourceLocation id, BlockState input, BlockState output, int tierRequirement, int craftingDuration, Advancement advancement) {
+    public FinishedGooSpreadRecipe(ResourceLocation id, BlockState input, BlockState output, int tierRequirement, int craftingDuration) {
         this.id = id;
         this.input = input;
         this.output = output;
         this.tierRequirement = tierRequirement;
         this.craftingDuration = craftingDuration;
         this.advancement = null;
-        this.advancementId = advancement.getId();
+        this.advancementId = null;
     }
 
     @Override

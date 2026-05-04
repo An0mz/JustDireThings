@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_coal_t1"
+      "has_coal_t1",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:coal_t1_9x9"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

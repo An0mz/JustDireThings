@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_eclipsealloy_raw"
+      "has_eclipsealloy_raw",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:eclipsealloy_ingot_smelted"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_ferricore_raw"
+      "has_ferricore_raw",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:ferricore_ingot_smelted"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

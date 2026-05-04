@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_celestigem"
+      "has_celestigem",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blockbreakert2"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

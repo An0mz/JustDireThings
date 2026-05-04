@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_goo_block1"
+      "has_goo_block1",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:gooblock_tier2"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

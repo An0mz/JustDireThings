@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "justdirethings:ferricore_chestplate"
-  }
+  },
+  "show_notification": true
 }

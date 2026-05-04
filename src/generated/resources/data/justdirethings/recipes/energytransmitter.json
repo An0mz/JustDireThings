@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:energytransmitter"
-  }
+  },
+  "show_notification": true
 }

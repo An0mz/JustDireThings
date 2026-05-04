@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:pocket_generator"
-  }
+  },
+  "show_notification": true
 }

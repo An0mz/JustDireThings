@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:blockplacert2"
-  }
+  },
+  "show_notification": true
 }

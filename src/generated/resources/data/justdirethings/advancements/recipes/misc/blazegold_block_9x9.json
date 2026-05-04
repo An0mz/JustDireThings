@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_blazegold_block"
+      "has_blazegold_block",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blazegold_block_9x9"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

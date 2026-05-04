@@ -20,5 +20,6 @@
   ],
   "result": {
     "item": "justdirethings:voidshift_wand"
-  }
+  },
+  "show_notification": true
 }

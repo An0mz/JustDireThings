@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_blazegold_raw"
+      "has_blazegold_raw",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blazegold_ingot_smelted"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

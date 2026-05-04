@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_clickert2"
+      "has_clickert2",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:clickert2_nbtclear"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

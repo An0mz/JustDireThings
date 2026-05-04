@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "justdirethings:creaturecatcher"
-  }
+  },
+  "show_notification": true
 }

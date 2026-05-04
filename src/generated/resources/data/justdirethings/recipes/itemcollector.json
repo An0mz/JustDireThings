@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:itemcollector"
-  }
+  },
+  "show_notification": true
 }

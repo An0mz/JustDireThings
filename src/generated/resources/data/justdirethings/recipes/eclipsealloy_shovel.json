@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "justdirethings:eclipsealloy_shovel"
-  }
+  },
+  "show_notification": true
 }

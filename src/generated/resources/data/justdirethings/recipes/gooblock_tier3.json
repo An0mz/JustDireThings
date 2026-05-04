@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:gooblock_tier3"
-  }
+  },
+  "show_notification": true
 }

@@ -23,5 +23,6 @@
   ],
   "result": {
     "item": "justdirethings:totem_of_death_recall"
-  }
+  },
+  "show_notification": true
 }

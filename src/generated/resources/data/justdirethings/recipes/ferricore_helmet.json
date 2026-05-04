@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "justdirethings:ferricore_helmet"
-  }
+  },
+  "show_notification": true
 }

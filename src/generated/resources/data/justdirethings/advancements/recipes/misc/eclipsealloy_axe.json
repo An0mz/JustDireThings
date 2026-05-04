@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_eclipsealloy_ingot"
+      "has_eclipsealloy_ingot",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:eclipsealloy_axe"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

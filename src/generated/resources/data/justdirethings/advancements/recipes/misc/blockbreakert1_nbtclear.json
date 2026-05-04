@@ -22,13 +22,14 @@
   },
   "requirements": [
     [
-      "has_the_recipe",
-      "has_blockbreakert1"
+      "has_blockbreakert1",
+      "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blockbreakert1_nbtclear"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

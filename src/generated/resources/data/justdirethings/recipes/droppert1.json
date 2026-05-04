@@ -26,5 +26,6 @@
   ],
   "result": {
     "item": "justdirethings:droppert1"
-  }
+  },
+  "show_notification": true
 }
