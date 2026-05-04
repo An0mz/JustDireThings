@@ -26,11 +26,15 @@ public class DropperT2BE extends DropperT1BE implements AreaAffectingBE, Powered
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public final PoweredMachineContainerData poweredMachineData;
     public List<ItemStack> filteredList;
+    private final MachineEnergyStorage energyStorage;
+    private final FilterBasicHandler filterHandler;
 
     public DropperT2BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         MACHINE_SLOTS = 9; //Slot for dropping
         poweredMachineData = new PoweredMachineContainerData(this);
+        energyStorage = new MachineEnergyStorage(getMaxEnergy());
+        filterHandler = new FilterBasicHandler(9);
     }
 
     public DropperT2BE(BlockPos pPos, BlockState pBlockState) {
@@ -44,7 +48,7 @@ public class DropperT2BE extends DropperT1BE implements AreaAffectingBE, Powered
 
     @Override
     public MachineEnergyStorage getEnergyStorage() {
-        return getData(Registration.ENERGYSTORAGE_MACHINES);
+        return energyStorage;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class DropperT2BE extends DropperT1BE implements AreaAffectingBE, Powered
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
     }
 
     @Override

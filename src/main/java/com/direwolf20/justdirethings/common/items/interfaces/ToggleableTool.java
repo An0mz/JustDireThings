@@ -447,7 +447,7 @@ public interface ToggleableTool extends ToggleableItem {
         BlockPos pPos = pContext.getClickedPos();
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity == null) return false;
-        IItemHandler handler = pLevel.getCapability(ForgeCapabilities.ITEM_HANDLER, pPos, pContext.getClickedFace());
+        IItemHandler handler = blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, pContext.getClickedFace()).orElse(null);
         if (handler == null) return false;
         setBoundInventory(pStack, new NBTHelpers.BoundInventory(GlobalPos.of(pLevel.dimension(), pPos), pContext.getClickedFace()));
         pContext.getPlayer().displayClientMessage(Component.translatable("justdirethings.boundto", Component.translatable(pLevel.dimension().location().getPath()), "[" + pPos.toShortString() + "]"), true);

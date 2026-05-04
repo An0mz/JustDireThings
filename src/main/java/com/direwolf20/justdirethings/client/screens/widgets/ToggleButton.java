@@ -51,7 +51,16 @@ public class ToggleButton extends BaseButton {
 
     @Override
     public boolean mouseClicked(double x, double y, int button) {
-        return super.mouseClicked(x, y, button);
+        if (isValidClickButton(button)) {
+            if (button == 1)
+                previousTexturePosition();
+            else
+                nextTexturePosition();
+            onPress();
+            playDownSound(net.minecraft.client.Minecraft.getInstance().getSoundManager());
+            return true;
+        }
+        return false;
     }
 
     public int getTexturePosition() {
@@ -62,14 +71,7 @@ public class ToggleButton extends BaseButton {
         setTexturePosition(texturePosition ? 1 : 0);
     }
 
-    @Override
-    public void onClick(double mouseX, double mouseY, int button) {
-        if (button == 1)
-            previousTexturePosition();
-        else
-            nextTexturePosition();
-        onPress();
-    }
+    // onClick(double, double, int) removed - not in Forge 1.20.1 AbstractWidget
 
     public void setTexturePosition(int texturePosition) {
         if (texturePosition >= textureLocalizations.size())

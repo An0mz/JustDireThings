@@ -133,7 +133,7 @@ public class PlayerAccessorBE extends BaseMachineBE {
     public void markDirtyClient() {
         //System.out.println("Marking Dirty Client!");
         if (level != null) {
-            level.invalidateCapabilities(getBlockPos());
+            // invalidateCapabilities removed - not available in Forge 1.20.1
         }
         super.markDirtyClient();
     }

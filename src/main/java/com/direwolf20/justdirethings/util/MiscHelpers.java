@@ -33,8 +33,7 @@ public class MiscHelpers {
         BlockEntity be = level.getBlockEntity(blockPos);
         // if we have a TE and its an item handler, try extracting from that
         if (be != null) {
-            IItemHandler handler = level.getCapability(ForgeCapabilities.ITEM_HANDLER, blockPos, side);
-            return handler;
+            return be.getCapability(ForgeCapabilities.ITEM_HANDLER, side).orElse(null);
         }
         return null;
     }

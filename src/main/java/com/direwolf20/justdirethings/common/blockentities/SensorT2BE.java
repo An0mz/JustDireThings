@@ -22,10 +22,14 @@ import java.util.stream.Collectors;
 public class SensorT2BE extends SensorT1BE implements AreaAffectingBE, PoweredMachineBE {
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public final PoweredMachineContainerData poweredMachineData;
+    private final FilterBasicHandler filterHandler;
+    private final MachineEnergyStorage energyStorage;
 
     public SensorT2BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         poweredMachineData = new PoweredMachineContainerData(this);
+        filterHandler = new FilterBasicHandler(9);
+        energyStorage = new MachineEnergyStorage(getMaxEnergy());
     }
 
     public SensorT2BE(BlockPos pPos, BlockState pBlockState) {
@@ -34,7 +38,7 @@ public class SensorT2BE extends SensorT1BE implements AreaAffectingBE, PoweredMa
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class SensorT2BE extends SensorT1BE implements AreaAffectingBE, PoweredMa
 
     @Override
     public MachineEnergyStorage getEnergyStorage() {
-        return getData(Registration.ENERGYSTORAGE_MACHINES);
+        return energyStorage;
     }
 
     @Override

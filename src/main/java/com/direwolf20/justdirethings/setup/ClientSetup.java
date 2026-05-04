@@ -1,6 +1,5 @@
 package com.direwolf20.justdirethings.setup;
 
-
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.client.KeyBindings;
 import com.direwolf20.justdirethings.client.blockentityrenders.*;
@@ -18,6 +17,7 @@ import com.direwolf20.justdirethings.client.screens.*;
 import com.direwolf20.justdirethings.common.items.PocketGenerator;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
 import com.direwolf20.justdirethings.util.NBTHelpers;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -29,7 +29,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterMenuScreensEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -45,8 +44,29 @@ public class ClientSetup {
         MinecraftForge.EVENT_BUS.register(RenderHighlight.class);
         MinecraftForge.EVENT_BUS.register(PlayerEvents.class);
 
-        //Item Properties
+        //Register screens
         event.enqueueWork(() -> {
+            MenuScreens.register(Registration.FuelCanister_Container.get(), FuelCanisterScreen::new);
+            MenuScreens.register(Registration.PocketGenerator_Container.get(), PocketGeneratorScreen::new);
+            MenuScreens.register(Registration.Tool_Settings_Container.get(), ToolSettingScreen::new);
+            MenuScreens.register(Registration.Item_Collector_Container.get(), ItemCollectorScreen::new);
+            MenuScreens.register(Registration.BlockBreakerT1_Container.get(), BlockBreakerT1Screen::new);
+            MenuScreens.register(Registration.BlockBreakerT2_Container.get(), BlockBreakerT2Screen::new);
+            MenuScreens.register(Registration.BlockPlacerT1_Container.get(), BlockPlacerT1Screen::new);
+            MenuScreens.register(Registration.BlockPlacerT2_Container.get(), BlockPlacerT2Screen::new);
+            MenuScreens.register(Registration.ClickerT1_Container.get(), ClickerT1Screen::new);
+            MenuScreens.register(Registration.ClickerT2_Container.get(), ClickerT2Screen::new);
+            MenuScreens.register(Registration.SensorT1_Container.get(), SensorT1Screen::new);
+            MenuScreens.register(Registration.SensorT2_Container.get(), SensorT2Screen::new);
+            MenuScreens.register(Registration.DropperT1_Container.get(), DropperT1Screen::new);
+            MenuScreens.register(Registration.DropperT2_Container.get(), DropperT2Screen::new);
+            MenuScreens.register(Registration.GeneratorT1_Container.get(), GeneratorT1Screen::new);
+            MenuScreens.register(Registration.EnergyTransmitter_Container.get(), EnergyTransmitterScreen::new);
+            MenuScreens.register(Registration.BlockSwapperT1_Container.get(), BlockSwapperT1Screen::new);
+            MenuScreens.register(Registration.BlockSwapperT2_Container.get(), BlockSwapperT2Screen::new);
+            MenuScreens.register(Registration.PlayerAccessor_Container.get(), PlayerAccessorScreen::new);
+
+            //Item Properties
             for (var tool : Registration.TOOLS.getEntries()) {
                 registerEnabledToolTextures(tool.get());
             }
@@ -56,7 +76,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), new ResourceLocation(JustDireThings.MODID, "abilitycooldownoverlay"), AbilityCooldownOverlay.INSTANCE);
+        event.registerAbove(VanillaGuiOverlay.HOTBAR.id().toString(), new ResourceLocation(JustDireThings.MODID, "abilitycooldownoverlay"), AbilityCooldownOverlay.INSTANCE);
     }
 
     public static void registerEnabledToolTextures(Item tool) {
@@ -79,29 +99,6 @@ public class ClientSetup {
     @SubscribeEvent
     public static void mrl(ModelEvent.RegisterAdditional e) {
         e.register(new ResourceLocation(JustDireThings.MODID, "item/creaturecatcher_base"));
-    }
-
-    @SubscribeEvent
-    public static void registerScreens(RegisterMenuScreensEvent event) {
-        event.register(Registration.FuelCanister_Container.get(), FuelCanisterScreen::new);
-        event.register(Registration.PocketGenerator_Container.get(), PocketGeneratorScreen::new);
-        event.register(Registration.Tool_Settings_Container.get(), ToolSettingScreen::new);
-        event.register(Registration.Item_Collector_Container.get(), ItemCollectorScreen::new);
-        event.register(Registration.BlockBreakerT1_Container.get(), BlockBreakerT1Screen::new);
-        event.register(Registration.BlockBreakerT2_Container.get(), BlockBreakerT2Screen::new);
-        event.register(Registration.BlockPlacerT1_Container.get(), BlockPlacerT1Screen::new);
-        event.register(Registration.BlockPlacerT2_Container.get(), BlockPlacerT2Screen::new);
-        event.register(Registration.ClickerT1_Container.get(), ClickerT1Screen::new);
-        event.register(Registration.ClickerT2_Container.get(), ClickerT2Screen::new);
-        event.register(Registration.SensorT1_Container.get(), SensorT1Screen::new);
-        event.register(Registration.SensorT2_Container.get(), SensorT2Screen::new);
-        event.register(Registration.DropperT1_Container.get(), DropperT1Screen::new);
-        event.register(Registration.DropperT2_Container.get(), DropperT2Screen::new);
-        event.register(Registration.GeneratorT1_Container.get(), GeneratorT1Screen::new);
-        event.register(Registration.EnergyTransmitter_Container.get(), EnergyTransmitterScreen::new);
-        event.register(Registration.BlockSwapperT1_Container.get(), BlockSwapperT1Screen::new);
-        event.register(Registration.BlockSwapperT2_Container.get(), BlockSwapperT2Screen::new);
-        event.register(Registration.PlayerAccessor_Container.get(), PlayerAccessorScreen::new);
     }
 
     @SubscribeEvent

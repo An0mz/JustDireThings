@@ -40,6 +40,14 @@ public class FuelCanisterScreen extends AbstractContainerScreen<FuelCanisterCont
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        // Render red overlay on invalid slots
+        for (Slot slot : this.menu.slots) {
+            if (!slot.getItem().isEmpty() && !container.handler.isItemValid(slot.getSlotIndex(), slot.getItem())) {
+                int x = this.leftPos + slot.x;
+                int y = this.topPos + slot.y;
+                guiGraphics.fill(RenderType.guiOverlay(), x, y, x + 16, y + Mth.ceil(16.0F), 0x7FFF0000);
+            }
+        }
         this.renderTooltip(guiGraphics, mouseX, mouseY);
         MutableComponent msg = Component.translatable("justdirethings.fuelcanisteritemsamt", MagicHelpers.formatted((float) FuelCanister.getFuelLevel(fuelCanister) / 200));
         guiGraphics.drawString(font, msg, this.getGuiLeft() + this.imageWidth / 2 - font.width(msg) / 2, getGuiTop() + 5, Color.DARK_GRAY.getRGB(), false);
@@ -66,12 +74,6 @@ public class FuelCanisterScreen extends AbstractContainerScreen<FuelCanisterCont
         }
     }
 
-    @Override
-    protected void renderSlot(GuiGraphics pGuiGraphics, Slot pSlot) {
-        super.renderSlot(pGuiGraphics, pSlot);
-        if (!pSlot.getItem().isEmpty() && !container.handler.isItemValid(pSlot.getSlotIndex(), pSlot.getItem()))
-            pGuiGraphics.fill(RenderType.guiOverlay(), pSlot.x, pSlot.y, pSlot.x + 16, pSlot.y + Mth.ceil(16.0F), 0x7FFF0000);
-    }
 
     @Override
     public void init() {
@@ -118,13 +120,9 @@ public class FuelCanisterScreen extends AbstractContainerScreen<FuelCanisterCont
         return super.mouseClicked(x, y, btn);
     }
 
-    public boolean mouseReleased(double p_mouseReleased_1_, double p_mouseReleased_3_, int p_mouseReleased_5_) {
-        return super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
-    }
-
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double pScrollX, double pScrollY) {
-        return super.mouseScrolled(mouseX, mouseY, pScrollX, pScrollY);
+    public boolean mouseScrolled(double mouseX, double mouseY, double pScrollY) {
+        return super.mouseScrolled(mouseX, mouseY, pScrollY);
     }
 
     private static MutableComponent getTrans(String key, Object... args) {

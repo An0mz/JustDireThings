@@ -29,8 +29,8 @@ public class AreaAffectingBER implements BlockEntityRenderer<BlockEntity> {
         }
     }
 
-    @Override
     public AABB getRenderBoundingBox(BlockEntity blockEntity) {
-        return AABB.encapsulatingFullBlocks(blockEntity.getBlockPos().above(10).north(10).east(10), blockEntity.getBlockPos().below(10).south(10).west(10));
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(pos.offset(-10, -10, -10), pos.offset(10, 10, 10));
     }
 }

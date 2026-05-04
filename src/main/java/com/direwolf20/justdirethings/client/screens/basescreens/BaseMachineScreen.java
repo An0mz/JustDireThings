@@ -11,6 +11,8 @@ import com.direwolf20.justdirethings.common.blockentities.ItemCollectorBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.*;
 import com.direwolf20.justdirethings.common.containers.basecontainers.BaseMachineContainer;
 import com.direwolf20.justdirethings.common.containers.slots.FilterBasicSlot;
+import com.direwolf20.justdirethings.common.network.PacketHandler;
+import com.direwolf20.justdirethings.common.network.PacketHandler;
 import com.direwolf20.justdirethings.common.network.data.*;
 import com.direwolf20.justdirethings.util.MagicHelpers;
 import com.direwolf20.justdirethings.util.MiscHelpers;
@@ -229,10 +231,10 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        guiGraphics.blitSprite(SOCIALBACKGROUND, topSectionLeft + 20, topSectionTop - 20, topSectionWidth - 40, 20);
+        guiGraphics.fillGradient(topSectionLeft + 20, topSectionTop - 20, topSectionLeft + 20 + topSectionWidth - 40, topSectionTop - 20 + 20, 0xC0101010, 0xD0101010);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        guiGraphics.blitSprite(SOCIALBACKGROUND, topSectionLeft, topSectionTop, topSectionWidth, topSectionHeight);
-        guiGraphics.blitSprite(SOCIALBACKGROUND, relX, relY + 83 - 8, this.imageWidth, this.imageHeight - 73); //Inventory Section
+        guiGraphics.fillGradient(topSectionLeft, topSectionTop, topSectionLeft + topSectionWidth, topSectionTop + topSectionHeight, 0xC0101010, 0xD0101010);
+        guiGraphics.fillGradient(relX, relY + 83 - 8, relX + this.imageWidth, relY + 83 - 8 + this.imageHeight - 73, 0xC0101010, 0xD0101010); //Inventory Section
         for (Slot slot : container.slots) {
             guiGraphics.blit(JUSTSLOT, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 0, 0, 18, 18);
         }
@@ -299,8 +301,7 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
             }
             if (renderable instanceof ToggleButton toggleButton && MiscTools.inBounds(toggleButton.getX(), toggleButton.getY(), toggleButton.getWidth(), toggleButton.getHeight(), x, y)) {
                 if (btn == 1) {
-                    toggleButton.onClick(x, y, btn);
-                    toggleButton.playDownSound(Minecraft.getInstance().getSoundManager());
+                    toggleButton.mouseClicked(x, y, btn);
                 }
             }
         }

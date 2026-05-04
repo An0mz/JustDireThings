@@ -29,12 +29,12 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
     private SensorScreenInterface parent;
 
     public BlockStateScrollList(SensorScreenInterface parent, int left, int listWidth, int top, int bottom) {
-        super(Minecraft.getInstance(), listWidth, bottom - top, top, parent.getFontRenderer().lineHeight * 2 + 8);
+        super(Minecraft.getInstance(), listWidth, bottom - top, top, bottom, parent.getFontRenderer().lineHeight * 2 + 8);
         this.parent = parent;
         this.listWidth = listWidth;
         this.setRenderBackground(false);
         this.refreshList();
-        setX(left);
+        setLeftPos(left);
     }
 
     public ItemStack getStateStack() {
@@ -47,7 +47,7 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
 
     @Override
     protected int getScrollbarPosition() {
-        return this.getX() + this.listWidth - 5;
+        return this.x0 + this.listWidth - 5;
     }
 
     @Override
@@ -74,13 +74,13 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
     }
 
     @Override
-    public void renderWidget(GuiGraphics p_282708_, int p_283242_, int p_282891_, float p_283683_) {
+    public void render(GuiGraphics p_282708_, int p_283242_, int p_282891_, float p_283683_) {
         renderContentBackground(p_282708_);
-        super.renderWidget(p_282708_, p_283242_, p_282891_, p_283683_);
+        super.render(p_282708_, p_283242_, p_282891_, p_283683_);
     }
 
     protected void renderContentBackground(GuiGraphics guiGraphics) {
-        guiGraphics.fillGradient(getX(), getY(), getRight(), getBottom(), 0xC0101010, 0xD0101010);
+        guiGraphics.fillGradient(this.x0, this.y0, this.x0 + listWidth, this.y0 + this.height, 0xC0101010, 0xD0101010);
     }
 
     public class BlockStateEntry extends ObjectSelectionList.Entry<BlockStateEntry> {

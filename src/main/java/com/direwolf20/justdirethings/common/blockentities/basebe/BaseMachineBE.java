@@ -40,6 +40,20 @@ public class BaseMachineBE extends BlockEntity {
         super(pType, pPos, pBlockState);
     }
 
+    protected ItemStackHandler machineHandler;
+
+    public ItemStackHandler getMachineHandler() {
+        if (machineHandler == null) {
+            machineHandler = new ItemStackHandler(MACHINE_SLOTS) {
+                @Override
+                protected void onContentsChanged(int slot) {
+                    setChanged();
+                }
+            };
+        }
+        return machineHandler;
+    }
+
     public void tickClient() {
     }
 
@@ -124,10 +138,6 @@ public class BaseMachineBE extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public ItemStackHandler getMachineHandler() {
-        return getData(Registration.MACHINE_HANDLER);
-    }
-
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
@@ -204,10 +214,14 @@ public class BaseMachineBE extends BlockEntity {
         if (placedByUUID != null)
             tag.putUUID("placedBy", placedByUUID);
         tag.putInt("direction", direction);
+        if (MACHINE_SLOTS > 0)
+            tag.put("machineHandler", getMachineHandler().serializeNBT());
         if (this instanceof AreaAffectingBE areaAffectingBE)
             areaAffectingBE.saveAreaSettings(tag);
-        if (this instanceof FilterableBE filterableBE)
+        if (this instanceof FilterableBE filterableBE) {
             filterableBE.saveFilterSettings(tag);
+            tag.put("filterHandler", filterableBE.getFilterHandler().serializeNBT());
+        }
         if (this instanceof RedstoneControlledBE redstoneControlledBE)
             redstoneControlledBE.saveRedstoneSettings(tag);
     }
@@ -220,10 +234,15 @@ public class BaseMachineBE extends BlockEntity {
             tickSpeed = tag.getInt("tickspeed");
         if (tag.contains("placedBy"))
             placedByUUID = tag.getUUID("placedBy");
+        if (tag.contains("machineHandler"))
+            getMachineHandler().deserializeNBT(tag.getCompound("machineHandler"));
         if (this instanceof AreaAffectingBE areaAffectingBE)
             areaAffectingBE.loadAreaSettings(tag);
-        if (this instanceof FilterableBE filterableBE)
+        if (this instanceof FilterableBE filterableBE) {
             filterableBE.loadFilterSettings(tag);
+            if (tag.contains("filterHandler"))
+                filterableBE.getFilterHandler().deserializeNBT(tag.getCompound("filterHandler"));
+        }
         if (this instanceof RedstoneControlledBE redstoneControlledBE)
             redstoneControlledBE.loadRedstoneSettings(tag);
         super.load(tag);

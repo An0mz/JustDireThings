@@ -247,10 +247,6 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
         }
     }
 
-    @Override
-    protected void renderSlot(GuiGraphics pGuiGraphics, Slot pSlot) {
-        super.renderSlot(pGuiGraphics, pSlot);
-    }
 
     @Override
     public void init() {
@@ -386,8 +382,8 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double pScrollX, double pScrollY) {
-        return super.mouseScrolled(mouseX, mouseY, pScrollX, pScrollY);
+    public boolean mouseScrolled(double mouseX, double mouseY, double pScrollY) {
+        return super.mouseScrolled(mouseX, mouseY, pScrollY);
     }
 
     private static MutableComponent getTrans(String key, Object... args) {

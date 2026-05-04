@@ -163,7 +163,7 @@ public class SensorT2Screen extends BaseMachineScreen<SensorT2Container> impleme
         super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
         validateItemStackCache();
         if (showBlockStates) {
-            guiGraphics.blitSprite(SOCIALBACKGROUND, topSectionLeft - 100, topSectionTop, 100, topSectionHeight);
+            guiGraphics.fillGradient(topSectionLeft - 100, topSectionTop, topSectionLeft, topSectionTop + topSectionHeight, 0xC0101010, 0xD0101010);
             if (blockStateSlot != -1 && !container.filterHandler.getStackInSlot(blockStateSlot).equals(scrollPanel.getStateStack()))
                 refreshStateWindow();
         }

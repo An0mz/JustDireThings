@@ -121,8 +121,8 @@ public class JustDireLootTables extends VanillaBlockLoot {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         List<Block> knownBlocks = new ArrayList<>();
-        knownBlocks.addAll(Registration.BLOCKS.getEntries().stream().map(DeferredHolder::get).toList());
-        knownBlocks.addAll(Registration.SIDEDBLOCKS.getEntries().stream().map(DeferredHolder::get).toList());
+        knownBlocks.addAll(Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).toList());
+        knownBlocks.addAll(Registration.SIDEDBLOCKS.getEntries().stream().map(RegistryObject::get).toList());
         return knownBlocks;
     }
 }

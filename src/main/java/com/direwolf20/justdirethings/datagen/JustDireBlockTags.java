@@ -76,7 +76,7 @@ public class JustDireBlockTags extends BlockTagsProvider {
         tag(LAWNMOWERABLE)
                 .addTag(BlockTags.FLOWERS)
                 .add(Blocks.TALL_GRASS)
-                .add(Blocks.SHORT_GRASS)
+                .add(Blocks.GRASS)
                 .add(Blocks.DEAD_BUSH)
                 .add(Blocks.SWEET_BERRY_BUSH)
                 .add(Blocks.FERN)

@@ -31,10 +31,14 @@ public class BlockBreakerT2BE extends BlockBreakerT1BE implements PoweredMachine
     public FilterData filterData = new FilterData(false, false, 0);
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public final PoweredMachineContainerData poweredMachineData;
+    private final MachineEnergyStorage energyStorage;
+    private final FilterBasicHandler filterHandler;
 
     public BlockBreakerT2BE(BlockPos pPos, BlockState pBlockState) {
         super(Registration.BlockBreakerT2BE.get(), pPos, pBlockState);
         poweredMachineData = new PoweredMachineContainerData(this);
+        energyStorage = new MachineEnergyStorage(getMaxEnergy());
+        filterHandler = new FilterBasicHandler(9);
     }
 
     @Override
@@ -44,7 +48,7 @@ public class BlockBreakerT2BE extends BlockBreakerT1BE implements PoweredMachine
 
     @Override
     public MachineEnergyStorage getEnergyStorage() {
-        return getData(Registration.ENERGYSTORAGE_MACHINES);
+        return energyStorage;
     }
 
     @Override
@@ -59,7 +63,19 @@ public class BlockBreakerT2BE extends BlockBreakerT1BE implements PoweredMachine
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
+    }
+
+    @Override
+    public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.putInt("energy", energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public void load(net.minecraft.nbt.CompoundTag tag) {
+        if (tag.contains("energy")) energyStorage.setEnergy(tag.getInt("energy"));
+        super.load(tag);
     }
 
     @Override

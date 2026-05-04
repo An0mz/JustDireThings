@@ -32,6 +32,7 @@ import java.util.*;
 public class SensorT1BE extends BaseMachineBE implements FilterableBE {
     public FilterData filterData = new FilterData();
     protected List<BlockPos> positions = new ArrayList<>();
+    protected FilterBasicHandler filterHandler;
     public SENSE_TARGET sense_target = SENSE_TARGET.BLOCK;
     public boolean emitRedstone = false;
     public boolean strongSignal = false;
@@ -61,6 +62,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
     public SensorT1BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         ANYSIZE_FILTER_SLOTS = 1;
+        filterHandler = new FilterBasicHandler(ANYSIZE_FILTER_SLOTS);
     }
 
     public SensorT1BE(BlockPos pPos, BlockState pBlockState) {
@@ -147,7 +149,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER_ANYSIZE);
+        return filterHandler;
     }
 
     @Override

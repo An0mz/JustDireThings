@@ -7,8 +7,7 @@ import com.direwolf20.justdirethings.common.capabilities.EnergyStorageNoReceive;
 import com.direwolf20.justdirethings.common.capabilities.TransmitterEnergyStorage;
 import com.direwolf20.justdirethings.common.containers.handlers.FilterBasicHandler;
 import com.direwolf20.justdirethings.common.items.PocketGenerator;
-import com.direwolf20.justdirethings.setup.Config;
-import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.common.blocks.EnergyTransmitter;
 import com.direwolf20.justdirethings.util.interfacehelpers.AreaAffectingData;
 import com.direwolf20.justdirethings.util.interfacehelpers.FilterData;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
@@ -40,12 +39,15 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public FilterData filterData = new FilterData();
     public boolean showParticles = true;
+    private final FilterBasicHandler filterHandler = new FilterBasicHandler(9);
+    private final TransmitterEnergyStorage energyStorage;
 
     public EnergyTransmitterBE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         MACHINE_SLOTS = 1;
         poweredMachineData = new PoweredMachineContainerData(this);
         tickSpeed = 50; //We use this to check how often to rescan the area
+        energyStorage = new TransmitterEnergyStorage(getMaxEnergy(), this);
     }
 
     public EnergyTransmitterBE(BlockPos pPos, BlockState pBlockState) {
@@ -59,7 +61,7 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
     }
 
     @Override
@@ -89,7 +91,7 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
 
     @Override
     public TransmitterEnergyStorage getEnergyStorage() {
-        return getData(Registration.ENERGYSTORAGE_TRANSMITTERS);
+        return energyStorage;
     }
 
     @Override

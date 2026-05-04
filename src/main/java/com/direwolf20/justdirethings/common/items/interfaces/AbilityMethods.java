@@ -196,8 +196,8 @@ public class AbilityMethods {
                 player.teleportTo(shiftPosition.x, shiftPosition.y, shiftPosition.z);
             }
             player.resetFallDistance();
-            PacketDistributor.PLAYER.with((ServerPlayer) player).send(new ClientSoundPayload(SoundEvents.PLAYER_TELEPORT.getLocation(), 1f, 1f));
-            level.playSound(player, BlockPos.containing(shiftPosition), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1F, 1.0F);
+            ((ServerPlayer) player).playNotifySound(SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 1f, 1f);
+            level.playSound(player, BlockPos.containing(shiftPosition), SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 1F, 1.0F);
             damageTool(itemStack, player, Ability.VOIDSHIFT, distanceTraveled);
         }
         return false;
@@ -251,7 +251,7 @@ public class AbilityMethods {
             player.resetFallDistance();
             // Optionally, you could add some effects or sounds here
             damageTool(itemStack, player, Ability.AIRBURST, multiplier);
-            PacketDistributor.PLAYER.with((ServerPlayer) player).send(new ClientSoundPayload(SoundEvents.FIRECHARGE_USE.getLocation(), 0.5f, 0.125f));
+            ((ServerPlayer) player).playNotifySound(SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 0.5f, 0.125f);
             level.playSound(player, player.getOnPos(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 0.5f, 0.125f);
             return true;
         }

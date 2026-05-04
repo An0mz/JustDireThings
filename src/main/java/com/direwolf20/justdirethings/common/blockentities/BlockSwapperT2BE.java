@@ -26,10 +26,14 @@ public class BlockSwapperT2BE extends BlockSwapperT1BE implements PoweredMachine
     public FilterData filterData = new FilterData();
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public final PoweredMachineContainerData poweredMachineData;
+    private final MachineEnergyStorage energyStorage;
+    private final FilterBasicHandler filterHandler;
 
     public BlockSwapperT2BE(BlockPos pPos, BlockState pBlockState) {
         super(Registration.BlockSwapperT2BE.get(), pPos, pBlockState);
         poweredMachineData = new PoweredMachineContainerData(this);
+        energyStorage = new MachineEnergyStorage(getMaxEnergy());
+        filterHandler = new FilterBasicHandler(9);
     }
 
     @Override
@@ -39,7 +43,7 @@ public class BlockSwapperT2BE extends BlockSwapperT1BE implements PoweredMachine
 
     @Override
     public MachineEnergyStorage getEnergyStorage() {
-        return getData(Registration.ENERGYSTORAGE_MACHINES);
+        return energyStorage;
     }
 
     @Override
@@ -58,7 +62,7 @@ public class BlockSwapperT2BE extends BlockSwapperT1BE implements PoweredMachine
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
     }
 
     @Override
@@ -180,5 +184,17 @@ public class BlockSwapperT2BE extends BlockSwapperT1BE implements PoweredMachine
         else
             eggItemStack = new ItemStack(eggItem);
         return isStackValidFilter(eggItemStack);
+    }
+
+    @Override
+    public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.putInt("energy", energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public void load(net.minecraft.nbt.CompoundTag tag) {
+        if (tag.contains("energy")) energyStorage.setEnergy(tag.getInt("energy"));
+        super.load(tag);
     }
 }

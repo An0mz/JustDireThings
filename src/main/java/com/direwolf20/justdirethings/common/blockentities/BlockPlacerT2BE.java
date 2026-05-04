@@ -26,10 +26,14 @@ public class BlockPlacerT2BE extends BlockPlacerT1BE implements PoweredMachineBE
     public FilterData filterData = new FilterData();
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public final PoweredMachineContainerData poweredMachineData;
+    private final MachineEnergyStorage energyStorage;
+    private final FilterBasicHandler filterHandler;
 
     public BlockPlacerT2BE(BlockPos pPos, BlockState pBlockState) {
         super(Registration.BlockPlacerT2BE.get(), pPos, pBlockState);
         poweredMachineData = new PoweredMachineContainerData(this);
+        energyStorage = new MachineEnergyStorage(getMaxEnergy());
+        filterHandler = new FilterBasicHandler(9);
     }
 
     @Override
@@ -39,7 +43,7 @@ public class BlockPlacerT2BE extends BlockPlacerT1BE implements PoweredMachineBE
 
     @Override
     public MachineEnergyStorage getEnergyStorage() {
-        return getData(Registration.ENERGYSTORAGE_MACHINES);
+        return energyStorage;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class BlockPlacerT2BE extends BlockPlacerT1BE implements PoweredMachineBE
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
     }
 
     @Override
@@ -91,5 +95,17 @@ public class BlockPlacerT2BE extends BlockPlacerT1BE implements PoweredMachineBE
             return false; //Do the same checks as normal, then check the filters
         ItemStack blockItemStack = level.getBlockState(blockPos.relative(getDirectionValue())).getCloneItemStack(new BlockHitResult(Vec3.ZERO, getDirectionValue(), blockPos, false), level, blockPos, fakePlayer);
         return isStackValidFilter(blockItemStack);
+    }
+
+    @Override
+    public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.putInt("energy", energyStorage.getEnergyStored());
+    }
+
+    @Override
+    public void load(net.minecraft.nbt.CompoundTag tag) {
+        if (tag.contains("energy")) energyStorage.setEnergy(tag.getInt("energy"));
+        super.load(tag);
     }
 }

@@ -79,7 +79,7 @@ public class BaseBoots extends ArmorItem implements ToggleableTool, LeftClickabl
         Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
         if (slot == EquipmentSlot.FEET) {
             if (canUseAbility(stack, Ability.STEPHEIGHT))
-                modifiers = Helpers.addAttributeToModifiers(modifiers, ForgeMod.STEP_HEIGHT.get(), stepHeight);
+                modifiers = Helpers.addAttributeToModifiers(modifiers, ForgeMod.STEP_HEIGHT_ADDITION.get(), stepHeight);
         }
         if (!(stack.getItem() instanceof PoweredTool poweredTool))
             return modifiers;

@@ -126,7 +126,7 @@ public class ThingFinder {
         BlockPos playerPos = player.getOnPos();
         int radius = 10; //TODO 50 seems to be ok perf wise but ridiculous
 
-        entityList = player.level().getEntities(player, AABB.encapsulatingFullBlocks(playerPos.offset(-radius, -radius, -radius), playerPos.offset(radius, radius, radius)))
+        entityList = player.level().getEntities(player, new AABB(playerPos.offset(-radius, -radius, -radius), playerPos.offset(radius, radius, radius)))
                 .stream()
                 .filter(entity -> entity instanceof Monster)
                 .collect(Collectors.toList());

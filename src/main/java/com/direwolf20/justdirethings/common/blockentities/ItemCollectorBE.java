@@ -32,6 +32,7 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
     public FilterData filterData = new FilterData();
     public AreaAffectingData areaAffectingData = new AreaAffectingData();
     public RedstoneControlData redstoneControlData = new RedstoneControlData();
+    private final FilterBasicHandler filterHandler = new FilterBasicHandler(9);
 
     public ItemCollectorBE(BlockPos pPos, BlockState pBlockState) {
         super(Registration.ItemCollectorBE.get(), pPos, pBlockState);
@@ -57,6 +58,7 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
         return areaAffectingData;
     }
 
+    @Override
     public void tickClient() {
     }
 
@@ -67,7 +69,7 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
 
     @Override
     public FilterBasicHandler getFilterHandler() {
-        return getData(Registration.HANDLER_BASIC_FILTER);
+        return filterHandler;
     }
 
     public void doParticles(ItemStack itemStack, Vec3 sourcePos) {

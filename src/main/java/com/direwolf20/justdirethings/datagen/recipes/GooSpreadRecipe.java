@@ -21,6 +21,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class GooSpreadRecipe implements CraftingRecipe {
     private final ResourceLocation id;
+
+    @Override
+    public ResourceLocation getId() {
+        return id;
+    }
     protected final BlockState input;
     protected final BlockState output;
     protected int tierRequirement;
@@ -109,12 +114,23 @@ public class GooSpreadRecipe implements CraftingRecipe {
                         .apply(p_311734_, GooSpreadRecipe::new)
         );
 
-        @Override
         public Codec<GooSpreadRecipe> codec() {
             return CODEC;
         }
 
-        public GooSpreadRecipe fromNetwork(FriendlyByteBuf pBuffer) {
+        @Override
+        public GooSpreadRecipe fromJson(ResourceLocation id, com.google.gson.JsonObject json) {
+            String inputStr = json.get("input").getAsString();
+            String outputStr = json.get("output").getAsString();
+            Block inputBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(new ResourceLocation(inputStr));
+            Block outputBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(new ResourceLocation(outputStr));
+            int tierRequirement = json.get("tierRequirement").getAsInt();
+            int craftingDuration = json.get("craftingDuration").getAsInt();
+            return new GooSpreadRecipe(id, inputBlock.defaultBlockState(), outputBlock.defaultBlockState(), tierRequirement, craftingDuration);
+        }
+
+        @Override
+        public GooSpreadRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf pBuffer) {
             ResourceLocation resourceLocation = pBuffer.readResourceLocation();
             BlockState inputState = Block.stateById(pBuffer.readInt());
             BlockState outputState = Block.stateById(pBuffer.readInt());
