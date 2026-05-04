@@ -82,7 +82,11 @@ public class TooltipHelpers {
     }
 
     public static void appendGeneratorDetails(ItemStack stack, List<Component> tooltip) {
-        ItemStackHandler itemStackHandler = stack.getData(Registration.HANDLER);
+        ItemStackHandler itemStackHandler = new ItemStackHandler(1);
+        if (stack.hasTag() && stack.getTag().contains("FuelInventory")) {
+            itemStackHandler.deserializeNBT(stack.getTag().getCompound("FuelInventory"));
+        }
+
         ItemStack fuelStack = itemStackHandler.getStackInSlot(0);
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.translatable("justdirethings.pocketgeneratorburntime", NBTHelpers.getIntValue(stack, COUNTER), NBTHelpers.getIntValue(stack, MAXBURN)).withStyle(ChatFormatting.DARK_RED));

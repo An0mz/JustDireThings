@@ -76,7 +76,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void registerOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.HOTBAR.id().toString(), new ResourceLocation(JustDireThings.MODID, "abilitycooldownoverlay"), AbilityCooldownOverlay.INSTANCE);
+        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), String.valueOf(new ResourceLocation(JustDireThings.MODID, "abilitycooldownoverlay")), AbilityCooldownOverlay.INSTANCE);
     }
 
     public static void registerEnabledToolTextures(Item tool) {

@@ -157,7 +157,7 @@ public class LivingEntityEvents {
             if (!totemStack.isEmpty()) {
                 CompoundTag deathData = new CompoundTag();
                 deathData.put("direDeathData", NBTHelpers.globalVec3ToNBT(player.level().dimension(), player.position()));
-                player.setData(Registration.DEATH_DATA, deathData);
+                player.getPersistentData().put("direDeathData", NBTHelpers.globalVec3ToNBT(player.level().dimension(), player.position()));
                 totemStack.shrink(1);
             }
         }
@@ -177,11 +177,13 @@ public class LivingEntityEvents {
         ServerPlayer oldPlayer = (ServerPlayer) event.getOriginal();
         if (oldPlayer.level().isClientSide || !event.isWasDeath()) return;
         ServerPlayer newPlayer = (ServerPlayer) event.getEntity();
-        CompoundTag deathData = oldPlayer.getData(Registration.DEATH_DATA);
 
-        if (deathData.contains("direDeathData")) {
-            //GlobalPos boundTo = NBTHelpers.nbtToGlobalPos(deathData.getCompound("direDeathData"));
-            NBTHelpers.GlobalVec3 boundTo = NBTHelpers.nbtToGlobalVec3(deathData.getCompound("direDeathData"));
+        CompoundTag persistentData = oldPlayer.getPersistentData();
+        newPlayer.getPersistentData().merge(persistentData);
+
+        if (persistentData.contains("direDeathData")) {
+            NBTHelpers.GlobalVec3 boundTo = NBTHelpers.nbtToGlobalVec3(
+                    persistentData.getCompound("direDeathData"));
             ItemStack totemStack = new ItemStack(Registration.TotemOfDeathRecall.get());
             TotemOfDeathRecall.setBoundTo(totemStack, boundTo);
             newPlayer.getInventory().add(totemStack);

@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.containers;
 import com.direwolf20.justdirethings.common.containers.basecontainers.BaseContainer;
 import com.direwolf20.justdirethings.common.containers.slots.FuelSlot;
 import com.direwolf20.justdirethings.setup.Registration;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -24,11 +25,25 @@ public class PocketGeneratorContainer extends BaseContainer {
     public PocketGeneratorContainer(int windowId, Inventory playerInventory, Player player, ItemStack pocketGenerator) {
         super(Registration.PocketGenerator_Container.get(), windowId);
         playerEntity = player;
-        handler = pocketGenerator.getData(Registration.HANDLER);
         this.pocketGeneratorItemStack = pocketGenerator;
-        if (handler != null)
-            addGeneratorSlots(handler, 0, 80, 35, 1, 18);
 
+        // Read handler from NBT tag on the item
+        handler = new ItemStackHandler(SLOTS) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                // Write back to the item's NBT whenever contents change
+                CompoundTag tag = pocketGeneratorItemStack.getOrCreateTag();
+                tag.put("FuelInventory", serializeNBT());
+            }
+        };
+
+        // Load existing contents if any
+        CompoundTag tag = pocketGenerator.getTag();
+        if (tag != null && tag.contains("FuelInventory")) {
+            handler.deserializeNBT(tag.getCompound("FuelInventory"));
+        }
+
+        addGeneratorSlots(handler, 0, 80, 35, 1, 18);
         addPlayerSlots(playerInventory, 8, 84);
     }
 

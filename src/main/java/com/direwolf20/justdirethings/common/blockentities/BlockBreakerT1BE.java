@@ -207,7 +207,15 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
                 toolDestroySpeed += (float) (efficiency * efficiency + 1);
             }
         }
-        toolDestroySpeed = net.minecraftforge.common.ForgeHooks.getBreakSpeed(player, blockState, toolDestroySpeed, blockPos);
+
+        // Fire the Forge BreakSpeed event manually, equivalent to ForgeHooks.getBreakSpeed
+        net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed event =
+                new net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed(player, blockState, toolDestroySpeed, blockPos);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
+        if (!event.isCanceled()) {
+            toolDestroySpeed = event.getNewSpeed();
+        }
+
         return toolDestroySpeed;
     }
 

@@ -127,7 +127,12 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
     }
 
     private boolean initBurn(ItemStack itemStack) {
-        ItemStackHandler handler = itemStack.getData(Registration.HANDLER);
+        // Read handler from NBT instead of getData()
+        ItemStackHandler handler = new ItemStackHandler(1);
+        if (itemStack.hasTag() && itemStack.getTag().contains("FuelInventory")) {
+            handler.deserializeNBT(itemStack.getTag().getCompound("FuelInventory"));
+        }
+
         ItemStack fuelStack = handler.getStackInSlot(0);
 
         int burnTime = fuelStack.getBurnTime(RecipeType.SMELTING);
@@ -141,11 +146,14 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
             } else {
                 setFuelMultiplier(itemStack, 1);
             }
+
             if (fuelStack.hasCraftingRemainingItem())
                 handler.setStackInSlot(0, fuelStack.getCraftingRemainingItem());
             else
                 fuelStack.shrink(1);
 
+            // Write the modified handler back to NBT
+            itemStack.getOrCreateTag().put("FuelInventory", handler.serializeNBT());
 
             int counter = (int) (Math.floor(burnTime) / getBurnSpeedMultiplier(itemStack));
             int maxBurn = counter;
