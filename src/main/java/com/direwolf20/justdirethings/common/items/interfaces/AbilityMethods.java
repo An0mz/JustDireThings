@@ -4,18 +4,25 @@ import com.direwolf20.justdirethings.client.renderactions.ThingFinder;
 import com.direwolf20.justdirethings.common.blockentities.EclipseGateBE;
 import com.direwolf20.justdirethings.common.network.data.ClientSoundPayload;
 import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
+import com.direwolf20.justdirethings.datagen.JustDireEntityTags;
 import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.util.MiscTools;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -374,6 +381,204 @@ public class AbilityMethods {
             Helpers.damageTool(itemStack, player, Ability.INVULNERABILITY);
         }
         return false;
+    }
+
+    public static boolean swimSpeed(Level level, Player player, ItemStack itemStack) {
+        if (player.fallDistance <= 0 && !player.isFallFlying() && player.zza > 0F && player.isInWaterOrBubble()) {
+            float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.SWIMSPEED.getName()) / 50;
+            player.moveRelative(speed, new Vec3(0, 0, 1));
+        }
+        return false;
+    }
+
+    public static boolean waterBreathing(Level level, Player player, ItemStack itemStack) {
+        if (player.isInWater() && player.getAirSupply() < (0.5 * player.getMaxAirSupply())) {
+            player.setAirSupply(player.getMaxAirSupply());
+            Helpers.damageTool(itemStack, player, Ability.WATERBREATHING);
+            player.playNotifySound(SoundEvents.PLAYER_BREATH, SoundSource.PLAYERS, .5F, 1.0F);
+        }
+        return false;
+    }
+
+    public static boolean extinguish(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        if (player.isOnFire() && player instanceof ServerPlayer serverPlayer && serverPlayer.gameMode.isSurvival()) {
+            int currentCooldown = ToggleableTool.getAnyCooldown(itemStack, Ability.EXTINGUISH);
+            if (currentCooldown != -1) return false;
+            if (itemStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.EXTINGUISH)) {
+                AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.EXTINGUISH);
+                ToggleableTool.addCooldown(itemStack, Ability.EXTINGUISH, abilityParams.cooldown, false);
+                player.clearFire();
+                player.playNotifySound(SoundEvents.LAVA_EXTINGUISH, SoundSource.PLAYERS, .5F, 1.0F);
+                ((ServerLevel) level).sendParticles(ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getY(), player.getZ(), 20, 0.5, 1.5, 0.5, 0);
+                Helpers.damageTool(itemStack, player, Ability.EXTINGUISH);
+            }
+        }
+        return false;
+    }
+
+    public static boolean stupefy(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        int currentCooldown = ToggleableTool.getAnyCooldown(itemStack, Ability.STUPEFY);
+        if (currentCooldown != -1) return false;
+        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.STUPEFY)) {
+            Entity entity = MiscTools.getEntityLookedAt(player, 32);
+            if (entity instanceof Mob mob) {
+                addStupefyTarget(itemStack, entity.getStringUUID());
+                mob.setTarget(null);
+                AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.STUPEFY);
+                ToggleableTool.addCooldown(itemStack, Ability.STUPEFY, abilityParams.activeCooldown, true);
+                player.playNotifySound(SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 0.5F, 0.75F);
+                ((ServerLevel) level).sendParticles(ParticleTypes.WHITE_ASH, mob.getX(), mob.getEyeY(), mob.getZ(), 20, 0.25, 0.2, 0.25, 0);
+                Helpers.damageTool(itemStack, player, Ability.STUPEFY);
+            }
+        }
+        return false;
+    }
+
+    public static boolean groundstomp(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        int currentCooldown = ToggleableTool.getAnyCooldown(itemStack, Ability.GROUNDSTOMP);
+        if (currentCooldown != -1) return false;
+        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.GROUNDSTOMP)) {
+            AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.GROUNDSTOMP);
+            ToggleableTool.addCooldown(itemStack, Ability.GROUNDSTOMP, abilityParams.cooldown, false);
+            int radius = 3;
+            AABB aabb = new AABB(player.getX() - radius, player.getY() - radius, player.getZ() - radius,
+                    player.getX() + radius, player.getY() + radius, player.getZ() + radius);
+            List<Mob> stompList = new ArrayList<>(level.getEntitiesOfClass(Mob.class, aabb, AbilityMethods::isValidStompEntity));
+            double strength = ToggleableTool.getToolValue(itemStack, Ability.GROUNDSTOMP.getName());
+            for (Mob mob : stompList) {
+                double dx = mob.getX() - player.getX();
+                double dz = mob.getZ() - player.getZ();
+                double distance = Math.sqrt(dx * dx + dz * dz);
+                if (distance != 0) {
+                    dx /= distance;
+                    dz /= distance;
+                    mob.knockback(strength, -dx, -dz);
+                }
+            }
+            player.playNotifySound(SoundEvents.IRON_GOLEM_HURT, SoundSource.PLAYERS, .5F, 1.0F);
+            ((ServerLevel) level).sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY(), player.getZ(), 20, 0.5, 0.2, 0.5, 0);
+            Helpers.damageTool(itemStack, player, Ability.GROUNDSTOMP);
+        }
+        return false;
+    }
+
+    public static boolean debuffRemover(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        int currentCooldown = ToggleableTool.getAnyCooldown(itemStack, Ability.DEBUFFREMOVER);
+        if (currentCooldown != -1) return false;
+        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.DEBUFFREMOVER)) {
+            AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.DEBUFFREMOVER);
+            ToggleableTool.addCooldown(itemStack, Ability.DEBUFFREMOVER, abilityParams.cooldown, false);
+            player.playNotifySound(SoundEvents.WANDERING_TRADER_DRINK_MILK, SoundSource.PLAYERS, 1.0F, 1.0F);
+            List<MobEffect> negativeEffects = new ArrayList<>();
+            for (MobEffect mobEffect : player.getActiveEffectsMap().keySet()) {
+                if (mobEffect.getCategory() == MobEffectCategory.HARMFUL)
+                    negativeEffects.add(mobEffect);
+            }
+            for (MobEffect mobEffect : negativeEffects) {
+                if (toggleableTool.canUseAbilityAndDurability(itemStack, Ability.DEBUFFREMOVER)) {
+                    player.removeEffect(mobEffect);
+                    Helpers.damageTool(itemStack, player, Ability.DEBUFFREMOVER);
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean earthquake(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        int currentCooldown = ToggleableTool.getAnyCooldown(itemStack, Ability.EARTHQUAKE);
+        if (currentCooldown != -1) return false;
+        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.EARTHQUAKE)) {
+            AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.EARTHQUAKE);
+            ToggleableTool.addCooldown(itemStack, Ability.EARTHQUAKE, abilityParams.activeCooldown, true);
+            player.playNotifySound(SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 0.5F, 0.4F);
+            int radius = 5;
+            AABB aabb = new AABB(player.getX() - radius, player.getY() - radius, player.getZ() - radius,
+                    player.getX() + radius, player.getY() + radius, player.getZ() + radius);
+            List<Mob> earthquakeList = new ArrayList<>(level.getEntitiesOfClass(Mob.class, aabb, AbilityMethods::isValidEarthquake));
+            for (Mob mob : earthquakeList) {
+                if (toggleableTool.canUseAbilityAndDurability(itemStack, Ability.EARTHQUAKE)) {
+                    mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 3), mob);
+                    ((ServerLevel) level).sendParticles(ParticleTypes.END_ROD, mob.getX(), mob.getY(), mob.getZ(), 20, 0.25, 0.2, 0.25, 0);
+                    ((ServerLevel) level).sendParticles(ParticleTypes.ENCHANT, mob.getX(), mob.getY(), mob.getZ(), 20, 0.5, 0.2, 0.5, 0);
+                    Helpers.damageTool(itemStack, player, Ability.EARTHQUAKE);
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean noAI(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        int currentCooldown = ToggleableTool.getAnyCooldown(itemStack, Ability.NOAI);
+        if (currentCooldown != -1) return false;
+        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.NOAI)) {
+            AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.NOAI);
+            ToggleableTool.addCooldown(itemStack, Ability.NOAI, abilityParams.cooldown, false);
+            int radius = 5;
+            AABB aabb = new AABB(player.getX() - radius, player.getY() - radius, player.getZ() - radius,
+                    player.getX() + radius, player.getY() + radius, player.getZ() + radius);
+            List<Mob> aiList = new ArrayList<>(level.getEntitiesOfClass(Mob.class, aabb, AbilityMethods::isValidNOAIEntity));
+            for (Mob mob : aiList) {
+                if (toggleableTool.canUseAbilityAndDurability(itemStack, Ability.NOAI)) {
+                    mob.setNoAi(true);
+                    ((ServerLevel) level).sendParticles(ParticleTypes.END_ROD, mob.getX(), mob.getEyeY(), mob.getZ(), 20, 0.25, 0.2, 0.25, 0);
+                    ((ServerLevel) level).sendParticles(ParticleTypes.ENCHANT, mob.getX(), mob.getEyeY(), mob.getZ(), 20, 0.5, 0.2, 0.5, 0);
+                    Helpers.damageTool(itemStack, player, Ability.NOAI);
+                }
+            }
+            player.playNotifySound(SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 1F, 0.5F);
+        }
+        return false;
+    }
+
+    public static boolean flight(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide) return false;
+        if (player.getAbilities().flying)
+            Helpers.damageTool(itemStack, player, Ability.FLIGHT);
+        return false;
+    }
+
+    /** Placeholder — DecoyEntity not yet ported. */
+    public static boolean decoy(Level level, Player player, ItemStack itemStack) {
+        return false;
+    }
+
+    public static boolean isValidStompEntity(Entity entity) {
+        return !entity.isMultipartEntity();
+    }
+
+    public static boolean isValidNOAIEntity(Entity entity) {
+        if (entity.isMultipartEntity()) return false;
+        if (entity.getType().is(JustDireEntityTags.NO_AI_DENY)) return false;
+        return true;
+    }
+
+    public static boolean isValidEarthquake(Entity entity) {
+        if (!entity.onGround()) return false;
+        if (entity.isMultipartEntity()) return false;
+        if (entity.getType().is(JustDireEntityTags.NO_EARTHQUAKE)) return false;
+        return true;
+    }
+
+    public static List<String> getStupefyTargets(ItemStack itemStack) {
+        CompoundTag tag = itemStack.getOrCreateTag();
+        if (!tag.contains("stupefyTargets")) return new ArrayList<>();
+        return MiscTools.NBTToStringList(tag.getList("stupefyTargets", Tag.TAG_STRING));
+    }
+
+    public static void addStupefyTarget(ItemStack itemStack, String entityUUID) {
+        List<String> stupefyTargets = new ArrayList<>(getStupefyTargets(itemStack));
+        stupefyTargets.add(entityUUID);
+        itemStack.getOrCreateTag().put("stupefyTargets", MiscTools.stringListToNBT(stupefyTargets));
+    }
+
+    public static void clearStupefyTargets(ItemStack itemStack) {
+        itemStack.getOrCreateTag().remove("stupefyTargets");
     }
 
 }

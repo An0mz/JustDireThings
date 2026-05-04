@@ -17,6 +17,18 @@ import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier4;
 import com.direwolf20.justdirethings.common.containers.*;
 import com.direwolf20.justdirethings.common.entities.CreatureCatcherEntity;
 import com.direwolf20.justdirethings.common.items.*;
+import com.direwolf20.justdirethings.common.items.armors.BlazegoldBoots;
+import com.direwolf20.justdirethings.common.items.armors.BlazegoldChestplate;
+import com.direwolf20.justdirethings.common.items.armors.BlazegoldHelmet;
+import com.direwolf20.justdirethings.common.items.armors.BlazegoldLeggings;
+import com.direwolf20.justdirethings.common.items.armors.CelestigemBoots;
+import com.direwolf20.justdirethings.common.items.armors.CelestigemChestplate;
+import com.direwolf20.justdirethings.common.items.armors.CelestigemHelmet;
+import com.direwolf20.justdirethings.common.items.armors.CelestigemLeggings;
+import com.direwolf20.justdirethings.common.items.armors.EclipseAlloyBoots;
+import com.direwolf20.justdirethings.common.items.armors.EclipseAlloyChestplate;
+import com.direwolf20.justdirethings.common.items.armors.EclipseAlloyHelmet;
+import com.direwolf20.justdirethings.common.items.armors.EclipseAlloyLeggings;
 import com.direwolf20.justdirethings.common.items.armors.FerricoreBoots;
 import com.direwolf20.justdirethings.common.items.armors.FerricoreChestplate;
 import com.direwolf20.justdirethings.common.items.armors.FerricoreHelmet;
@@ -289,6 +301,21 @@ public class Registration {
     public static final RegistryObject<FerricoreChestplate> FerricoreChestplate = ARMORS.register("ferricore_chestplate", FerricoreChestplate::new);
     public static final RegistryObject<FerricoreLeggings> FerricoreLeggings = ARMORS.register("ferricore_leggings", FerricoreLeggings::new);
     public static final RegistryObject<FerricoreHelmet> FerricoreHelmet = ARMORS.register("ferricore_helmet", FerricoreHelmet::new);
+
+    public static final RegistryObject<BlazegoldBoots> BlazegoldBoots = ARMORS.register("blazegold_boots", BlazegoldBoots::new);
+    public static final RegistryObject<BlazegoldChestplate> BlazegoldChestplate = ARMORS.register("blazegold_chestplate", BlazegoldChestplate::new);
+    public static final RegistryObject<BlazegoldLeggings> BlazegoldLeggings = ARMORS.register("blazegold_leggings", BlazegoldLeggings::new);
+    public static final RegistryObject<BlazegoldHelmet> BlazegoldHelmet = ARMORS.register("blazegold_helmet", BlazegoldHelmet::new);
+
+    public static final RegistryObject<CelestigemBoots> CelestigemBoots = ARMORS.register("celestigem_boots", CelestigemBoots::new);
+    public static final RegistryObject<CelestigemChestplate> CelestigemChestplate = ARMORS.register("celestigem_chestplate", CelestigemChestplate::new);
+    public static final RegistryObject<CelestigemLeggings> CelestigemLeggings = ARMORS.register("celestigem_leggings", CelestigemLeggings::new);
+    public static final RegistryObject<CelestigemHelmet> CelestigemHelmet = ARMORS.register("celestigem_helmet", CelestigemHelmet::new);
+
+    public static final RegistryObject<EclipseAlloyBoots> EclipseAlloyBoots = ARMORS.register("eclipsealloy_boots", EclipseAlloyBoots::new);
+    public static final RegistryObject<EclipseAlloyChestplate> EclipseAlloyChestplate = ARMORS.register("eclipsealloy_chestplate", EclipseAlloyChestplate::new);
+    public static final RegistryObject<EclipseAlloyLeggings> EclipseAlloyLeggings = ARMORS.register("eclipsealloy_leggings", EclipseAlloyLeggings::new);
+    public static final RegistryObject<EclipseAlloyHelmet> EclipseAlloyHelmet = ARMORS.register("eclipsealloy_helmet", EclipseAlloyHelmet::new);
 
     //Entities
     public static final RegistryObject<EntityType<CreatureCatcherEntity>> CreatureCatcherEntity = ENTITY_TYPES.register("creature_catcher",

@@ -82,7 +82,7 @@ public interface ToggleableTool extends ToggleableItem {
     default List<Ability> getPassiveTickAbilities(ItemStack itemStack) {
         List<Ability> abilityList = new ArrayList<>();
         for (Ability ability : getAbilities()) {
-            if (ability.useType == Ability.UseType.PASSIVE_TICK && canUseAbility(itemStack, ability))
+            if ((ability.useType == Ability.UseType.PASSIVE_TICK || ability.useType == Ability.UseType.PASSIVE_TICK_COOLDOWN) && canUseAbility(itemStack, ability))
                 abilityList.add(ability);
         }
         return abilityList;

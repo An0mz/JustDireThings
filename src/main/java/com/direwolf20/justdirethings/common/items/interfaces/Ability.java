@@ -33,7 +33,9 @@ public enum Ability {
             AbilityMethods::jumpBoost, false),
     MINDFOG(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
     INVULNERABILITY(SettingType.SLIDER, 25, 5000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
-            AbilityMethods::invulnerability, false),
+            AbilityMethods::invulnerability, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/invulnerability.png")),
+    POTIONARROW(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
 
     //Tier 2
     SMELTER(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
@@ -44,11 +46,30 @@ public enum Ability {
             AbilityMethods::cauterizeWounds, false),
     AIRBURST(SettingType.SLIDER, 1, 250, UseType.USE, BindingType.LEFT_AND_CUSTOM,
             AbilityMethods::airBurst, false),
+    SWIMSPEED(SettingType.SLIDER, 1, 5, UseType.PASSIVE_TICK, BindingType.CUSTOM_ONLY,
+            AbilityMethods::swimSpeed, false),
+    GROUNDSTOMP(SettingType.SLIDER, 25, 5000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::groundstomp, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/groundstomp.png")),
+    EXTINGUISH(SettingType.SLIDER, 25, 5000, UseType.PASSIVE_TICK_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::extinguish, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/extinguish.png")),
+    STUPEFY(SettingType.SLIDER, 25, 5000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::stupefy, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/stupefy.png")),
 
     //Tier 3
     DROPTELEPORT(SettingType.TOGGLE, 2, 100, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
     VOIDSHIFT(SettingType.SLIDER, 1, 50, UseType.USE, BindingType.LEFT_AND_CUSTOM,
             AbilityMethods::voidShift, true), //FE Per block traveled
+    NEGATEFALLDAMAGE(SettingType.SLIDER, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    NIGHTVISION(SettingType.SLIDER, 1, 25, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    ELYTRA(SettingType.SLIDER, 1, 1000, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    DECOY(SettingType.SLIDER, 25, 5000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::decoy, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/decoy.png")),
+    WATERBREATHING(SettingType.TOGGLE, 50, 500, UseType.PASSIVE_TICK, BindingType.CUSTOM_ONLY,
+            AbilityMethods::waterBreathing, false),
 
     //Tier 4
     OREXRAY(SettingType.TOGGLE, 100, 5000, UseType.USE, BindingType.LEFT_AND_CUSTOM,
@@ -57,7 +78,23 @@ public enum Ability {
             AbilityMethods::glowing, false),
     INSTABREAK(SettingType.TOGGLE, 2, 250, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
     ECLIPSEGATE(SettingType.TOGGLE, 1, 250, UseType.USE_ON, BindingType.LEFT_AND_CUSTOM,
-            AbilityMethods::eclipseGate, false); //FE Per block Removed
+            AbilityMethods::eclipseGate, false), //FE Per block Removed
+    DEATHPROTECTION(SettingType.SLIDER, 25, 450000, UseType.PASSIVE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            false, new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/deathprotection.png")),
+    DEBUFFREMOVER(SettingType.SLIDER, 25, 50000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::debuffRemover, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/debuffremover.png")),
+    EARTHQUAKE(SettingType.SLIDER, 25, 50000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::earthquake, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/earthquake.png")),
+    NOAI(SettingType.SLIDER, 25, 100000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY,
+            AbilityMethods::noAI, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/noai.png")),
+    FLIGHT(SettingType.SLIDER, 1, 100, UseType.PASSIVE_TICK, BindingType.CUSTOM_ONLY,
+            AbilityMethods::flight, false),
+    LAVAIMMUNITY(SettingType.SLIDER, 1, 1000, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    PHASE(SettingType.SLIDER, 1, 50000, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    TIMEPROTECTION(SettingType.SLIDER, 1, 5000, UseType.PASSIVE, BindingType.CUSTOM_ONLY);
 
     public enum SettingType {
         TOGGLE,
@@ -70,7 +107,9 @@ public enum Ability {
         USE_ON,
         USE_COOLDOWN,
         PASSIVE,
-        PASSIVE_TICK
+        PASSIVE_TICK,
+        PASSIVE_COOLDOWN,
+        PASSIVE_TICK_COOLDOWN
     }
 
     public enum BindingType {
@@ -88,6 +127,7 @@ public enum Ability {
     final BindingType bindingType;
     final boolean renderButton;
     final UseType useType;
+    private ResourceLocation cooldownIcon;
     // Dynamic parameter map
     private static final Map<Ability, AbilityParams> dynamicParams = new EnumMap<>(Ability.class);
     public AbilityAction action;  // Functional interface for action
@@ -110,9 +150,22 @@ public enum Ability {
         this(settingType, durabilityCost, feCost, useType, bindingType, false);
     }
 
+    // Constructor with renderButton + cooldownIcon (no action — for passive cooldown abilities)
+    Ability(SettingType settingType, int durabilityCost, int feCost, UseType useType, BindingType bindingType, boolean renderButton, ResourceLocation cooldownIcon) {
+        this(settingType, durabilityCost, feCost, useType, bindingType, renderButton);
+        this.cooldownIcon = cooldownIcon;
+    }
+
     Ability(SettingType settingType, int durabilityCost, int feCost, UseType useType, BindingType bindingType, AbilityAction action, boolean renderButton) {
         this(settingType, durabilityCost, feCost, useType, bindingType, renderButton);
         this.action = action;
+    }
+
+    // Constructor with action + cooldownIcon
+    Ability(SettingType settingType, int durabilityCost, int feCost, UseType useType, BindingType bindingType, AbilityAction action, boolean renderButton, ResourceLocation cooldownIcon) {
+        this(settingType, durabilityCost, feCost, useType, bindingType, renderButton);
+        this.action = action;
+        this.cooldownIcon = cooldownIcon;
     }
 
     Ability(SettingType settingType, int durabilityCost, int feCost, UseType useType, BindingType bindingType, UseOnAbilityAction useOnAction, boolean renderButton) {
@@ -158,6 +211,18 @@ public enum Ability {
 
     public boolean hasRenderButton() {
         return renderButton;
+    }
+
+    public ResourceLocation getCooldownIcon() {
+        return cooldownIcon;
+    }
+
+    public boolean hasCooldownIcon() {
+        return cooldownIcon != null;
+    }
+
+    public static Ability byName(String name) {
+        return Ability.valueOf(name.toUpperCase(Locale.ROOT));
     }
 
     @FunctionalInterface

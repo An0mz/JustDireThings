@@ -7,16 +7,20 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MiscTools {
     //Thanks Soaryn!
@@ -98,5 +102,28 @@ public class MiscTools {
         MutableComponent current = Component.translatable(string);
         current.setStyle(style);
         return current;
+    }
+
+    @Nullable
+    public static Entity getEntityLookedAt(Player player, double distance) {
+        Vec3 eyePos = player.getEyePosition();
+        Vec3 lookVec = player.getViewVector(1.0F);
+        Vec3 endPos = eyePos.add(lookVec.x * distance, lookVec.y * distance, lookVec.z * distance);
+        AABB searchBox = player.getBoundingBox().expandTowards(lookVec.scale(distance)).inflate(1.0);
+        List<Entity> entities = player.level().getEntities(player, searchBox, e -> !e.isSpectator() && e.isPickable());
+        Entity closest = null;
+        double closestDist = distance;
+        for (Entity entity : entities) {
+            AABB entityBB = entity.getBoundingBox().inflate(0.3);
+            Optional<Vec3> hit = entityBB.clip(eyePos, endPos);
+            if (hit.isPresent()) {
+                double dist = eyePos.distanceTo(hit.get());
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = entity;
+                }
+            }
+        }
+        return closest;
     }
 }
