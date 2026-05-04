@@ -39,7 +39,7 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
     protected final ResourceLocation JUSTSLOT = new ResourceLocation(JustDireThings.MODID, "textures/gui/justslot.png");
     protected final ResourceLocation JUSTINV = new ResourceLocation(JustDireThings.MODID, "textures/gui/justinv.png");
     protected final ResourceLocation POWERBAR = new ResourceLocation(JustDireThings.MODID, "textures/gui/powerbar.png");
-    protected final ResourceLocation SOCIALBACKGROUND = new ResourceLocation(JustDireThings.MODID, "background");
+    protected final ResourceLocation BACKGROUND_SPRITE = new ResourceLocation(JustDireThings.MODID, "textures/gui/sprites/background.png");
     protected BaseMachineContainer container;
     protected BaseMachineBE baseMachineBE;
     protected double xRadius = 3, yRadius = 3, zRadius = 3;
@@ -231,13 +231,9 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        // Main top section - gray panel with border
-        guiGraphics.fill(topSectionLeft, topSectionTop, topSectionLeft + topSectionWidth, topSectionTop + topSectionHeight, 0xFF373737);
-        guiGraphics.fill(topSectionLeft + 1, topSectionTop + 1, topSectionLeft + topSectionWidth - 1, topSectionTop + topSectionHeight - 1, 0xFFC6C6C6);
-        // Notch above main panel - drawn on top so it merges flush with the main panel
-        guiGraphics.fill(topSectionLeft + 20, topSectionTop - 20, topSectionLeft + topSectionWidth - 20, topSectionTop + 1, 0xFF373737);
-        guiGraphics.fill(topSectionLeft + 21, topSectionTop - 19, topSectionLeft + topSectionWidth - 21, topSectionTop + 1, 0xFFC6C6C6);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        blitNineSlice(guiGraphics, topSectionLeft, topSectionTop, topSectionWidth, topSectionHeight);
+        blitNineSlice(guiGraphics, topSectionLeft + 20, topSectionTop - 20, topSectionWidth - 40, 20);
         guiGraphics.blit(JUSTINV, relX, relY + 83 - 8, 0, 0, this.imageWidth, this.imageHeight - 73); //Inventory Section
         for (Slot slot : container.slots) {
             guiGraphics.blit(JUSTSLOT, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 0, 0, 18, 18);
@@ -335,5 +331,22 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
             PacketHandler.CHANNEL.sendToServer(new FilterSettingPayload(filterData.allowlist, filterData.compareNBT, filterData.blockItemFilter));
         if (baseMachineBE instanceof RedstoneControlledBE)
             PacketHandler.CHANNEL.sendToServer(new RedstoneSettingPayload(redstoneMode.ordinal()));
+    }
+
+    private void blitNineSlice(GuiGraphics guiGraphics, int x, int y, int w, int h) {
+        final int texW = 236, texH = 34, b = 8;
+        final int innerW = texW - 2 * b, innerH = texH - 2 * b;
+        // Corners (1:1 scale)
+        guiGraphics.blit(BACKGROUND_SPRITE, x,       y,       b,      b,      0f,        0f,        b,      b,      texW, texH);
+        guiGraphics.blit(BACKGROUND_SPRITE, x+w-b,   y,       b,      b,      texW-b,    0f,        b,      b,      texW, texH);
+        guiGraphics.blit(BACKGROUND_SPRITE, x,       y+h-b,   b,      b,      0f,        texH-b,    b,      b,      texW, texH);
+        guiGraphics.blit(BACKGROUND_SPRITE, x+w-b,   y+h-b,   b,      b,      texW-b,    texH-b,    b,      b,      texW, texH);
+        // Edges (stretched to fit)
+        guiGraphics.blit(BACKGROUND_SPRITE, x+b,     y,       w-2*b,  b,      b,         0f,        innerW, b,      texW, texH);
+        guiGraphics.blit(BACKGROUND_SPRITE, x+b,     y+h-b,   w-2*b,  b,      b,         texH-b,    innerW, b,      texW, texH);
+        guiGraphics.blit(BACKGROUND_SPRITE, x,       y+b,     b,      h-2*b,  0f,        b,         b,      innerH, texW, texH);
+        guiGraphics.blit(BACKGROUND_SPRITE, x+w-b,   y+b,     b,      h-2*b,  texW-b,    b,         b,      innerH, texW, texH);
+        // Center (stretched both axes)
+        guiGraphics.blit(BACKGROUND_SPRITE, x+b,     y+b,     w-2*b,  h-2*b,  b,         b,         innerW, innerH, texW, texH);
     }
 }
