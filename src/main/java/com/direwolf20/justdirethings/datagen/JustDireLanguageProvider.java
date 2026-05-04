@@ -42,6 +42,13 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.BlockSwapperT2.get(), "Advanced Swapper");
         add(Registration.PlayerAccessor.get(), "Player Accessor");
         add(Registration.EclipseGateBlock.get(), "Eclipse Gate");
+        add(Registration.TimeCrystalBlock.get(), "Time Crystal Block");
+        add(Registration.TimeCrystalBuddingBlock.get(), "Budding Time Crystal Block");
+        add(Registration.TimeCrystalCluster.get(), "Time Crystal Cluster");
+        add(Registration.TimeCrystalCluster_Small.get(), "Small Time Crystal Cluster");
+        add(Registration.TimeCrystalCluster_Medium.get(), "Medium Time Crystal Cluster");
+        add(Registration.TimeCrystalCluster_Large.get(), "Large Time Crystal Cluster");
+        add(Registration.CharcoalBlock.get(), "Charcoal Block");
 
         //Resources
         add(Registration.FerricoreBlock.get(), "Ferricore Block");
@@ -113,7 +120,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.Coal_T2.get(), "Blaze Ember");
         add(Registration.Coal_T3.get(), "Voidflame Coal");
         add(Registration.Coal_T4.get(), "Eclipse Ember");
-
+        add(Registration.TimeCrystal.get(), "Time Crystal");
 
         //Misc
         add("justdirethings.shiftmoreinfo", "Hold Shift for details");
@@ -243,6 +250,10 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 
         //Recipes
         add("justdirethings.goospreadrecipe.title", "Goo Spreading Recipes");
+
+        //Time Crystal tooltips
+        add("justdirethings.timecrystaltooltip", "The crystal pulses with temporal energy, accelerating or slowing time around you.");
+        add("justdirethings.timecrystaltooltiptwo", "A sliver of crystallized time. Its effects are unpredictable but undeniably powerful.");
 
     }
 }

@@ -1,4 +1,4 @@
-// 1.20.1	2026-05-04T05:02:25.4372175	Item Models: justdirethings
+// 1.20.1	2026-05-04T14:32:41.838646	Item Models: justdirethings
 c197a1b2a5ae31fcfabfe6cab9ab95a9dc0e1af6 assets/justdirethings/models/item/blazegold_axe.json
 dddf215922d40d92c2d8bce4229f2e2af8b3c7ba assets/justdirethings/models/item/blazegold_axe_active.json
 6396fb6e503760080534bc26337236d4d09a4cb8 assets/justdirethings/models/item/blazegold_block.json
@@ -32,6 +32,7 @@ dd58edd5b5d58719e49974bb1f500fcd0df4ee9e assets/justdirethings/models/item/celes
 90f510306fd1b95e6ab7e4760703cd5b245465ba assets/justdirethings/models/item/celestigem_shovel_active.json
 023978962bc02106700f66298b1be91107296986 assets/justdirethings/models/item/celestigem_sword.json
 c6cec87182f9b816f7cdfb07a09755855080ec62 assets/justdirethings/models/item/celestigem_sword_active.json
+78d17db0b338dad52160e9721f18a5b7101b9ff8 assets/justdirethings/models/item/charcoal.json
 24e00f9c3ca952c03eef6cc245b611a3f4f126be assets/justdirethings/models/item/clickert1.json
 75ceb606c976ed61986e2d53cab03c62967a0092 assets/justdirethings/models/item/clickert2.json
 d98fc00e03a87b0f97f4b76c7aacfbf24278eed2 assets/justdirethings/models/item/coalblock_t1.json
@@ -106,5 +107,12 @@ dd859b0b386ad41b819dc6e7d46a8979373ef257 assets/justdirethings/models/item/raw_f
 97542b1def735985bb9c9ea40bfb51992ea786e3 assets/justdirethings/models/item/raw_ferricore_ore.json
 a5cb1a907f54e259523e8a93f7aa56b1da6bcc6e assets/justdirethings/models/item/sensort1.json
 15ff8f93bc9c48050641d72595d1a2873948289f assets/justdirethings/models/item/sensort2.json
+193663f2e7e71d6bfc848e6da1ac1c1269f6b732 assets/justdirethings/models/item/time_crystal.json
+4ae892d65df31c717c3053b7e5e63f9435e18bf4 assets/justdirethings/models/item/time_crystal_block.json
+09cc0c746d62e2027647dc44323b208b3dec5bcf assets/justdirethings/models/item/time_crystal_budding_block.json
+cfd2784f583dd77e664f561d3e9e79f7ede18dc0 assets/justdirethings/models/item/time_crystal_cluster.json
+11aeb64dcdc10e9ab0d2bc66ab0b998c7220d75c assets/justdirethings/models/item/time_crystal_cluster_large.json
+0472de56c299fcdad921cda717af276d3904a6de assets/justdirethings/models/item/time_crystal_cluster_medium.json
+53c1420a65e583a52845f5dde985091521d0c84e assets/justdirethings/models/item/time_crystal_cluster_small.json
 cb3be9b73e78631097a0854d5da4a7c87cbe94a1 assets/justdirethings/models/item/totem_of_death_recall.json
 e25287d609bca6b8f5528ef11aabe3f67cdbdac8 assets/justdirethings/models/item/voidshift_wand.json

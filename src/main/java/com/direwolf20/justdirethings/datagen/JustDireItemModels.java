@@ -56,6 +56,13 @@ public class JustDireItemModels extends ItemModelProvider {
         withExistingParent(Registration.BlockSwapperT1_ITEM.getId().getPath(), modLoc("block/blockswappert1"));
         withExistingParent(Registration.BlockSwapperT2_ITEM.getId().getPath(), modLoc("block/blockswappert2"));
         withExistingParent(Registration.PlayerAccessor.getId().getPath(), modLoc("block/playeraccessor"));
+        withExistingParent(Registration.TimeCrystalBlock_ITEM.getId().getPath(), modLoc("block/time_crystal_block"));
+        withExistingParent(Registration.TimeCrystalBuddingBlock_ITEM.getId().getPath(), modLoc("block/time_crystal_budding_block"));
+        withExistingParent(Registration.TimeCrystalCluster_ITEM.getId().getPath(), modLoc("block/time_crystal_cluster"));
+        withExistingParent(Registration.TimeCrystalCluster_Small_ITEM.getId().getPath(), modLoc("block/time_crystal_cluster_small"));
+        withExistingParent(Registration.TimeCrystalCluster_Medium_ITEM.getId().getPath(), modLoc("block/time_crystal_cluster_medium"));
+        withExistingParent(Registration.TimeCrystalCluster_Large_ITEM.getId().getPath(), modLoc("block/time_crystal_cluster_large"));
+        withExistingParent(Registration.CharcoalBlock_ITEM.getId().getPath(), modLoc("block/charcoal"));
 
         //Item items
         singleTexture(Registration.Fuel_Canister.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/fuel_canister"));
@@ -76,6 +83,7 @@ public class JustDireItemModels extends ItemModelProvider {
         singleTexture(Registration.Coal_T2.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/coal_t2"));
         singleTexture(Registration.Coal_T3.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/coal_t3"));
         singleTexture(Registration.Coal_T4.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/coal_t4"));
+        singleTexture(Registration.TimeCrystal.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/time_crystal_shard"));
 
         singleTexture(Registration.FerricoreWrench.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/ferricore_wrench"));
         singleTexture(Registration.TotemOfDeathRecall.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/totem_of_death_recall"));

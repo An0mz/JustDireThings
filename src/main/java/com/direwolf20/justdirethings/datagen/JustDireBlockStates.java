@@ -3,6 +3,8 @@ package com.direwolf20.justdirethings.datagen;
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.blocks.BlockBreakerT1;
 import com.direwolf20.justdirethings.common.blocks.gooblocks.GooPatternBlock;
+import com.direwolf20.justdirethings.common.blocks.resources.TimeCrystalBuddingBlock;
+import com.direwolf20.justdirethings.common.blocks.resources.TimeCrystalCluster;
 import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -12,6 +14,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
@@ -38,11 +41,39 @@ public class JustDireBlockStates extends BlockStateProvider {
         simpleBlock(Registration.CoalBlock_T4.get(), models().cubeAll(Registration.CoalBlock_T4.getId().getPath(), blockTexture(Registration.CoalBlock_T4.get())));
         simpleBlock(Registration.PlayerAccessor.get(), models().cubeAll(Registration.PlayerAccessor.getId().getPath(), blockTexture(Registration.PlayerAccessor.get())));
         simpleBlock(Registration.EclipseGateBlock.get(), models().cubeAll(Registration.EclipseGateBlock.getId().getPath(), blockTexture(Registration.EclipseGateBlock.get())).renderType("cutout"));
+        simpleBlock(Registration.TimeCrystalBlock.get(), models().cubeAll(Registration.TimeCrystalBlock_ITEM.getId().getPath(), blockTexture(Registration.TimeCrystalBlock.get())));
+        simpleBlock(Registration.CharcoalBlock.get(), models().cubeAll(Registration.CharcoalBlock_ITEM.getId().getPath(), blockTexture(Registration.CharcoalBlock.get())));
+        timeCrystalCluster(Registration.TimeCrystalCluster);
+        timeCrystalCluster(Registration.TimeCrystalCluster_Small);
+        timeCrystalCluster(Registration.TimeCrystalCluster_Medium);
+        timeCrystalCluster(Registration.TimeCrystalCluster_Large);
+
+        getVariantBuilder(Registration.TimeCrystalBuddingBlock.get()).forAllStates(s -> {
+            ModelFile model;
+            int stage = s.getValue(TimeCrystalBuddingBlock.STAGE);
+            if (stage == 0) {
+                model = models().cubeAll("time_crystal_budding_block_state_0", modLoc("block/time_crystal_budding_block_state_0")).renderType("solid");
+            } else if (stage == 1) {
+                model = models().cubeAll("time_crystal_budding_block_state_1", modLoc("block/time_crystal_budding_block_state_1")).renderType("solid");
+            } else if (stage == 2) {
+                model = models().cubeAll("time_crystal_budding_block_state_2", modLoc("block/time_crystal_budding_block_state_2")).renderType("solid");
+            } else {
+                model = models().cubeAll("time_crystal_budding_block", modLoc("block/time_crystal_budding_block")).renderType("solid");
+            }
+            return ConfiguredModel.builder().modelFile(model).build();
+        });
 
         patternBlock();
         soilBlocks();
         sidedBlocks();
         sidedNonRotating();
+    }
+
+    private void timeCrystalCluster(RegistryObject<TimeCrystalCluster> block) {
+        var texturePath = block.getId().getPath();
+        var texture = modLoc("block/" + texturePath);
+        var model = models().cross(texturePath, texture).renderType("cutout");
+        directionalBlock(block.get(), model);
     }
 
     private void sidedNonRotating() {

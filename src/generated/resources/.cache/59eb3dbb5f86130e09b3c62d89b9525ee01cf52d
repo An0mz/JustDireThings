@@ -1,4 +1,4 @@
-// 1.20.1	2026-05-04T05:02:25.4387261	Loot Tables
+// 1.20.1	2026-05-04T14:32:41.8410461	Loot Tables
 16a0ab61513717ab1cb8c1df9718722a643d9728 data/justdirethings/loot_tables/blocks/blazegold_block.json
 b2953e2dcd4960e7f275bb42e4ad626219213fe1 data/justdirethings/loot_tables/blocks/blockbreakert1.json
 bb65fdba3c1b14526a629aacb462661b5853008b data/justdirethings/loot_tables/blocks/blockbreakert2.json
@@ -7,6 +7,7 @@ a35afbe42ae811005ae497833e517381b061c259 data/justdirethings/loot_tables/blocks/
 928b3ad9133a8fd73160e4a0e5a317d275980c99 data/justdirethings/loot_tables/blocks/blockswappert1.json
 660d853390c3009ee76cebcff5473805ecd7f615 data/justdirethings/loot_tables/blocks/blockswappert2.json
 db5eebe1105a78a3cc495f52f15653d62ef252fb data/justdirethings/loot_tables/blocks/celestigem_block.json
+0b5c11f7e894b74d531dd2ac09bf31bcc5a4194b data/justdirethings/loot_tables/blocks/charcoal.json
 0cc43a700e7d2727caf3262edaefc5b3040d203a data/justdirethings/loot_tables/blocks/clickert1.json
 fec23f4b1f7e4927f0f9152615f2a24b62967a61 data/justdirethings/loot_tables/blocks/clickert2.json
 3b5492a66295c0f3f90560154868322e17e9387d data/justdirethings/loot_tables/blocks/coalblock_t1.json
@@ -41,3 +42,9 @@ e6e31b3bfee4a6caa533f61014fd5dae5fc5938e data/justdirethings/loot_tables/blocks/
 9a3a9b5226f317f041d8b874ca09fd6b8925b2ef data/justdirethings/loot_tables/blocks/raw_ferricore_ore.json
 3a3a3d719e9882ab9e60546e7127c411939186ee data/justdirethings/loot_tables/blocks/sensort1.json
 5bf2a1543e7b0f4e1ea79595445be65298b21af7 data/justdirethings/loot_tables/blocks/sensort2.json
+8796099af6731d42fd8624a4b2698ff6cd7b660d data/justdirethings/loot_tables/blocks/time_crystal_block.json
+b2d80d93bccfc4417bba63f15ecad5a094f5dfb7 data/justdirethings/loot_tables/blocks/time_crystal_budding_block.json
+771d05a22bf0edb7a0be7aa3ebca1560284c5f6d data/justdirethings/loot_tables/blocks/time_crystal_cluster.json
+89e0120397635ce2ce9e2f8059fa89f3019d5caf data/justdirethings/loot_tables/blocks/time_crystal_cluster_large.json
+3b739d3fc6e7b77aff68bd23b31a3f025a0c056a data/justdirethings/loot_tables/blocks/time_crystal_cluster_medium.json
+8e0626e45088328c1df8ccf0cb770ce66b799698 data/justdirethings/loot_tables/blocks/time_crystal_cluster_small.json

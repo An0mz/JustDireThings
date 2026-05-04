@@ -51,6 +51,24 @@ public class JustDireLootTables extends VanillaBlockLoot {
         dropSelf(Registration.BlockSwapperT2.get());
         add(Registration.EclipseGateBlock.get(), noDrop());
 
+        //Time Crystal blocks
+        dropSelf(Registration.TimeCrystalBlock.get());
+        add(Registration.TimeCrystalBuddingBlock.get(), noDrop());
+        add(Registration.TimeCrystalCluster.get(), createSilkTouchDispatchTable(
+                Registration.TimeCrystalCluster.get(),
+                this.applyExplosionDecay(
+                        Registration.TimeCrystalCluster.get(),
+                        LootItem.lootTableItem(Registration.TimeCrystal.get())
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
+                )
+        ));
+        add(Registration.TimeCrystalCluster_Small.get(), createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Small_ITEM.get()));
+        add(Registration.TimeCrystalCluster_Medium.get(), createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Medium_ITEM.get()));
+        add(Registration.TimeCrystalCluster_Large.get(), createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Large_ITEM.get()));
+
+        //Charcoal block
+        dropSelf(Registration.CharcoalBlock.get());
+
         //Raw Ores
         add(Registration.RawFerricoreOre.get(), createSilkTouchDispatchTable(
                 Registration.RawFerricoreOre.get(),

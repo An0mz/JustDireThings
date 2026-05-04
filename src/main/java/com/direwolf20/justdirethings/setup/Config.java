@@ -4,6 +4,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.List;
+
 public class Config {
     public static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
@@ -33,6 +35,12 @@ public class Config {
     public static ForgeConfigSpec.IntValue POCKET_GENERATOR_MAX_FE;
     public static ForgeConfigSpec.IntValue POCKET_GENERATOR_FE_PER_TICK;
 
+    public static final String CATEGORY_TIME_CRYSTAL = "time_crystal";
+    public static ForgeConfigSpec.BooleanValue TIME_CRYSTAL_CUSTOM_DIMENSIONS;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> TIME_CRYSTAL_STAGE1_DIMENSIONS;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> TIME_CRYSTAL_STAGE2_DIMENSIONS;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> TIME_CRYSTAL_STAGE3_DIMENSIONS;
+
     public static void register() {
         //registerServerConfigs();
         registerCommonConfigs();
@@ -50,6 +58,7 @@ public class Config {
         energyTransmitter();
         fuelCanisterConfig();
         pocketGeneratorConfig();
+        timeCrystalConfig();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
     }
@@ -109,6 +118,19 @@ public class Config {
                 .defineInRange("pocket_gen_max_fe", 1000000, 1, Integer.MAX_VALUE);
         POCKET_GENERATOR_FE_PER_TICK = COMMON_BUILDER.comment("The FE per Tick that the generator charges other items at")
                 .defineInRange("pocket_gen_fe_per_tick", 5000, 1, Integer.MAX_VALUE);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void timeCrystalConfig() {
+        COMMON_BUILDER.comment("Time Crystals").push(CATEGORY_TIME_CRYSTAL);
+        TIME_CRYSTAL_CUSTOM_DIMENSIONS = COMMON_BUILDER.comment("Do you want to customize Time Crystal Growth Dimensions? If set to true, the following 3 fields MUST be populated. Defaults to false, which means normal growth rules: Stage 1 = Overworld, Stage 2 = Nether, Stage 3 = End.")
+                .define("time_crystal_custom_dimensions", false);
+        TIME_CRYSTAL_STAGE1_DIMENSIONS = COMMON_BUILDER.comment("Dimensions where Stage 0 -> Stage 1 growth occurs. Example: [\"minecraft:overworld\"]")
+                .defineListAllowEmpty(List.of("time_crystal_stage1_dimensions"), () -> List.of("minecraft:overworld"), s -> s instanceof String);
+        TIME_CRYSTAL_STAGE2_DIMENSIONS = COMMON_BUILDER.comment("Dimensions where Stage 1 -> Stage 2 growth occurs. Example: [\"minecraft:the_nether\"]")
+                .defineListAllowEmpty(List.of("time_crystal_stage2_dimensions"), () -> List.of("minecraft:the_nether"), s -> s instanceof String);
+        TIME_CRYSTAL_STAGE3_DIMENSIONS = COMMON_BUILDER.comment("Dimensions where Stage 2 -> Stage 3 growth occurs. Example: [\"minecraft:the_end\"]")
+                .defineListAllowEmpty(List.of("time_crystal_stage3_dimensions"), () -> List.of("minecraft:the_end"), s -> s instanceof String);
         COMMON_BUILDER.pop();
     }
 }

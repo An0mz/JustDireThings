@@ -9,6 +9,7 @@ import com.direwolf20.justdirethings.common.blockentities.gooblocks.GooBlockBE_T
 import com.direwolf20.justdirethings.common.blocks.*;
 import com.direwolf20.justdirethings.common.blocks.gooblocks.*;
 import com.direwolf20.justdirethings.common.blocks.resources.*;
+import com.direwolf20.justdirethings.common.items.resources.TimeCrystal;
 import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier1;
 import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier2;
 import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier3;
@@ -30,6 +31,8 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -153,6 +156,39 @@ public class Registration {
     public static final RegistryObject<RawCoal_T4> RawCoal_T4 = BLOCKS.register("raw_coal_t4_ore", RawCoal_T4::new);
     public static final RegistryObject<BlockItem> RawCoal_T4_ITEM = ITEMS.register("raw_coal_t4_ore", () -> new BlockItem(RawCoal_T4.get(), new Item.Properties()));
 
+    //Blocks - Time Crystal
+    public static final RegistryObject<TimeCrystalBlock> TimeCrystalBlock = BLOCKS.register("time_crystal_block", TimeCrystalBlock::new);
+    public static final RegistryObject<BlockItem> TimeCrystalBlock_ITEM = ITEMS.register("time_crystal_block", () -> new BlockItem(TimeCrystalBlock.get(), new Item.Properties()));
+    public static final RegistryObject<TimeCrystalBuddingBlock> TimeCrystalBuddingBlock = BLOCKS.register("time_crystal_budding_block", TimeCrystalBuddingBlock::new);
+    public static final RegistryObject<BlockItem> TimeCrystalBuddingBlock_ITEM = ITEMS.register("time_crystal_budding_block", () -> new BlockItem(TimeCrystalBuddingBlock.get(), new Item.Properties()));
+    public static final RegistryObject<TimeCrystalCluster> TimeCrystalCluster = BLOCKS.register("time_crystal_cluster", () -> new TimeCrystalCluster(
+            7, 3,
+            Block.Properties.of()
+                    .forceSolidOn()
+                    .noOcclusion()
+                    .sound(SoundType.AMETHYST_CLUSTER)
+                    .strength(1.5F)
+                    .lightLevel(s -> 5)
+                    .pushReaction(PushReaction.DESTROY)
+    ));
+    public static final RegistryObject<BlockItem> TimeCrystalCluster_ITEM = ITEMS.register("time_crystal_cluster", () -> new BlockItem(TimeCrystalCluster.get(), new Item.Properties()));
+    public static final RegistryObject<TimeCrystalCluster> TimeCrystalCluster_Small = BLOCKS.register("time_crystal_cluster_small", () -> new TimeCrystalCluster(
+            3, 4, Block.Properties.copy(TimeCrystalCluster.get()).sound(SoundType.SMALL_AMETHYST_BUD).lightLevel(s -> 1)
+    ));
+    public static final RegistryObject<BlockItem> TimeCrystalCluster_Small_ITEM = ITEMS.register("time_crystal_cluster_small", () -> new BlockItem(TimeCrystalCluster_Small.get(), new Item.Properties()));
+    public static final RegistryObject<TimeCrystalCluster> TimeCrystalCluster_Medium = BLOCKS.register("time_crystal_cluster_medium", () -> new TimeCrystalCluster(
+            4, 3, Block.Properties.copy(TimeCrystalCluster.get()).sound(SoundType.MEDIUM_AMETHYST_BUD).lightLevel(s -> 2)
+    ));
+    public static final RegistryObject<BlockItem> TimeCrystalCluster_Medium_ITEM = ITEMS.register("time_crystal_cluster_medium", () -> new BlockItem(TimeCrystalCluster_Medium.get(), new Item.Properties()));
+    public static final RegistryObject<TimeCrystalCluster> TimeCrystalCluster_Large = BLOCKS.register("time_crystal_cluster_large", () -> new TimeCrystalCluster(
+            5, 3, Block.Properties.copy(TimeCrystalCluster.get()).sound(SoundType.LARGE_AMETHYST_BUD).lightLevel(s -> 4)
+    ));
+    public static final RegistryObject<BlockItem> TimeCrystalCluster_Large_ITEM = ITEMS.register("time_crystal_cluster_large", () -> new BlockItem(TimeCrystalCluster_Large.get(), new Item.Properties()));
+
+    //Blocks - Charcoal
+    public static final RegistryObject<CharcoalBlock> CharcoalBlock = BLOCKS.register("charcoal", CharcoalBlock::new);
+    public static final RegistryObject<BlockItem> CharcoalBlock_ITEM = ITEMS.register("charcoal", () -> new BlockItem(CharcoalBlock.get(), new Item.Properties()));
+
     //Blocks Consolidated Resources
     public static final RegistryObject<FerricoreBlock> FerricoreBlock = BLOCKS.register("ferricore_block", FerricoreBlock::new);
     public static final RegistryObject<BlockItem> FerricoreBlock_ITEM = ITEMS.register("ferricore_block", () -> new BlockItem(FerricoreBlock.get(), new Item.Properties()));
@@ -194,6 +230,9 @@ public class Registration {
     public static final RegistryObject<BlockEntityType<BlockSwapperT2BE>> BlockSwapperT2BE = BLOCK_ENTITIES.register("blockswappert2", () -> BlockEntityType.Builder.of(BlockSwapperT2BE::new, BlockSwapperT2.get()).build(null));
     public static final RegistryObject<BlockEntityType<PlayerAccessorBE>> PlayerAccessorBE = BLOCK_ENTITIES.register("playeraccessorbe", () -> BlockEntityType.Builder.of(PlayerAccessorBE::new, PlayerAccessor.get()).build(null));
     public static final RegistryObject<BlockEntityType<EclipseGateBE>> EclipseGateBE = BLOCK_ENTITIES.register("eclipsegatebe", () -> BlockEntityType.Builder.of(EclipseGateBE::new, EclipseGateBlock.get()).build(null));
+
+    //Items - Time Crystal
+    public static final RegistryObject<TimeCrystal> TimeCrystal = ITEMS.register("time_crystal", TimeCrystal::new);
 
     //Items - Raw Resources
     public static final RegistryObject<RawFerricore> RawFerricore = ITEMS.register("raw_ferricore", RawFerricore::new);
