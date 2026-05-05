@@ -9,6 +9,7 @@ import com.direwolf20.justdirethings.common.containers.handlers.FilterBasicHandl
 import com.direwolf20.justdirethings.common.items.PocketGenerator;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.util.BlockEnergyCache;
 import com.direwolf20.justdirethings.util.interfacehelpers.AreaAffectingData;
 import com.direwolf20.justdirethings.util.interfacehelpers.FilterData;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
@@ -28,6 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +44,9 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     public boolean showParticles = true;
     private final FilterBasicHandler filterHandler = new FilterBasicHandler(9);
     private final TransmitterEnergyStorage energyStorage;
+
+    /** Caches neighbor/area energy capabilities — auto-invalidated when neighbors change. */
+    private final BlockEnergyCache neighborEnergyCache = new BlockEnergyCache();
 
     public EnergyTransmitterBE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
@@ -263,15 +268,16 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     }
 
     public IEnergyStorage getHandler(BlockPos blockPos) {
-        BlockEntity be = level.getBlockEntity(blockPos);
-        if (be == null) return null;
+        if (level == null) return null;
+        // Try each side to find one that can receive, using the cache
         for (Direction direction : Direction.values()) {
-            IEnergyStorage cap = be.getCapability(ForgeCapabilities.ENERGY, direction).orElse(null);
+            IEnergyStorage cap = neighborEnergyCache.get(level, blockPos, direction);
             if (cap != null && cap.canReceive()) {
                 return cap;
             }
         }
-        return be.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
+        // Fall back to isotropic (null-sided) query
+        return neighborEnergyCache.get(level, blockPos, null);
     }
 
     public TransmitterEnergyStorage getTransmitterEnergyHandler(BlockPos blockPos) {
@@ -282,14 +288,19 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     }
 
     public IEnergyStorage getTransmitterHandler(BlockPos blockPos) {
+        if (level == null) return null;
         BlockState blockState = level.getBlockState(blockPos);
         if (blockState.is(Registration.EnergyTransmitter.get())) {
-            BlockEntity be = level.getBlockEntity(blockPos);
-            if (be == null) return null;
             Direction facing = blockState.getValue(BlockStateProperties.FACING);
-            return be.getCapability(ForgeCapabilities.ENERGY, facing).orElse(null);
+            return neighborEnergyCache.get(level, blockPos, facing);
         }
         return null;
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        neighborEnergyCache.invalidateAll();
     }
 
     public void providePower() {
@@ -330,6 +341,8 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
     public void getBlocksToCharge() {
         transmitters.clear();
         blocksToCharge.clear();
+        // Clear stale cache entries — positions that left the area won't auto-invalidate otherwise
+        neighborEnergyCache.invalidateAll();
         transmitters.add(getBlockPos()); //Always add yourself
         AABB area = getAABB(getBlockPos());
         BlockPos.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1, (int) area.maxY - 1, (int) area.maxZ - 1)
@@ -341,9 +354,8 @@ public class EnergyTransmitterBE extends BaseMachineBE implements RedstoneContro
                     if (blockState.isAir() || level.getBlockEntity(blockPos) == null) return;
 
                     boolean foundAcceptableSide = false;
-                    BlockEntity targetBe = level.getBlockEntity(blockPos);
                     for (Direction direction : Direction.values()) {
-                        IEnergyStorage cap = targetBe.getCapability(ForgeCapabilities.ENERGY, direction).orElse(null);
+                        IEnergyStorage cap = neighborEnergyCache.get(level, blockPos, direction);
                         if (cap != null && cap.canReceive()) {
                             foundAcceptableSide = true;
                             break;

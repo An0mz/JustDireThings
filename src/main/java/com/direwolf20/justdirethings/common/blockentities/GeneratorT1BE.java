@@ -10,6 +10,7 @@ import com.direwolf20.justdirethings.common.items.FuelCanister;
 import com.direwolf20.justdirethings.common.items.resources.Coal_T1;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.util.BlockEnergyCache;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE, PoweredMachineBE {
@@ -33,6 +33,9 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     public int feRemaining = 0;
     int fuelBurnMultiplier = 1;
     private MachineEnergyStorage energyStorage;
+
+    /** Caches neighbor energy capabilities — auto-invalidated when neighbors change. */
+    private final BlockEnergyCache neighborEnergyCache = new BlockEnergyCache();
 
     public GeneratorT1BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
@@ -117,10 +120,14 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     }
 
     public IEnergyStorage getHandler(Direction direction) {
-        BlockPos targetPos = getBlockPos().relative(direction);
-        BlockEntity be = level.getBlockEntity(targetPos);
-        if (be == null) return null;
-        return be.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).orElse(null);
+        if (level == null) return null;
+        return neighborEnergyCache.get(level, getBlockPos().relative(direction), direction.getOpposite());
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        neighborEnergyCache.invalidateAll();
     }
 
     public void providePowerAdjacent() {

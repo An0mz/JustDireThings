@@ -19,10 +19,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class BaseMachineBE extends BlockEntity {
@@ -35,6 +42,35 @@ public class BaseMachineBE extends BlockEntity {
     protected int tickSpeed = 20;
     protected int operationTicks = -1;
     protected UsefulFakePlayer usefulFakePlayer;
+
+    // Capability holders — lazily initialized, invalidated when the BE is removed
+    private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if (cap == ForgeCapabilities.ENERGY && this instanceof PoweredMachineBE powered) {
+            if (!lazyEnergyStorage.isPresent()) {
+                lazyEnergyStorage = LazyOptional.of(powered::getEnergyStorage);
+            }
+            return lazyEnergyStorage.cast();
+        }
+        if (cap == ForgeCapabilities.ITEM_HANDLER && MACHINE_SLOTS > 0) {
+            if (!lazyItemHandler.isPresent()) {
+                lazyItemHandler = LazyOptional.of(this::getMachineHandler);
+            }
+            return lazyItemHandler.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyEnergyStorage.invalidate();
+        lazyItemHandler.invalidate();
+    }
 
     public BaseMachineBE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
