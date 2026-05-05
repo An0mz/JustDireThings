@@ -99,6 +99,7 @@ public class JustDireItemModels extends ItemModelProvider {
         //Tool Items
         registerTools();
         registerArmors();
+        registerBowModels();
 
         //Generators
         registerEnabledTextureItem(Registration.Pocket_Generator.getId().getPath());
@@ -116,8 +117,38 @@ public class JustDireItemModels extends ItemModelProvider {
         }
     }
 
-    public void registerEnabledTextureItem(String path) {
-        ResourceLocation enabledModelPath = modLoc("item/" + path + "_active"); // Path to your enabled model
+    public void registerBowModels() {
+        for (var bow : Registration.BOWS.getEntries()) {
+            String bowName = bow.getId().getPath();
+            // Create the 3 pulling-state models
+            var pulling0 = singleTexture(bowName + "_pulling_0", mcLoc("item/bow_pulling_0"),
+                    "layer0", modLoc("item/bows/" + bowName + "_pulling_0"));
+            var pulling1 = singleTexture(bowName + "_pulling_1", mcLoc("item/bow_pulling_1"),
+                    "layer0", modLoc("item/bows/" + bowName + "_pulling_1"));
+            var pulling2 = singleTexture(bowName + "_pulling_2", mcLoc("item/bow_pulling_2"),
+                    "layer0", modLoc("item/bows/" + bowName + "_pulling_2"));
+            // Base model with overrides
+            getBuilder(bowName)
+                    .parent(getExistingFile(mcLoc("item/bow")))
+                    .texture("layer0", modLoc("item/bows/" + bowName))
+                    .override()
+                        .predicate(new ResourceLocation("pulling"), 1.0F)
+                        .model(pulling0)
+                    .end()
+                    .override()
+                        .predicate(new ResourceLocation("pulling"), 1.0F)
+                        .predicate(new ResourceLocation("pull"), 0.65F)
+                        .model(pulling1)
+                    .end()
+                    .override()
+                        .predicate(new ResourceLocation("pulling"), 1.0F)
+                        .predicate(new ResourceLocation("pull"), 0.9F)
+                        .model(pulling2)
+                    .end();
+        }
+    }
+
+    public void registerEnabledTextureItem(String path) {        ResourceLocation enabledModelPath = modLoc("item/" + path + "_active"); // Path to your enabled model
         ResourceLocation defaultModelPath = modLoc("item/" + path); // Path to your default model
 
         // Start building your item model

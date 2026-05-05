@@ -41,6 +41,10 @@ public class ModSetup {
                     Item item = e.get();
                     output.accept(item);
                 });
+                Registration.BOWS.getEntries().forEach(e -> {
+                    Item item = e.get();
+                    output.accept(item);
+                });
             }).build());
 
 }

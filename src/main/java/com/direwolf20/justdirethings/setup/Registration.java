@@ -16,6 +16,11 @@ import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier3;
 import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier4;
 import com.direwolf20.justdirethings.common.containers.*;
 import com.direwolf20.justdirethings.common.entities.CreatureCatcherEntity;
+import com.direwolf20.justdirethings.common.entities.JustDireArrow;
+import com.direwolf20.justdirethings.common.items.tools.BlazegoldBow;
+import com.direwolf20.justdirethings.common.items.tools.CelestigemBow;
+import com.direwolf20.justdirethings.common.items.tools.EclipseAlloyBow;
+import com.direwolf20.justdirethings.common.items.tools.FerricoreBow;
 import com.direwolf20.justdirethings.common.items.*;
 import com.direwolf20.justdirethings.common.items.armors.BlazegoldBoots;
 import com.direwolf20.justdirethings.common.items.armors.BlazegoldChestplate;
@@ -65,6 +70,7 @@ public class Registration {
     public static final DeferredRegister<Block> SIDEDBLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Item> TOOLS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<Item> BOWS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Item> ARMORS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
@@ -81,6 +87,7 @@ public class Registration {
         SIDEDBLOCKS.register(eventBus);
         ITEMS.register(eventBus);
         TOOLS.register(eventBus);
+        BOWS.register(eventBus);
         BLOCK_ENTITIES.register(eventBus);
         CONTAINERS.register(eventBus);
         RECIPE_SERIALIZERS.register(eventBus);
@@ -296,6 +303,12 @@ public class Registration {
     public static final RegistryObject<EclipseAlloyHoe> EclipseAlloyHoe = TOOLS.register("eclipsealloy_hoe", EclipseAlloyHoe::new);
     public static final RegistryObject<EclipseAlloyPaxel> EclipseAlloyPaxel = TOOLS.register("eclipsealloy_paxel", EclipseAlloyPaxel::new);
 
+    //Items - Bows
+    public static final RegistryObject<FerricoreBow> FerricoreBow = BOWS.register("bow_ferricore", FerricoreBow::new);
+    public static final RegistryObject<BlazegoldBow> BlazegoldBow = BOWS.register("bow_blazegold", BlazegoldBow::new);
+    public static final RegistryObject<CelestigemBow> CelestigemBow = BOWS.register("bow_celestigem", CelestigemBow::new);
+    public static final RegistryObject<EclipseAlloyBow> EclipseAlloyBow = BOWS.register("bow_eclipsealloy", EclipseAlloyBow::new);
+
     //Items - Armor
     public static final RegistryObject<FerricoreBoots> FerricoreBoots = ARMORS.register("ferricore_boots", FerricoreBoots::new);
     public static final RegistryObject<FerricoreChestplate> FerricoreChestplate = ARMORS.register("ferricore_chestplate", FerricoreChestplate::new);
@@ -324,6 +337,13 @@ public class Registration {
                     .clientTrackingRange(4)
                     .updateInterval(10)
                     .build("creature_catcher"));
+
+    public static final RegistryObject<EntityType<JustDireArrow>> JustDireArrow = ENTITY_TYPES.register("justdire_arrow",
+            () -> EntityType.Builder.<JustDireArrow>of(JustDireArrow::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build("justdire_arrow"));
 
     //Containers
     public static final RegistryObject<MenuType<FuelCanisterContainer>> FuelCanister_Container = CONTAINERS.register("fuelcanister",

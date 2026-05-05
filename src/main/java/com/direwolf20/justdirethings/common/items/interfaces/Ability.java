@@ -36,6 +36,10 @@ public enum Ability {
             AbilityMethods::invulnerability, false,
             new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/invulnerability.png")),
     POTIONARROW(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    SPLASH(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    LINGERING(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    HOMING(SettingType.SLIDER, 1, 25, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    EPICARROW(SettingType.SLIDER, 50, 5000, UseType.USE_COOLDOWN, BindingType.CUSTOM_ONLY),
 
     //Tier 2
     SMELTER(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
