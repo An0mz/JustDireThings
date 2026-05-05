@@ -107,6 +107,24 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.FerricoreChestplate.get(), "Ferricore Chestplate");
         add(Registration.FerricoreLeggings.get(), "Ferricore Leggings");
         add(Registration.FerricoreHelmet.get(), "Ferricore Helmet");
+        add(Registration.BlazegoldBoots.get(), "Blazegold Boots");
+        add(Registration.BlazegoldChestplate.get(), "Blazegold Chestplate");
+        add(Registration.BlazegoldLeggings.get(), "Blazegold Leggings");
+        add(Registration.BlazegoldHelmet.get(), "Blazegold Helmet");
+        add(Registration.CelestigemBoots.get(), "Celestigem Boots");
+        add(Registration.CelestigemChestplate.get(), "Celestigem Chestplate");
+        add(Registration.CelestigemLeggings.get(), "Celestigem Leggings");
+        add(Registration.CelestigemHelmet.get(), "Celestigem Helmet");
+        add(Registration.EclipseAlloyBoots.get(), "Eclipse Alloy Boots");
+        add(Registration.EclipseAlloyChestplate.get(), "Eclipse Alloy Chestplate");
+        add(Registration.EclipseAlloyLeggings.get(), "Eclipse Alloy Leggings");
+        add(Registration.EclipseAlloyHelmet.get(), "Eclipse Alloy Helmet");
+
+        //Bows
+        add(Registration.FerricoreBow.get(), "Ferricore Bow");
+        add(Registration.BlazegoldBow.get(), "Blazegold Bow");
+        add(Registration.CelestigemBow.get(), "Celestigem Bow");
+        add(Registration.EclipseAlloyBow.get(), "Eclipse Alloy Bow");
 
         //Resources
         add(Registration.FerricoreIngot.get(), "Ferricore Ingot");
@@ -181,6 +199,29 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Ability.JUMPBOOST.getLocalization(), "Jump Boost");
         add(Ability.MINDFOG.getLocalization(), "Mind Fog");
         add(Ability.INVULNERABILITY.getLocalization(), "Invulnerability");
+        add(Ability.POTIONARROW.getLocalization(), "Potion Arrow");
+        add(Ability.SPLASH.getLocalization(), "Splash Arrow");
+        add(Ability.LINGERING.getLocalization(), "Lingering Arrow");
+        add(Ability.HOMING.getLocalization(), "Homing Arrow");
+        add(Ability.EPICARROW.getLocalization(), "Epic Arrow");
+        add(Ability.SWIMSPEED.getLocalization(), "Swim Speed");
+        add(Ability.GROUNDSTOMP.getLocalization(), "Ground Stomp");
+        add(Ability.EXTINGUISH.getLocalization(), "Extinguish");
+        add(Ability.STUPEFY.getLocalization(), "Stupefy");
+        add(Ability.NEGATEFALLDAMAGE.getLocalization(), "Negate Fall Damage");
+        add(Ability.NIGHTVISION.getLocalization(), "Night Vision");
+        add(Ability.ELYTRA.getLocalization(), "Elytra Flight");
+        add(Ability.DECOY.getLocalization(), "Decoy");
+        add(Ability.WATERBREATHING.getLocalization(), "Water Breathing");
+        add(Ability.DEATHPROTECTION.getLocalization(), "Death Protection");
+        add(Ability.DEBUFFREMOVER.getLocalization(), "Debuff Remover");
+        add(Ability.EARTHQUAKE.getLocalization(), "Earthquake");
+        add(Ability.NOAI.getLocalization(), "No AI");
+        add(Ability.FLIGHT.getLocalization(), "Flight");
+        add(Ability.LAVAIMMUNITY.getLocalization(), "Lava Immunity");
+        add(Ability.PHASE.getLocalization(), "Phase");
+        add(Ability.TIMEPROTECTION.getLocalization(), "Time Protection");
+        add("entity.justdirethings.justdire_arrow", "JustDire Arrow");
 
         //GUI
         add("justdirethings.screen.energy", "Energy: %s/%s FE");
