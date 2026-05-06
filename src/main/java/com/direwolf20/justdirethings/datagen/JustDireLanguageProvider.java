@@ -234,6 +234,10 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         //GUI
         add("justdirethings.screen.energy", "Energy: %s/%s FE");
         add("justdirethings.screen.energycost", "Energy Cost: %s");
+        add("justdirethings.screen.fluid", "Fluid: %s (%s/%s mB)");
+        add("justdirethings.screen.paradoxfluidcost", "Fluid Cost: %s mB");
+        add("justdirethings.screen.paradoxenergycost", "Energy Cost: %s FE");
+        add("justdirethings.paradoxenergy", "Paradox Energy: %s/%s");
         add("justdirethings.screen.fepertick", "FE/T: %s");
         add("justdirethings.screen.no_fuel", "Fuel source empty");
         add("justdirethings.screen.burn_time", "Burn time left: %ss");
