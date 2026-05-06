@@ -5,7 +5,6 @@ import com.direwolf20.justdirethings.common.blockentities.basebe.PoweredMachineB
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
 import com.direwolf20.justdirethings.common.blocks.resources.CoalBlock_T1;
 import com.direwolf20.justdirethings.common.capabilities.EnergyStorageNoReceive;
-import com.direwolf20.justdirethings.common.capabilities.MachineEnergyStorage;
 import com.direwolf20.justdirethings.common.items.FuelCanister;
 import com.direwolf20.justdirethings.common.items.resources.Coal_T1;
 import com.direwolf20.justdirethings.setup.Config;
@@ -22,6 +21,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE, PoweredMachineBE {
@@ -113,10 +113,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
 
     @Override
     public int insertEnergy(int power, boolean simulate) {
-        MachineEnergyStorage energyStorage = getEnergyStorage();
-        if (energyStorage instanceof EnergyStorageNoReceive energyStorageNoReceive)
-            return energyStorageNoReceive.forceReceiveEnergy(power, simulate);
-        return 0;
+        return energyStorage.forceReceiveEnergy(power, simulate);
     }
 
     public IEnergyStorage getHandler(Direction direction) {
@@ -153,7 +150,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
         if (fuelStack.isEmpty())
             return; //Stop if we have no fuel! The slot only accepts burnables, so this should be a good enough check
         int oldMultiplier = this.fuelBurnMultiplier;
-        int burnTime = fuelStack.getBurnTime(RecipeType.SMELTING);
+        int burnTime = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
         if (burnTime <= 0) return; //Should be impossible, but lets be sure!
         if (fuelStack.getItem() instanceof Coal_T1 direCoal) {
             this.fuelBurnMultiplier = direCoal.getBurnSpeedMultiplier();
@@ -169,7 +166,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
         if (fuelStack.hasCraftingRemainingItem())
             getMachineHandler().setStackInSlot(0, fuelStack.getCraftingRemainingItem());
         else
-            fuelStack.shrink(1);
+            getMachineHandler().extractItem(0, 1, false);
 
         feRemaining = burnTime * getFePerFuelTick();
         maxBurn = (int) (Math.floor(burnTime) / getBurnSpeedMultiplier());
@@ -246,6 +243,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
+        tag.putInt("energy", energyStorage.getEnergyStored());
         tag.putInt("burnRemaining", burnRemaining);
         tag.putInt("maxBurn", maxBurn);
         tag.putInt("feRemaining", feRemaining);
@@ -255,6 +253,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
+        if (tag.contains("energy")) energyStorage.setEnergy(tag.getInt("energy"));
         this.burnRemaining = tag.getInt("burnRemaining");
         this.maxBurn = tag.getInt("maxBurn");
         this.feRemaining = tag.getInt("feRemaining");
