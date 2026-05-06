@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.containers;
 
 import com.direwolf20.justdirethings.common.containers.basecontainers.BaseMachineContainer;
+import com.direwolf20.justdirethings.common.containers.slots.RefinedFuelSlot;
 import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 
 public class GeneratorFluidT1Container extends BaseMachineContainer {
 
@@ -18,6 +20,21 @@ public class GeneratorFluidT1Container extends BaseMachineContainer {
     public GeneratorFluidT1Container(int windowId, Inventory playerInventory, BlockPos blockPos) {
         super(Registration.GeneratorFluidT1_Container.get(), windowId, playerInventory, blockPos);
         addPlayerSlots(player.getInventory());
+    }
+
+    @Override
+    public void addMachineSlots() {
+        machineHandler = baseMachineBE.getMachineHandler();
+        addFuelSlotRange(machineHandler, 0, 80, 13, 1, 18);
+    }
+
+    protected int addFuelSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
+        for (int i = 0; i < amount; i++) {
+            addSlot(new RefinedFuelSlot(handler, index, x, y));
+            x += dx;
+            index++;
+        }
+        return index;
     }
 
     @Override

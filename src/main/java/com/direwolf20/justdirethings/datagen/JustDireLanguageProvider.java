@@ -36,7 +36,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.SensorT2.get(), "Advanced Sensor");
         add(Registration.DropperT1.get(), "Simple Dropper");
         add(Registration.DropperT2.get(), "Advanced Dropper");
-        add(Registration.GeneratorT1.get(), "Simple Fuel Generator");
+        add(Registration.GeneratorT1.get(), "Simple Coal Generator");
         add(Registration.EnergyTransmitter.get(), "Energy Transmitter");
         add(Registration.BlockSwapperT1.get(), "Simple Swapper");
         add(Registration.BlockSwapperT2.get(), "Advanced Swapper");
@@ -46,7 +46,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.FluidCollectorT2.get(), "Advanced Fluid Collector");
         add(Registration.FluidPlacerT1.get(), "Simple Fluid Placer");
         add(Registration.FluidPlacerT2.get(), "Advanced Fluid Placer");
-        add(Registration.GeneratorFluidT1.get(), "Simple Fluid Generator");
+        add(Registration.GeneratorFluidT1.get(), "Simple Fuel Generator");
         add(Registration.InventoryHolder.get(), "Inventory Holder");
         add(Registration.ParadoxMachine.get(), "Paradox Machine");
         add(Registration.EclipseGateBlock.get(), "Eclipse Gate");

@@ -32,7 +32,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     public int burnRemaining = 0;
     public int feRemaining = 0;
     int fuelBurnMultiplier = 1;
-    private MachineEnergyStorage energyStorage;
+    private EnergyStorageNoReceive energyStorage;
 
     /** Caches neighbor energy capabilities — auto-invalidated when neighbors change. */
     private final BlockEnergyCache neighborEnergyCache = new BlockEnergyCache();
@@ -40,7 +40,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     public GeneratorT1BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         MACHINE_SLOTS = 1;
-        energyStorage = new MachineEnergyStorage(getMaxEnergy());
+        energyStorage = new EnergyStorageNoReceive(getMaxEnergy());
         poweredMachineData = new ContainerData() {
             @Override
             public int get(int index) {
@@ -91,7 +91,7 @@ public class GeneratorT1BE extends BaseMachineBE implements RedstoneControlledBE
     }
 
     @Override
-    public MachineEnergyStorage getEnergyStorage() {
+    public EnergyStorageNoReceive getEnergyStorage() {
         return energyStorage;
     }
 
