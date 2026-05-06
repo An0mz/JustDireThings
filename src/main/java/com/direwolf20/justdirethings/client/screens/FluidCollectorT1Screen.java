@@ -1,10 +1,8 @@
 package com.direwolf20.justdirethings.client.screens;
 
 import com.direwolf20.justdirethings.client.screens.basescreens.BaseMachineScreen;
-import com.direwolf20.justdirethings.client.screens.standardbuttons.ToggleButtonFactory;
-import com.direwolf20.justdirethings.client.screens.widgets.ToggleButton;
 import com.direwolf20.justdirethings.common.containers.FluidCollectorT1Container;
-import com.direwolf20.justdirethings.util.MiscHelpers;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -26,11 +24,7 @@ public class FluidCollectorT1Screen extends BaseMachineScreen<FluidCollectorT1Co
     }
 
     @Override
-    public void addRedstoneButtons() {
-        addRenderableWidget(ToggleButtonFactory.REDSTONEBUTTON(getGuiLeft() + 104, topSectionTop + 38, redstoneMode.ordinal(), b -> {
-            redstoneMode = MiscHelpers.RedstoneMode.values()[((ToggleButton) b).getTexturePosition()];
-            saveSettings();
-        }));
+    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+        super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
     }
 }
-
