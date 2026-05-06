@@ -41,8 +41,15 @@ public class PacketHandler {
         CHANNEL.registerMessage(nextId(), ToggleToolLeftRightClickPayload.class, ToggleToolLeftRightClickPayload::write, ToggleToolLeftRightClickPayload::new, ToggleToolLeftRightClickPacket::handle);
         CHANNEL.registerMessage(nextId(), ToggleToolPayload.class,            ToggleToolPayload::write,            ToggleToolPayload::new,            ToggleToolPacket::handle);
         CHANNEL.registerMessage(nextId(), ToggleToolSlotPayload.class,        ToggleToolSlotPayload::write,        ToggleToolSlotPayload::new,        ToggleToolSlotPacket::handle);
+        CHANNEL.registerMessage(nextId(), ExperienceHolderPayload.class,         ExperienceHolderPayload::write,         ExperienceHolderPayload::new,         ExperienceHolderPacket::handle);
+        CHANNEL.registerMessage(nextId(), ExperienceHolderSettingsPayload.class, ExperienceHolderSettingsPayload::write, ExperienceHolderSettingsPayload::new, ExperienceHolderSettingsPacket::handle);
+        CHANNEL.registerMessage(nextId(), InventoryHolderPayload.class,       InventoryHolderPayload::write,       InventoryHolderPayload::new,       InventoryHolderPacket::handle);
+        CHANNEL.registerMessage(nextId(), InventoryHolderMoveItemsPayload.class, InventoryHolderMoveItemsPayload::write, InventoryHolderMoveItemsPayload::new, InventoryHolderMoveItemsPacket::handle);
+        CHANNEL.registerMessage(nextId(), InventoryHolderSaveSlotPayload.class,  InventoryHolderSaveSlotPayload::write,  InventoryHolderSaveSlotPayload::new,  InventoryHolderSaveSlotPacket::handle);
+        CHANNEL.registerMessage(nextId(), ParadoxMachinePayload.class,        ParadoxMachinePayload::write,        ParadoxMachinePayload::new,        ParadoxMachinePacket::handle);
 
         // Client-bound packets
         CHANNEL.registerMessage(nextId(), ClientSoundPayload.class,           ClientSoundPayload::write,           ClientSoundPayload::new,           ClientSoundPacket::handle);
+        CHANNEL.registerMessage(nextId(), ParadoxSyncPayload.class,           ParadoxSyncPayload::write,           ParadoxSyncPayload::new,           ParadoxSyncPacket::handle);
     }
 }

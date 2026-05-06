@@ -41,6 +41,14 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.BlockSwapperT1.get(), "Simple Swapper");
         add(Registration.BlockSwapperT2.get(), "Advanced Swapper");
         add(Registration.PlayerAccessor.get(), "Player Accessor");
+        add(Registration.ExperienceHolder.get(), "Experience Holder");
+        add(Registration.FluidCollectorT1.get(), "Simple Fluid Collector");
+        add(Registration.FluidCollectorT2.get(), "Advanced Fluid Collector");
+        add(Registration.FluidPlacerT1.get(), "Simple Fluid Placer");
+        add(Registration.FluidPlacerT2.get(), "Advanced Fluid Placer");
+        add(Registration.GeneratorFluidT1.get(), "Simple Fluid Generator");
+        add(Registration.InventoryHolder.get(), "Inventory Holder");
+        add(Registration.ParadoxMachine.get(), "Paradox Machine");
         add(Registration.EclipseGateBlock.get(), "Eclipse Gate");
         add(Registration.TimeCrystalBlock.get(), "Time Crystal Block");
         add(Registration.TimeCrystalBuddingBlock.get(), "Budding Time Crystal Block");
@@ -273,6 +281,11 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.screen.equals", "Equals");
         add("justdirethings.screen.dropcount", "Drop Amount");
         add("justdirethings.screen.showparticles", "Show Particles");
+        add("justdirethings.screen.storeexp", "Store EXP");
+        add("justdirethings.screen.retrieveexp", "Retrieve EXP");
+        add("justdirethings.screen.owneronly", "Owner Only");
+        add("justdirethings.screen.collectexp", "Collect EXP");
+        add("justdirethings.screen.targetexp", "Target Level");
         add("justdirethings.screen.showrender", "Show Render");
         add("justdirethings.screen.burnspeedmultiplier", "Burn Speed Multiplier: %s");
         add("justdirethings.screen.click-hold", "Hold Click");

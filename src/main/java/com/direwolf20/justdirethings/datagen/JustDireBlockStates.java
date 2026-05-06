@@ -63,6 +63,11 @@ public class JustDireBlockStates extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(model).build();
         });
 
+        // InventoryHolder — simple cubeAll
+        simpleBlock(Registration.InventoryHolder.get(), models().cubeAll(
+                Registration.InventoryHolder.getId().getPath(),
+                modLoc("block/inventory_holder")));
+
         patternBlock();
         soilBlocks();
         sidedBlocks();
@@ -107,6 +112,26 @@ public class JustDireBlockStates extends BlockStateProvider {
                 modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_side"),
                 modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_bottom"),
                 modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_top")));
+        simpleBlock(Registration.FluidCollectorT2.get(), models().cubeBottomTop(
+                Registration.FluidCollectorT2.getId().getPath(),
+                modLoc("block/fluidcollectort2_side"),
+                modLoc("block/fluidcollectort2_bottom"),
+                modLoc("block/fluidcollectort2_top")));
+        simpleBlock(Registration.FluidPlacerT2.get(), models().cubeBottomTop(
+                Registration.FluidPlacerT2.getId().getPath(),
+                modLoc("block/fluidplacert2_side"),
+                modLoc("block/fluidplacert2_bottom"),
+                modLoc("block/fluidplacert2_top")));
+        simpleBlock(Registration.GeneratorFluidT1.get(), models().cubeBottomTop(
+                Registration.GeneratorFluidT1.getId().getPath(),
+                modLoc("block/generatorfluidt1_side"),
+                modLoc("block/generatorfluidt1_bottom"),
+                modLoc("block/generatorfluidt1_top")));
+        simpleBlock(Registration.ParadoxMachine.get(), models().cubeBottomTop(
+                Registration.ParadoxMachine.getId().getPath(),
+                modLoc("block/paradoxmachine_side"),
+                modLoc("block/paradoxmachine_bottom"),
+                modLoc("block/paradoxmachine_top")));
     }
 
     private void sidedBlocks() {

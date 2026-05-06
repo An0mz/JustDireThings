@@ -65,6 +65,14 @@ public class ClientSetup {
             MenuScreens.register(Registration.BlockSwapperT1_Container.get(), BlockSwapperT1Screen::new);
             MenuScreens.register(Registration.BlockSwapperT2_Container.get(), BlockSwapperT2Screen::new);
             MenuScreens.register(Registration.PlayerAccessor_Container.get(), PlayerAccessorScreen::new);
+            MenuScreens.register(Registration.ExperienceHolder_Container.get(), ExperienceHolderScreen::new);
+            MenuScreens.register(Registration.FluidCollectorT1_Container.get(), FluidCollectorT1Screen::new);
+            MenuScreens.register(Registration.FluidCollectorT2_Container.get(), FluidCollectorT2Screen::new);
+            MenuScreens.register(Registration.FluidPlacerT1_Container.get(), FluidPlacerT1Screen::new);
+            MenuScreens.register(Registration.FluidPlacerT2_Container.get(), FluidPlacerT2Screen::new);
+            MenuScreens.register(Registration.GeneratorFluidT1_Container.get(), GeneratorFluidT1Screen::new);
+            MenuScreens.register(Registration.InventoryHolder_Container.get(), InventoryHolderScreen::new);
+            MenuScreens.register(Registration.ParadoxMachine_Container.get(), ParadoxMachineScreen::new);
 
             //Item Properties
             for (var tool : Registration.TOOLS.getEntries()) {

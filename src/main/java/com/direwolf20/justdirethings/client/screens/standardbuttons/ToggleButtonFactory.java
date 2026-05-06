@@ -114,6 +114,45 @@ public class ToggleButtonFactory {
         return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, HAMMER_TEXTURES, startingValue, maxValue, onPress);
     }
 
+    /** Store EXP button **/
+    private static final ResourceLocation STORE_EXP_BUTTON = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/add.png");
+    private static final Component STORE_EXP_BUTTON_LOCALIZATION = Component.translatable("justdirethings.screen.storeexp");
+
+    public static GrayscaleButton STOREEXPBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, STORE_EXP_BUTTON, STORE_EXP_BUTTON_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Extract EXP button **/
+    private static final ResourceLocation EXTRACT_EXP_BUTTON = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/remove.png");
+    private static final Component EXTRACT_EXP_BUTTON_LOCALIZATION = Component.translatable("justdirethings.screen.retrieveexp");
+
+    public static GrayscaleButton EXTRACTEXPBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, EXTRACT_EXP_BUTTON, EXTRACT_EXP_BUTTON_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Owner Only button **/
+    private static final ResourceLocation OWNER_ONLY_BUTTON = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/player.png");
+    private static final Component OWNER_ONLY_BUTTON_LOCALIZATION = Component.translatable("justdirethings.screen.owneronly");
+
+    public static GrayscaleButton OWNERONLYBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, OWNER_ONLY_BUTTON, OWNER_ONLY_BUTTON_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Collect EXP button **/
+    private static final ResourceLocation COLLECT_EXP_BUTTON = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/mindfog.png");
+    private static final Component COLLECT_EXP_BUTTON_LOCALIZATION = Component.translatable("justdirethings.screen.collectexp");
+
+    public static GrayscaleButton COLLECTEXPBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, COLLECT_EXP_BUTTON, COLLECT_EXP_BUTTON_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Target EXP level number button **/
+    private static final Component targetExpLocalization = Component.translatable("justdirethings.screen.targetexp");
+
+    public static NumberButton TARGETEXPBUTTON(int x, int y, int value, Button.OnPress onPress) {
+        return new NumberButton(x, y, 24, 12, value, 0, 1000, targetExpLocalization, onPress);
+    }
+
     private static Component ticksButtonLocalization = Component.translatable("justdirethings.screen.tickspeed");
 
     public static NumberButton TICKSPEEDBUTTON(int x, int y, int value, Button.OnPress onPress) {
@@ -287,6 +326,77 @@ public class ToggleButtonFactory {
 
     public static GrayscaleButton HIDE_RENDER_ABILITY_BUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
         return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, HIDE_RENDER_BUTTON, HIDE_RENDER_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Filter Only button **/
+    private static final ResourceLocation FILTER_ONLY = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/allowlisttrue.png");
+    private static final Component FILTER_ONLY_LOCALIZATION = Component.translatable("justdirethings.screen.filteronlytrue");
+
+    public static GrayscaleButton FILTERONLYBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, FILTER_ONLY, FILTER_ONLY_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Compare Counts button **/
+    private static final ResourceLocation COMPARE_COUNTS = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/equals.png");
+    private static final Component COMPARE_COUNTS_LOCALIZATION = Component.translatable("justdirethings.screen.comparecounts");
+
+    public static GrayscaleButton COMPARECOUNTSBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, COMPARE_COUNTS, COMPARE_COUNTS_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Render Paradox button **/
+    private static final ResourceLocation RENDER_PARADOX = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/showfakeplayer.png");
+    private static final Component RENDER_PARADOX_LOCALIZATION = Component.translatable("justdirethings.screen.renderparadox");
+
+    public static GrayscaleButton RENDERPARADOXBUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, RENDER_PARADOX, RENDER_PARADOX_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Paradox Target Button **/
+    private static final List<TextureLocalization> PARADOX_TARGET_TEXTURES = List.of(
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/filter-block.png"), Component.translatable("justdirethings.screen.paradoxall")),
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/filter-block.png"), Component.translatable("justdirethings.screen.paradoxblock")),
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/passivemob.png"), Component.translatable("justdirethings.screen.paradoxentity"))
+    );
+
+    public static ToggleButton PARADOXTARGETBUTTON(int x, int y, int startingValue, Button.OnPress onPress) {
+        return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, PARADOX_TARGET_TEXTURES, startingValue, onPress);
+    }
+
+    /** Snapshot Area Button **/
+    private static final List<TextureLocalization> SNAPSHOT_AREA_TEXTURES = List.of(
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/area.png"), Component.translatable("justdirethings.screen.snapshotarea"))
+    );
+
+    public static ToggleButton SNAPSHOT_AREA_BUTTON(int x, int y, Button.OnPress onPress) {
+        return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, SNAPSHOT_AREA_TEXTURES, 0, onPress);
+    }
+
+    /** Send Items button **/
+    private static final List<TextureLocalization> SEND_INV_TEXTURES = List.of(
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/allowlisttrue.png"), Component.translatable("justdirethings.screen.senditems"))
+    );
+
+    public static ToggleButton SEND_INV_BUTTON(int x, int y, Button.OnPress onPress) {
+        return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, SEND_INV_TEXTURES, 0, onPress);
+    }
+
+    /** Pull Items button **/
+    private static final List<TextureLocalization> PULL_INV_TEXTURES = List.of(
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/allowlistfalse.png"), Component.translatable("justdirethings.screen.pullitems"))
+    );
+
+    public static ToggleButton PULL_INV_BUTTON(int x, int y, Button.OnPress onPress) {
+        return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, PULL_INV_TEXTURES, 0, onPress);
+    }
+
+    /** Swap Items button **/
+    private static final List<TextureLocalization> SWAP_INV_TEXTURES = List.of(
+            new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/matchnbttrue.png"), Component.translatable("justdirethings.screen.swapitems"))
+    );
+
+    public static ToggleButton SWAP_INV_BUTTON(int x, int y, Button.OnPress onPress) {
+        return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, SWAP_INV_TEXTURES, 0, onPress);
     }
 
 }

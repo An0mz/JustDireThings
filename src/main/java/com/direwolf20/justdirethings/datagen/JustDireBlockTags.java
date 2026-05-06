@@ -24,6 +24,7 @@ public class JustDireBlockTags extends BlockTagsProvider {
 
     public static final TagKey<Block> LAWNMOWERABLE = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "lawnmowerable"));
     public static final TagKey<Block> NO_AUTO_CLICK = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "noautoclick"));
+    public static final TagKey<Block> PARADOX_ALLOW = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "paradox_allow"));
     public static final TagKey<Block> SWAPPERDENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "swapper_deny"));
     public static final TagKey<Block> ECLISEGATEDENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "eclipsegate_deny"));
     public static final TagKey<Block> NO_MOVE = BlockTags.create(new ResourceLocation("forge", "relocation_not_supported"));
@@ -72,7 +73,15 @@ public class JustDireBlockTags extends BlockTagsProvider {
                 .add(Registration.CoalBlock_T4.get())
                 .add(Registration.BlockSwapperT1.get())
                 .add(Registration.BlockSwapperT2.get())
-                .add(Registration.PlayerAccessor.get());
+                .add(Registration.PlayerAccessor.get())
+                .add(Registration.ExperienceHolder.get())
+                .add(Registration.FluidCollectorT1.get())
+                .add(Registration.FluidCollectorT2.get())
+                .add(Registration.FluidPlacerT1.get())
+                .add(Registration.FluidPlacerT2.get())
+                .add(Registration.GeneratorFluidT1.get())
+                .add(Registration.InventoryHolder.get())
+                .add(Registration.ParadoxMachine.get());
         tag(LAWNMOWERABLE)
                 .addTag(BlockTags.FLOWERS)
                 .add(Blocks.TALL_GRASS)
@@ -91,6 +100,8 @@ public class JustDireBlockTags extends BlockTagsProvider {
                 .add(Registration.GooSoil_Tier2.get())
                 .add(Registration.GooSoil_Tier3.get())
                 .add(Registration.GooSoil_Tier4.get());
+        tag(PARADOX_ALLOW)
+                .addTag(net.minecraftforge.common.Tags.Blocks.ORES);
         tag(NO_AUTO_CLICK);
         tag(SWAPPERDENY)
                 .add(Blocks.PISTON_HEAD)

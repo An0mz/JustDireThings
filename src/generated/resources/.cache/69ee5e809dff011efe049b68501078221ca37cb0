@@ -1,4 +1,4 @@
-// 1.20.1	2026-05-04T15:34:48.689803	Item Models: justdirethings
+// 1.20.1	2026-05-06T00:54:19.3099781	Item Models: justdirethings
 c197a1b2a5ae31fcfabfe6cab9ab95a9dc0e1af6 assets/justdirethings/models/item/blazegold_axe.json
 dddf215922d40d92c2d8bce4229f2e2af8b3c7ba assets/justdirethings/models/item/blazegold_axe_active.json
 6396fb6e503760080534bc26337236d4d09a4cb8 assets/justdirethings/models/item/blazegold_block.json
@@ -91,6 +91,7 @@ d3f356b071deedc9372ec13aa79b224a46327716 assets/justdirethings/models/item/eclip
 2f3ef44480cc3c82ab7af95cfee7d174dcfd1d30 assets/justdirethings/models/item/eclipsealloy_sword_active.json
 0513f5b0e4ee400a4f2ee1440d8488302683a12f assets/justdirethings/models/item/eclipsegate_wand.json
 acf1922ba0cd70df4e7ccf30684508a47ac1a14b assets/justdirethings/models/item/energytransmitter.json
+c6e8a590cc9e752378ffd172eadd9fcf6f6bb1ed assets/justdirethings/models/item/experienceholder.json
 eb052d000da5f8d7999360f7bbfe773aa23ce70d assets/justdirethings/models/item/ferricore_axe.json
 62a8f615d9bd8a95b2e7e21b8f6658454008fb54 assets/justdirethings/models/item/ferricore_axe_active.json
 6c85011e764ec697b9be64a2f7fc12ddacf56f74 assets/justdirethings/models/item/ferricore_block.json
@@ -108,7 +109,12 @@ d7e8aa57768845fa217ec6dd8b1231fe379d6f0c assets/justdirethings/models/item/ferri
 bbd7675c2e3492bf9a3b359d492825ae53b03b80 assets/justdirethings/models/item/ferricore_sword.json
 5d94fa5471736b6c14c1fc07a9d184f3051df65f assets/justdirethings/models/item/ferricore_sword_active.json
 a1ce9ead1232d00769af1db1a121acce49867fca assets/justdirethings/models/item/ferricore_wrench.json
+d31f068e72a68c69220744b3226a75cb1b3bdd25 assets/justdirethings/models/item/fluidcollectort1.json
+0993697cc5bc87edb98f63ab9bd4a10a1527581d assets/justdirethings/models/item/fluidcollectort2.json
+f22b6d245d77b6e76ae0ff72fc4e484528bfcc57 assets/justdirethings/models/item/fluidplacert1.json
+805525d33c60fdec5e8dc72cbd11f65f01373d61 assets/justdirethings/models/item/fluidplacert2.json
 af62c31381c904f86fde9370e374e01d828fa643 assets/justdirethings/models/item/fuel_canister.json
+1ac0164c3e7593f7bd9dba80916574c672546ded assets/justdirethings/models/item/generatorfluidt1.json
 3704b53abb2c321bda2b0e187417031d0f8c08ef assets/justdirethings/models/item/generatort1.json
 2ec271fed6a1fb15d49837326283ca1f0e269689 assets/justdirethings/models/item/gooblock_tier1.json
 8e2f93de57bf331b80c25882febe5601d1b9d26a assets/justdirethings/models/item/gooblock_tier2.json
@@ -118,7 +124,9 @@ a48cecdb5ad78ee95ffb4e98458804d64cd1f608 assets/justdirethings/models/item/gooso
 d42f004ad7ff6b67416aa3265ce45f6c3ec717f4 assets/justdirethings/models/item/goosoil_tier2.json
 e4ec28bbb693fef607a9a59e130c9c741c2c4ec2 assets/justdirethings/models/item/goosoil_tier3.json
 ac932db480bd510a82b5f207cc05152877106e2e assets/justdirethings/models/item/goosoil_tier4.json
+83982416b284cfe1d34098790f96cc5132107530 assets/justdirethings/models/item/inventoryholder.json
 87ad4ff946b952807517ec6ef4b434215dc6fb51 assets/justdirethings/models/item/itemcollector.json
+93289cdb69e1b67bf43186e5ad12efafcb01149e assets/justdirethings/models/item/paradoxmachine.json
 b10bbca68270e48599af7174531b0235c8e7c9a4 assets/justdirethings/models/item/playeraccessor.json
 66aca56ce4b585aebe915412dea2b9a65ec6fb82 assets/justdirethings/models/item/pocket_generator.json
 86e8b463737ba209a47a1f3544b51525598d38a3 assets/justdirethings/models/item/pocket_generator_active.json

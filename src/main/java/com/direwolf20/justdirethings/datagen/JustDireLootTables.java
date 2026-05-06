@@ -50,6 +50,14 @@ public class JustDireLootTables extends VanillaBlockLoot {
         dropSelf(Registration.BlockSwapperT1.get());
         dropSelf(Registration.BlockSwapperT2.get());
         add(Registration.EclipseGateBlock.get(), noDrop());
+        dropSelf(Registration.ExperienceHolder.get());
+        dropSelf(Registration.FluidCollectorT1.get());
+        dropSelf(Registration.FluidCollectorT2.get());
+        dropSelf(Registration.FluidPlacerT1.get());
+        dropSelf(Registration.FluidPlacerT2.get());
+        dropSelf(Registration.GeneratorFluidT1.get());
+        dropSelf(Registration.InventoryHolder.get());
+        dropSelf(Registration.ParadoxMachine.get());
 
         //Time Crystal blocks
         dropSelf(Registration.TimeCrystalBlock.get());

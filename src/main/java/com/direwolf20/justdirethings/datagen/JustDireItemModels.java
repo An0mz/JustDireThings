@@ -56,6 +56,14 @@ public class JustDireItemModels extends ItemModelProvider {
         withExistingParent(Registration.BlockSwapperT1_ITEM.getId().getPath(), modLoc("block/blockswappert1"));
         withExistingParent(Registration.BlockSwapperT2_ITEM.getId().getPath(), modLoc("block/blockswappert2"));
         withExistingParent(Registration.PlayerAccessor.getId().getPath(), modLoc("block/playeraccessor"));
+        withExistingParent(Registration.ExperienceHolder_ITEM.getId().getPath(), modLoc("block/experienceholder"));
+        withExistingParent(Registration.FluidCollectorT1_ITEM.getId().getPath(), modLoc("block/fluidcollectort1"));
+        withExistingParent(Registration.FluidCollectorT2_ITEM.getId().getPath(), modLoc("block/fluidcollectort2"));
+        withExistingParent(Registration.FluidPlacerT1_ITEM.getId().getPath(), modLoc("block/fluidplacert1"));
+        withExistingParent(Registration.FluidPlacerT2_ITEM.getId().getPath(), modLoc("block/fluidplacert2"));
+        withExistingParent(Registration.GeneratorFluidT1_ITEM.getId().getPath(), modLoc("block/generatorfluidt1"));
+        withExistingParent(Registration.InventoryHolder_ITEM.getId().getPath(), modLoc("block/inventoryholder"));
+        withExistingParent(Registration.ParadoxMachine_ITEM.getId().getPath(), modLoc("block/paradoxmachine"));
         withExistingParent(Registration.TimeCrystalBlock_ITEM.getId().getPath(), modLoc("block/time_crystal_block"));
         withExistingParent(Registration.TimeCrystalBuddingBlock_ITEM.getId().getPath(), modLoc("block/time_crystal_budding_block"));
         withExistingParent(Registration.TimeCrystalCluster_ITEM.getId().getPath(), modLoc("block/time_crystal_cluster"));

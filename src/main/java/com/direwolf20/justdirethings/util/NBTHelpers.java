@@ -81,6 +81,21 @@ public class NBTHelpers {
         return GlobalPos.of(levelKey, blockPos);
     }
 
+    public static CompoundTag vec3ToNBT(net.minecraft.world.phys.Vec3 vec3) {
+        CompoundTag tag = new CompoundTag();
+        tag.putDouble("vec3x", vec3.x);
+        tag.putDouble("vec3y", vec3.y);
+        tag.putDouble("vec3z", vec3.z);
+        return tag;
+    }
+
+    public static net.minecraft.world.phys.Vec3 nbtToVec3(CompoundTag tag) {
+        double x = tag.getDouble("vec3x");
+        double y = tag.getDouble("vec3y");
+        double z = tag.getDouble("vec3z");
+        return new net.minecraft.world.phys.Vec3(x, y, z);
+    }
+
     public static CompoundTag globalVec3ToNBT(GlobalVec3 globalVec3) {
         CompoundTag tag = new CompoundTag();
         tag.putString("dimension", globalVec3.dimension.location().toString());

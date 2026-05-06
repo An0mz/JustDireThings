@@ -10,6 +10,7 @@ import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -46,6 +47,7 @@ public class BaseMachineBE extends BlockEntity {
     // Capability holders — lazily initialized, invalidated when the BE is removed
     private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private LazyOptional<net.minecraftforge.fluids.capability.IFluidHandler> lazyFluidHandler = LazyOptional.empty();
 
     @Nonnull
     @Override
@@ -62,6 +64,12 @@ public class BaseMachineBE extends BlockEntity {
             }
             return lazyItemHandler.cast();
         }
+        if (cap == ForgeCapabilities.FLUID_HANDLER && this instanceof FluidMachineBE fluidMachine) {
+            if (!lazyFluidHandler.isPresent()) {
+                lazyFluidHandler = LazyOptional.of(fluidMachine::getFluidTank);
+            }
+            return lazyFluidHandler.cast();
+        }
         return super.getCapability(cap, side);
     }
 
@@ -70,6 +78,7 @@ public class BaseMachineBE extends BlockEntity {
         super.invalidateCaps();
         lazyEnergyStorage.invalidate();
         lazyItemHandler.invalidate();
+        lazyFluidHandler.invalidate();
     }
 
     public BaseMachineBE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
@@ -132,6 +141,14 @@ public class BaseMachineBE extends BlockEntity {
 
     public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    protected boolean canPlaceAt(Level level, BlockPos blockPos, FakePlayer fakePlayer) {
+        return level.mayInteract(fakePlayer, blockPos);
+    }
+
+    protected boolean canBreakAndPlaceAt(Level level, BlockPos blockPos, FakePlayer fakePlayer) {
+        return level.mayInteract(fakePlayer, blockPos);
     }
 
     protected GameProfile getPlacedByProfile() {

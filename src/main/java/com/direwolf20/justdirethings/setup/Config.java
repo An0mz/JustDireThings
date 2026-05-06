@@ -41,6 +41,22 @@ public class Config {
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> TIME_CRYSTAL_STAGE2_DIMENSIONS;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> TIME_CRYSTAL_STAGE3_DIMENSIONS;
 
+    public static final String CATEGORY_GENERATOR_FLUID_T1 = "generator_fluid_t1";
+    public static ForgeConfigSpec.IntValue GENERATOR_FLUID_T1_MAX_FE;
+    public static ForgeConfigSpec.IntValue GENERATOR_FLUID_T1_FE_PER_TICK;
+
+    public static final String CATEGORY_PARADOX = "paradox_machine";
+    public static ForgeConfigSpec.IntValue PARADOX_TOTAL_RF_CAPACITY;
+    public static ForgeConfigSpec.IntValue PARADOX_TOTAL_FLUID_CAPACITY;
+    public static ForgeConfigSpec.IntValue PARADOX_RF_PER_BLOCK;
+    public static ForgeConfigSpec.IntValue PARADOX_RF_PER_ENTITY;
+    public static ForgeConfigSpec.IntValue PARADOX_FLUID_PER_BLOCK;
+    public static ForgeConfigSpec.IntValue PARADOX_FLUID_PER_ENTITY;
+    public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_PER_BLOCK;
+    public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_PER_ENTITY;
+    public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_MAX;
+    public static ForgeConfigSpec.BooleanValue PARADOX_RESTRICTED_MOBS;
+
     public static void register() {
         //registerServerConfigs();
         registerCommonConfigs();
@@ -55,10 +71,12 @@ public class Config {
     private static void registerCommonConfigs() {
         generalConfig();
         generatorT1Config();
+        generatorFluidT1Config();
         energyTransmitter();
         fuelCanisterConfig();
         pocketGeneratorConfig();
         timeCrystalConfig();
+        paradoxConfig();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
     }
@@ -131,6 +149,40 @@ public class Config {
                 .defineListAllowEmpty(List.of("time_crystal_stage2_dimensions"), () -> List.of("minecraft:the_nether"), s -> s instanceof String);
         TIME_CRYSTAL_STAGE3_DIMENSIONS = COMMON_BUILDER.comment("Dimensions where Stage 2 -> Stage 3 growth occurs. Example: [\"minecraft:the_end\"]")
                 .defineListAllowEmpty(List.of("time_crystal_stage3_dimensions"), () -> List.of("minecraft:the_end"), s -> s instanceof String);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void generatorFluidT1Config() {
+        COMMON_BUILDER.comment("Generator Fluid T1").push(CATEGORY_GENERATOR_FLUID_T1);
+        GENERATOR_FLUID_T1_MAX_FE = COMMON_BUILDER.comment("Max FE capacity for the Fluid Generator T1")
+                .defineInRange("generator_fluid_t1_max_fe", 1000000, 1, Integer.MAX_VALUE);
+        GENERATOR_FLUID_T1_FE_PER_TICK = COMMON_BUILDER.comment("FE output per tick for the Fluid Generator T1")
+                .defineInRange("generator_fluid_t1_fe_per_tick", 1000, 1, Integer.MAX_VALUE);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void paradoxConfig() {
+        COMMON_BUILDER.comment("Paradox Machine").push(CATEGORY_PARADOX);
+        PARADOX_TOTAL_RF_CAPACITY = COMMON_BUILDER.comment("Max RF capacity of the Paradox Machine")
+                .defineInRange("paradox_total_rf_capacity", 10000000, 1, Integer.MAX_VALUE);
+        PARADOX_TOTAL_FLUID_CAPACITY = COMMON_BUILDER.comment("Max fluid capacity (mB) of the Paradox Machine")
+                .defineInRange("paradox_total_fluid_capacity", 64000, 1, Integer.MAX_VALUE);
+        PARADOX_RF_PER_BLOCK = COMMON_BUILDER.comment("RF cost per block restored")
+                .defineInRange("paradox_rf_per_block", 1000, 0, Integer.MAX_VALUE);
+        PARADOX_RF_PER_ENTITY = COMMON_BUILDER.comment("RF cost per entity restored")
+                .defineInRange("paradox_rf_per_entity", 5000, 0, Integer.MAX_VALUE);
+        PARADOX_FLUID_PER_BLOCK = COMMON_BUILDER.comment("Fluid cost (mB) per block restored")
+                .defineInRange("paradox_fluid_per_block", 10, 0, Integer.MAX_VALUE);
+        PARADOX_FLUID_PER_ENTITY = COMMON_BUILDER.comment("Fluid cost (mB) per entity restored")
+                .defineInRange("paradox_fluid_per_entity", 50, 0, Integer.MAX_VALUE);
+        PARADOX_ENERGY_PER_BLOCK = COMMON_BUILDER.comment("Paradox energy generated per block restored")
+                .defineInRange("paradox_energy_per_block", 0.5, 0, Double.MAX_VALUE);
+        PARADOX_ENERGY_PER_ENTITY = COMMON_BUILDER.comment("Paradox energy generated per entity restored")
+                .defineInRange("paradox_energy_per_entity", 2.0, 0, Double.MAX_VALUE);
+        PARADOX_ENERGY_MAX = COMMON_BUILDER.comment("Max paradox energy before a ParadoxEntity spawns")
+                .defineInRange("paradox_energy_max", 100.0, 1, Double.MAX_VALUE);
+        PARADOX_RESTRICTED_MOBS = COMMON_BUILDER.comment("If true, only safe mob data fields are restored")
+                .define("paradox_restricted_mobs", true);
         COMMON_BUILDER.pop();
     }
 }
