@@ -1,5 +1,6 @@
 {
   "loader": "forge:fluid_container",
+  "parent": "forge:item/default",
   "fluid": "justdirethings:xp_fluid",
   "flip_gas": false,
   "textures": {

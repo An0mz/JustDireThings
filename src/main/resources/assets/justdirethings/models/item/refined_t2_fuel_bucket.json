@@ -1,5 +1,6 @@
 {
   "loader": "forge:fluid_container",
+  "parent": "forge:item/default",
   "fluid": "justdirethings:refined_t2_fuel",
   "flip_gas": false,
   "textures": {
