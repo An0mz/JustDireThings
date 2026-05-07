@@ -296,6 +296,11 @@ public class Registration {
     //Items
     public static final RegistryObject<FuelCanister> Fuel_Canister = ITEMS.register("fuel_canister", FuelCanister::new);
     public static final RegistryObject<PocketGenerator> Pocket_Generator = ITEMS.register("pocket_generator", PocketGenerator::new);
+    public static final RegistryObject<FluidCanister> FluidCanister = ITEMS.register("fluid_canister", FluidCanister::new);
+    public static final RegistryObject<PotionCanister> PotionCanister = ITEMS.register("potion_canister", PotionCanister::new);
+    public static final RegistryObject<PolymorphicCatalyst> PolymorphicCatalyst = ITEMS.register("polymorphic_catalyst", PolymorphicCatalyst::new);
+    public static final RegistryObject<PortalFluidCatalyst> PortalFluidCatalyst = ITEMS.register("portal_fluid_catalyst", PortalFluidCatalyst::new);
+    public static final RegistryObject<MachineSettingsCopier> MachineSettingsCopier = ITEMS.register("machine_settings_copier", MachineSettingsCopier::new);
 
     public static final RegistryObject<FerricoreWrench> FerricoreWrench = ITEMS.register("ferricore_wrench", FerricoreWrench::new);
     public static final RegistryObject<TotemOfDeathRecall> TotemOfDeathRecall = ITEMS.register("totem_of_death_recall", TotemOfDeathRecall::new);
@@ -303,6 +308,8 @@ public class Registration {
     public static final RegistryObject<VoidshiftWand> VoidshiftWand = ITEMS.register("voidshift_wand", VoidshiftWand::new);
     public static final RegistryObject<EclipsegateWand> EclipsegateWand = ITEMS.register("eclipsegate_wand", EclipsegateWand::new);
     public static final RegistryObject<CreatureCatcher> CreatureCatcher = ITEMS.register("creaturecatcher", CreatureCatcher::new);
+
+    public static final RegistryObject<PolymorphicWand> PolymorphicWand = TOOLS.register("polymorphic_wand", PolymorphicWand::new);
 
     //Items - Tools
     public static final RegistryObject<FerricoreSword> FerricoreSword = TOOLS.register("ferricore_sword", FerricoreSword::new);
@@ -373,6 +380,8 @@ public class Registration {
     //Containers
     public static final RegistryObject<MenuType<FuelCanisterContainer>> FuelCanister_Container = CONTAINERS.register("fuelcanister",
             () -> IForgeMenuType.create((windowId, inv, data) -> new FuelCanisterContainer(windowId, inv, inv.player, data)));
+    public static final RegistryObject<MenuType<PotionCanisterContainer>> PotionCanister_Container = CONTAINERS.register("potioncanister",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new PotionCanisterContainer(windowId, inv, inv.player, data)));
     public static final RegistryObject<MenuType<PocketGeneratorContainer>> PocketGenerator_Container = CONTAINERS.register("pocketgenerator",
             () -> IForgeMenuType.create((windowId, inv, data) -> new PocketGeneratorContainer(windowId, inv, inv.player, data)));
     public static final RegistryObject<MenuType<ToolSettingContainer>> Tool_Settings_Container = CONTAINERS.register("tool_settings",

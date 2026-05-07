@@ -148,6 +148,14 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.Coal_T4.get(), "Eclipse Ember");
         add(Registration.TimeCrystal.get(), "Time Crystal");
 
+        //New Items
+        add(Registration.FluidCanister.get(), "Fluid Canister");
+        add(Registration.PotionCanister.get(), "Potion Canister");
+        add(Registration.PolymorphicCatalyst.get(), "Polymorphic Catalyst");
+        add(Registration.PortalFluidCatalyst.get(), "Portal Fluid Catalyst");
+        add(Registration.MachineSettingsCopier.get(), "Machine Settings Copier");
+        add(Registration.PolymorphicWand.get(), "Polymorphic Wand");
+
         //Misc
         add("justdirethings.shiftmoreinfo", "Hold Shift for details");
         add("justdirethings.presshotkey", "<Press %s>");
@@ -188,6 +196,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Ability.SMELTER.getLocalization(), "Auto Smelter");
         add(Ability.SMOKER.getLocalization(), "Auto Smoker");
         add(Ability.LAVAREPAIR.getLocalization(), "Lava Repair");
+        add(Ability.POLYMORPH_RANDOM.getLocalization(), "Polymorph Random");
         add(Ability.CAUTERIZEWOUNDS.getLocalization(), "Cauterize Wounds");
         add(Ability.HAMMER.getLocalization(), "Hammer");
         add(Ability.HAMMER.getLocalization() + "_off", "Hammer: Disabled");
@@ -298,6 +307,16 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.screen.inv-armor", "Armor Slots");
         add("justdirethings.screen.inv-offhand", "Offhand Slots");
         add("justdirethings.screen.rightclicksettings", "Right Click for Settings");
+        add("justdirethings.fillmode.none", "Fill Mode: Off");
+        add("justdirethings.fillmode.jdtonly", "Fill Mode: JDT Only");
+        add("justdirethings.fillmode.all", "Fill Mode: All");
+        add("justdirethings.fluidname", "Fluid: %s");
+        add("justdirethings.fluidamt", "Amount: %s mB");
+        add("justdirethings.fillmode", "Fill Mode: %s");
+        add("justdirethings.settingscopied", "Settings Copied");
+        add("justdirethings.settingspasted", "Settings Pasted");
+        add("justdirethings.polymorphicfluidamt", "Polymorphic Fluid: %s / %s mB");
+        add("justdirethings.hint.dropinwater", "Drop in water to restore");
 
 
         //Buttons

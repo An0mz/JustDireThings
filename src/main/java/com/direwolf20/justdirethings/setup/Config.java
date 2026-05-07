@@ -62,6 +62,9 @@ public class Config {
     public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_MAX;
     public static ForgeConfigSpec.BooleanValue PARADOX_RESTRICTED_MOBS;
 
+    public static final String CATEGORY_POLYMORPHIC_WAND = "polymorphic_wand";
+    public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_MAX_FLUID;
+
     public static void register() {
         //registerServerConfigs();
         registerCommonConfigs();
@@ -200,6 +203,11 @@ public class Config {
                 .defineInRange("paradox_energy_max", 100.0, 1, Double.MAX_VALUE);
         PARADOX_RESTRICTED_MOBS = COMMON_BUILDER.comment("If true, only safe mob data fields are restored")
                 .define("paradox_restricted_mobs", true);
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment("Polymorphic Wand").push(CATEGORY_POLYMORPHIC_WAND);
+        POLYMORPHIC_WAND_MAX_FLUID = COMMON_BUILDER.comment("Maximum mB of polymorphic fluid the wand can hold")
+                .defineInRange("polymorphic_wand_max_fluid", 8000, 1, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
     }
 }

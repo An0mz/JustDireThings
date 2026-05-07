@@ -86,4 +86,40 @@ public interface AreaAffectingBE {
             getAreaAffectingData().renderArea = tag.getBoolean("renderArea");
         }
     }
+
+    default void saveAreaOnly(CompoundTag tag) {
+        tag.putDouble("xRadiusDouble", getAreaAffectingData().xRadius);
+        tag.putDouble("yRadiusDouble", getAreaAffectingData().yRadius);
+        tag.putDouble("zRadiusDouble", getAreaAffectingData().zRadius);
+        tag.putBoolean("renderArea", getAreaAffectingData().renderArea);
+    }
+
+    default void loadAreaOnly(CompoundTag tag) {
+        if (tag.contains("xRadiusDouble")) {
+            getAreaAffectingData().xRadius = tag.getDouble("xRadiusDouble");
+            getAreaAffectingData().yRadius = tag.getDouble("yRadiusDouble");
+            getAreaAffectingData().zRadius = tag.getDouble("zRadiusDouble");
+            getAreaAffectingData().renderArea = tag.getBoolean("renderArea");
+            getAreaAffectingData().area = null;
+            if (getBlockEntity() instanceof BaseMachineBE baseMachineBE)
+                baseMachineBE.markDirtyClient();
+        }
+    }
+
+    default void saveOffsetOnly(CompoundTag tag) {
+        tag.putInt("xOffset", getAreaAffectingData().xOffset);
+        tag.putInt("yOffset", getAreaAffectingData().yOffset);
+        tag.putInt("zOffset", getAreaAffectingData().zOffset);
+    }
+
+    default void loadOffsetOnly(CompoundTag tag) {
+        if (tag.contains("xOffset")) {
+            getAreaAffectingData().xOffset = tag.getInt("xOffset");
+            getAreaAffectingData().yOffset = tag.getInt("yOffset");
+            getAreaAffectingData().zOffset = tag.getInt("zOffset");
+            getAreaAffectingData().area = null;
+            if (getBlockEntity() instanceof BaseMachineBE baseMachineBE)
+                baseMachineBE.markDirtyClient();
+        }
+    }
 }

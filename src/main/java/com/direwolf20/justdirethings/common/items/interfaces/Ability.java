@@ -46,6 +46,8 @@ public enum Ability {
     SMOKER(SettingType.TOGGLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
     HAMMER(SettingType.CYCLE, 1, 50, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
     LAVAREPAIR(SettingType.TOGGLE, 0, 0, UseType.PASSIVE, BindingType.CUSTOM_ONLY),
+    POLYMORPH_RANDOM(SettingType.TOGGLE, 10, 1000, UseType.USE, BindingType.LEFT_AND_CUSTOM,
+            AbilityMethods::polymorphRandom, false),
     CAUTERIZEWOUNDS(SettingType.TOGGLE, 30, 1500, UseType.USE, BindingType.LEFT_AND_CUSTOM,
             AbilityMethods::cauterizeWounds, false),
     AIRBURST(SettingType.SLIDER, 1, 250, UseType.USE, BindingType.LEFT_AND_CUSTOM,

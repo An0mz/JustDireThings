@@ -93,6 +93,12 @@ public class JustDireItemModels extends ItemModelProvider {
         singleTexture(Registration.Coal_T4.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/coal_t4"));
         singleTexture(Registration.TimeCrystal.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/time_crystal_shard"));
 
+        singleTexture(Registration.FluidCanister.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/fluid_canister"));
+        singleTexture(Registration.PotionCanister.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/potion_canister"));
+        singleTexture(Registration.PolymorphicCatalyst.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/polymorphic_catalyst"));
+        singleTexture(Registration.PortalFluidCatalyst.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/portal_fluid_catalyst"));
+        singleTexture(Registration.MachineSettingsCopier.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/machine_settings_copier"));
+
         singleTexture(Registration.FerricoreWrench.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/ferricore_wrench"));
         singleTexture(Registration.TotemOfDeathRecall.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/totem_of_death_recall"));
         singleTexture(Registration.BlazejetWand.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/blazejet_wand"));

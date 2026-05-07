@@ -77,6 +77,7 @@ public class ClientSetup {
             MenuScreens.register(Registration.GeneratorFluidT1_Container.get(), GeneratorFluidT1Screen::new);
             MenuScreens.register(Registration.InventoryHolder_Container.get(), InventoryHolderScreen::new);
             MenuScreens.register(Registration.ParadoxMachine_Container.get(), ParadoxMachineScreen::new);
+            MenuScreens.register(Registration.PotionCanister_Container.get(), PotionCanisterScreen::new);
 
             //Fluid block render layers
             ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T2_FLUID_BLOCK.get(), RenderType.translucent());

@@ -581,4 +581,8 @@ public class AbilityMethods {
         itemStack.getOrCreateTag().remove("stupefyTargets");
     }
 
+    public static boolean polymorphRandom(Level level, Player player, ItemStack itemStack) {
+        return false;
+    }
+
 }
