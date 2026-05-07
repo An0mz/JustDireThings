@@ -18,6 +18,8 @@ import com.direwolf20.justdirethings.common.items.PocketGenerator;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
 import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -28,7 +30,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -74,6 +78,19 @@ public class ClientSetup {
             MenuScreens.register(Registration.InventoryHolder_Container.get(), InventoryHolderScreen::new);
             MenuScreens.register(Registration.ParadoxMachine_Container.get(), ParadoxMachineScreen::new);
 
+            //Fluid block render layers
+            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T2_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T3_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T4_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T2_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T3_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T4_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.PORTAL_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNSTABLE_PORTAL_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.TIME_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.XP_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.POLYMORPHIC_FLUID_BLOCK.get(), RenderType.translucent());
+
             //Item Properties
             for (var tool : Registration.TOOLS.getEntries()) {
                 registerEnabledToolTextures(tool.get());
@@ -104,6 +121,24 @@ public class ClientSetup {
                             return toggleableItem.getEnabled(stack) ? 1.0f : 0.0f;
                     });
         }
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        var bucketColors = new DynamicFluidContainerModel.Colors();
+        event.register(bucketColors,
+                Registration.REFINED_T2_FUEL_BUCKET.get(),
+                Registration.REFINED_T3_FUEL_BUCKET.get(),
+                Registration.REFINED_T4_FUEL_BUCKET.get(),
+                Registration.UNREFINED_T2_FUEL_BUCKET.get(),
+                Registration.UNREFINED_T3_FUEL_BUCKET.get(),
+                Registration.UNREFINED_T4_FUEL_BUCKET.get(),
+                Registration.PORTAL_FLUID_BUCKET.get(),
+                Registration.UNSTABLE_PORTAL_FLUID_BUCKET.get(),
+                Registration.TIME_FLUID_BUCKET.get(),
+                Registration.XP_FLUID_BUCKET.get(),
+                Registration.POLYMORPHIC_FLUID_BUCKET.get()
+        );
     }
 
     @SubscribeEvent

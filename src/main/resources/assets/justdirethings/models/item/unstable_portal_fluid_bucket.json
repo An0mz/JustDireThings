@@ -1,0 +1,9 @@
+{
+  "loader": "forge:fluid_container",
+  "fluid": "justdirethings:unstable_portal_fluid",
+  "flip_gas": false,
+  "textures": {
+    "base": "minecraft:item/bucket",
+    "fluid": "forge:item/mask/bucket_fluid"
+  }
+}

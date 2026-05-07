@@ -45,6 +45,11 @@ public class Config {
     public static ForgeConfigSpec.IntValue GENERATOR_FLUID_T1_MAX_FE;
     public static ForgeConfigSpec.IntValue GENERATOR_FLUID_T1_FE_PER_TICK;
 
+    public static final String CATEGORY_FLUID_FUEL = "fluid_fuel";
+    public static ForgeConfigSpec.IntValue FUEL_TIER2_FE_PER_MB;
+    public static ForgeConfigSpec.IntValue FUEL_TIER3_FE_PER_MB;
+    public static ForgeConfigSpec.IntValue FUEL_TIER4_FE_PER_MB;
+
     public static final String CATEGORY_PARADOX = "paradox_machine";
     public static ForgeConfigSpec.IntValue PARADOX_TOTAL_RF_CAPACITY;
     public static ForgeConfigSpec.IntValue PARADOX_TOTAL_FLUID_CAPACITY;
@@ -76,6 +81,7 @@ public class Config {
         fuelCanisterConfig();
         pocketGeneratorConfig();
         timeCrystalConfig();
+        fluidFuelConfig();
         paradoxConfig();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
@@ -158,6 +164,17 @@ public class Config {
                 .defineInRange("generator_fluid_t1_max_fe", 1000000, 1, Integer.MAX_VALUE);
         GENERATOR_FLUID_T1_FE_PER_TICK = COMMON_BUILDER.comment("FE output per tick for the Fluid Generator T1")
                 .defineInRange("generator_fluid_t1_fe_per_tick", 1000, 1, Integer.MAX_VALUE);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void fluidFuelConfig() {
+        COMMON_BUILDER.comment("Fluid Fuel FE per mB values").push(CATEGORY_FLUID_FUEL);
+        FUEL_TIER2_FE_PER_MB = COMMON_BUILDER.comment("FE generated per mB of Refined Fuel T2")
+                .defineInRange("fuel_tier2_fe_per_mb", 4000, 1, Integer.MAX_VALUE);
+        FUEL_TIER3_FE_PER_MB = COMMON_BUILDER.comment("FE generated per mB of Refined Fuel T3")
+                .defineInRange("fuel_tier3_fe_per_mb", 16000, 1, Integer.MAX_VALUE);
+        FUEL_TIER4_FE_PER_MB = COMMON_BUILDER.comment("FE generated per mB of Refined Fuel T4")
+                .defineInRange("fuel_tier4_fe_per_mb", 64000, 1, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
     }
 
