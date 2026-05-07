@@ -91,6 +91,12 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(Registration.XP_FLUID_BLOCK.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(Registration.POLYMORPHIC_FLUID_BLOCK.get(), RenderType.translucent());
 
+            //Fluid render layers (for in-world fluid rendering transparency)
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNSTABLE_PORTAL_FLUID_SOURCE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNSTABLE_PORTAL_FLUID_FLOWING.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.TIME_FLUID_SOURCE.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.TIME_FLUID_FLOWING.get(), RenderType.translucent());
+
             //Item Properties
             for (var tool : Registration.TOOLS.getEntries()) {
                 registerEnabledToolTextures(tool.get());

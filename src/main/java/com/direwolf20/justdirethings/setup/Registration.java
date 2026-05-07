@@ -471,7 +471,7 @@ public class Registration {
 
     // Blaze Ember Fuel (T2)
     public static final RegistryObject<FluidType> REFINED_T2_FLUID_TYPE = FLUID_TYPES.register("refined_t2_fluid_type",
-            () -> new JustDireFluidType(0xFFFF9F00, FluidType.Properties.create().density(800).viscosity(2000)));
+            () -> new JustDireFluidType(0xFF8B0000, FluidType.Properties.create().density(800).viscosity(2000)));
     public static final RegistryObject<ForgeFlowingFluid> REFINED_T2_FLUID_SOURCE = FLUIDS.register("refined_t2_fluid_source",
             RefinedT2Fuel.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> REFINED_T2_FLUID_FLOWING = FLUIDS.register("refined_t2_fluid_flowing",
@@ -483,7 +483,7 @@ public class Registration {
 
     // Voidflame Fuel (T3)
     public static final RegistryObject<FluidType> REFINED_T3_FLUID_TYPE = FLUID_TYPES.register("refined_t3_fluid_type",
-            () -> new JustDireFluidType(0xFFFFCC00, FluidType.Properties.create().density(800).viscosity(2000)));
+            () -> new JustDireFluidType(0xFF40C7C7, FluidType.Properties.create().density(800).viscosity(2000)));
     public static final RegistryObject<ForgeFlowingFluid> REFINED_T3_FLUID_SOURCE = FLUIDS.register("refined_t3_fluid_source",
             RefinedT3Fuel.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> REFINED_T3_FLUID_FLOWING = FLUIDS.register("refined_t3_fluid_flowing",
@@ -495,7 +495,7 @@ public class Registration {
 
     // Eclipse Ember Fuel (T4)
     public static final RegistryObject<FluidType> REFINED_T4_FLUID_TYPE = FLUID_TYPES.register("refined_t4_fluid_type",
-            () -> new JustDireFluidType(0xFFFFFF44, FluidType.Properties.create().density(800).viscosity(2000)));
+            () -> new JustDireFluidType(0xFF1B2027, FluidType.Properties.create().density(800).viscosity(2000)));
     public static final RegistryObject<ForgeFlowingFluid> REFINED_T4_FLUID_SOURCE = FLUIDS.register("refined_t4_fluid_source",
             RefinedT4Fuel.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> REFINED_T4_FLUID_FLOWING = FLUIDS.register("refined_t4_fluid_flowing",
@@ -507,7 +507,7 @@ public class Registration {
 
     // Unrefined Blaze Ember Fuel (T2)
     public static final RegistryObject<FluidType> UNREFINED_T2_FLUID_TYPE = FLUID_TYPES.register("unrefined_t2_fluid_type",
-            () -> new JustDireFluidType(0xFF804000, FluidType.Properties.create().density(900).viscosity(3000)));
+            () -> new JustDireFluidType(0xFF8B4500, FluidType.Properties.create().density(900).viscosity(3000)));
     public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T2_FLUID_SOURCE = FLUIDS.register("unrefined_t2_fluid_source",
             UnrefinedT2Fuel.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T2_FLUID_FLOWING = FLUIDS.register("unrefined_t2_fluid_flowing",
@@ -519,7 +519,7 @@ public class Registration {
 
     // Unrefined Voidflame Fuel (T3)
     public static final RegistryObject<FluidType> UNREFINED_T3_FLUID_TYPE = FLUID_TYPES.register("unrefined_t3_fluid_type",
-            () -> new JustDireFluidType(0xFFA05000, FluidType.Properties.create().density(900).viscosity(3000)));
+            () -> new JustDireFluidType(0xFF64D5AD, FluidType.Properties.create().density(900).viscosity(3000)));
     public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T3_FLUID_SOURCE = FLUIDS.register("unrefined_t3_fluid_source",
             UnrefinedT3Fuel.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T3_FLUID_FLOWING = FLUIDS.register("unrefined_t3_fluid_flowing",
@@ -531,7 +531,7 @@ public class Registration {
 
     // Unrefined Eclipse Ember Fuel (T4)
     public static final RegistryObject<FluidType> UNREFINED_T4_FLUID_TYPE = FLUID_TYPES.register("unrefined_t4_fluid_type",
-            () -> new JustDireFluidType(0xFFC06000, FluidType.Properties.create().density(900).viscosity(3000)));
+            () -> new JustDireFluidType(0xFF36484A, FluidType.Properties.create().density(900).viscosity(3000)));
     public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T4_FLUID_SOURCE = FLUIDS.register("unrefined_t4_fluid_source",
             UnrefinedT4Fuel.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T4_FLUID_FLOWING = FLUIDS.register("unrefined_t4_fluid_flowing",
@@ -543,7 +543,7 @@ public class Registration {
 
     // Portal Fluid
     public static final RegistryObject<FluidType> PORTAL_FLUID_TYPE = FLUID_TYPES.register("portal_fluid_type",
-            () -> new JustDireFluidType(0xFF8000FF, FluidType.Properties.create().density(500).viscosity(1000)));
+            () -> new JustDireFluidType(0xFF00DD00, FluidType.Properties.create().density(500).viscosity(1000)));
     public static final RegistryObject<ForgeFlowingFluid> PORTAL_FLUID_SOURCE = FLUIDS.register("portal_fluid",
             PortalFluid.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> PORTAL_FLUID_FLOWING = FLUIDS.register("portal_fluid_flowing",
@@ -555,7 +555,7 @@ public class Registration {
 
     // Unstable Portal Fluid
     public static final RegistryObject<FluidType> UNSTABLE_PORTAL_FLUID_TYPE = FLUID_TYPES.register("unstable_portal_fluid_type",
-            () -> new JustDireFluidType(0xFFFF00CC, FluidType.Properties.create().density(400).viscosity(800)));
+            () -> new JustDireFluidType(0xFF9400D3, FluidType.Properties.create().density(400).viscosity(800)));
     public static final RegistryObject<ForgeFlowingFluid> UNSTABLE_PORTAL_FLUID_SOURCE = FLUIDS.register("unstable_portal_fluid",
             UnstablePortalFluid.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> UNSTABLE_PORTAL_FLUID_FLOWING = FLUIDS.register("unstable_portal_fluid_flowing",
@@ -567,7 +567,7 @@ public class Registration {
 
     // Time Fluid
     public static final RegistryObject<FluidType> TIME_FLUID_TYPE = FLUID_TYPES.register("time_fluid_type",
-            () -> new JustDireFluidType(0xFF00DDFF, FluidType.Properties.create().density(200).viscosity(500)));
+            () -> new JustDireFluidType(0x3300FF00, FluidType.Properties.create().density(200).viscosity(500)));
     public static final RegistryObject<ForgeFlowingFluid> TIME_FLUID_SOURCE = FLUIDS.register("time_fluid",
             TimeFluid.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> TIME_FLUID_FLOWING = FLUIDS.register("time_fluid_flowing",
@@ -579,7 +579,7 @@ public class Registration {
 
     // XP Fluid
     public static final RegistryObject<FluidType> XP_FLUID_TYPE = FLUID_TYPES.register("xp_fluid_type",
-            () -> new JustDireFluidType(0xFF00FF44, FluidType.Properties.create().density(800).viscosity(1000)));
+            () -> new JustDireFluidType(0xFF32CD32, FluidType.Properties.create().density(800).viscosity(1000)));
     public static final RegistryObject<ForgeFlowingFluid> XP_FLUID_SOURCE = FLUIDS.register("xp_fluid",
             XPFluid.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> XP_FLUID_FLOWING = FLUIDS.register("xp_fluid_flowing",
