@@ -1,7 +1,7 @@
 {
   "loader": "forge:fluid_container",
   "parent": "forge:item/default",
-  "fluid": "justdirethings:refined_t3_fuel",
+  "fluid": "justdirethings:refined_t2_fluid_source",
   "flip_gas": false,
   "textures": {
     "base": "minecraft:item/bucket",

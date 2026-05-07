@@ -79,12 +79,12 @@ public class ClientSetup {
             MenuScreens.register(Registration.ParadoxMachine_Container.get(), ParadoxMachineScreen::new);
 
             //Fluid block render layers
-            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T2_FUEL_BLOCK.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T3_FUEL_BLOCK.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T4_FUEL_BLOCK.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T2_FUEL_BLOCK.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T3_FUEL_BLOCK.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T4_FUEL_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T2_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T3_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.REFINED_T4_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T2_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T3_FLUID_BLOCK.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(Registration.UNREFINED_T4_FLUID_BLOCK.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(Registration.PORTAL_FLUID_BLOCK.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(Registration.UNSTABLE_PORTAL_FLUID_BLOCK.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(Registration.TIME_FLUID_BLOCK.get(), RenderType.translucent());
@@ -127,12 +127,12 @@ public class ClientSetup {
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         var bucketColors = new DynamicFluidContainerModel.Colors();
         event.register(bucketColors,
-                Registration.REFINED_T2_FUEL_BUCKET.get(),
-                Registration.REFINED_T3_FUEL_BUCKET.get(),
-                Registration.REFINED_T4_FUEL_BUCKET.get(),
-                Registration.UNREFINED_T2_FUEL_BUCKET.get(),
-                Registration.UNREFINED_T3_FUEL_BUCKET.get(),
-                Registration.UNREFINED_T4_FUEL_BUCKET.get(),
+                Registration.REFINED_T2_FLUID_BUCKET.get(),
+                Registration.REFINED_T3_FLUID_BUCKET.get(),
+                Registration.REFINED_T4_FLUID_BUCKET.get(),
+                Registration.UNREFINED_T2_FLUID_BUCKET.get(),
+                Registration.UNREFINED_T3_FLUID_BUCKET.get(),
+                Registration.UNREFINED_T4_FLUID_BUCKET.get(),
                 Registration.PORTAL_FLUID_BUCKET.get(),
                 Registration.UNSTABLE_PORTAL_FLUID_BUCKET.get(),
                 Registration.TIME_FLUID_BUCKET.get(),

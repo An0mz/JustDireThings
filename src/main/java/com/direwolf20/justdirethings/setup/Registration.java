@@ -469,77 +469,77 @@ public class Registration {
 
     // ── Fluids ────────────────────────────────────────────────────────────────
 
-    // Refined Fuel T2
-    public static final RegistryObject<FluidType> REFINED_T2_FUEL_TYPE = FLUID_TYPES.register("refined_t2_fuel_type",
+    // Blaze Ember Fuel (T2)
+    public static final RegistryObject<FluidType> REFINED_T2_FLUID_TYPE = FLUID_TYPES.register("refined_t2_fluid_type",
             () -> new JustDireFluidType(0xFFFF9F00, FluidType.Properties.create().density(800).viscosity(2000)));
-    public static final RegistryObject<ForgeFlowingFluid> REFINED_T2_FUEL_SOURCE = FLUIDS.register("refined_t2_fuel",
+    public static final RegistryObject<ForgeFlowingFluid> REFINED_T2_FLUID_SOURCE = FLUIDS.register("refined_t2_fluid_source",
             RefinedT2Fuel.Source::new);
-    public static final RegistryObject<ForgeFlowingFluid> REFINED_T2_FUEL_FLOWING = FLUIDS.register("refined_t2_fuel_flowing",
+    public static final RegistryObject<ForgeFlowingFluid> REFINED_T2_FLUID_FLOWING = FLUIDS.register("refined_t2_fluid_flowing",
             RefinedT2Fuel.Flowing::new);
-    public static final RegistryObject<LiquidBlock> REFINED_T2_FUEL_BLOCK = BLOCKS.register("refined_t2_fuel_block",
-            () -> new LiquidBlock(() -> REFINED_T2_FUEL_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
-    public static final RegistryObject<Item> REFINED_T2_FUEL_BUCKET = ITEMS.register("refined_t2_fuel_bucket",
-            () -> new BucketItem(() -> REFINED_T2_FUEL_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<LiquidBlock> REFINED_T2_FLUID_BLOCK = BLOCKS.register("refined_t2_fluid_block",
+            () -> new LiquidBlock(() -> REFINED_T2_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<Item> REFINED_T2_FLUID_BUCKET = ITEMS.register("refined_t2_fluid_bucket",
+            () -> new BucketItem(() -> REFINED_T2_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    // Refined Fuel T3
-    public static final RegistryObject<FluidType> REFINED_T3_FUEL_TYPE = FLUID_TYPES.register("refined_t3_fuel_type",
+    // Voidflame Fuel (T3)
+    public static final RegistryObject<FluidType> REFINED_T3_FLUID_TYPE = FLUID_TYPES.register("refined_t3_fluid_type",
             () -> new JustDireFluidType(0xFFFFCC00, FluidType.Properties.create().density(800).viscosity(2000)));
-    public static final RegistryObject<ForgeFlowingFluid> REFINED_T3_FUEL_SOURCE = FLUIDS.register("refined_t3_fuel",
+    public static final RegistryObject<ForgeFlowingFluid> REFINED_T3_FLUID_SOURCE = FLUIDS.register("refined_t3_fluid_source",
             RefinedT3Fuel.Source::new);
-    public static final RegistryObject<ForgeFlowingFluid> REFINED_T3_FUEL_FLOWING = FLUIDS.register("refined_t3_fuel_flowing",
+    public static final RegistryObject<ForgeFlowingFluid> REFINED_T3_FLUID_FLOWING = FLUIDS.register("refined_t3_fluid_flowing",
             RefinedT3Fuel.Flowing::new);
-    public static final RegistryObject<LiquidBlock> REFINED_T3_FUEL_BLOCK = BLOCKS.register("refined_t3_fuel_block",
-            () -> new LiquidBlock(() -> REFINED_T3_FUEL_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
-    public static final RegistryObject<Item> REFINED_T3_FUEL_BUCKET = ITEMS.register("refined_t3_fuel_bucket",
-            () -> new BucketItem(() -> REFINED_T3_FUEL_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<LiquidBlock> REFINED_T3_FLUID_BLOCK = BLOCKS.register("refined_t3_fluid_block",
+            () -> new LiquidBlock(() -> REFINED_T3_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<Item> REFINED_T3_FLUID_BUCKET = ITEMS.register("refined_t3_fluid_bucket",
+            () -> new BucketItem(() -> REFINED_T3_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    // Refined Fuel T4
-    public static final RegistryObject<FluidType> REFINED_T4_FUEL_TYPE = FLUID_TYPES.register("refined_t4_fuel_type",
+    // Eclipse Ember Fuel (T4)
+    public static final RegistryObject<FluidType> REFINED_T4_FLUID_TYPE = FLUID_TYPES.register("refined_t4_fluid_type",
             () -> new JustDireFluidType(0xFFFFFF44, FluidType.Properties.create().density(800).viscosity(2000)));
-    public static final RegistryObject<ForgeFlowingFluid> REFINED_T4_FUEL_SOURCE = FLUIDS.register("refined_t4_fuel",
+    public static final RegistryObject<ForgeFlowingFluid> REFINED_T4_FLUID_SOURCE = FLUIDS.register("refined_t4_fluid_source",
             RefinedT4Fuel.Source::new);
-    public static final RegistryObject<ForgeFlowingFluid> REFINED_T4_FUEL_FLOWING = FLUIDS.register("refined_t4_fuel_flowing",
+    public static final RegistryObject<ForgeFlowingFluid> REFINED_T4_FLUID_FLOWING = FLUIDS.register("refined_t4_fluid_flowing",
             RefinedT4Fuel.Flowing::new);
-    public static final RegistryObject<LiquidBlock> REFINED_T4_FUEL_BLOCK = BLOCKS.register("refined_t4_fuel_block",
-            () -> new LiquidBlock(() -> REFINED_T4_FUEL_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
-    public static final RegistryObject<Item> REFINED_T4_FUEL_BUCKET = ITEMS.register("refined_t4_fuel_bucket",
-            () -> new BucketItem(() -> REFINED_T4_FUEL_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<LiquidBlock> REFINED_T4_FLUID_BLOCK = BLOCKS.register("refined_t4_fluid_block",
+            () -> new LiquidBlock(() -> REFINED_T4_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<Item> REFINED_T4_FLUID_BUCKET = ITEMS.register("refined_t4_fluid_bucket",
+            () -> new BucketItem(() -> REFINED_T4_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    // Unrefined Fuel T2
-    public static final RegistryObject<FluidType> UNREFINED_T2_FUEL_TYPE = FLUID_TYPES.register("unrefined_t2_fuel_type",
+    // Unrefined Blaze Ember Fuel (T2)
+    public static final RegistryObject<FluidType> UNREFINED_T2_FLUID_TYPE = FLUID_TYPES.register("unrefined_t2_fluid_type",
             () -> new JustDireFluidType(0xFF804000, FluidType.Properties.create().density(900).viscosity(3000)));
-    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T2_FUEL_SOURCE = FLUIDS.register("unrefined_t2_fuel",
+    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T2_FLUID_SOURCE = FLUIDS.register("unrefined_t2_fluid_source",
             UnrefinedT2Fuel.Source::new);
-    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T2_FUEL_FLOWING = FLUIDS.register("unrefined_t2_fuel_flowing",
+    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T2_FLUID_FLOWING = FLUIDS.register("unrefined_t2_fluid_flowing",
             UnrefinedT2Fuel.Flowing::new);
-    public static final RegistryObject<LiquidBlock> UNREFINED_T2_FUEL_BLOCK = BLOCKS.register("unrefined_t2_fuel_block",
-            () -> new LiquidBlock(() -> UNREFINED_T2_FUEL_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
-    public static final RegistryObject<Item> UNREFINED_T2_FUEL_BUCKET = ITEMS.register("unrefined_t2_fuel_bucket",
-            () -> new BucketItem(() -> UNREFINED_T2_FUEL_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<LiquidBlock> UNREFINED_T2_FLUID_BLOCK = BLOCKS.register("unrefined_t2_fluid_block",
+            () -> new LiquidBlock(() -> UNREFINED_T2_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<Item> UNREFINED_T2_FLUID_BUCKET = ITEMS.register("unrefined_t2_fluid_bucket",
+            () -> new BucketItem(() -> UNREFINED_T2_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    // Unrefined Fuel T3
-    public static final RegistryObject<FluidType> UNREFINED_T3_FUEL_TYPE = FLUID_TYPES.register("unrefined_t3_fuel_type",
+    // Unrefined Voidflame Fuel (T3)
+    public static final RegistryObject<FluidType> UNREFINED_T3_FLUID_TYPE = FLUID_TYPES.register("unrefined_t3_fluid_type",
             () -> new JustDireFluidType(0xFFA05000, FluidType.Properties.create().density(900).viscosity(3000)));
-    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T3_FUEL_SOURCE = FLUIDS.register("unrefined_t3_fuel",
+    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T3_FLUID_SOURCE = FLUIDS.register("unrefined_t3_fluid_source",
             UnrefinedT3Fuel.Source::new);
-    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T3_FUEL_FLOWING = FLUIDS.register("unrefined_t3_fuel_flowing",
+    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T3_FLUID_FLOWING = FLUIDS.register("unrefined_t3_fluid_flowing",
             UnrefinedT3Fuel.Flowing::new);
-    public static final RegistryObject<LiquidBlock> UNREFINED_T3_FUEL_BLOCK = BLOCKS.register("unrefined_t3_fuel_block",
-            () -> new LiquidBlock(() -> UNREFINED_T3_FUEL_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
-    public static final RegistryObject<Item> UNREFINED_T3_FUEL_BUCKET = ITEMS.register("unrefined_t3_fuel_bucket",
-            () -> new BucketItem(() -> UNREFINED_T3_FUEL_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<LiquidBlock> UNREFINED_T3_FLUID_BLOCK = BLOCKS.register("unrefined_t3_fluid_block",
+            () -> new LiquidBlock(() -> UNREFINED_T3_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<Item> UNREFINED_T3_FLUID_BUCKET = ITEMS.register("unrefined_t3_fluid_bucket",
+            () -> new BucketItem(() -> UNREFINED_T3_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    // Unrefined Fuel T4
-    public static final RegistryObject<FluidType> UNREFINED_T4_FUEL_TYPE = FLUID_TYPES.register("unrefined_t4_fuel_type",
+    // Unrefined Eclipse Ember Fuel (T4)
+    public static final RegistryObject<FluidType> UNREFINED_T4_FLUID_TYPE = FLUID_TYPES.register("unrefined_t4_fluid_type",
             () -> new JustDireFluidType(0xFFC06000, FluidType.Properties.create().density(900).viscosity(3000)));
-    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T4_FUEL_SOURCE = FLUIDS.register("unrefined_t4_fuel",
+    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T4_FLUID_SOURCE = FLUIDS.register("unrefined_t4_fluid_source",
             UnrefinedT4Fuel.Source::new);
-    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T4_FUEL_FLOWING = FLUIDS.register("unrefined_t4_fuel_flowing",
+    public static final RegistryObject<ForgeFlowingFluid> UNREFINED_T4_FLUID_FLOWING = FLUIDS.register("unrefined_t4_fluid_flowing",
             UnrefinedT4Fuel.Flowing::new);
-    public static final RegistryObject<LiquidBlock> UNREFINED_T4_FUEL_BLOCK = BLOCKS.register("unrefined_t4_fuel_block",
-            () -> new LiquidBlock(() -> UNREFINED_T4_FUEL_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
-    public static final RegistryObject<Item> UNREFINED_T4_FUEL_BUCKET = ITEMS.register("unrefined_t4_fuel_bucket",
-            () -> new BucketItem(() -> UNREFINED_T4_FUEL_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<LiquidBlock> UNREFINED_T4_FLUID_BLOCK = BLOCKS.register("unrefined_t4_fluid_block",
+            () -> new LiquidBlock(() -> UNREFINED_T4_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F).noLootTable()));
+    public static final RegistryObject<Item> UNREFINED_T4_FLUID_BUCKET = ITEMS.register("unrefined_t4_fluid_bucket",
+            () -> new BucketItem(() -> UNREFINED_T4_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     // Portal Fluid
     public static final RegistryObject<FluidType> PORTAL_FLUID_TYPE = FLUID_TYPES.register("portal_fluid_type",

@@ -13,11 +13,11 @@ public abstract class RefinedT4Fuel extends ForgeFlowingFluid implements Refined
 
     private static ForgeFlowingFluid.Properties makeProperties() {
         return new ForgeFlowingFluid.Properties(
-                () -> Registration.REFINED_T4_FUEL_TYPE.get(),
-                () -> Registration.REFINED_T4_FUEL_SOURCE.get(),
-                () -> Registration.REFINED_T4_FUEL_FLOWING.get()
-        ).bucket(() -> Registration.REFINED_T4_FUEL_BUCKET.get())
-         .block(() -> Registration.REFINED_T4_FUEL_BLOCK.get());
+                () -> Registration.REFINED_T4_FLUID_TYPE.get(),
+                () -> Registration.REFINED_T4_FLUID_SOURCE.get(),
+                () -> Registration.REFINED_T4_FLUID_FLOWING.get()
+        ).bucket(() -> Registration.REFINED_T4_FLUID_BUCKET.get())
+         .block(() -> Registration.REFINED_T4_FLUID_BLOCK.get());
     }
 
     protected RefinedT4Fuel() {

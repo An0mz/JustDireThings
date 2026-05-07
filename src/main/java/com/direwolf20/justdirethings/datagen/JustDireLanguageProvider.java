@@ -314,12 +314,12 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.timecrystaltooltiptwo", "A sliver of crystallized time. Its effects are unpredictable but undeniably powerful.");
 
         //Fluid Buckets
-        add(Registration.REFINED_T2_FUEL_BUCKET.get(), "Refined Fuel T2 Bucket");
-        add(Registration.REFINED_T3_FUEL_BUCKET.get(), "Refined Fuel T3 Bucket");
-        add(Registration.REFINED_T4_FUEL_BUCKET.get(), "Refined Fuel T4 Bucket");
-        add(Registration.UNREFINED_T2_FUEL_BUCKET.get(), "Unrefined Fuel T2 Bucket");
-        add(Registration.UNREFINED_T3_FUEL_BUCKET.get(), "Unrefined Fuel T3 Bucket");
-        add(Registration.UNREFINED_T4_FUEL_BUCKET.get(), "Unrefined Fuel T4 Bucket");
+        add(Registration.REFINED_T2_FLUID_BUCKET.get(), "Blaze Ember Fuel Bucket");
+        add(Registration.REFINED_T3_FLUID_BUCKET.get(), "Voidflame Fuel Bucket");
+        add(Registration.REFINED_T4_FLUID_BUCKET.get(), "Eclipse Ember Fuel Bucket");
+        add(Registration.UNREFINED_T2_FLUID_BUCKET.get(), "Unrefined Blaze Ember Fuel Bucket");
+        add(Registration.UNREFINED_T3_FLUID_BUCKET.get(), "Unrefined Voidflame Fuel Bucket");
+        add(Registration.UNREFINED_T4_FLUID_BUCKET.get(), "Unrefined Eclipse Ember Fuel Bucket");
         add(Registration.PORTAL_FLUID_BUCKET.get(), "Portal Fluid Bucket");
         add(Registration.UNSTABLE_PORTAL_FLUID_BUCKET.get(), "Unstable Portal Fluid Bucket");
         add(Registration.TIME_FLUID_BUCKET.get(), "Time Fluid Bucket");
@@ -327,12 +327,12 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.POLYMORPHIC_FLUID_BUCKET.get(), "Polymorphic Fluid Bucket");
 
         //Fluid Type Names
-        add("fluid_type.justdirethings.refined_t2_fuel_type", "Refined Fuel T2");
-        add("fluid_type.justdirethings.refined_t3_fuel_type", "Refined Fuel T3");
-        add("fluid_type.justdirethings.refined_t4_fuel_type", "Refined Fuel T4");
-        add("fluid_type.justdirethings.unrefined_t2_fuel_type", "Unrefined Fuel T2");
-        add("fluid_type.justdirethings.unrefined_t3_fuel_type", "Unrefined Fuel T3");
-        add("fluid_type.justdirethings.unrefined_t4_fuel_type", "Unrefined Fuel T4");
+        add("fluid_type.justdirethings.refined_t2_fluid_type", "Blaze Ember Fuel");
+        add("fluid_type.justdirethings.refined_t3_fluid_type", "Voidflame Fuel");
+        add("fluid_type.justdirethings.refined_t4_fluid_type", "Eclipse Ember Fuel");
+        add("fluid_type.justdirethings.unrefined_t2_fluid_type", "Unrefined Blaze Ember Fuel");
+        add("fluid_type.justdirethings.unrefined_t3_fluid_type", "Unrefined Voidflame Fuel");
+        add("fluid_type.justdirethings.unrefined_t4_fluid_type", "Unrefined Eclipse Ember Fuel");
         add("fluid_type.justdirethings.portal_fluid_type", "Portal Fluid");
         add("fluid_type.justdirethings.unstable_portal_fluid_type", "Unstable Portal Fluid");
         add("fluid_type.justdirethings.time_fluid_type", "Time Fluid");

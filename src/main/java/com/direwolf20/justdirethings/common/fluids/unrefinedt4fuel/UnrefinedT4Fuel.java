@@ -11,11 +11,11 @@ public abstract class UnrefinedT4Fuel extends ForgeFlowingFluid {
 
     private static ForgeFlowingFluid.Properties makeProperties() {
         return new ForgeFlowingFluid.Properties(
-                () -> Registration.UNREFINED_T4_FUEL_TYPE.get(),
-                () -> Registration.UNREFINED_T4_FUEL_SOURCE.get(),
-                () -> Registration.UNREFINED_T4_FUEL_FLOWING.get()
-        ).bucket(() -> Registration.UNREFINED_T4_FUEL_BUCKET.get())
-         .block(() -> Registration.UNREFINED_T4_FUEL_BLOCK.get());
+                () -> Registration.UNREFINED_T4_FLUID_TYPE.get(),
+                () -> Registration.UNREFINED_T4_FLUID_SOURCE.get(),
+                () -> Registration.UNREFINED_T4_FLUID_FLOWING.get()
+        ).bucket(() -> Registration.UNREFINED_T4_FLUID_BUCKET.get())
+         .block(() -> Registration.UNREFINED_T4_FLUID_BLOCK.get());
     }
 
     protected UnrefinedT4Fuel() {
