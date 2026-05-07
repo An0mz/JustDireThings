@@ -567,7 +567,7 @@ public class Registration {
 
     // Time Fluid
     public static final RegistryObject<FluidType> TIME_FLUID_TYPE = FLUID_TYPES.register("time_fluid_type",
-            () -> new JustDireFluidType(0x3300FF00, FluidType.Properties.create().density(200).viscosity(500)));
+            () -> new JustDireFluidType(0x9900FF00, FluidType.Properties.create().density(200).viscosity(500)));
     public static final RegistryObject<ForgeFlowingFluid> TIME_FLUID_SOURCE = FLUIDS.register("time_fluid",
             TimeFluid.Source::new);
     public static final RegistryObject<ForgeFlowingFluid> TIME_FLUID_FLOWING = FLUIDS.register("time_fluid_flowing",
