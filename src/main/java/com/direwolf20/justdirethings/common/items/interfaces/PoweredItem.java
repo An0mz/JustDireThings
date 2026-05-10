@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.items.interfaces;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public interface PoweredItem {
     default int getAvailableEnergy(ItemStack stack) {
@@ -39,5 +40,17 @@ public interface PoweredItem {
 
     default int getMaxEnergy() {
         return 10000;
+    }
+
+    static boolean hasEnoughEnergy(ItemStack stack, int amount) {
+        IEnergyStorage energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        if (energy == null) return false;
+        return energy.getEnergyStored() >= amount;
+    }
+
+    static void consumeEnergy(ItemStack stack, int amount) {
+        IEnergyStorage energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+        if (energy == null) return;
+        energy.extractEnergy(amount, false);
     }
 }

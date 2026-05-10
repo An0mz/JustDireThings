@@ -65,6 +65,21 @@ public class Config {
     public static final String CATEGORY_POLYMORPHIC_WAND = "polymorphic_wand";
     public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_MAX_FLUID;
 
+    public static final String CATEGORY_TIME_WAND = "time_wand";
+    public static ForgeConfigSpec.IntValue TIME_WAND_MAX_FE;
+    public static ForgeConfigSpec.IntValue TIME_WAND_FE_COST;
+    public static ForgeConfigSpec.IntValue TIME_WAND_MAX_FLUID;
+    public static ForgeConfigSpec.DoubleValue TIME_WAND_FLUID_COST;
+    public static ForgeConfigSpec.IntValue TIME_WAND_MAX_MULTIPLIER;
+    public static ForgeConfigSpec.BooleanValue TIME_WAND_FAKE_PLAYER_ALLOWED;
+
+    public static final String CATEGORY_PORTAL_GUN = "portal_gun";
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_MAX_FE;
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_FE_COST;
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_MAX_FLUID;
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_FLUID_COST;
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_LIFESPAN;
+
     public static void register() {
         //registerServerConfigs();
         registerCommonConfigs();
@@ -86,6 +101,8 @@ public class Config {
         timeCrystalConfig();
         fluidFuelConfig();
         paradoxConfig();
+        timeWandConfig();
+        portalGunConfig();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
     }
@@ -208,6 +225,42 @@ public class Config {
         COMMON_BUILDER.comment("Polymorphic Wand").push(CATEGORY_POLYMORPHIC_WAND);
         POLYMORPHIC_WAND_MAX_FLUID = COMMON_BUILDER.comment("Maximum mB of polymorphic fluid the wand can hold")
                 .defineInRange("polymorphic_wand_max_fluid", 8000, 1, Integer.MAX_VALUE);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void timeWandConfig() {
+        COMMON_BUILDER.comment("Time Wand").push(CATEGORY_TIME_WAND);
+        TIME_WAND_MAX_FE = COMMON_BUILDER.comment("The maximum amount of Forge Energy the Time Wand can hold in its buffer")
+                .defineInRange("time_wand_rf_capacity", 100000, 1, Integer.MAX_VALUE);
+        TIME_WAND_FE_COST = COMMON_BUILDER.comment("FE cost per use, multiplied by the acceleration rate (2^level)")
+                .defineInRange("time_wand_rf_cost", 100, 0, Integer.MAX_VALUE);
+        TIME_WAND_MAX_FLUID = COMMON_BUILDER.comment("Max mB of time fluid the Time Wand can hold")
+                .defineInRange("time_wand_max_fluid", 8000, 1, Integer.MAX_VALUE);
+        TIME_WAND_FLUID_COST = COMMON_BUILDER.comment("Time Fluid cost per use, multiplied by the acceleration rate (2^level)")
+                .defineInRange("time_wand_fluid_cost", 0.5, 0.0, Double.MAX_VALUE);
+        TIME_WAND_MAX_MULTIPLIER = COMMON_BUILDER.comment("Maximum tick speed multiplier (must be a power of 2, e.g. 256 = up to 2^8 = 256x)")
+                .defineInRange("time_wand_max_multiplier", 256, 2, Integer.MAX_VALUE);
+        TIME_WAND_FAKE_PLAYER_ALLOWED = COMMON_BUILDER.comment("Can fake players (e.g. Clickers) use the Time Wand?")
+                .define("time_wand_fake_player_allowed", true);
+        COMMON_BUILDER.pop();
+    }
+
+    public static int logBase2(int n) {
+        return (int) (Math.log(n) / Math.log(2));
+    }
+
+    private static void portalGunConfig() {
+        COMMON_BUILDER.comment("Portal Gun").push(CATEGORY_PORTAL_GUN);
+        PORTAL_GUN_MAX_FE = COMMON_BUILDER.comment("Max FE capacity of the Portal Gun")
+                .defineInRange("portal_gun_max_fe", 1000000, 1, Integer.MAX_VALUE);
+        PORTAL_GUN_FE_COST = COMMON_BUILDER.comment("FE cost per portal shot")
+                .defineInRange("portal_gun_fe_cost", 5000, 0, Integer.MAX_VALUE);
+        PORTAL_GUN_MAX_FLUID = COMMON_BUILDER.comment("Max mB of portal fluid the Portal Gun can hold")
+                .defineInRange("portal_gun_max_fluid", 8000, 1, Integer.MAX_VALUE);
+        PORTAL_GUN_FLUID_COST = COMMON_BUILDER.comment("mB of portal fluid consumed per shot")
+                .defineInRange("portal_gun_fluid_cost", 500, 0, Integer.MAX_VALUE);
+        PORTAL_GUN_LIFESPAN = COMMON_BUILDER.comment("How many ticks a portal remains open (6000 = 5 minutes, -1 for infinite)")
+                .defineInRange("portal_gun_lifespan", 6000, -1, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
     }
 }

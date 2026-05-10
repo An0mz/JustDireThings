@@ -8,6 +8,11 @@ import com.direwolf20.justdirethings.client.blockentityrenders.gooblocks.GooBloc
 import com.direwolf20.justdirethings.client.blockentityrenders.gooblocks.GooBlockRender_Tier3;
 import com.direwolf20.justdirethings.client.blockentityrenders.gooblocks.GooBlockRender_Tier4;
 import com.direwolf20.justdirethings.client.entityrenders.CreatureCatcherEntityRender;
+import com.direwolf20.justdirethings.client.entityrenders.TimeWandEntityRenderer;
+import com.direwolf20.justdirethings.client.entityrenders.PortalEntityRenderer;
+import com.direwolf20.justdirethings.client.itemcustomrenders.FluidbarDecorator;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import com.direwolf20.justdirethings.client.events.EventKeyInput;
 import com.direwolf20.justdirethings.client.events.PlayerEvents;
 import com.direwolf20.justdirethings.client.events.RenderHighlight;
@@ -154,6 +159,12 @@ public class ClientSetup {
     }
 
     @SubscribeEvent
+    public static void registerItemDecorations(RegisterItemDecorationsEvent event) {
+        event.register(Registration.TimeWand.get(), FluidbarDecorator.INSTANCE);
+        event.register(Registration.PortalGunV2.get(), FluidbarDecorator.INSTANCE);
+    }
+
+    @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         //Register Block Entity Renders
         event.registerBlockEntityRenderer(Registration.GooBlockBE_Tier1.get(), GooBlockRender_Tier1::new);
@@ -175,5 +186,8 @@ public class ClientSetup {
 
         //Entities
         event.registerEntityRenderer(Registration.CreatureCatcherEntity.get(), CreatureCatcherEntityRender::new);
+        event.registerEntityRenderer(Registration.TimeWandEntity.get(), TimeWandEntityRenderer::new);
+        event.registerEntityRenderer(Registration.PortalEntity.get(), PortalEntityRenderer::new);
+        event.registerEntityRenderer(Registration.PortalProjectile.get(), ThrownItemRenderer::new);
     }
 }

@@ -122,4 +122,24 @@ public class NBTHelpers {
         double z = tag.getDouble("vec3z");
         return new GlobalVec3(levelKey, new Vec3(x, y, z));
     }
+
+    public record PortalDestination(ResourceKey<Level> dimension, Vec3 position, net.minecraft.core.Direction facing, String name) {
+        public static PortalDestination fromNBT(CompoundTag tag) {
+            if (!tag.contains("dimension") || !tag.contains("facing")) return null;
+            ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(tag.getString("dimension")));
+            Vec3 pos = nbtToVec3(tag.getCompound("position"));
+            net.minecraft.core.Direction dir = net.minecraft.core.Direction.values()[tag.getInt("facing")];
+            String label = tag.getString("name");
+            return new PortalDestination(dim, pos, dir, label);
+        }
+
+        public CompoundTag toNBT() {
+            CompoundTag tag = new CompoundTag();
+            tag.putString("dimension", dimension.location().toString());
+            tag.put("position", vec3ToNBT(position));
+            tag.putInt("facing", facing.ordinal());
+            tag.putString("name", name);
+            return tag;
+        }
+    }
 }

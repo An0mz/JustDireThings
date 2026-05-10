@@ -240,6 +240,18 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Ability.TIMEPROTECTION.getLocalization(), "Time Protection");
         add("entity.justdirethings.justdire_arrow", "JustDire Arrow");
 
+        //Time Wand & Portal Gun V2
+        add(Registration.TimeWand.get(), "Time Wand");
+        add(Registration.PortalGunV2.get(), "Advanced Portal Gun");
+        add("entity.justdirethings.time_wand_entity", "Time Wand Effect");
+        add("entity.justdirethings.portal_projectile", "Portal Projectile");
+        add("entity.justdirethings.portal_entity", "DirePortal");
+        add("justdirethings.lowenergy", "Insufficient Energy");
+        add("justdirethings.lowtimefluid", "Insufficient Time Fluid");
+        add("justdirethings.lowportalfluid", "Insufficient Portal Fluid");
+        add("justdirethings.timefluidamt", "Time Fluid: %s / %s");
+        add("justdirethings.portalfluidamt", "Portal Fluid: %s / %s");
+
         //GUI
         add("justdirethings.screen.energy", "Energy: %s/%s FE");
         add("justdirethings.screen.energycost", "Energy Cost: %s");

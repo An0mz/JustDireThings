@@ -2,8 +2,10 @@ package com.direwolf20.justdirethings.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 
@@ -36,5 +38,22 @@ public class MiscHelpers {
             return be.getCapability(ForgeCapabilities.ITEM_HANDLER, side).orElse(null);
         }
         return null;
+    }
+
+    public static Direction getPrimaryDirection(Vec3 vec) {
+        Direction best = Direction.NORTH;
+        double bestDot = Double.NEGATIVE_INFINITY;
+        for (Direction dir : Direction.values()) {
+            double dot = vec.dot(new Vec3(dir.getStepX(), dir.getStepY(), dir.getStepZ()));
+            if (dot > bestDot) {
+                bestDot = dot;
+                best = dir;
+            }
+        }
+        return best;
+    }
+
+    public static Direction getFacingDirection(Player player) {
+        return player.getDirection();
     }
 }

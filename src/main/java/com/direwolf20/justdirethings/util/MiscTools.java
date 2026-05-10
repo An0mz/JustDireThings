@@ -1,15 +1,24 @@
 package com.direwolf20.justdirethings.util;
 
+import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
 import com.mojang.math.Axis;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -102,6 +111,30 @@ public class MiscTools {
         MutableComponent current = Component.translatable(string);
         current.setStyle(style);
         return current;
+    }
+
+    public static boolean isValidTickAccelBlock(ServerLevel level, BlockState state, @Nullable BlockEntity be) {
+        if (be == null) return false;
+        if (state.is(JustDireBlockTags.TICK_SPEED_DENY)) return false;
+        return true;
+    }
+
+    public static void doExtraTicks(ServerLevel level, BlockPos pos, int extraTicks) {
+        BlockState state = level.getBlockState(pos);
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!isValidTickAccelBlock(level, state, be)) return;
+        for (int i = 0; i < extraTicks; i++) {
+            tickBlockEntity(level, pos, state, be);
+        }
+    }
+
+        @SuppressWarnings("unchecked")
+    private static <T extends BlockEntity> void tickBlockEntity(Level level, BlockPos pos, BlockState state, T be) {
+        if (!(state.getBlock() instanceof EntityBlock entityBlock)) return;
+        BlockEntityTicker<T> ticker = entityBlock.getTicker(level, state, (BlockEntityType<T>) be.getType());
+        if (ticker != null) {
+            ticker.tick(level, pos, state, be);
+        }
     }
 
     @Nullable

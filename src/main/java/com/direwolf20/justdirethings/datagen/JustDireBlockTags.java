@@ -28,6 +28,7 @@ public class JustDireBlockTags extends BlockTagsProvider {
     public static final TagKey<Block> SWAPPERDENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "swapper_deny"));
     public static final TagKey<Block> ECLISEGATEDENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "eclipsegate_deny"));
     public static final TagKey<Block> NO_MOVE = BlockTags.create(new ResourceLocation("forge", "relocation_not_supported"));
+    public static final TagKey<Block> TICK_SPEED_DENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "tick_speed_deny"));
 
 
     @Override
@@ -113,6 +114,8 @@ public class JustDireBlockTags extends BlockTagsProvider {
                 .addTag(BlockTags.PORTALS)
                 .addTag(BlockTags.DOORS);
         tag(ECLISEGATEDENY)
+                .addTag(BlockTags.PORTALS);
+        tag(TICK_SPEED_DENY)
                 .addTag(BlockTags.PORTALS);
     }
 

@@ -99,6 +99,9 @@ public class JustDireItemModels extends ItemModelProvider {
         singleTexture(Registration.PortalFluidCatalyst.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/portal_fluid_catalyst"));
         singleTexture(Registration.MachineSettingsCopier.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/machine_settings_copier"));
 
+        singleTexture(Registration.TimeWand.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/time_wand"));
+        withExistingParent(Registration.PortalGunV2.getId().getPath(), modLoc("item/portalgun_v2"));
+
         singleTexture(Registration.FerricoreWrench.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/ferricore_wrench"));
         singleTexture(Registration.TotemOfDeathRecall.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/totem_of_death_recall"));
         singleTexture(Registration.BlazejetWand.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/blazejet_wand"));

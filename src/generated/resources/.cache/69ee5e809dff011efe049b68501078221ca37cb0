@@ -1,4 +1,4 @@
-// 1.20.1	2026-05-07T01:55:05.4359792	Item Models: justdirethings
+// 1.20.1	2026-05-10T14:57:59.5801625	Item Models: justdirethings
 c197a1b2a5ae31fcfabfe6cab9ab95a9dc0e1af6 assets/justdirethings/models/item/blazegold_axe.json
 dddf215922d40d92c2d8bce4229f2e2af8b3c7ba assets/justdirethings/models/item/blazegold_axe_active.json
 6396fb6e503760080534bc26337236d4d09a4cb8 assets/justdirethings/models/item/blazegold_block.json
@@ -136,6 +136,7 @@ b10bbca68270e48599af7174531b0235c8e7c9a4 assets/justdirethings/models/item/playe
 6aa432e83cc0ecd412a6a1de8d7a357b7e3d28b1 assets/justdirethings/models/item/polymorphic_wand.json
 37ec5d9f63a972d8924804a2472ee8bfc3ac0647 assets/justdirethings/models/item/polymorphic_wand_active.json
 ea9b4416ff95371822cbc5808fd425323b170cc9 assets/justdirethings/models/item/portal_fluid_catalyst.json
+960342a33399bf82f82b7a8d6c9f9b119663bcc3 assets/justdirethings/models/item/portal_gun_v2.json
 8a7cbdf3ca9845c6e6a4242876eaddcb2ffb1f7b assets/justdirethings/models/item/potion_canister.json
 d8ea68a75b8b49f7765e715d62ad23c2f1939281 assets/justdirethings/models/item/raw_blazegold.json
 0eb4cfb03ddec169426214f46beb6f8781ce9421 assets/justdirethings/models/item/raw_blazegold_ore.json
@@ -157,5 +158,6 @@ cfd2784f583dd77e664f561d3e9e79f7ede18dc0 assets/justdirethings/models/item/time_
 11aeb64dcdc10e9ab0d2bc66ab0b998c7220d75c assets/justdirethings/models/item/time_crystal_cluster_large.json
 0472de56c299fcdad921cda717af276d3904a6de assets/justdirethings/models/item/time_crystal_cluster_medium.json
 53c1420a65e583a52845f5dde985091521d0c84e assets/justdirethings/models/item/time_crystal_cluster_small.json
+2b69103add231fa43efafb33e305e4f9171dbaec assets/justdirethings/models/item/time_wand.json
 cb3be9b73e78631097a0854d5da4a7c87cbe94a1 assets/justdirethings/models/item/totem_of_death_recall.json
 e25287d609bca6b8f5528ef11aabe3f67cdbdac8 assets/justdirethings/models/item/voidshift_wand.json
