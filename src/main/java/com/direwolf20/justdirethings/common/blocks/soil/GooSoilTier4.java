@@ -2,8 +2,10 @@ package com.direwolf20.justdirethings.common.blocks.soil;
 
 import com.direwolf20.justdirethings.common.blockentities.GooSoilBE;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +27,14 @@ public class GooSoilTier4 extends GooSoilBase implements EntityBlock {
             bonemealMe(pLevel, pPos);
         }
         autoHarvest(pLevel, pPos);
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        if (facing == Direction.UP && level instanceof ServerLevel serverLevel) {
+            autoHarvest(serverLevel, currentPos);
+        }
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
     }
 
     @Nullable
