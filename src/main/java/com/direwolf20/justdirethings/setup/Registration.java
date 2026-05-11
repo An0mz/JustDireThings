@@ -59,6 +59,10 @@ import com.direwolf20.justdirethings.common.fluids.unrefinedt3fuel.UnrefinedT3Fu
 import com.direwolf20.justdirethings.common.fluids.unrefinedt4fuel.UnrefinedT4Fuel;
 import com.direwolf20.justdirethings.common.fluids.unstableportalfluid.UnstablePortalFluid;
 import com.direwolf20.justdirethings.common.fluids.xpfluid.XPFluid;
+import com.direwolf20.justdirethings.common.items.abilityupgrades.Upgrade;
+import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeBlank;
+import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeTemplate;
+import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -97,6 +101,7 @@ public class Registration {
     public static final DeferredRegister<Item> TOOLS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Item> BOWS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Item> ARMORS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<Item> UPGRADES = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(Registries.MENU, MODID);
@@ -123,6 +128,7 @@ public class Registration {
         PARTICLE_TYPES.register(eventBus);
         ENTITY_TYPES.register(eventBus);
         ARMORS.register(eventBus);
+        UPGRADES.register(eventBus);
         FLUID_TYPES.register(eventBus);
         FLUIDS.register(eventBus);
     }
@@ -640,4 +646,65 @@ public class Registration {
                     .clientTrackingRange(8)
                     .updateInterval(5)
                     .build("portal_entity"));
+
+    // ── Upgrade Templates ─────────────────────────────────────────────────────
+
+    public static final RegistryObject<UpgradeTemplate> TEMPLATE_FERRICORE = ITEMS.register("template_ferricore", UpgradeTemplate::new);
+    public static final RegistryObject<UpgradeTemplate> TEMPLATE_BLAZEGOLD = ITEMS.register("template_blazegold", UpgradeTemplate::new);
+    public static final RegistryObject<UpgradeTemplate> TEMPLATE_CELESTIGEM = ITEMS.register("template_celestigem", UpgradeTemplate::new);
+    public static final RegistryObject<UpgradeTemplate> TEMPLATE_ECLIPSEALLOY = ITEMS.register("template_eclipsealloy", UpgradeTemplate::new);
+
+    // ── Upgrade Items ─────────────────────────────────────────────────────────
+    // MUST be declared before ABILITY_RECIPE_SERIALIZER to avoid circular static init with Ability enum
+
+    public static final RegistryObject<UpgradeBlank> UPGRADE_BASE = UPGRADES.register("upgrade_blank", UpgradeBlank::new);
+
+    public static final RegistryObject<Upgrade> UPGRADE_MOBSCANNER = UPGRADES.register("upgrade_mobscanner", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_OREMINER = UPGRADES.register("upgrade_oreminer", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_ORESCANNER = UPGRADES.register("upgrade_orescanner", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_LAWNMOWER = UPGRADES.register("upgrade_lawnmower", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_SKYSWEEPER = UPGRADES.register("upgrade_skysweeper", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_TREEFELLER = UPGRADES.register("upgrade_treefeller", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_LEAFBREAKER = UPGRADES.register("upgrade_leafbreaker", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_RUNSPEED = UPGRADES.register("upgrade_runspeed", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_WALKSPEED = UPGRADES.register("upgrade_walkspeed", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_STEPHEIGHT = UPGRADES.register("upgrade_stepheight", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_JUMPBOOST = UPGRADES.register("upgrade_jumpboost", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_MINDFOG = UPGRADES.register("upgrade_mindfog", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_INVULNERABILITY = UPGRADES.register("upgrade_invulnerability", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_POTIONARROW = UPGRADES.register("upgrade_potionarrow", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_SMELTER = UPGRADES.register("upgrade_smelter", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_SMOKER = UPGRADES.register("upgrade_smoker", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_HAMMER = UPGRADES.register("upgrade_hammer", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_CAUTERIZEWOUNDS = UPGRADES.register("upgrade_cauterizewounds", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_SWIMSPEED = UPGRADES.register("upgrade_swimspeed", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_GROUNDSTOMP = UPGRADES.register("upgrade_groundstomp", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_EXTINGUISH = UPGRADES.register("upgrade_extinguish", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_STUPEFY = UPGRADES.register("upgrade_stupefy", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_SPLASH = UPGRADES.register("upgrade_splash", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_ELYTRA = UPGRADES.register("upgrade_elytra", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_DROPTELEPORT = UPGRADES.register("upgrade_dropteleport", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_NEGATEFALLDAMAGE = UPGRADES.register("upgrade_negatefalldamage", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_NIGHTVISION = UPGRADES.register("upgrade_nightvision", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_DECOY = UPGRADES.register("upgrade_decoy", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_LINGERING = UPGRADES.register("upgrade_lingering", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_HOMING = UPGRADES.register("upgrade_homing", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_WATERBREATHING = UPGRADES.register("upgrade_waterbreathing", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_OREXRAY = UPGRADES.register("upgrade_orexray", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_GLOWING = UPGRADES.register("upgrade_glowing", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_INSTABREAK = UPGRADES.register("upgrade_instabreak", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_EARTHQUAKE = UPGRADES.register("upgrade_earthquake", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_NOAI = UPGRADES.register("upgrade_noai", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_FLIGHT = UPGRADES.register("upgrade_flight", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_LAVAIMMUNITY = UPGRADES.register("upgrade_lavaimmunity", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_PHASE = UPGRADES.register("upgrade_phase", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_DEATHPROTECTION = UPGRADES.register("upgrade_deathprotection", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_DEBUFFREMOVER = UPGRADES.register("upgrade_debuffremover", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_EPICARROW = UPGRADES.register("upgrade_epicarrow", Upgrade::new);
+    public static final RegistryObject<Upgrade> UPGRADE_TIMEPROTECTION = UPGRADES.register("upgrade_time_protection", Upgrade::new);
+
+    // ── Ability Recipe ────────────────────────────────────────────────────────
+    // Must be after all UPGRADE_* declarations (Ability enum static init references them)
+
+    public static final Supplier<AbilityRecipe.Serializer> ABILITY_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("ability", AbilityRecipe.Serializer::new);
 }

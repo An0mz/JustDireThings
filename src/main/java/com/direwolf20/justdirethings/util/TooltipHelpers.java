@@ -10,6 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemStackHandler;
@@ -59,18 +60,23 @@ public class TooltipHelpers {
             NBTHelpers.BoundInventory boundInventory = ToggleableTool.getBoundInventory(stack);
             for (Ability ability : toggleableTool.getAbilities()) {
                 boolean active = ToggleableTool.getSetting(stack, ability.getName());
-                ChatFormatting chatFormatting = active ? ChatFormatting.GREEN : ChatFormatting.DARK_RED;
-                tooltip.add(Component.translatable(ability.getLocalization()).withStyle(chatFormatting));
-                if (ability.equals(Ability.DROPTELEPORT)) {
-                    chatFormatting = ChatFormatting.DARK_PURPLE;
-                    String dimString;
-                    if (boundInventory == null) {
-                        dimString = I18n.get("justdirethings.unbound");
-                        tooltip.add(Component.literal(dimString).withStyle(chatFormatting));
-                    } else {
-                        dimString = " -" + I18n.get(boundInventory.globalPos().dimension().location().getPath()) + ": [" + boundInventory.globalPos().pos().toShortString() + "]";
-                        tooltip.add(Component.literal(dimString).withStyle(chatFormatting));
-                        tooltip.add(Component.literal("").append(Component.translatable("justdirethings.boundside")).append(Component.translatable("justdirethings.screen.direction-" + boundInventory.direction().getName())).withStyle(chatFormatting));
+                ChatFormatting chatFormatting = ChatFormatting.GRAY;
+                if (!ToggleableTool.hasUpgrade(stack, ability)) {
+                    tooltip.add(Component.translatable(ability.getLocalization()).append(Component.translatable("justdirethings.missingupgrade")).withStyle(chatFormatting));
+                } else {
+                    chatFormatting = active ? ChatFormatting.GREEN : ChatFormatting.DARK_RED;
+                    tooltip.add(Component.translatable(ability.getLocalization()).withStyle(chatFormatting));
+                    if (ability.equals(Ability.DROPTELEPORT)) {
+                        chatFormatting = ChatFormatting.DARK_PURPLE;
+                        String dimString;
+                        if (boundInventory == null) {
+                            dimString = I18n.get("justdirethings.unbound");
+                            tooltip.add(Component.literal(dimString).withStyle(chatFormatting));
+                        } else {
+                            dimString = " -" + I18n.get(boundInventory.globalPos().dimension().location().getPath()) + ": [" + boundInventory.globalPos().pos().toShortString() + "]";
+                            tooltip.add(Component.literal(dimString).withStyle(chatFormatting));
+                            tooltip.add(Component.literal("").append(Component.translatable("justdirethings.boundside")).append(Component.translatable("justdirethings.screen.direction-" + boundInventory.direction().getName())).withStyle(chatFormatting));
+                        }
                     }
                 }
             }
@@ -79,6 +85,24 @@ public class TooltipHelpers {
 
     public static void appendShiftForInfo(ItemStack stack, List<Component> tooltip) {
         tooltip.add(Component.translatable("justdirethings.shiftmoreinfo").withStyle(ChatFormatting.GRAY));
+    }
+
+    public static void appendUpgradeDetails(ItemStack stack, List<Component> tooltip) {
+        Ability ability = Ability.getAbilityFromUpgradeItem(stack.getItem());
+        if (ability == null) return;
+
+        String detailTextKey = "justdirethings." + ability.getName() + ".detailtext";
+        String flavorTextKey = "justdirethings." + ability.getName() + ".flavortext";
+
+        MutableComponent detailTextComponent = Component.translatable(detailTextKey);
+        if (!detailTextComponent.getString().equals(detailTextKey)) {
+            tooltip.add(detailTextComponent.withStyle(ChatFormatting.GREEN));
+        }
+
+        MutableComponent flavorTextComponent = Component.translatable(flavorTextKey);
+        if (!flavorTextComponent.getString().equals(flavorTextKey)) {
+            tooltip.add(flavorTextComponent.withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
+        }
     }
 
     public static void appendGeneratorDetails(ItemStack stack, List<Component> tooltip) {

@@ -110,7 +110,14 @@ public interface ToggleableTool extends ToggleableItem {
     }
 
     default boolean canUseAbility(ItemStack itemStack, Ability toolAbility) {
-        return hasAbility(toolAbility) && getEnabled(itemStack) && getSetting(itemStack, toolAbility.getName());
+        return hasAbility(toolAbility) && hasUpgrade(itemStack, toolAbility) && getEnabled(itemStack) && getSetting(itemStack, toolAbility.getName());
+    }
+
+    static boolean hasUpgrade(ItemStack stack, Ability ability) {
+        if (!ability.requiresUpgrade()) return true;
+        CompoundTag tag = stack.getTag();
+        if (tag == null) return false;
+        return tag.getBoolean("upgrade_" + ability.getName());
     }
 
     default boolean canUseAbilityAndDurability(ItemStack itemStack, Ability toolAbility) {

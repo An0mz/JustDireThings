@@ -3,7 +3,9 @@ package com.direwolf20.justdirethings.datagen.recipes;
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.blockentities.basebe.GooBlockBE_Base;
 import com.direwolf20.justdirethings.setup.Registration;
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -120,13 +122,17 @@ public class GooSpreadRecipe implements CraftingRecipe {
 
         @Override
         public GooSpreadRecipe fromJson(ResourceLocation id, com.google.gson.JsonObject json) {
-            String inputStr = json.get("input").getAsString();
-            String outputStr = json.get("output").getAsString();
-            Block inputBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(new ResourceLocation(inputStr));
-            Block outputBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(new ResourceLocation(outputStr));
+            BlockState inputState = parseBlockState(json.get("input"));
+            BlockState outputState = parseBlockState(json.get("output"));
             int tierRequirement = json.get("tierRequirement").getAsInt();
             int craftingDuration = json.get("craftingDuration").getAsInt();
-            return new GooSpreadRecipe(id, inputBlock.defaultBlockState(), outputBlock.defaultBlockState(), tierRequirement, craftingDuration);
+            return new GooSpreadRecipe(id, inputState, outputState, tierRequirement, craftingDuration);
+        }
+
+        private static BlockState parseBlockState(JsonElement el) {
+            return BlockState.CODEC.parse(JsonOps.INSTANCE, el)
+                    .resultOrPartial(e -> {})
+                    .orElse(net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
         }
 
         @Override
