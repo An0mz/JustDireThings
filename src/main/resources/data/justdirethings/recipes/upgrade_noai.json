@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": { "item": "minecraft:calibrated_sculk_sensor" },
+    "b": { "item": "justdirethings:upgrade_blank" },
+    "e": { "item": "minecraft:end_rod" },
+    "f": { "item": "justdirethings:time_crystal" }
+  },
+  "pattern": [ "aea", "fbf", "aea" ],
+  "result": { "count": 1, "item": "justdirethings:upgrade_noai" }
+}

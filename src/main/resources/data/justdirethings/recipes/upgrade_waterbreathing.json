@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": { "item": "justdirethings:upgrade_blank" },
+    "e": { "item": "minecraft:kelp" },
+    "f": { "item": "minecraft:prismarine_shard" },
+    "g": { "item": "justdirethings:blazegold_ingot" },
+    "p": { "item": "minecraft:pufferfish" }
+  },
+  "pattern": [ "fep", "gbg", "pef" ],
+  "result": { "count": 1, "item": "justdirethings:upgrade_waterbreathing" }
+}

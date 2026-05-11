@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "justdirethings",
+  "ingredients": [
+    { "item": "justdirethings:upgrade_blank" },
+    { "item": "minecraft:elytra" }
+  ],
+  "result": { "count": 1, "item": "justdirethings:upgrade_elytra" }
+}

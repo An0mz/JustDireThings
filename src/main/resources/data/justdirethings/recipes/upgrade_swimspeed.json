@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": { "item": "justdirethings:upgrade_blank" },
+    "e": { "item": "minecraft:kelp" },
+    "f": { "item": "minecraft:sugar" }
+  },
+  "pattern": [ " e ", "fbf", " e " ],
+  "result": { "count": 1, "item": "justdirethings:upgrade_swimspeed" }
+}

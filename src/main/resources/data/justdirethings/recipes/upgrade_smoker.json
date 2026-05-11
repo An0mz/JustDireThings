@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": { "item": "justdirethings:upgrade_blank" },
+    "e": { "item": "minecraft:blaze_rod" },
+    "f": { "item": "minecraft:smoker" }
+  },
+  "pattern": [ " e ", "fbf", " e " ],
+  "result": { "count": 1, "item": "justdirethings:upgrade_smoker" }
+}

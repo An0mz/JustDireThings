@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": { "item": "justdirethings:time_crystal" },
+    "b": { "item": "justdirethings:upgrade_blank" },
+    "e": { "item": "minecraft:nether_star" },
+    "f": { "item": "minecraft:netherite_pickaxe" }
+  },
+  "pattern": [ "aea", "fbf", "aea" ],
+  "result": { "count": 1, "item": "justdirethings:upgrade_instabreak" }
+}
