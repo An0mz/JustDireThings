@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "justdirethings",
+  "ingredients": [ { "item": "justdirethings:charcoal" } ],
+  "result": { "count": 9, "item": "minecraft:charcoal" }
+}

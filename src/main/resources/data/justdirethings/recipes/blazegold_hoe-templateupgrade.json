@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "justdirethings:template_blazegold" },
+  "base": { "item": "justdirethings:ferricore_hoe" },
+  "addition": { "item": "justdirethings:blazegold_ingot" },
+  "result": { "item": "justdirethings:blazegold_hoe" }
+}

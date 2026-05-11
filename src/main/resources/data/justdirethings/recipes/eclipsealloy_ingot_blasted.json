@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 1.0,
+  "ingredient": { "item": "justdirethings:raw_eclipsealloy" },
+  "result": { "count": 1, "item": "justdirethings:eclipsealloy_ingot" }
+}
