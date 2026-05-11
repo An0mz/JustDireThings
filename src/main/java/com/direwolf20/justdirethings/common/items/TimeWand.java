@@ -28,6 +28,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+import static com.direwolf20.justdirethings.util.TooltipHelpers.appendFEText;
+
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
@@ -148,6 +150,7 @@ public class TimeWand extends BasePoweredItem implements FluidContainingItem {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         if (level == null) return;
+        appendFEText(stack, tooltip);
         IFluidHandlerItem fh = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
         if (fh != null) {
             tooltip.add(Component.translatable("justdirethings.timefluidamt",

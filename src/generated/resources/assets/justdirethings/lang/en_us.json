@@ -215,7 +215,7 @@
   "justdirethings.creature": "Creature: ",
   "justdirethings.disabled": "Disabled",
   "justdirethings.enabled": "Enabled",
-  "justdirethings.festored": "Forge Energy: %s / %s",
+  "justdirethings.festored": "Energy: %s / %s",
   "justdirethings.fillmode": "Fill Mode: %s",
   "justdirethings.fillmode.all": "Fill Mode: All",
   "justdirethings.fillmode.jdtonly": "Fill Mode: JDT Only",

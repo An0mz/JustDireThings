@@ -19,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+
+import static com.direwolf20.justdirethings.util.TooltipHelpers.appendFEText;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -104,11 +106,12 @@ public class PortalGunV2 extends BasePoweredItem implements FluidContainingItem 
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         if (level == null) return;
+        appendFEText(stack, tooltip);
         IFluidHandlerItem fh = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
         if (fh != null) {
             tooltip.add(Component.translatable("justdirethings.portalfluidamt",
                     MagicHelpers.formatted(fh.getFluidInTank(0).getAmount()),
-                    MagicHelpers.formatted(fh.getTankCapacity(0))).withStyle(ChatFormatting.GRAY));
+                    MagicHelpers.formatted(fh.getTankCapacity(0))).withStyle(ChatFormatting.GREEN));
         }
     }
 }

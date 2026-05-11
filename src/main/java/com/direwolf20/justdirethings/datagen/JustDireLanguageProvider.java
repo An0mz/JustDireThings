@@ -168,7 +168,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.pocketgeneratorburntime", "Burn Time: %f / %f");
         add("justdirethings.pocketgeneratorfuelstack", "Fuel: %f %s");
         add("justdirethings.pocketgeneratornofuel", "Fuel Empty");
-        add("justdirethings.festored", "Forge Energy: %s / %s");
+        add("justdirethings.festored", "Energy: %s / %s");
         add("justdirethings.boundto", "Bound to: %s:%s");
         add("justdirethings.boundto-missing", "Bound to (MISSING BLOCK): %s:%s");
         add("justdirethings.unbound", " -Not Bound");

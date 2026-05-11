@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.IItemDecorator;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class FluidbarDecorator implements IItemDecorator {
     public static final FluidbarDecorator INSTANCE = new FluidbarDecorator();
@@ -20,7 +21,7 @@ public class FluidbarDecorator implements IItemDecorator {
         if (stack.isBarVisible())
             isPowerBarVisible = true;
 
-        if (FluidContainingItem.getAvailableFluid(stack) <= 0) return false;
+        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null) == null) return false;
 
         int fluidBarY = isPowerBarVisible ? yOffset + 11 : yOffset + 13;
         int fluidBarWidth = fluidContainingItem.getFluidBarWidth(stack);

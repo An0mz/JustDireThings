@@ -28,9 +28,7 @@ public interface FluidContainingItem {
     }
 
     default boolean isFluidBarVisible(ItemStack stack) {
-        IFluidHandlerItem handler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
-        if (handler == null) return false;
-        return handler.getFluidInTank(0).getAmount() < handler.getTankCapacity(0);
+        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null) != null;
     }
 
     default int getFluidBarWidth(ItemStack stack) {

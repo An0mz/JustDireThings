@@ -15,11 +15,7 @@ public interface PoweredItem {
     }
 
     default boolean isPowerBarVisible(ItemStack stack) {
-        var energy = stack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
-        if (energy == null) {
-            return false;
-        }
-        return (energy.getEnergyStored() < energy.getMaxEnergyStored());
+        return stack.getCapability(ForgeCapabilities.ENERGY).orElse(null) != null;
     }
 
     default int getPowerBarWidth(ItemStack stack) {
