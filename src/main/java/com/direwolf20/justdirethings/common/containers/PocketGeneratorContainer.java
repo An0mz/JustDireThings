@@ -17,6 +17,7 @@ public class PocketGeneratorContainer extends BaseContainer {
     public ItemStackHandler handler;
     public ItemStack pocketGeneratorItemStack;
     public Player playerEntity;
+    private boolean syncing = false;
 
     public PocketGeneratorContainer(int windowId, Inventory playerInventory, Player player, FriendlyByteBuf extraData) {
         this(windowId, playerInventory, player, extraData.readItem());
@@ -31,7 +32,7 @@ public class PocketGeneratorContainer extends BaseContainer {
         handler = new ItemStackHandler(SLOTS) {
             @Override
             protected void onContentsChanged(int slot) {
-                // Write back to the item's NBT whenever contents change
+                if (syncing) return;
                 CompoundTag tag = pocketGeneratorItemStack.getOrCreateTag();
                 tag.put("FuelInventory", serializeNBT());
             }
@@ -91,6 +92,24 @@ public class PocketGeneratorContainer extends BaseContainer {
             slot.onTake(playerIn, currentStack);
         }
         return itemstack;
+    }
+
+    @Override
+    public void broadcastChanges() {
+        // Sync handler from item NBT in case inventoryTick consumed fuel externally
+        CompoundTag tag = pocketGeneratorItemStack.getTag();
+        ItemStack nbtFuel = ItemStack.EMPTY;
+        if (tag != null && tag.contains("FuelInventory")) {
+            ItemStackHandler temp = new ItemStackHandler(SLOTS);
+            temp.deserializeNBT(tag.getCompound("FuelInventory"));
+            nbtFuel = temp.getStackInSlot(0);
+        }
+        if (!ItemStack.matches(nbtFuel, handler.getStackInSlot(0))) {
+            syncing = true;
+            handler.setStackInSlot(0, nbtFuel.copy());
+            syncing = false;
+        }
+        super.broadcastChanges();
     }
 
     @Override

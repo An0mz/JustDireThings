@@ -22,6 +22,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -68,13 +70,15 @@ public class PocketGeneratorScreen extends AbstractContainerScreen<PocketGenerat
     protected void renderTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
         if (this.menu.getCarried().isEmpty() && this.hoveredSlot != null && this.hoveredSlot.hasItem()) {
             ItemStack fuelStack = this.hoveredSlot.getItem();
-            int burnTime = fuelStack.getBurnTime(RecipeType.SMELTING);
+            int burnTime = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
             if (burnTime > 0) {
                 int fuelBurnMultiplier = 1;
                 if (fuelStack.getItem() instanceof Coal_T1 direCoal) {
                     fuelBurnMultiplier = direCoal.getBurnSpeedMultiplier();
                 } else if (fuelStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof CoalBlock_T1 coalBlock) {
                     fuelBurnMultiplier = coalBlock.getBurnSpeedMultiplier();
+                } else if (fuelStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() == Blocks.COAL_BLOCK) {
+                    fuelBurnMultiplier = 9;
                 } else if (fuelStack.getItem() instanceof FuelCanister) {
                     fuelBurnMultiplier = FuelCanister.getBurnSpeedMultiplier(fuelStack);
                 }

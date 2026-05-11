@@ -14,7 +14,10 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -57,6 +60,12 @@ public class PortalGunV2 extends BasePoweredItem implements FluidContainingItem 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+
+        BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            if (FluidContainingItem.pickupFluid(level, player, stack, hitResult))
+                return InteractionResultHolder.success(stack);
+        }
 
         if (level.isClientSide) return InteractionResultHolder.pass(stack);
 

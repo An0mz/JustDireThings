@@ -1,7 +1,7 @@
 package com.direwolf20.justdirethings.common.items;
 
 import com.direwolf20.justdirethings.common.blocks.resources.CoalBlock_T1;
-import com.direwolf20.justdirethings.common.capabilities.EnergyStorageNoReceive;
+import net.minecraft.world.level.block.Blocks;
 import com.direwolf20.justdirethings.common.containers.PocketGeneratorContainer;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredItem;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
@@ -42,6 +42,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.ItemStackHandler;
@@ -81,18 +82,16 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
         if (entity instanceof Player player && itemStack.getItem() instanceof ToggleableItem toggleableItem && toggleableItem.getEnabled(itemStack)) {
             IEnergyStorage energyStorage = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             if (energyStorage == null) return;
-            if (energyStorage instanceof EnergyStorageNoReceive energyStorageNoReceive) {
-                tryBurn(energyStorageNoReceive, itemStack);
-                if (energyStorage.getEnergyStored() >= (getFEPerTick() / 10)) { //If we have 1/10th the max transfer speed, go ahead and let it rip
-                    for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-                        ItemStack slotStack = player.getInventory().getItem(i);
-                        IEnergyStorage slotEnergy = slotStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
-                        if (slotEnergy != null) {
-                            int acceptedEnergy = slotEnergy.receiveEnergy(getFEPerTick(), true);
-                            if (acceptedEnergy > 0) {
-                                int extractedEnergy = energyStorage.extractEnergy(acceptedEnergy, false);
-                                slotEnergy.receiveEnergy(extractedEnergy, false);
-                            }
+            tryBurn(energyStorage, itemStack);
+            if (energyStorage.getEnergyStored() >= (getFEPerTick() / 10)) { //If we have 1/10th the max transfer speed, go ahead and let it rip
+                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                    ItemStack slotStack = player.getInventory().getItem(i);
+                    IEnergyStorage slotEnergy = slotStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+                    if (slotEnergy != null) {
+                        int acceptedEnergy = slotEnergy.receiveEnergy(getFEPerTick(), true);
+                        if (acceptedEnergy > 0) {
+                            int extractedEnergy = energyStorage.extractEnergy(acceptedEnergy, false);
+                            slotEnergy.receiveEnergy(extractedEnergy, false);
                         }
                     }
                 }
@@ -104,8 +103,8 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
         return (getFePerFuelTick() * getBurnSpeedMultiplier(itemStack));
     }
 
-    public void tryBurn(EnergyStorageNoReceive energyStorage, ItemStack itemStack) {
-        boolean canInsertEnergy = energyStorage.forceReceiveEnergy(fePerTick(itemStack), true) > 0;
+    public void tryBurn(IEnergyStorage energyStorage, ItemStack itemStack) {
+        boolean canInsertEnergy = energyStorage.receiveEnergy(fePerTick(itemStack), true) > 0;
         if (NBTHelpers.getIntValue(itemStack, COUNTER) > 0 && canInsertEnergy) {
             burn(energyStorage, itemStack);
         } else if (canInsertEnergy) {
@@ -115,8 +114,8 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
     }
 
 
-    private void burn(EnergyStorageNoReceive energyStorage, ItemStack itemStack) {
-        energyStorage.forceReceiveEnergy(fePerTick(itemStack), false);
+    private void burn(IEnergyStorage energyStorage, ItemStack itemStack) {
+        energyStorage.receiveEnergy(fePerTick(itemStack), false);
         int counter = NBTHelpers.getIntValue(itemStack, COUNTER);
         counter--;
         NBTHelpers.setIntValue(itemStack, COUNTER, counter);
@@ -135,12 +134,14 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
 
         ItemStack fuelStack = handler.getStackInSlot(0);
 
-        int burnTime = fuelStack.getBurnTime(RecipeType.SMELTING);
+        int burnTime = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
         if (burnTime > 0) {
             if (fuelStack.getItem() instanceof Coal_T1 direCoal) {
                 setFuelMultiplier(itemStack, direCoal.getBurnSpeedMultiplier());
             } else if (fuelStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof CoalBlock_T1 coalBlock) {
                 setFuelMultiplier(itemStack, coalBlock.getBurnSpeedMultiplier());
+            } else if (fuelStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() == Blocks.COAL_BLOCK) {
+                setFuelMultiplier(itemStack, 9);
             } else if (fuelStack.getItem() instanceof FuelCanister) {
                 setFuelMultiplier(itemStack, FuelCanister.getBurnSpeedMultiplier(fuelStack));
             } else {

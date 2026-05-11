@@ -206,21 +206,31 @@ public class Helpers {
         RecipeManager recipeManager = level.getRecipeManager();
         didISmelt[0] = false;
         for (ItemStack drop : drops) {
-            // Check if there's a smelting recipe for the drop
             Optional<SmeltingRecipe> smeltingRecipe = recipeManager.getRecipeFor(RecipeType.SMELTING, new SimpleContainer(drop), level);
 
             if (smeltingRecipe.isPresent() && !drop.is(JustDireItemTags.AUTO_SMELT_DENY)) {
-                // Get the result of the smelting recipe
                 ItemStack smeltedResult = smeltingRecipe.get().getResultItem(registryAccess);
 
-                if (!smeltedResult.isEmpty() && (testUseTool(tool, Ability.SMELTER, drop.getCount()) >= 0)) {
-                    // If the smelting result is valid, prepare to replace the original drop with the smelted result
-                    ItemStack resultStack = smeltedResult.copy();
-                    resultStack.setCount(drop.getCount()); // Assume all items in the stack are smelted
-                    if (!tool.isEmpty())
-                        damageTool(tool, entityLiving, Ability.SMELTER, drop.getCount());
-                    returnList.add(resultStack);
-                    didISmelt[0] = true;
+                if (!smeltedResult.isEmpty()) {
+                    // Find how many we can smelt with available energy (allows partial smelting of Fortune stacks)
+                    int count = drop.getCount();
+                    int canSmelt = count;
+                    while (canSmelt > 0 && testUseTool(tool, Ability.SMELTER, canSmelt) < 0) {
+                        canSmelt--;
+                    }
+                    if (canSmelt > 0) {
+                        ItemStack resultStack = smeltedResult.copy();
+                        resultStack.setCount(canSmelt);
+                        if (!tool.isEmpty())
+                            damageTool(tool, entityLiving, Ability.SMELTER, canSmelt);
+                        returnList.add(resultStack);
+                        didISmelt[0] = true;
+                    }
+                    if (canSmelt < count) {
+                        ItemStack remainder = drop.copy();
+                        remainder.setCount(count - canSmelt);
+                        returnList.add(remainder);
+                    }
                 } else {
                     returnList.add(drop);
                 }
