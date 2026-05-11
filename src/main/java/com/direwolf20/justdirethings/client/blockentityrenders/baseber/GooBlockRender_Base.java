@@ -4,31 +4,48 @@ import com.direwolf20.justdirethings.client.renderers.DireModelBlockRenderer;
 import com.direwolf20.justdirethings.client.renderers.DireVertexConsumer;
 import com.direwolf20.justdirethings.client.renderers.OurRenderTypes;
 import com.direwolf20.justdirethings.common.blockentities.basebe.GooBlockBE_Base;
+import com.direwolf20.justdirethings.common.blocks.gooblocks.GooBlock_Base;
 import com.direwolf20.justdirethings.common.blocks.gooblocks.GooPatternBlock;
+import com.direwolf20.justdirethings.datagen.JustDireItemTags;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.BitSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GooBlockRender_Base<T extends GooBlockBE_Base> implements BlockEntityRenderer<T> {
     private final static float percentageDivisor = (float) 100 / GooPatternBlock.GOOSTAGE.getPossibleValues().size();
+    private ItemStack cachedItemStack = ItemStack.EMPTY;
+    private int currentItemIndex = 0;
+    private long lastChangeTime = 0;
 
     public GooBlockRender_Base(BlockEntityRendererProvider.Context p_173636_) {
 
@@ -36,12 +53,95 @@ public class GooBlockRender_Base<T extends GooBlockBE_Base> implements BlockEnti
 
     @Override
     public void render(T blockentity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightsIn, int combinedOverlayIn) {
+        BlockState blockState = blockentity.getBlockState();
+
+        if (!blockState.getValue(GooBlock_Base.ALIVE)) {
+            renderFloatingItem(blockentity, matrixStackIn, bufferIn, combinedLightsIn);
+        }
+
         for (Direction direction : Direction.values()) {
             int remainingTicks = blockentity.getRemainingTimeFor(direction);
             if (remainingTicks > 0) {
                 int maxTicks = blockentity.getCraftingDuration(direction);
                 renderTextures(direction, blockentity.getLevel(), blockentity.getBlockPos(), matrixStackIn, bufferIn, combinedOverlayIn, remainingTicks, maxTicks, blockentity.getBlockState(), blockentity);
             }
+        }
+    }
+
+    private ItemStack getNextItemFromTag(int tier) {
+        TagKey<Item> tag = switch (tier) {
+            case 1 -> JustDireItemTags.GOO_REVIVE_TIER_1;
+            case 2 -> JustDireItemTags.GOO_REVIVE_TIER_2;
+            case 3 -> JustDireItemTags.GOO_REVIVE_TIER_3;
+            case 4 -> JustDireItemTags.GOO_REVIVE_TIER_4;
+            default -> null;
+        };
+        if (tag == null) return ItemStack.EMPTY;
+
+        List<Item> items = ForgeRegistries.ITEMS.tags().getTag(tag).stream().collect(Collectors.toList());
+        if (items.isEmpty()) return ItemStack.EMPTY;
+
+        Item next = items.get(currentItemIndex % items.size());
+        currentItemIndex = (currentItemIndex + 1) % items.size();
+        return new ItemStack(next);
+    }
+
+    private void renderFloatingItem(T blockentity, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightsIn) {
+        long currentTime = System.currentTimeMillis();
+        long cycleDuration = 3600;
+        long elapsedTime = (currentTime - lastChangeTime) % cycleDuration;
+        float fadeFactor = (float) (0.5 - 0.5 * Math.cos((2 * Math.PI * elapsedTime) / cycleDuration));
+
+        if (cachedItemStack.isEmpty() || (elapsedTime < 50 && currentTime - lastChangeTime >= cycleDuration)) {
+            cachedItemStack = getNextItemFromTag(blockentity.getTier());
+            lastChangeTime = currentTime;
+        }
+
+        if (cachedItemStack.isEmpty()) return;
+
+        final float finalFadeFactor = fadeFactor;
+        MultiBufferSource transparentBuffer = renderType ->
+                new DireVertexConsumer(bufferIn.getBuffer(RenderType.translucent()), finalFadeFactor);
+
+        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+        BakedModel bakedModel = itemRenderer.getModel(cachedItemStack, blockentity.getLevel(), null, 0);
+
+        for (Direction direction : Direction.values()) {
+            matrixStackIn.pushPose();
+
+            boolean isBlockItem = cachedItemStack.getItem() instanceof BlockItem;
+            Vec3 itemPos = getOffsetPositionForSide(direction, isBlockItem);
+            matrixStackIn.translate(itemPos.x, itemPos.y, itemPos.z);
+            applyRotationForSide(matrixStackIn, direction);
+            matrixStackIn.scale(0.6f, 0.6f, 0.6f);
+
+            itemRenderer.render(cachedItemStack, ItemDisplayContext.GROUND, false, matrixStackIn, transparentBuffer, combinedLightsIn, OverlayTexture.NO_OVERLAY, bakedModel);
+
+            matrixStackIn.popPose();
+        }
+    }
+
+    private Vec3 getOffsetPositionForSide(Direction direction, boolean isBlockItem) {
+        double offset = 0.025;
+        double nudge = isBlockItem ? 0.10 : 0.05;
+        return switch (direction) {
+            case UP -> new Vec3(0.5, 1.0 + offset, 0.5 - nudge);
+            case DOWN -> new Vec3(0.5, 0.0 - offset, 0.5 + nudge);
+            case NORTH -> new Vec3(0.5, 0.5 - nudge, 0.0 - offset);
+            case SOUTH -> new Vec3(0.5, 0.5 - nudge, 1.0 + offset);
+            case WEST -> new Vec3(0.0 - offset, 0.5 - nudge, 0.5);
+            case EAST -> new Vec3(1.0 + offset, 0.5 - nudge, 0.5);
+        };
+    }
+
+    private void applyRotationForSide(PoseStack matrixStackIn, Direction direction) {
+        switch (direction) {
+            case UP -> matrixStackIn.mulPose(Axis.XP.rotationDegrees(90));
+            case DOWN -> matrixStackIn.mulPose(Axis.XN.rotationDegrees(90));
+            case NORTH -> matrixStackIn.mulPose(Axis.YP.rotationDegrees(180));
+            case SOUTH -> matrixStackIn.mulPose(Axis.YN.rotationDegrees(0));
+            case WEST -> matrixStackIn.mulPose(Axis.YP.rotationDegrees(90));
+            case EAST -> matrixStackIn.mulPose(Axis.YP.rotationDegrees(-90));
         }
     }
 
@@ -142,4 +242,5 @@ public class GooBlockRender_Base<T extends GooBlockBE_Base> implements BlockEnti
             };
         };
     }
+
 }

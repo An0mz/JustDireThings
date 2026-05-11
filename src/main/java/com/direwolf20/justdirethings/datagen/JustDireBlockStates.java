@@ -2,10 +2,12 @@ package com.direwolf20.justdirethings.datagen;
 
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.blocks.BlockBreakerT1;
+import com.direwolf20.justdirethings.common.blocks.gooblocks.GooBlock_Base;
 import com.direwolf20.justdirethings.common.blocks.gooblocks.GooPatternBlock;
 import com.direwolf20.justdirethings.common.blocks.resources.TimeCrystalBuddingBlock;
 import com.direwolf20.justdirethings.common.blocks.resources.TimeCrystalCluster;
 import com.direwolf20.justdirethings.setup.Registration;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -26,10 +28,10 @@ public class JustDireBlockStates extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock(Registration.GooBlock_Tier1.get(), models().cubeAll(Registration.GooBlock_Tier1_ITEM.getId().getPath(), blockTexture(Registration.GooBlock_Tier1.get())).renderType("cutout"));
-        simpleBlock(Registration.GooBlock_Tier2.get(), models().cubeAll(Registration.GooBlock_Tier2_ITEM.getId().getPath(), blockTexture(Registration.GooBlock_Tier2.get())).renderType("cutout"));
-        simpleBlock(Registration.GooBlock_Tier3.get(), models().cubeAll(Registration.GooBlock_Tier3_ITEM.getId().getPath(), blockTexture(Registration.GooBlock_Tier3.get())).renderType("cutout"));
-        simpleBlock(Registration.GooBlock_Tier4.get(), models().cubeAll(Registration.GooBlock_Tier4_ITEM.getId().getPath(), blockTexture(Registration.GooBlock_Tier4.get())).renderType("cutout"));
+        gooBlock(Registration.GooBlock_Tier1.get(), "gooblock_tier1");
+        gooBlock(Registration.GooBlock_Tier2.get(), "gooblock_tier2");
+        gooBlock(Registration.GooBlock_Tier3.get(), "gooblock_tier3");
+        gooBlock(Registration.GooBlock_Tier4.get(), "gooblock_tier4");
         simpleBlock(Registration.FerricoreBlock.get(), models().cubeAll(Registration.FerricoreBlock_ITEM.getId().getPath(), blockTexture(Registration.FerricoreBlock.get())));
         simpleBlock(Registration.BlazeGoldBlock.get(), models().cubeAll(Registration.BlazeGoldBlock_ITEM.getId().getPath(), blockTexture(Registration.BlazeGoldBlock.get())));
         simpleBlock(Registration.CelestigemBlock.get(), models().cubeAll(Registration.CelestigemBlock_ITEM.getId().getPath(), blockTexture(Registration.CelestigemBlock.get())));
@@ -241,6 +243,14 @@ public class JustDireBlockStates extends BlockStateProvider {
             return ConfiguredModel.builder()
                     .modelFile(model).build();
         });
+    }
+
+    private void gooBlock(Block block, String name) {
+        ModelFile alive = models().cubeAll(name, modLoc("block/" + name)).renderType("cutout");
+        ModelFile dead = models().cubeAll(name + "_dead", modLoc("block/" + name + "_dead")).renderType("cutout");
+        getVariantBuilder(block)
+                .partialState().with(GooBlock_Base.ALIVE, false).addModels(new ConfiguredModel(dead))
+                .partialState().with(GooBlock_Base.ALIVE, true).addModels(new ConfiguredModel(alive));
     }
 
     private void patternBlock() {

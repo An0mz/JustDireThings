@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.blockentities.basebe;
 
 import com.direwolf20.justdirethings.client.particles.gooexplodeparticle.GooExplodeParticleData;
+import com.direwolf20.justdirethings.common.blocks.gooblocks.GooBlock_Base;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import com.direwolf20.justdirethings.setup.Registration;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -65,8 +66,10 @@ public class GooBlockBE_Base extends BlockEntity {
     }
 
     public void tickServer() {
-        checkSides();
-        tickCounters();
+        if (getBlockState().getValue(GooBlock_Base.ALIVE)) {
+            checkSides();
+            tickCounters();
+        }
         this.setChanged();
     }
 
