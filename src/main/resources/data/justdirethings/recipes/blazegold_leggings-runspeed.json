@@ -1,0 +1,10 @@
+﻿{
+  "type": "justdirethings:ability",
+  "template": [],
+  "base": {
+    "item": "justdirethings:blazegold_leggings"
+  },
+  "addition": {
+    "item": "justdirethings:upgrade_runspeed"
+  }
+}

@@ -1,0 +1,10 @@
+﻿{
+  "type": "justdirethings:ability",
+  "template": [],
+  "base": {
+    "item": "justdirethings:eclipsealloy_sword"
+  },
+  "addition": {
+    "item": "justdirethings:upgrade_glowing"
+  }
+}

@@ -1,0 +1,10 @@
+﻿{
+  "type": "justdirethings:ability",
+  "template": [],
+  "base": {
+    "item": "justdirethings:ferricore_boots"
+  },
+  "addition": {
+    "item": "justdirethings:upgrade_stepheight"
+  }
+}

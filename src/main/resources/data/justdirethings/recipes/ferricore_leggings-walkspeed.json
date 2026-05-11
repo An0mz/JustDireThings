@@ -1,0 +1,10 @@
+﻿{
+  "type": "justdirethings:ability",
+  "template": [],
+  "base": {
+    "item": "justdirethings:ferricore_leggings"
+  },
+  "addition": {
+    "item": "justdirethings:upgrade_walkspeed"
+  }
+}

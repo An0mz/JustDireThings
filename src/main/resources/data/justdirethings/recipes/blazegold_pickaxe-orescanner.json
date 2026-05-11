@@ -1,0 +1,10 @@
+﻿{
+  "type": "justdirethings:ability",
+  "template": [],
+  "base": {
+    "item": "justdirethings:blazegold_pickaxe"
+  },
+  "addition": {
+    "item": "justdirethings:upgrade_orescanner"
+  }
+}
