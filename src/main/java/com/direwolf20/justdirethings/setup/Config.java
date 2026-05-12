@@ -73,12 +73,21 @@ public class Config {
     public static ForgeConfigSpec.IntValue TIME_WAND_MAX_MULTIPLIER;
     public static ForgeConfigSpec.BooleanValue TIME_WAND_FAKE_PLAYER_ALLOWED;
 
+    public static final String CATEGORY_POLYMORPHIC_WAND_V2 = "polymorphic_wand_v2";
+    public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_V2_MAX_FE;
+    public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_V2_MAX_FLUID;
+
     public static final String CATEGORY_PORTAL_GUN = "portal_gun";
     public static ForgeConfigSpec.IntValue PORTAL_GUN_MAX_FE;
     public static ForgeConfigSpec.IntValue PORTAL_GUN_FE_COST;
     public static ForgeConfigSpec.IntValue PORTAL_GUN_MAX_FLUID;
     public static ForgeConfigSpec.IntValue PORTAL_GUN_FLUID_COST;
     public static ForgeConfigSpec.IntValue PORTAL_GUN_LIFESPAN;
+
+    public static final String CATEGORY_PORTAL_GUN_ORIGINAL = "portal_gun_original";
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_MAX_FLUID;
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_FLUID_COST;
+    public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_LIFESPAN;
 
     public static void register() {
         //registerServerConfigs();
@@ -103,6 +112,8 @@ public class Config {
         paradoxConfig();
         timeWandConfig();
         portalGunConfig();
+        portalGunOriginalConfig();
+        polymorphicWandV2Config();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
     }
@@ -261,6 +272,26 @@ public class Config {
                 .defineInRange("portal_gun_fluid_cost", 500, 0, Integer.MAX_VALUE);
         PORTAL_GUN_LIFESPAN = COMMON_BUILDER.comment("How many ticks a portal remains open (6000 = 5 minutes, -1 for infinite)")
                 .defineInRange("portal_gun_lifespan", 6000, -1, Integer.MAX_VALUE);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void portalGunOriginalConfig() {
+        COMMON_BUILDER.comment("Portal Gun (Original)").push(CATEGORY_PORTAL_GUN_ORIGINAL);
+        PORTAL_GUN_ORIGINAL_MAX_FLUID = COMMON_BUILDER.comment("Max mB of unstable portal fluid the original Portal Gun can hold")
+                .defineInRange("portal_gun_original_max_fluid", 4000, 1, Integer.MAX_VALUE);
+        PORTAL_GUN_ORIGINAL_FLUID_COST = COMMON_BUILDER.comment("mB of unstable portal fluid consumed per shot")
+                .defineInRange("portal_gun_original_fluid_cost", 500, 0, Integer.MAX_VALUE);
+        PORTAL_GUN_ORIGINAL_LIFESPAN = COMMON_BUILDER.comment("How many ticks a portal remains open (-1 for infinite)")
+                .defineInRange("portal_gun_original_lifespan", 3000, -1, Integer.MAX_VALUE);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void polymorphicWandV2Config() {
+        COMMON_BUILDER.comment("Polymorphic Wand V2").push(CATEGORY_POLYMORPHIC_WAND_V2);
+        POLYMORPHIC_WAND_V2_MAX_FE = COMMON_BUILDER.comment("Maximum FE the Polymorphic Wand V2 can hold")
+                .defineInRange("polymorphic_wand_v2_max_fe", 200000, 1, Integer.MAX_VALUE);
+        POLYMORPHIC_WAND_V2_MAX_FLUID = COMMON_BUILDER.comment("Maximum mB of polymorphic fluid the Polymorphic Wand V2 can hold")
+                .defineInRange("polymorphic_wand_v2_max_fluid", 32000, 1, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
     }
 }

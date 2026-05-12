@@ -157,6 +157,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.PolymorphicWand.get(), "Polymorphic Wand");
 
         //Misc
+        add("justdirethings.missingupgrade", " (Missing)");
         add("justdirethings.shiftmoreinfo", "Hold Shift for details");
         add("justdirethings.presshotkey", "<Press %s>");
         add("justdirethings.enabled", "Enabled");
@@ -240,9 +241,11 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Ability.TIMEPROTECTION.getLocalization(), "Time Protection");
         add("entity.justdirethings.justdire_arrow", "JustDire Arrow");
 
-        //Time Wand & Portal Gun V2
+        //Time Wand & Portal Guns
         add(Registration.TimeWand.get(), "Time Wand");
+        add(Registration.PortalGun.get(), "Portal Gun");
         add(Registration.PortalGunV2.get(), "Advanced Portal Gun");
+        add(Registration.PolymorphicWandV2.get(), "Polymorphic Wand V2");
         add("entity.justdirethings.time_wand_entity", "Time Wand Effect");
         add("entity.justdirethings.portal_projectile", "Portal Projectile");
         add("entity.justdirethings.portal_entity", "DirePortal");
@@ -337,8 +340,76 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         //Messages to Player
         //add("justdirethings.messages.invalidblock", "Invalid Block");
 
+        add("justdirethings.screen.copyarea", "Copy Area");
+        add("justdirethings.screen.copyoffset", "Copy Offset");
+        add("justdirethings.screen.copyfilter", "Copy Filter");
+        add("justdirethings.screen.copyredstone", "Copy Redstone");
+        add("justdirethings.screen.filteronlytrue", "Filter Only");
+        add("justdirethings.screen.comparecounts", "Compare Counts");
+        add("justdirethings.screen.renderparadox", "Render Paradox");
+        add("justdirethings.screen.paradoxall", "Paradox: All");
+        add("justdirethings.screen.paradoxblock", "Paradox: Blocks");
+        add("justdirethings.screen.paradoxentity", "Paradox: Entities");
+        add("justdirethings.screen.snapshotarea", "Snapshot Area");
+        add("justdirethings.screen.senditems", "Send Items");
+        add("justdirethings.screen.pullitems", "Pull Items");
+        add("justdirethings.screen.swapitems", "Swap Items");
+
+        //Upgrade Smithing Templates
+        add(Registration.TEMPLATE_FERRICORE.get(), "Ferricore Smithing Template");
+        add(Registration.TEMPLATE_BLAZEGOLD.get(), "Blazegold Smithing Template");
+        add(Registration.TEMPLATE_CELESTIGEM.get(), "Celestigem Smithing Template");
+        add(Registration.TEMPLATE_ECLIPSEALLOY.get(), "Eclipse Alloy Smithing Template");
+
+        //Upgrades
+        add(Registration.UPGRADE_BASE.get(), "Blank Upgrade");
+        add(Registration.UPGRADE_MOBSCANNER.get(), "Mob Scanner Upgrade");
+        add(Registration.UPGRADE_ORESCANNER.get(), "Ore Scanner Upgrade");
+        add(Registration.UPGRADE_OREMINER.get(), "Ore Miner Upgrade");
+        add(Registration.UPGRADE_LAWNMOWER.get(), "Lawnmower Upgrade");
+        add(Registration.UPGRADE_SKYSWEEPER.get(), "Sky Sweeper Upgrade");
+        add(Registration.UPGRADE_TREEFELLER.get(), "Tree Feller Upgrade");
+        add(Registration.UPGRADE_LEAFBREAKER.get(), "Leaf Breaker Upgrade");
+        add(Registration.UPGRADE_SMELTER.get(), "Auto Smelter Upgrade");
+        add(Registration.UPGRADE_SMOKER.get(), "Auto Smoker Upgrade");
+        add(Registration.UPGRADE_HAMMER.get(), "Hammer Upgrade");
+        add(Registration.UPGRADE_CAUTERIZEWOUNDS.get(), "Cauterize Wounds Upgrade");
+        add(Registration.UPGRADE_OREXRAY.get(), "X-Ray Upgrade");
+        add(Registration.UPGRADE_DROPTELEPORT.get(), "Drops Teleporter Upgrade");
+        add(Registration.UPGRADE_GLOWING.get(), "Mob X-Ray Upgrade");
+        add(Registration.UPGRADE_INSTABREAK.get(), "Instant Break Upgrade");
+        add(Registration.UPGRADE_RUNSPEED.get(), "Run Speed Upgrade");
+        add(Registration.UPGRADE_WALKSPEED.get(), "Walk Speed Upgrade");
+        add(Registration.UPGRADE_STEPHEIGHT.get(), "Step Assist Upgrade");
+        add(Registration.UPGRADE_JUMPBOOST.get(), "Jump Boost Upgrade");
+        add(Registration.UPGRADE_MINDFOG.get(), "Mind Fog Upgrade");
+        add(Registration.UPGRADE_INVULNERABILITY.get(), "Invulnerability Upgrade");
+        add(Registration.UPGRADE_POTIONARROW.get(), "Potion Arrow Upgrade");
+        add(Registration.UPGRADE_SPLASH.get(), "Splash Arrow Upgrade");
+        add(Registration.UPGRADE_LINGERING.get(), "Lingering Arrow Upgrade");
+        add(Registration.UPGRADE_HOMING.get(), "Homing Arrow Upgrade");
+        add(Registration.UPGRADE_EPICARROW.get(), "Epic Arrow Upgrade");
+        add(Registration.UPGRADE_SWIMSPEED.get(), "Swim Speed Upgrade");
+        add(Registration.UPGRADE_GROUNDSTOMP.get(), "Ground Stomp Upgrade");
+        add(Registration.UPGRADE_EXTINGUISH.get(), "Extinguish Upgrade");
+        add(Registration.UPGRADE_STUPEFY.get(), "Stupefy Upgrade");
+        add(Registration.UPGRADE_NEGATEFALLDAMAGE.get(), "Negate Fall Damage Upgrade");
+        add(Registration.UPGRADE_NIGHTVISION.get(), "Night Vision Upgrade");
+        add(Registration.UPGRADE_ELYTRA.get(), "Elytra Flight Upgrade");
+        add(Registration.UPGRADE_DECOY.get(), "Decoy Upgrade");
+        add(Registration.UPGRADE_WATERBREATHING.get(), "Water Breathing Upgrade");
+        add(Registration.UPGRADE_DEATHPROTECTION.get(), "Death Protection Upgrade");
+        add(Registration.UPGRADE_DEBUFFREMOVER.get(), "Debuff Remover Upgrade");
+        add(Registration.UPGRADE_EARTHQUAKE.get(), "Earthquake Upgrade");
+        add(Registration.UPGRADE_NOAI.get(), "No AI Upgrade");
+        add(Registration.UPGRADE_FLIGHT.get(), "Flight Upgrade");
+        add(Registration.UPGRADE_LAVAIMMUNITY.get(), "Lava Immunity Upgrade");
+        add(Registration.UPGRADE_PHASE.get(), "Phase Upgrade");
+        add(Registration.UPGRADE_TIMEPROTECTION.get(), "Time Protection Upgrade");
+
         //Recipes
         add("justdirethings.goospreadrecipe.title", "Goo Spreading Recipes");
+        add("justdirethings.fluiddroprecipe.title", "Drop in Fluid Recipes");
 
         //Time Crystal tooltips
         add("justdirethings.timecrystaltooltip", "The crystal pulses with temporal energy, accelerating or slowing time around you.");

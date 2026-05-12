@@ -48,6 +48,8 @@ public class PacketHandler {
         CHANNEL.registerMessage(nextId(), InventoryHolderSaveSlotPayload.class,  InventoryHolderSaveSlotPayload::write,  InventoryHolderSaveSlotPayload::new,  InventoryHolderSaveSlotPacket::handle);
         CHANNEL.registerMessage(nextId(), ParadoxMachinePayload.class,        ParadoxMachinePayload::write,        ParadoxMachinePayload::new,        ParadoxMachinePacket::handle);
 
+        CHANNEL.registerMessage(nextId(), CopyMachineSettingsPayload.class, CopyMachineSettingsPayload::write, CopyMachineSettingsPayload::new, CopyMachineSettingsPacket::handle);
+
         // Client-bound packets
         CHANNEL.registerMessage(nextId(), ClientSoundPayload.class,           ClientSoundPayload::write,           ClientSoundPayload::new,           ClientSoundPacket::handle);
         CHANNEL.registerMessage(nextId(), ParadoxSyncPayload.class,           ParadoxSyncPayload::write,           ParadoxSyncPayload::new,           ParadoxSyncPacket::handle);

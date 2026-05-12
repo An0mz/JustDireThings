@@ -9,6 +9,7 @@ import com.direwolf20.justdirethings.client.particles.gooexplodeparticle.GooExpl
 import com.direwolf20.justdirethings.client.particles.itemparticle.ItemFlowParticleData;
 import com.direwolf20.justdirethings.client.particles.itemparticle.ItemFlowParticleType;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraftforge.registries.DeferredRegister;
 
@@ -19,4 +20,6 @@ public class ModParticles {
     public static final Supplier<ParticleType<GooExplodeParticleData>> GOOEXPLODEPARTICLE = PARTICLE_TYPES.register("gooexplodeparticle", GooExplodeParticleType::new);
     public static final Supplier<ParticleType<ItemFlowParticleData>> ITEMFLOWPARTICLE = PARTICLE_TYPES.register("itemflowparticle", ItemFlowParticleType::new);
     public static final Supplier<ParticleType<AlwaysVisibleParticleData>> ALWAYSVISIBLEPARTICLE = PARTICLE_TYPES.register("alwaysvisibleparticle", AlwaysVisibleParticleType::new);
+    public static final Supplier<SimpleParticleType> GLITTER = PARTICLE_TYPES.register("glitter", () -> new SimpleParticleType(false));
+    public static final Supplier<SimpleParticleType> PARADOX = PARTICLE_TYPES.register("paradox", () -> new SimpleParticleType(false));
 }

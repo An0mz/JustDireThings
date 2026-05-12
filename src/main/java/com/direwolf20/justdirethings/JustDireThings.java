@@ -6,6 +6,8 @@ import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.ModSetup;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -26,8 +28,13 @@ public class JustDireThings {
         modEventBus.addListener(ModSetup::init);
         ModSetup.CREATIVE_MODE_TABS.register(modEventBus);
         modEventBus.addListener(PacketHandler::registerNetworking);
+        modEventBus.addListener(JustDireThings::registerEntityAttributes);
         if (FMLLoader.getDist().isClient()) {
             modEventBus.addListener(ClientSetup::init);
         }
+    }
+
+    private static void registerEntityAttributes(EntityAttributeModificationEvent event) {
+        event.add(EntityType.PLAYER, Registration.PHASE.get());
     }
 }

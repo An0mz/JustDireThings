@@ -13,6 +13,7 @@ public class EclipseAlloyLeggings extends BaseLeggings implements PoweredTool {
         super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
         registerAbility(Ability.RUNSPEED, new AbilityParams(1, 5, 1));
         registerAbility(Ability.WALKSPEED, new AbilityParams(1, 5, 1));
+        registerAbility(Ability.PHASE);
     }
 
     @Override

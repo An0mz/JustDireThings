@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.setup;
 
 import com.direwolf20.justdirethings.common.events.BlockEvents;
 import com.direwolf20.justdirethings.common.events.CapabilityEvents;
+import com.direwolf20.justdirethings.common.events.EntityEvents;
 import com.direwolf20.justdirethings.common.events.LivingEntityEvents;
 import com.direwolf20.justdirethings.common.events.PlayerEvents;
 import net.minecraft.core.registries.Registries;
@@ -24,6 +25,7 @@ public class ModSetup {
         MinecraftForge.EVENT_BUS.register(LivingEntityEvents.class);
         MinecraftForge.EVENT_BUS.register(PlayerEvents.class);
         MinecraftForge.EVENT_BUS.register(CapabilityEvents.class);
+        MinecraftForge.EVENT_BUS.register(EntityEvents.class);
         MinecraftForge.EVENT_BUS.addListener(ModSetup::registerFurnaceFuels);
     }
 

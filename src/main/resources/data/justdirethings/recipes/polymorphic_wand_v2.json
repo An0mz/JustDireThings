@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "justdirethings",
+  "key": {
+    "w": {"item": "justdirethings:polymorphic_wand"},
+    "c": {"item": "justdirethings:celestigem"},
+    "f": {"item": "justdirethings:ferricore_ingot"},
+    "b": {"item": "justdirethings:blazegold_ingot"}
+  },
+  "pattern": [
+    "  c",
+    " wc",
+    "fb "
+  ],
+  "result": {
+    "count": 1,
+    "item": "justdirethings:polymorphic_wand_v2"
+  }
+}

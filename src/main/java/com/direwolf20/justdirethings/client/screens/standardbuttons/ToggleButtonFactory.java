@@ -336,6 +336,38 @@ public class ToggleButtonFactory {
         return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, FILTER_ONLY, FILTER_ONLY_LOCALIZATION, startingValue, onPress);
     }
 
+    /** Copy Area button **/
+    private static final ResourceLocation COPY_AREA = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/area.png");
+    private static final Component COPY_AREA_LOCALIZATION = Component.translatable("justdirethings.screen.copyarea");
+
+    public static GrayscaleButton COPY_AREA_BUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, COPY_AREA, COPY_AREA_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Copy Offset button **/
+    private static final ResourceLocation COPY_OFFSET = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/stepheight.png");
+    private static final Component COPY_OFFSET_LOCALIZATION = Component.translatable("justdirethings.screen.copyoffset");
+
+    public static GrayscaleButton COPY_OFFSET_BUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, COPY_OFFSET, COPY_OFFSET_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Copy Filter button **/
+    private static final ResourceLocation COPY_FILTER = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/matchnbttrue.png");
+    private static final Component COPY_FILTER_LOCALIZATION = Component.translatable("justdirethings.screen.copyfilter");
+
+    public static GrayscaleButton COPY_FILTER_BUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, COPY_FILTER, COPY_FILTER_LOCALIZATION, startingValue, onPress);
+    }
+
+    /** Copy Redstone button **/
+    private static final ResourceLocation COPY_REDSTONE = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/redstonepulse.png");
+    private static final Component COPY_REDSTONE_LOCALIZATION = Component.translatable("justdirethings.screen.copyredstone");
+
+    public static GrayscaleButton COPY_REDSTONE_BUTTON(int x, int y, boolean startingValue, Button.OnPress onPress) {
+        return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, COPY_REDSTONE, COPY_REDSTONE_LOCALIZATION, startingValue, onPress);
+    }
+
     /** Compare Counts button **/
     private static final ResourceLocation COMPARE_COUNTS = new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/equals.png");
     private static final Component COMPARE_COUNTS_LOCALIZATION = Component.translatable("justdirethings.screen.comparecounts");

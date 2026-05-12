@@ -33,10 +33,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import com.direwolf20.justdirethings.client.particles.GlitterParticle;
+import com.direwolf20.justdirethings.client.particles.ModParticles;
+import com.direwolf20.justdirethings.client.particles.ParadoxParticle;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
@@ -154,6 +158,12 @@ public class ClientSetup {
     }
 
     @SubscribeEvent
+    public static void registerParticles(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.GLITTER.get(), GlitterParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.PARADOX.get(), ParadoxParticle.Provider::new);
+    }
+
+    @SubscribeEvent
     public static void mrl(ModelEvent.RegisterAdditional e) {
         e.register(new ResourceLocation(JustDireThings.MODID, "item/creaturecatcher_base"));
     }
@@ -161,7 +171,9 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerItemDecorations(RegisterItemDecorationsEvent event) {
         event.register(Registration.TimeWand.get(), FluidbarDecorator.INSTANCE);
+        event.register(Registration.PortalGun.get(), FluidbarDecorator.INSTANCE);
         event.register(Registration.PortalGunV2.get(), FluidbarDecorator.INSTANCE);
+        event.register(Registration.PolymorphicWandV2.get(), FluidbarDecorator.INSTANCE);
     }
 
     @SubscribeEvent
@@ -183,6 +195,8 @@ public class ClientSetup {
         event.registerBlockEntityRenderer(Registration.FluidCollectorT2BE.get(), FluidCollectorT2BER::new);
         event.registerBlockEntityRenderer(Registration.FluidPlacerT2BE.get(), FluidPlacerT2BER::new);
         event.registerBlockEntityRenderer(Registration.ExperienceHolderBE.get(), ExperienceHolderBER::new);
+        event.registerBlockEntityRenderer(Registration.InventoryHolderBE.get(), InventoryHolderBER::new);
+        event.registerBlockEntityRenderer(Registration.ParadoxMachineBE.get(), ParadoxMachineBER::new);
 
         //Entities
         event.registerEntityRenderer(Registration.CreatureCatcherEntity.get(), CreatureCatcherEntityRender::new);

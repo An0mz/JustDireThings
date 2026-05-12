@@ -1,7 +1,10 @@
 package com.direwolf20.justdirethings.common.items.armors.basearmors;
 
 import com.direwolf20.justdirethings.common.items.interfaces.*;
+import com.direwolf20.justdirethings.setup.Registration;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -76,11 +79,21 @@ public class BaseLeggings extends ArmorItem implements ToggleableTool, LeftClick
         }
     }
 
+    private static final UUID PHASE_UUID = UUID.fromString("3b4b2d28-8f5c-4c2e-9d3a-1a2b3c4d5e6f");
+
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
         if (!(stack.getItem() instanceof PoweredTool poweredTool))
             return modifiers;
+
+        if (slot == EquipmentSlot.LEGS) {
+            Multimap<Attribute, AttributeModifier> result = HashMultimap.create(modifiers);
+            if (canUseAbilityAndDurability(stack, Ability.PHASE)) {
+                result.put(Registration.PHASE.get(), new AttributeModifier(PHASE_UUID, "Phase modifier", 1.0, AttributeModifier.Operation.ADDITION));
+            }
+            return result;
+        }
 
         return poweredTool.getPoweredAttributeModifiers(slot, stack, modifiers);
     }

@@ -23,6 +23,8 @@ import com.direwolf20.justdirethings.common.entities.TimeWandEntity;
 import com.direwolf20.justdirethings.common.entities.PortalProjectile;
 import com.direwolf20.justdirethings.common.entities.PortalEntity;
 import com.direwolf20.justdirethings.common.items.TimeWand;
+import com.direwolf20.justdirethings.common.items.PolymorphicWandV2;
+import com.direwolf20.justdirethings.common.items.PortalGun;
 import com.direwolf20.justdirethings.common.items.PortalGunV2;
 import com.direwolf20.justdirethings.common.items.tools.BlazegoldBow;
 import com.direwolf20.justdirethings.common.items.tools.CelestigemBow;
@@ -63,6 +65,7 @@ import com.direwolf20.justdirethings.common.items.abilityupgrades.Upgrade;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeBlank;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeTemplate;
 import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -77,6 +80,8 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
@@ -114,6 +119,12 @@ public class Registration {
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, JustDireThings.MODID);
     public static final Supplier<GooSpreadRecipe.Serializer> GOO_SPREAD_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("goospread", GooSpreadRecipe.Serializer::new);
+    public static final Supplier<FluidDropRecipe.Serializer> FLUID_DROP_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("fluiddrop", FluidDropRecipe.Serializer::new);
+
+    public static final Supplier<RecipeType<FluidDropRecipe>> FLUID_DROP_RECIPE_TYPE = RECIPE_TYPES.register("fluiddroprecipe", () -> RecipeType.simple(new ResourceLocation(MODID, "fluiddroprecipe")));
+
+    public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MODID);
+    public static final RegistryObject<Attribute> PHASE = ATTRIBUTES.register("phase", () -> new RangedAttribute("justdirethings.phase", 0D, 0D, Double.MAX_VALUE).setSyncable(true));
 
     public static void init(IEventBus eventBus) {
         BLOCKS.register(eventBus);
@@ -131,6 +142,7 @@ public class Registration {
         UPGRADES.register(eventBus);
         FLUID_TYPES.register(eventBus);
         FLUIDS.register(eventBus);
+        ATTRIBUTES.register(eventBus);
     }
 
     //Gooblocks
@@ -624,7 +636,9 @@ public class Registration {
     // ── Portal Gun V2 & Time Wand ─────────────────────────────────────────────
 
     public static final RegistryObject<TimeWand> TimeWand = ITEMS.register("time_wand", TimeWand::new);
+    public static final RegistryObject<PortalGun> PortalGun = ITEMS.register("portal_gun", PortalGun::new);
     public static final RegistryObject<PortalGunV2> PortalGunV2 = ITEMS.register("portal_gun_v2", PortalGunV2::new);
+    public static final RegistryObject<PolymorphicWandV2> PolymorphicWandV2 = TOOLS.register("polymorphic_wand_v2", PolymorphicWandV2::new);
 
     public static final RegistryObject<EntityType<TimeWandEntity>> TimeWandEntity = ENTITY_TYPES.register("time_wand_entity",
             () -> EntityType.Builder.<TimeWandEntity>of(TimeWandEntity::new, MobCategory.MISC)

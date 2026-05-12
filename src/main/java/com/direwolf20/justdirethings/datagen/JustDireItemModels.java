@@ -101,6 +101,7 @@ public class JustDireItemModels extends ItemModelProvider {
 
         singleTexture(Registration.TimeWand.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/time_wand"));
         withExistingParent(Registration.PortalGunV2.getId().getPath(), modLoc("item/portalgun_v2"));
+        // portal_gun and polymorphic_wand_v2 models are static in src/main/resources (textures pending)
 
         singleTexture(Registration.FerricoreWrench.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/ferricore_wrench"));
         singleTexture(Registration.TotemOfDeathRecall.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/totem_of_death_recall"));
@@ -141,7 +142,10 @@ public class JustDireItemModels extends ItemModelProvider {
 
     public void registerTools() {
         for (var tool : Registration.TOOLS.getEntries()) {
-            registerEnabledTextureItem(tool.getId().getPath());
+            String path = tool.getId().getPath();
+            // Skip items whose textures aren't available yet; their models are static in src/main/resources
+            if (path.equals("polymorphic_wand_v2")) continue;
+            registerEnabledTextureItem(path);
         }
     }
 
