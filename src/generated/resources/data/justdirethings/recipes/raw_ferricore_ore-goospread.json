@@ -1,7 +1,7 @@
 {
   "type": "justdirethings:goospread",
   "craftingDuration": 2400,
-  "id": "justdirethings:dire_iron_block",
+  "id": "justdirethings:raw_ferricore_ore-goospread",
   "input": {
     "Name": "minecraft:iron_block"
   },

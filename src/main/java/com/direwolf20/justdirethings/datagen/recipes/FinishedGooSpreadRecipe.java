@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.datagen.recipes;
 
 import com.direwolf20.justdirethings.setup.Registration;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -32,9 +33,8 @@ public class FinishedGooSpreadRecipe implements FinishedRecipe {
     @Override
     public void serializeRecipeData(JsonObject json) {
         json.addProperty("id", id.toString());
-        // blockstate as block id strings
-        json.addProperty("input", net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(input.getBlock()).toString());
-        json.addProperty("output", net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(output.getBlock()).toString());
+        json.add("input", BlockState.CODEC.encodeStart(JsonOps.INSTANCE, input).getOrThrow(false, e -> {}));
+        json.add("output", BlockState.CODEC.encodeStart(JsonOps.INSTANCE, output).getOrThrow(false, e -> {}));
         json.addProperty("tierRequirement", tierRequirement);
         json.addProperty("craftingDuration", craftingDuration);
     }

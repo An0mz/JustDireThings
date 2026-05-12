@@ -1,7 +1,7 @@
 {
   "type": "justdirethings:goospread",
   "craftingDuration": 4800,
-  "id": "justdirethings:coal_block_t3",
+  "id": "justdirethings:raw_coal_t3_ore-goospread",
   "input": {
     "Name": "justdirethings:coalblock_t2"
   },

@@ -1,7 +1,7 @@
 {
   "type": "justdirethings:goospread",
   "craftingDuration": 2400,
-  "id": "justdirethings:dire_gold_block",
+  "id": "justdirethings:raw_blazegold_ore-goospread",
   "input": {
     "Name": "minecraft:gold_block"
   },

@@ -369,6 +369,24 @@ public class JustDireRecipes extends RecipeProvider {
                 .unlockedBy("has_goo_block_t4", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier4_ITEM.get()))
                 .save(consumer);
 
+        //GooSpread Fluids (unrefined → refined)
+        GooSpreadRecipeBuilder.shapeless(new ResourceLocation(JustDireThings.MODID, "refined_t2_fluid"), Registration.UNREFINED_T2_FLUID_BLOCK.get().defaultBlockState(), Registration.REFINED_T2_FLUID_BLOCK.get().defaultBlockState(), 2, 2400)
+                .group("justdirethings")
+                .unlockedBy("has_goo_block_t2", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier2_ITEM.get()))
+                .save(consumer, new ResourceLocation(JustDireThings.MODID, "refined_t2_fluid_block-goospread"));
+        GooSpreadRecipeBuilder.shapeless(new ResourceLocation(JustDireThings.MODID, "refined_t3_fluid"), Registration.UNREFINED_T3_FLUID_BLOCK.get().defaultBlockState(), Registration.REFINED_T3_FLUID_BLOCK.get().defaultBlockState(), 3, 2400)
+                .group("justdirethings")
+                .unlockedBy("has_goo_block_t3", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier3_ITEM.get()))
+                .save(consumer, new ResourceLocation(JustDireThings.MODID, "refined_t3_fluid_block-goospread"));
+        GooSpreadRecipeBuilder.shapeless(new ResourceLocation(JustDireThings.MODID, "refined_t4_fluid"), Registration.UNREFINED_T4_FLUID_BLOCK.get().defaultBlockState(), Registration.REFINED_T4_FLUID_BLOCK.get().defaultBlockState(), 4, 2400)
+                .group("justdirethings")
+                .unlockedBy("has_goo_block_t4", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier4_ITEM.get()))
+                .save(consumer, new ResourceLocation(JustDireThings.MODID, "refined_t4_fluid_block-goospread"));
+        GooSpreadRecipeBuilder.shapeless(new ResourceLocation(JustDireThings.MODID, "portal_fluid"), Registration.UNSTABLE_PORTAL_FLUID_BLOCK.get().defaultBlockState(), Registration.PORTAL_FLUID_BLOCK.get().defaultBlockState(), 3, 2400)
+                .group("justdirethings")
+                .unlockedBy("has_goo_block_t3", InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier3_ITEM.get()))
+                .save(consumer, new ResourceLocation(JustDireThings.MODID, "portal_fluid_block-goospread"));
+
         //Smelting
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(Registration.RawFerricore.get()), RecipeCategory.MISC,
                         Registration.FerricoreIngot.get(), 1.0f, 200)
