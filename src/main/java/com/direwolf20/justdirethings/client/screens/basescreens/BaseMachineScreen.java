@@ -241,8 +241,10 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         blitNineSlice(guiGraphics, topSectionLeft, topSectionTop, topSectionWidth, topSectionHeight);
         blitNineSlice(guiGraphics, topSectionLeft + 20, topSectionTop - 20, topSectionWidth - 40, 20);
-        guiGraphics.blit(JUSTINV, relX, relY + 83 - 8, 0, 0, this.imageWidth, this.imageHeight - 73); //Inventory Section
+        renderInventoryBackground(guiGraphics, relX, relY);
         for (Slot slot : container.slots) {
+            // Some machines park ghost/filter slots off-screen; do not render their slot chrome.
+            if (slot instanceof FilterBasicSlot && (slot.x < 0 || slot.y < 0)) continue;
             guiGraphics.blit(JUSTSLOT, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 0, 0, 18, 18);
         }
         if (baseMachineBE instanceof PoweredMachineBE poweredMachineBE) {
@@ -265,6 +267,10 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
         }
         if (renderablesChanged)
             updateRenderables();
+    }
+
+    protected void renderInventoryBackground(GuiGraphics guiGraphics, int relX, int relY) {
+        guiGraphics.blit(JUSTINV, relX, relY + 83 - 8, 0, 0, this.imageWidth, this.imageHeight - 73); //Inventory Section
     }
 
     public void powerBarTooltip(GuiGraphics pGuiGraphics, int pX, int pY) {
@@ -436,7 +442,7 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
             PacketHandler.CHANNEL.sendToServer(new RedstoneSettingPayload(redstoneMode.ordinal()));
     }
 
-    private void blitNineSlice(GuiGraphics guiGraphics, int x, int y, int w, int h) {
+    protected void blitNineSlice(GuiGraphics guiGraphics, int x, int y, int w, int h) {
         final int texW = 236, texH = 34, b = 8;
         final int innerW = texW - 2 * b, innerH = texH - 2 * b;
         guiGraphics.blit(BACKGROUND_SPRITE, x,       y,       b,      b,      0f,        0f,        b,      b,      texW, texH);

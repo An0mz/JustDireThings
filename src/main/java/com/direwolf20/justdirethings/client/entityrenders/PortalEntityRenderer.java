@@ -16,7 +16,7 @@ public class PortalEntityRenderer extends EntityRenderer<PortalEntity> {
 
     private static final double HALF_WIDTH = 0.45;
     private static final double HEIGHT = 1.9;
-    private static final float SURFACE_OFFSET = 0.1f;
+    private static final float SURFACE_OFFSET = 0.015f;
     private static final float BORDER_SIZE = 0.02f;
     private static final ResourceLocation PORTAL_SHADER_TEXTURE = ResourceLocation.fromNamespaceAndPath("justdirethings", "textures/block/portal_shader.png");
 

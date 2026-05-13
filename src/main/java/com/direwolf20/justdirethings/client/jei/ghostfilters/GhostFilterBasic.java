@@ -19,22 +19,26 @@ public class GhostFilterBasic implements IGhostIngredientHandler<BaseScreen> {
         List<Target<I>> targets = new ArrayList<>();
 
         for (Slot slot : gui.getMenu().slots) {
-            Rect2i bounds = new Rect2i(gui.getGuiLeft() + slot.x, gui.getGuiTop() + slot.y, 16, 16);
-
-            if (ingredient.getIngredient() instanceof ItemStack && (slot instanceof FilterBasicSlot)) {
-                targets.add(new Target<I>() {
-                    @Override
-                    public Rect2i getArea() {
-                        return bounds;
-                    }
-
-                    @Override
-                    public void accept(I ingredient) {
-                        slot.set((ItemStack) ingredient);
-                        PacketHandler.CHANNEL.sendToServer(new GhostSlotPayload(slot.index, (ItemStack) ingredient, ((ItemStack) ingredient).getCount(), -1));
-                    }
-                });
+            if (!(ingredient.getIngredient() instanceof ItemStack) || !(slot instanceof FilterBasicSlot)) {
+                continue;
             }
+            if (slot.x < 0 || slot.y < 0) {
+                continue;
+            }
+
+            Rect2i bounds = new Rect2i(gui.getGuiLeft() + slot.x, gui.getGuiTop() + slot.y, 16, 16);
+            targets.add(new Target<>() {
+                @Override
+                public Rect2i getArea() {
+                    return bounds;
+                }
+
+                @Override
+                public void accept(I ingredient) {
+                    slot.set((ItemStack) ingredient);
+                    PacketHandler.CHANNEL.sendToServer(new GhostSlotPayload(slot.index, (ItemStack) ingredient, ((ItemStack) ingredient).getCount(), -1));
+                }
+            });
         }
         return targets;
     }

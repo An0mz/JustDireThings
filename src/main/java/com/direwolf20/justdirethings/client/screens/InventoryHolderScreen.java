@@ -68,13 +68,13 @@ public class InventoryHolderScreen extends BaseMachineScreen<InventoryHolderCont
             ((GrayscaleButton) b).toggleActive();
             saveSettings();
         }));
-        addRenderableWidget(ToggleButtonFactory.SEND_INV_BUTTON(getGuiLeft() + 134, topSectionTop + 132, b -> {
+        addRenderableWidget(ToggleButtonFactory.SEND_INV_BUTTON(getGuiLeft() + 134, topSectionTop + 129, b -> {
             PacketHandler.CHANNEL.sendToServer(new InventoryHolderMoveItemsPayload(0));
         }));
-        addRenderableWidget(ToggleButtonFactory.PULL_INV_BUTTON(getGuiLeft() + 26, topSectionTop + 132, b -> {
+        addRenderableWidget(ToggleButtonFactory.PULL_INV_BUTTON(getGuiLeft() + 26, topSectionTop + 129, b -> {
             PacketHandler.CHANNEL.sendToServer(new InventoryHolderMoveItemsPayload(1));
         }));
-        addRenderableWidget(ToggleButtonFactory.SWAP_INV_BUTTON(getGuiLeft() + 152, topSectionTop + 132, b -> {
+        addRenderableWidget(ToggleButtonFactory.SWAP_INV_BUTTON(getGuiLeft() + 152, topSectionTop + 129, b -> {
             PacketHandler.CHANNEL.sendToServer(new InventoryHolderMoveItemsPayload(2));
         }));
         addRenderableWidget(ToggleButtonFactory.FILTERONLYBUTTON(getGuiLeft() + 26, topSectionTop + 22, automatedFiltersOnly, b -> {
@@ -128,6 +128,13 @@ public class InventoryHolderScreen extends BaseMachineScreen<InventoryHolderCont
             }
         }
         RenderSystem.disableBlend();
+    }
+
+    @Override
+    protected void renderInventoryBackground(GuiGraphics guiGraphics, int relX, int relY) {
+        // Inventory Holder has an extra armor/offhand row in the lower section, so it needs
+        // a taller contour than the standard player inventory background texture provides.
+        blitNineSlice(guiGraphics, relX, relY + 74, this.imageWidth, 111);
     }
 
     @Override
