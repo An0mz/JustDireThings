@@ -8,8 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Set;
 
@@ -17,6 +17,7 @@ import static com.direwolf20.justdirethings.common.items.interfaces.ToggleableTo
 import static com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool.getToolValue;
 
 public class PlayerEvents {
+
     @SubscribeEvent
     public static void BreakSpeed(PlayerEvent.BreakSpeed event) {
         Player player = event.getEntity();
