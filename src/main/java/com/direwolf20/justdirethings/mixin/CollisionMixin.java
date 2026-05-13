@@ -1,11 +1,14 @@
 package com.direwolf20.justdirethings.mixin;
 
 import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
-import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockCollisions;
 import net.minecraft.world.level.CollisionGetter;
 import net.minecraft.world.level.Level;
@@ -13,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,27 +30,29 @@ public interface CollisionMixin {
 
     @Inject(method = "collidesWithSuffocatingBlock(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Z", at = @At("HEAD"), cancellable = true)
     private void collidesWithSuffocatingBlock(Entity entity, AABB box, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof Player player && shouldPassThroughWalls(player)) {
+        if (entity instanceof Player player && jdt$shouldPassThroughWalls(player)) {
             cir.setReturnValue(false);
         }
     }
 
     @Inject(method = "getBlockCollisions", at = @At("HEAD"), cancellable = true)
     private void onGetBlockCollisions(Entity entity, AABB collisionBox, CallbackInfoReturnable<Iterable<VoxelShape>> cir) {
-        if (entity instanceof Player player && shouldPassThroughWalls(player)) {
-            Iterable<VoxelShape> originalBlockCollisions = getOriginalBlockCollisions(entity, collisionBox);
+        if (entity instanceof Player player && jdt$shouldPassThroughWalls(player)) {
+            Iterable<VoxelShape> originalBlockCollisions = jdt$getOriginalBlockCollisions(entity, collisionBox);
             List<VoxelShape> filteredBlockCollisions = StreamSupport.stream(originalBlockCollisions.spliterator(), false)
-                    .filter(shape -> isVerticalCollision(shape, collisionBox, player))
+                    .filter(shape -> jdt$isVerticalCollision(shape, collisionBox, player))
                     .collect(Collectors.toList());
             cir.setReturnValue(filteredBlockCollisions);
         }
     }
 
-    private Iterable<VoxelShape> getOriginalBlockCollisions(Entity entity, AABB collisionBox) {
-        return () -> new BlockCollisions<>((CollisionGetter) (Object) this, entity, collisionBox, false, (p_286215_, p_286216_) -> p_286216_);
+    @Unique
+    private Iterable<VoxelShape> jdt$getOriginalBlockCollisions(Entity entity, AABB collisionBox) {
+        return () -> new BlockCollisions<>((CollisionGetter) this, entity, collisionBox, false, (p_286215_, p_286216_) -> p_286216_);
     }
 
-    default boolean isVerticalCollision(VoxelShape shape, AABB collisionBox, Player player) {
+    @Unique
+    default boolean jdt$isVerticalCollision(VoxelShape shape, AABB collisionBox, Player player) {
         Level level = player.level();
         BlockPos blockPos = new BlockPos((int) shape.min(Direction.Axis.X), (int) shape.min(Direction.Axis.Y), (int) shape.min(Direction.Axis.Z));
         BlockState blockState = level.getBlockState(blockPos);
@@ -57,7 +63,10 @@ public interface CollisionMixin {
         return Math.abs(maxY - minY) < 0.75;
     }
 
-    default boolean shouldPassThroughWalls(Player player) {
-        return player.getAttributeValue(Registration.PHASE.get()) > 0;
+    @Unique
+    default boolean jdt$shouldPassThroughWalls(Player player) {
+        ItemStack leggings = player.getItemBySlot(EquipmentSlot.LEGS);
+        return leggings.getItem() instanceof ToggleableTool toggleableTool
+                && toggleableTool.canUseAbilityAndDurability(leggings, Ability.PHASE);
     }
 }

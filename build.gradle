@@ -73,8 +73,8 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'mixin.env.disableRefMap', 'true'
+            args '--mixin.config', 'mixins.justdirethings.json'
             mods {
                 "${mod_id}" {
                     source sourceSets.main
@@ -186,6 +186,14 @@ publishing {
         maven {
             url "file://${project.projectDir}/repo"
         }
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'MixinConfigs': 'mixins.justdirethings.json'
+        ])
     }
 }
 
