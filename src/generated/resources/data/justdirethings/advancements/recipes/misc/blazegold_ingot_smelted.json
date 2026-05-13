@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:raw_blazegold"
-            ]
+            "items": "justdirethings:raw_blazegold"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_blazegold_raw",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_blazegold_raw"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blazegold_ingot_smelted"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -338,5 +338,7 @@
   "justdirethings.fluiddroprecipe.title": "Drop in Fluid Recipes",
 
   "justdirethings.timecrystaltooltip": "The crystal pulses with temporal energy, accelerating or slowing time around you.",
-  "justdirethings.timecrystaltooltiptwo": "A sliver of crystallized time. Its effects are unpredictable but undeniably powerful."
+  "justdirethings.timecrystaltooltiptwo": "A sliver of crystallized time. Its effects are unpredictable but undeniably powerful.",
+  "sound.justdirethings.portal_gun_open": "Portal opens",
+  "sound.justdirethings.portal_gun_close": "Portal closes"
 }

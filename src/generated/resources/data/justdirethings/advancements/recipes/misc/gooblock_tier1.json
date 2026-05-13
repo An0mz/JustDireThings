@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:coal"
-            ]
+            "items": "minecraft:coal"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_coal",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coal"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:gooblock_tier1"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

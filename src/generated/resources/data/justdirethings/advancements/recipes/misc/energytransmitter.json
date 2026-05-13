@@ -1,13 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ferricore_ingot": {
+    "has_blazegold_ingot": {
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:ferricore_ingot"
-            ]
+            "items": "justdirethings:blazegold_ingot"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_ferricore_ingot",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_blazegold_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:energytransmitter"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

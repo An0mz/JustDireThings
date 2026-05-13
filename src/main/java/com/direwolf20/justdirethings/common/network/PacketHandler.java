@@ -33,6 +33,9 @@ public class PacketHandler {
         CHANNEL.registerMessage(nextId(), FilterSettingPayload.class,         FilterSettingPayload::write,         FilterSettingPayload::new,         FilterSettingPacket::handle);
         CHANNEL.registerMessage(nextId(), GhostSlotPayload.class,             GhostSlotPayload::write,             GhostSlotPayload::new,             GhostSlotPacket::handle);
         CHANNEL.registerMessage(nextId(), LeftClickPayload.class,             LeftClickPayload::write,             LeftClickPayload::new,             LeftClickPacket::handle);
+        CHANNEL.registerMessage(nextId(), PortalGunLeftClickPayload.class,    PortalGunLeftClickPayload::write,    PortalGunLeftClickPayload::new,    PortalGunLeftClickPacket::handle);
+        CHANNEL.registerMessage(nextId(), PortalGunFavoritePayload.class,     PortalGunFavoritePayload::write,     PortalGunFavoritePayload::new,     PortalGunFavoritePacket::handle);
+        CHANNEL.registerMessage(nextId(), PortalGunFavoriteChangePayload.class, PortalGunFavoriteChangePayload::write, PortalGunFavoriteChangePayload::new, PortalGunFavoriteChangePacket::handle);
         CHANNEL.registerMessage(nextId(), PlayerAccessorPayload.class,        PlayerAccessorPayload::write,        PlayerAccessorPayload::new,        PlayerAccessorPacket::handle);
         CHANNEL.registerMessage(nextId(), RedstoneSettingPayload.class,       RedstoneSettingPayload::write,       RedstoneSettingPayload::new,       RedstoneSettingPacket::handle);
         CHANNEL.registerMessage(nextId(), SensorPayload.class,                SensorPayload::write,                SensorPayload::new,                SensorPacket::handle);

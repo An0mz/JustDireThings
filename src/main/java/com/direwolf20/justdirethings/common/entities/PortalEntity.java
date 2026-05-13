@@ -7,9 +7,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +20,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,10 +30,12 @@ public class PortalEntity extends Entity {
             SynchedEntityData.defineId(PortalEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> PORTAL_COLOR =
             SynchedEntityData.defineId(PortalEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> PRIMARY_TYPE =
+            SynchedEntityData.defineId(PortalEntity.class, EntityDataSerializers.BOOLEAN);
 
     private UUID gunUUID = UUID.randomUUID();
+    private int lifespanTicks = -1;
     private int age;
-    private boolean stayOpen;
     private final Map<UUID, Integer> teleportCooldowns = new HashMap<>();
     private static final int TELEPORT_COOLDOWN = 40;
     private static final double PORTAL_WIDTH = 0.9;
@@ -43,19 +48,21 @@ public class PortalEntity extends Entity {
         this.setNoGravity(true);
     }
 
-    public PortalEntity(Level level, Vec3 position, Direction facing, UUID gunUUID, boolean stayOpen) {
+    public PortalEntity(Level level, Vec3 position, Direction facing, UUID gunUUID, boolean primaryType, int lifespanTicks) {
         this(Registration.PortalEntity.get(), level);
         this.setPos(position.x, position.y, position.z);
         this.entityData.set(FACING_ID, facing.ordinal());
-        this.entityData.set(PORTAL_COLOR, colorFromUUID(gunUUID));
+        this.entityData.set(PORTAL_COLOR, primaryType ? 0x44B5FF : 0xFF9A2E);
+        this.entityData.set(PRIMARY_TYPE, primaryType);
         this.gunUUID = gunUUID;
-        this.stayOpen = stayOpen;
+        this.lifespanTicks = lifespanTicks;
     }
 
     @Override
     protected void defineSynchedData() {
         this.entityData.define(FACING_ID, Direction.NORTH.ordinal());
         this.entityData.define(PORTAL_COLOR, 0x00DD00);
+        this.entityData.define(PRIMARY_TYPE, false);
     }
 
     public Direction getFacing() {
@@ -72,13 +79,16 @@ public class PortalEntity extends Entity {
         return gunUUID;
     }
 
+    public boolean isPrimaryType() {
+        return this.entityData.get(PRIMARY_TYPE);
+    }
+
     @Override
     public void tick() {
         super.tick();
         if (!level().isClientSide) {
             age++;
-            int lifespan = com.direwolf20.justdirethings.setup.Config.PORTAL_GUN_LIFESPAN.get();
-            if (!stayOpen && lifespan >= 0 && age > lifespan) {
+            if (lifespanTicks >= 0 && age > lifespanTicks) {
                 this.discard();
                 return;
             }
@@ -110,7 +120,11 @@ public class PortalEntity extends Entity {
         if (partner == null) return;
 
         Vec3 dest = partner.position().add(0, 0, 0);
-        Direction partnerFacing = partner.getFacing();
+        ServerLevel destinationLevel = (ServerLevel) partner.level();
+
+        if (!destinationLevel.equals(serverLevel) && !entity.canChangeDimensions()) {
+            return;
+        }
 
         teleportCooldowns.put(entity.getUUID(), TELEPORT_COOLDOWN);
         partner.teleportCooldowns.put(entity.getUUID(), TELEPORT_COOLDOWN);
@@ -119,9 +133,9 @@ public class PortalEntity extends Entity {
         float xRot = entity.getXRot();
 
         if (entity instanceof ServerPlayer sp) {
-            sp.teleportTo(serverLevel, dest.x, dest.y, dest.z, yRot, xRot);
+            sp.teleportTo(destinationLevel, dest.x, dest.y, dest.z, yRot, xRot);
         } else {
-            entity.teleportTo(dest.x, dest.y, dest.z);
+            entity.teleportTo(destinationLevel, dest.x, dest.y, dest.z, new HashSet<>(), yRot, xRot);
         }
 
         Vec3 velocity = entity.getDeltaMovement();
@@ -130,9 +144,12 @@ public class PortalEntity extends Entity {
     }
 
     private PortalEntity findPartner(ServerLevel level) {
-        for (net.minecraft.world.entity.Entity entity : level.getAllEntities()) {
-            if (entity instanceof PortalEntity p && p != this && p.gunUUID.equals(this.gunUUID)) {
-                return p;
+        MinecraftServer server = level.getServer();
+        for (ServerLevel serverLevel : server.getAllLevels()) {
+            for (net.minecraft.world.entity.Entity entity : serverLevel.getAllEntities()) {
+                if (entity instanceof PortalEntity p && p != this && p.gunUUID.equals(this.gunUUID) && p.isPrimaryType() != this.isPrimaryType()) {
+                    return p;
+                }
             }
         }
         return null;
@@ -155,20 +172,22 @@ public class PortalEntity extends Entity {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("Age", age);
-        compound.putBoolean("StayOpen", stayOpen);
+        compound.putInt("LifespanTicks", lifespanTicks);
         compound.putLong("GunUUIDMost", gunUUID.getMostSignificantBits());
         compound.putLong("GunUUIDLeast", gunUUID.getLeastSignificantBits());
         compound.putInt("Facing", entityData.get(FACING_ID));
         compound.putInt("Color", entityData.get(PORTAL_COLOR));
+        compound.putBoolean("PrimaryType", entityData.get(PRIMARY_TYPE));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         age = compound.getInt("Age");
-        stayOpen = compound.getBoolean("StayOpen");
+        lifespanTicks = compound.getInt("LifespanTicks");
         gunUUID = new UUID(compound.getLong("GunUUIDMost"), compound.getLong("GunUUIDLeast"));
         entityData.set(FACING_ID, compound.getInt("Facing"));
         entityData.set(PORTAL_COLOR, compound.getInt("Color"));
+        entityData.set(PRIMARY_TYPE, compound.getBoolean("PrimaryType"));
     }
 
     @Override
@@ -194,6 +213,7 @@ public class PortalEntity extends Entity {
     public void onAddedToWorld() {
         super.onAddedToWorld();
         if (!level().isClientSide && level() instanceof ServerLevel serverLevel) {
+            level().playSound(null, getX(), getY(), getZ(), Registration.PORTAL_GUN_OPEN.get(), SoundSource.NEUTRAL, 0.75F, 0.4F);
             BlockPos pos = this.blockPosition();
             serverLevel.setChunkForced(pos.getX() >> 4, pos.getZ() >> 4, true);
         }
@@ -202,6 +222,7 @@ public class PortalEntity extends Entity {
     @Override
     public void remove(RemovalReason reason) {
         if (!level().isClientSide && level() instanceof ServerLevel serverLevel) {
+            level().playSound(null, getX(), getY(), getZ(), Registration.PORTAL_GUN_CLOSE.get(), SoundSource.NEUTRAL, 0.5F, 0.2F);
             BlockPos pos = this.blockPosition();
             serverLevel.setChunkForced(pos.getX() >> 4, pos.getZ() >> 4, false);
         }

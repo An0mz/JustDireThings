@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:clickert1"
-            ]
+            "items": "justdirethings:clickert1"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_clickert1",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_clickert1"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:clickert1_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

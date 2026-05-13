@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:blockswappert1"
-            ]
+            "items": "justdirethings:blockswappert1"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_blockswappert1",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_blockswappert1"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blockswappert1_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

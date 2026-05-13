@@ -1,7 +1,7 @@
 {
   "type": "justdirethings:goospread",
   "craftingDuration": 2400,
-  "id": "justdirethings:refined_t2_fluid_block-goospread",
+  "id": "justdirethings:refined_t2_fluid",
   "input": {
     "Name": "justdirethings:unrefined_t2_fluid_block",
     "Properties": {

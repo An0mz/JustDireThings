@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:fluidplacert1"
-            ]
+            "items": "justdirethings:fluidplacert1"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_fluidplacert1",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_fluidplacert1"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:fluidplacert1_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

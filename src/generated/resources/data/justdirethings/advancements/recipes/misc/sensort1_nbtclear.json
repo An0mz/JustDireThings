@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:sensort1"
-            ]
+            "items": "justdirethings:sensort1"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_sensort1",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_sensort1"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:sensort1_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

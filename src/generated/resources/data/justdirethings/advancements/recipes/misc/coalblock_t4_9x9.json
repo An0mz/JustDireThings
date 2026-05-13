@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:coalblock_t4"
-            ]
+            "items": "justdirethings:coalblock_t4"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_coalblock_t4",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_coalblock_t4"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:coalblock_t4_9x9"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

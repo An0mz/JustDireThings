@@ -2,8 +2,12 @@ package com.direwolf20.justdirethings.client.renderers;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.function.Function;
 
 public class OurRenderTypes extends RenderType {
     /*public static final RenderType RenderBlock = create("GadgetRenderBlock",
@@ -63,6 +67,34 @@ public class OurRenderTypes extends RenderType {
                     .setLightmapState(NO_LIGHTMAP)
                     .setWriteMaskState(COLOR_WRITE)
                     .createCompositeState(false));
+
+    public static final RenderType PortalEntity = create("PortalEntity",
+            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true,
+            RenderType.CompositeState.builder()
+                    .setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setTextureState(NO_TEXTURE)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
+                    .setCullState(NO_CULL)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .createCompositeState(false));
+
+    private static final Function<ResourceLocation, RenderType> PortalSurface = Util.memoize(
+            texture -> create("PortalSurface",
+                    DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
+                    RenderType.CompositeState.builder()
+                            .setShaderState(RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                            .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                            .setCullState(NO_CULL)
+                            .setLightmapState(LIGHTMAP)
+                            .setOverlayState(OVERLAY)
+                            .createCompositeState(true))
+    );
+
+    public static RenderType portalSurface(ResourceLocation texture) {
+        return PortalSurface.apply(texture);
+    }
 
     /*private static final Function<ResourceLocation, RenderType> GooPattern = Util.memoize(
             p_286150_ -> {

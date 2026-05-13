@@ -69,6 +69,7 @@ import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
@@ -107,6 +108,7 @@ public class Registration {
     public static final DeferredRegister<Item> BOWS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Item> ARMORS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Item> UPGRADES = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(Registries.MENU, MODID);
@@ -132,6 +134,7 @@ public class Registration {
         ITEMS.register(eventBus);
         TOOLS.register(eventBus);
         BOWS.register(eventBus);
+        SOUNDS.register(eventBus);
         BLOCK_ENTITIES.register(eventBus);
         CONTAINERS.register(eventBus);
         RECIPE_SERIALIZERS.register(eventBus);
@@ -634,6 +637,11 @@ public class Registration {
             () -> new BucketItem(() -> POLYMORPHIC_FLUID_SOURCE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     // ── Portal Gun V2 & Time Wand ─────────────────────────────────────────────
+
+    public static final RegistryObject<SoundEvent> PORTAL_GUN_CLOSE = SOUNDS.register("portal_gun_close",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "portal_gun_close")));
+    public static final RegistryObject<SoundEvent> PORTAL_GUN_OPEN = SOUNDS.register("portal_gun_open",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "portal_gun_open")));
 
     public static final RegistryObject<TimeWand> TimeWand = ITEMS.register("time_wand", TimeWand::new);
     public static final RegistryObject<PortalGun> PortalGun = ITEMS.register("portal_gun", PortalGun::new);

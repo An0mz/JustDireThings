@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:playeraccessor"
-            ]
+            "items": "justdirethings:playeraccessor"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_playeraccessor",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_playeraccessor"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:playeraccessor_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

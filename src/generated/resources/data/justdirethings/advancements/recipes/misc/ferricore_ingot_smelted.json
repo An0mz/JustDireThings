@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:raw_ferricore"
-            ]
+            "items": "justdirethings:raw_ferricore"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_ferricore_raw",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_ferricore_raw"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:ferricore_ingot_smelted"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -11,6 +11,7 @@ import com.direwolf20.justdirethings.client.entityrenders.CreatureCatcherEntityR
 import com.direwolf20.justdirethings.client.entityrenders.TimeWandEntityRenderer;
 import com.direwolf20.justdirethings.client.entityrenders.PortalEntityRenderer;
 import com.direwolf20.justdirethings.client.itemcustomrenders.FluidbarDecorator;
+import com.direwolf20.justdirethings.client.renderers.shader.DireRenderTypes;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import com.direwolf20.justdirethings.client.events.EventKeyInput;
@@ -41,10 +42,13 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.io.IOException;
 
 @Mod.EventBusSubscriber(modid = JustDireThings.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
@@ -161,6 +165,11 @@ public class ClientSetup {
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.GLITTER.get(), GlitterParticle.Provider::new);
         event.registerSpriteSet(ModParticles.PARADOX.get(), ParadoxParticle.Provider::new);
+    }
+
+    @SubscribeEvent
+    public static void registerShaders(RegisterShadersEvent event) throws IOException {
+        DireRenderTypes.registerShaders(event);
     }
 
     @SubscribeEvent

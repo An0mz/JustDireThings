@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:fluidcollectort2"
-            ]
+            "items": "justdirethings:fluidcollectort2"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_fluidcollectort2",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_fluidcollectort2"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:fluidcollectort2_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

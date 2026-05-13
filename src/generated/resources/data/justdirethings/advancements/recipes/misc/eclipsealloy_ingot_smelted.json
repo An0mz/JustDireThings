@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:raw_eclipsealloy"
-            ]
+            "items": "justdirethings:raw_eclipsealloy"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_eclipsealloy_raw",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_eclipsealloy_raw"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:eclipsealloy_ingot_smelted"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

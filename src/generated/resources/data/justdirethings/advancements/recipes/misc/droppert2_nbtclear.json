@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:droppert2"
-            ]
+            "items": "justdirethings:droppert2"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_droppert2",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_droppert2"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:droppert2_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

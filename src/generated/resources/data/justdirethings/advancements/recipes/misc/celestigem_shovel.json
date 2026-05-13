@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:celestigem"
-            ]
+            "items": "justdirethings:celestigem"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_celestigem",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_celestigem"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:celestigem_shovel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

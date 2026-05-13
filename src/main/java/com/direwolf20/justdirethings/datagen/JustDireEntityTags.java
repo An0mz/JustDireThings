@@ -28,5 +28,8 @@ public class JustDireEntityTags extends EntityTypeTagsProvider {
     public void addTags(HolderLookup.Provider lookupProvider) {
         tag(PARADOX_DENY).add(Registration.ParadoxEntity.get());
         tag(CREATURE_CATCHER_DENY).add(EntityType.ENDER_DRAGON);
+        // Keep these tags present even if empty so ability deny-list checks are data-pack extensible.
+        tag(NO_AI_DENY);
+        tag(NO_EARTHQUAKE);
     }
 }

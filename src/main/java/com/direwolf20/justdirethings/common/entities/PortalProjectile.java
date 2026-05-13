@@ -1,8 +1,11 @@
 package com.direwolf20.justdirethings.common.entities;
 
 import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
@@ -19,16 +22,22 @@ import java.util.UUID;
 public class PortalProjectile extends ThrowableItemProjectile {
 
     private UUID gunUUID = UUID.randomUUID();
-    private boolean stayOpen;
+    private boolean isPrimaryType;
+    private boolean isAdvanced;
+    private NBTHelpers.PortalDestination portalDestination;
+    private int lifespanTicks;
 
     public PortalProjectile(EntityType<? extends ThrowableItemProjectile> type, Level level) {
         super(type, level);
     }
 
-    public PortalProjectile(Level level, LivingEntity shooter, UUID gunUUID, boolean stayOpen) {
+    public PortalProjectile(Level level, LivingEntity shooter, UUID gunUUID, boolean isPrimaryType, boolean isAdvanced, NBTHelpers.PortalDestination portalDestination, int lifespanTicks) {
         super(Registration.PortalProjectile.get(), shooter, level);
         this.gunUUID = gunUUID;
-        this.stayOpen = stayOpen;
+        this.isPrimaryType = isPrimaryType;
+        this.isAdvanced = isAdvanced;
+        this.portalDestination = portalDestination;
+        this.lifespanTicks = lifespanTicks;
     }
 
     @Override
@@ -63,22 +72,12 @@ public class PortalProjectile extends ThrowableItemProjectile {
         }
 
         Vec3 portalPos = new Vec3(px, py, pz);
-
-        net.minecraft.server.level.ServerLevel serverLevel = (net.minecraft.server.level.ServerLevel) level();
-        List<PortalEntity> existing = new java.util.ArrayList<>();
-        for (net.minecraft.world.entity.Entity entity : serverLevel.getAllEntities()) {
-            if (entity instanceof PortalEntity p && p.getGunUUID().equals(gunUUID)) {
-                existing.add(p);
-            }
+        if (isAdvanced && portalDestination != null) {
+            spawnAdvancedPortals(portalPos, facing);
+        } else {
+            spawnPortal((ServerLevel) level(), portalPos, facing, isPrimaryType);
+            this.discard();
         }
-        if (existing.size() >= 2) {
-            existing.get(0).discard();
-        }
-
-        PortalEntity portal = new PortalEntity(level(), portalPos, facing, gunUUID, stayOpen);
-        level().addFreshEntity(portal);
-
-        this.discard();
     }
 
     @Override
@@ -91,7 +90,12 @@ public class PortalProjectile extends ThrowableItemProjectile {
         super.addAdditionalSaveData(compound);
         compound.putLong("GunUUIDMost", gunUUID.getMostSignificantBits());
         compound.putLong("GunUUIDLeast", gunUUID.getLeastSignificantBits());
-        compound.putBoolean("StayOpen", stayOpen);
+        compound.putBoolean("Primary", isPrimaryType);
+        compound.putBoolean("Advanced", isAdvanced);
+        compound.putInt("LifespanTicks", lifespanTicks);
+        if (portalDestination != null) {
+            compound.put("PortalDestination", portalDestination.toNBT());
+        }
     }
 
     @Override
@@ -100,6 +104,56 @@ public class PortalProjectile extends ThrowableItemProjectile {
         if (compound.contains("GunUUIDMost")) {
             gunUUID = new UUID(compound.getLong("GunUUIDMost"), compound.getLong("GunUUIDLeast"));
         }
-        stayOpen = compound.getBoolean("StayOpen");
+        isPrimaryType = compound.getBoolean("Primary");
+        isAdvanced = compound.getBoolean("Advanced");
+        lifespanTicks = compound.getInt("LifespanTicks");
+        if (compound.contains("PortalDestination")) {
+            portalDestination = NBTHelpers.PortalDestination.fromNBT(compound.getCompound("PortalDestination"));
+        }
+    }
+
+    private void spawnAdvancedPortals(Vec3 sourcePos, Direction sourceFacing) {
+        if (!(level() instanceof ServerLevel sourceLevel)) {
+            this.discard();
+            return;
+        }
+        MinecraftServer server = sourceLevel.getServer();
+        ServerLevel destinationLevel = server.getLevel(portalDestination.dimension());
+        if (destinationLevel == null) {
+            this.discard();
+            return;
+        }
+
+        clearMyPortals(server);
+
+        PortalEntity sourcePortal = new PortalEntity(sourceLevel, sourcePos, sourceFacing, gunUUID, isPrimaryType, lifespanTicks);
+        PortalEntity destinationPortal = new PortalEntity(destinationLevel, portalDestination.position(), portalDestination.facing(), gunUUID, !isPrimaryType, lifespanTicks);
+        sourceLevel.addFreshEntity(sourcePortal);
+        destinationLevel.addFreshEntity(destinationPortal);
+        this.discard();
+    }
+
+    private void spawnPortal(ServerLevel serverLevel, Vec3 portalPos, Direction facing, boolean primaryType) {
+        clearMatchingPortal(serverLevel.getServer(), primaryType);
+        PortalEntity portal = new PortalEntity(serverLevel, portalPos, facing, gunUUID, primaryType, lifespanTicks);
+        serverLevel.addFreshEntity(portal);
+    }
+
+    private void clearMatchingPortal(MinecraftServer server, boolean primaryType) {
+        for (ServerLevel serverLevel : server.getAllLevels()) {
+            List<? extends PortalEntity> existing = serverLevel.getEntities(Registration.PortalEntity.get(), portal -> portal.getGunUUID().equals(gunUUID) && portal.isPrimaryType() == primaryType);
+            for (PortalEntity portal : existing) {
+                portal.discard();
+            }
+        }
+    }
+
+    private void clearMyPortals(MinecraftServer server) {
+        for (ServerLevel serverLevel : server.getAllLevels()) {
+            List<? extends PortalEntity> existing = serverLevel.getEntities(Registration.PortalEntity.get(), portal -> portal.getGunUUID().equals(gunUUID));
+            for (PortalEntity portal : existing) {
+                portal.discard();
+            }
+        }
     }
 }

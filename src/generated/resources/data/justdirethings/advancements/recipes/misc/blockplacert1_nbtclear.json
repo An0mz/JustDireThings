@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:blockplacert1"
-            ]
+            "items": "justdirethings:blockplacert1"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_blockplacert1",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_blockplacert1"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:blockplacert1_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

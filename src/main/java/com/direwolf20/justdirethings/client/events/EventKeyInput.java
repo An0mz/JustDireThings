@@ -2,6 +2,8 @@ package com.direwolf20.justdirethings.client.events;
 
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.client.KeyBindings;
+import com.direwolf20.justdirethings.client.screens.AdvPortalRadialMenu;
+import com.direwolf20.justdirethings.common.items.PortalGunV2;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.LeftClickableTool;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
@@ -38,6 +40,15 @@ public class EventKeyInput {
             return;
 
         ItemStack toggleableItem = ToggleableItem.getToggleableItem(mc.player);
+        ItemStack portalGun = PortalGunV2.getPortalGunv2(mc.player);
+
+        if (!portalGun.isEmpty()) {
+            if (!(mc.screen instanceof AdvPortalRadialMenu) && KeyBindings.toggleTool.consumeClick()) {
+                mc.setScreen(new AdvPortalRadialMenu(portalGun));
+                return;
+            }
+        }
+
         if (!toggleableItem.isEmpty()) {
             if (KeyBindings.toggleTool.consumeClick()) {
                 PacketHandler.CHANNEL.sendToServer(new ToggleToolPayload("enabled"));

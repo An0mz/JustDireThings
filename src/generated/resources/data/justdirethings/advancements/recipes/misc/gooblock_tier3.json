@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:gooblock_tier2"
-            ]
+            "items": "justdirethings:gooblock_tier2"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_goo_block2",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_goo_block2"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:gooblock_tier3"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

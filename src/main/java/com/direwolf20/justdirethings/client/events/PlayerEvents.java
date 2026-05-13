@@ -2,9 +2,11 @@ package com.direwolf20.justdirethings.client.events;
 
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.PortalGun;
 import com.direwolf20.justdirethings.common.items.interfaces.LeftClickableTool;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.common.network.data.LeftClickPayload;
+import com.direwolf20.justdirethings.common.network.data.PortalGunLeftClickPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
@@ -32,6 +34,10 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void LeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
         ItemStack itemStack = event.getItemStack();
+        if (itemStack.getItem() instanceof PortalGun) {
+            PacketHandler.CHANNEL.sendToServer(new PortalGunLeftClickPayload());
+            return;
+        }
         if (itemStack.getItem() instanceof ToggleableTool toggleableTool && itemStack.getItem() instanceof LeftClickableTool) {
             activateAbilities(itemStack, toggleableTool, event.getEntity(), event.getHand(), true, BlockPos.ZERO, Direction.DOWN);
         }
@@ -40,6 +46,11 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void LeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         ItemStack itemStack = event.getItemStack();
+        if (itemStack.getItem() instanceof PortalGun && event.getAction() == PlayerInteractEvent.LeftClickBlock.Action.START) {
+            PacketHandler.CHANNEL.sendToServer(new PortalGunLeftClickPayload());
+            event.setCanceled(true);
+            return;
+        }
         if (itemStack.getItem() instanceof ToggleableTool toggleableTool && itemStack.getItem() instanceof LeftClickableTool && event.getFace() != null) {
             if (event.getAction() == PlayerInteractEvent.LeftClickBlock.Action.START) { //Only start has the 'proper' direction - this also runs both client AND server side!
                 activateAbilities(itemStack, toggleableTool, event.getEntity(), event.getHand(), false, event.getPos(), event.getFace());

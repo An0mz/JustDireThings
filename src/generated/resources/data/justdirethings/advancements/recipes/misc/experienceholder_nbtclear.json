@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "justdirethings:experienceholder"
-            ]
+            "items": "justdirethings:experienceholder"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_experienceholder",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_experienceholder"
     ]
   ],
   "rewards": {
     "recipes": [
       "justdirethings:experienceholder_nbtclear"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
