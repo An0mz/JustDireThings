@@ -136,18 +136,22 @@ public class FluidCanister extends Item implements FluidContainingItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, level, tooltip, flagIn);
-        if (level == null) return;
         IFluidHandlerItem fluidHandler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
         if (fluidHandler == null) return;
         FluidStack fluidStack = fluidHandler.getFluidInTank(0);
         int fluidColor = getFluidColor(stack);
         Style fluidStyle = Style.EMPTY.withColor(TextColor.fromRgb(fluidColor));
-        tooltip.add(Component.translatable("justdirethings.fluidname").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(fluidStack.isEmpty() ? "-" : fluidStack.getDisplayName().getString()).withStyle(fluidStyle)));
-        tooltip.add(Component.translatable("justdirethings.fluidamt").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(MagicHelpers.formatted(fluidStack.getAmount()) + "/" + MagicHelpers.formatted(getMaxMB())).withStyle(ChatFormatting.GREEN)));
-        tooltip.add(Component.translatable("justdirethings.fillmode").withStyle(ChatFormatting.GRAY)
-                .append(getFillMode(stack).getTooltip().copy().withStyle(ChatFormatting.GREEN)));
+        Component fluidName = fluidStack.isEmpty()
+                ? Component.literal("-").withStyle(fluidStyle)
+                : fluidStack.getDisplayName().copy().withStyle(fluidStyle);
+        tooltip.add(Component.translatable("justdirethings.fluidname", fluidName)
+                .withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("justdirethings.fluidamt",
+                Component.literal(MagicHelpers.formatted(fluidStack.getAmount()) + "/" + MagicHelpers.formatted(getMaxMB())).withStyle(ChatFormatting.GREEN))
+                .withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("justdirethings.fillmode",
+                getFillMode(stack).getTooltip().copy().withStyle(ChatFormatting.GREEN))
+                .withStyle(ChatFormatting.GRAY));
     }
 
     public boolean placeFluid(Level level, Player player, ItemStack itemStack, BlockHitResult blockhitresult) {

@@ -5,55 +5,24 @@ import com.direwolf20.justdirethings.common.containers.FuelCanisterContainer;
 import com.direwolf20.justdirethings.common.items.resources.Coal_T1;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.util.MagicHelpers;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -67,12 +36,6 @@ public class FuelCanister extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, level, tooltip, flagIn);
-
-        Minecraft mc = Minecraft.getInstance();
-
-        if (level == null || mc.player == null) {
-            return;
-        }
         boolean sneakPressed = Screen.hasShiftDown();
         if (sneakPressed)
             tooltip.add(Component.translatable("justdirethings.fuelcanisteramt", MagicHelpers.formatted(getFuelLevel(stack))).withStyle(ChatFormatting.AQUA));
