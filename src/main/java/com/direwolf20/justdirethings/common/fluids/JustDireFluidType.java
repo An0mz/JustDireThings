@@ -1,7 +1,9 @@
 package com.direwolf20.justdirethings.common.fluids;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
 
 import java.util.function.Consumer;
@@ -14,7 +16,10 @@ public class JustDireFluidType extends FluidType {
     private final int tintColor;
 
     public JustDireFluidType(int tintColor, Properties properties) {
-        super(properties);
+        super(properties
+                .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH));
         this.tintColor = tintColor;
     }
 
