@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.blockentities;
 
+import com.direwolf20.justdirethings.client.particles.itemparticle.ItemFlowParticleData;
 import com.direwolf20.justdirethings.common.blockentities.basebe.AreaAffectingBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
@@ -9,6 +10,7 @@ import com.direwolf20.justdirethings.util.MiscHelpers;
 import com.direwolf20.justdirethings.util.interfacehelpers.AreaAffectingData;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -154,11 +156,35 @@ public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE
         int currentLevel = currentPlayer.experienceLevel;
         if (currentLevel < targetExp && exp > 0) {
             extractExp(currentPlayer, 1);
+            doParticles(new ItemStack(Items.EXPERIENCE_BOTTLE), currentPlayer.getEyePosition().subtract(0, 0.25f, 0), false);
             if (exp == 0) currentPlayer = null;
         } else if (currentLevel > targetExp || (currentLevel == targetExp && currentPlayer.experienceProgress > 0.01f)) {
             storeExp(currentPlayer, 1);
+            doParticles(new ItemStack(Items.EXPERIENCE_BOTTLE), currentPlayer.getEyePosition().subtract(0, 0.25f, 0), true);
         } else {
             currentPlayer = null;
+        }
+    }
+
+    public void doParticles(ItemStack itemStack, Vec3 sourcePos, boolean toBlock) {
+        if (!showParticles) return;
+        if (!(level instanceof ServerLevel serverLevel)) return;
+        Direction direction = getBlockState().getValue(BlockStateProperties.FACING);
+        BlockPos blockPos = getBlockPos();
+        Vec3 baubleSpot = new Vec3(
+                blockPos.getX() + 0.5f - (0.3 * direction.getStepX()),
+                blockPos.getY() + 0.5f - (0.3 * direction.getStepY()),
+                blockPos.getZ() + 0.5f - (0.3 * direction.getStepZ())
+        );
+        double d0 = sourcePos.x();
+        double d1 = sourcePos.y();
+        double d2 = sourcePos.z();
+        if (toBlock) {
+            ItemFlowParticleData data = new ItemFlowParticleData(itemStack, baubleSpot.x, baubleSpot.y, baubleSpot.z, 1);
+            serverLevel.sendParticles(data, d0, d1, d2, 10, 0, 0, 0, 0);
+        } else {
+            ItemFlowParticleData data = new ItemFlowParticleData(itemStack, d0, d1, d2, 1);
+            serverLevel.sendParticles(data, baubleSpot.x, baubleSpot.y, baubleSpot.z, 10, 0, 0, 0, 0);
         }
     }
 
