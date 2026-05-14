@@ -12,15 +12,26 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 public abstract class BaseScreen<T extends BaseContainer> extends AbstractContainerScreen<T> {
+
+    /** Prevents double-rendering the background if AbstractContainerScreen calls renderBackground internally. */
+    private boolean backgroundDrawnThisFrame = false;
+
     public BaseScreen(T pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        if (minecraft != null && minecraft.level != null) {
-            guiGraphics.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+    public void renderBackground(GuiGraphics guiGraphics) {
+        if (!backgroundDrawnThisFrame) {
+            backgroundDrawnThisFrame = true;
+            super.renderBackground(guiGraphics); // sets NeoForge's background-rendered flag + draws gradient/dirt
         }
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        backgroundDrawnThisFrame = false;
+        this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
