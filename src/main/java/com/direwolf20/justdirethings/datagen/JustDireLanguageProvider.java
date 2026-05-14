@@ -415,6 +415,98 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.timecrystaltooltip", "The crystal pulses with temporal energy, accelerating or slowing time around you.");
         add("justdirethings.timecrystaltooltiptwo", "A sliver of crystallized time. Its effects are unpredictable but undeniably powerful.");
 
+        //Upgrade Tooltip Details (detailtext = green, flavortext = gray italic)
+        // Tier 1
+        add("justdirethings." + Ability.MOBSCANNER.getName() + ".detailtext", "Left-click to scan for nearby mobs within range");
+        add("justdirethings." + Ability.MOBSCANNER.getName() + ".flavortext", "The map shows what the naked eye misses");
+        add("justdirethings." + Ability.OREMINER.getName() + ".detailtext", "Automatically vein-mines connected ores when you break one");
+        add("justdirethings." + Ability.OREMINER.getName() + ".flavortext", "One block starts a chain reaction");
+        add("justdirethings." + Ability.ORESCANNER.getName() + ".detailtext", "Left-click to scan for nearby ores underground");
+        add("justdirethings." + Ability.ORESCANNER.getName() + ".flavortext", "The earth hides nothing from those who ask politely");
+        add("justdirethings." + Ability.LAWNMOWER.getName() + ".detailtext", "Left-click to mow all grass in a wide area");
+        add("justdirethings." + Ability.LAWNMOWER.getName() + ".flavortext", "Your neighbors will be envious");
+        add("justdirethings." + Ability.SKYSWEEPER.getName() + ".detailtext", "Automatically sweeps leaves and cobwebs overhead while moving");
+        add("justdirethings." + Ability.SKYSWEEPER.getName() + ".flavortext", "Nature clears the path for the determined");
+        add("justdirethings." + Ability.TREEFELLER.getName() + ".detailtext", "Automatically fells entire trees when you break the base log");
+        add("justdirethings." + Ability.TREEFELLER.getName() + ".flavortext", "One swing. One tree. Zero drama.");
+        add("justdirethings." + Ability.LEAFBREAKER.getName() + ".detailtext", "Left-click to break all leaves in a connected area");
+        add("justdirethings." + Ability.LEAFBREAKER.getName() + ".flavortext", "Autumn, accelerated");
+        add("justdirethings." + Ability.RUNSPEED.getName() + ".detailtext", "Increases your sprint speed based on slider setting");
+        add("justdirethings." + Ability.RUNSPEED.getName() + ".flavortext", "The horizon gets closer with every step");
+        add("justdirethings." + Ability.WALKSPEED.getName() + ".detailtext", "Increases your walk speed based on slider setting");
+        add("justdirethings." + Ability.WALKSPEED.getName() + ".flavortext", "A steady pace, impressively fast");
+        add("justdirethings." + Ability.STEPHEIGHT.getName() + ".detailtext", "Allows stepping over full blocks without jumping");
+        add("justdirethings." + Ability.STEPHEIGHT.getName() + ".flavortext", "Stairs are just decorations now");
+        add("justdirethings." + Ability.JUMPBOOST.getName() + ".detailtext", "Increases your jump height based on slider setting");
+        add("justdirethings." + Ability.JUMPBOOST.getName() + ".flavortext", "The ground is merely a suggestion");
+        add("justdirethings." + Ability.MINDFOG.getName() + ".detailtext", "Clouds nearby mobs' perception so they ignore you");
+        add("justdirethings." + Ability.MINDFOG.getName() + ".flavortext", "Out of sight, out of mind — literally");
+        add("justdirethings." + Ability.INVULNERABILITY.getName() + ".detailtext", "Activate to become briefly invulnerable to all damage");
+        add("justdirethings." + Ability.INVULNERABILITY.getName() + ".flavortext", "Death, rescheduled");
+        add("justdirethings." + Ability.POTIONARROW.getName() + ".detailtext", "Arrows you fire apply potion effects on hit");
+        add("justdirethings." + Ability.POTIONARROW.getName() + ".flavortext", "Chemistry meets archery");
+        add("justdirethings." + Ability.SPLASH.getName() + ".detailtext", "Arrows explode with a splash potion effect on impact");
+        add("justdirethings." + Ability.SPLASH.getName() + ".flavortext", "The radius was not negotiable");
+        add("justdirethings." + Ability.LINGERING.getName() + ".detailtext", "Arrows leave a lingering potion cloud on impact");
+        add("justdirethings." + Ability.LINGERING.getName() + ".flavortext", "The effect outlasts the arrow");
+        add("justdirethings." + Ability.HOMING.getName() + ".detailtext", "Arrows home in on the nearest mob");
+        add("justdirethings." + Ability.HOMING.getName() + ".flavortext", "Aim once, let the upgrade do the rest");
+        add("justdirethings." + Ability.EPICARROW.getName() + ".detailtext", "Activate to fire an epic explosive arrow");
+        add("justdirethings." + Ability.EPICARROW.getName() + ".flavortext", "One arrow. Considerable radius.");
+        // Tier 2
+        add("justdirethings." + Ability.SMELTER.getName() + ".detailtext", "Mined blocks are automatically smelted into your inventory");
+        add("justdirethings." + Ability.SMELTER.getName() + ".flavortext", "The furnace moved into your pickaxe");
+        add("justdirethings." + Ability.SMOKER.getName() + ".detailtext", "Food in your inventory is automatically cooked");
+        add("justdirethings." + Ability.SMOKER.getName() + ".flavortext", "No campfire required");
+        add("justdirethings." + Ability.HAMMER.getName() + ".detailtext", "Break blocks in a 3x3, 5x5, or 7x7 area around target");
+        add("justdirethings." + Ability.HAMMER.getName() + ".flavortext", "Mining, but wholesale");
+        add("justdirethings." + Ability.CAUTERIZEWOUNDS.getName() + ".detailtext", "Activate to heal wounds and stop damage over time");
+        add("justdirethings." + Ability.CAUTERIZEWOUNDS.getName() + ".flavortext", "Fire heals what it doesn't kill");
+        add("justdirethings." + Ability.SWIMSPEED.getName() + ".detailtext", "Increases your swim speed based on slider setting");
+        add("justdirethings." + Ability.SWIMSPEED.getName() + ".flavortext", "The fish can barely keep up");
+        add("justdirethings." + Ability.GROUNDSTOMP.getName() + ".detailtext", "Activate to launch nearby mobs into the air");
+        add("justdirethings." + Ability.GROUNDSTOMP.getName() + ".flavortext", "Personal space, enforced enthusiastically");
+        add("justdirethings." + Ability.EXTINGUISH.getName() + ".detailtext", "Removes burning effect at regular intervals automatically");
+        add("justdirethings." + Ability.EXTINGUISH.getName() + ".flavortext", "Fire's biggest disappointment");
+        add("justdirethings." + Ability.STUPEFY.getName() + ".detailtext", "Activate to make a targeted mob completely forget you");
+        add("justdirethings." + Ability.STUPEFY.getName() + ".flavortext", "Professor Lockhart would be proud");
+        // Tier 3
+        add("justdirethings." + Ability.DROPTELEPORT.getName() + ".detailtext", "Teleports item drops from nearby blocks into your inventory");
+        add("justdirethings." + Ability.DROPTELEPORT.getName() + ".flavortext", "Why walk to loot when loot walks to you");
+        add("justdirethings." + Ability.NEGATEFALLDAMAGE.getName() + ".detailtext", "Reduces or eliminates fall damage based on slider setting");
+        add("justdirethings." + Ability.NEGATEFALLDAMAGE.getName() + ".flavortext", "Gravity submits a formal objection. Denied.");
+        add("justdirethings." + Ability.NIGHTVISION.getName() + ".detailtext", "Grants permanent night vision in dark areas");
+        add("justdirethings." + Ability.NIGHTVISION.getName() + ".flavortext", "Darkness is just light with poor planning");
+        add("justdirethings." + Ability.ELYTRA.getName() + ".detailtext", "Grants elytra-style gliding when airborne");
+        add("justdirethings." + Ability.ELYTRA.getName() + ".flavortext", "Falling, but with style and a destination");
+        add("justdirethings." + Ability.DECOY.getName() + ".detailtext", "Activate to spawn a decoy clone that distracts enemies");
+        add("justdirethings." + Ability.DECOY.getName() + ".flavortext", "You can be in two places at once — sort of");
+        add("justdirethings." + Ability.WATERBREATHING.getName() + ".detailtext", "Allows breathing indefinitely underwater");
+        add("justdirethings." + Ability.WATERBREATHING.getName() + ".flavortext", "The ocean no longer has the home-field advantage");
+        // Tier 4
+        add("justdirethings." + Ability.OREXRAY.getName() + ".detailtext", "Left-click to highlight ores through walls in your view");
+        add("justdirethings." + Ability.OREXRAY.getName() + ".flavortext", "The bedrock has no secrets left");
+        add("justdirethings." + Ability.GLOWING.getName() + ".detailtext", "Left-click to apply glowing to all nearby mobs");
+        add("justdirethings." + Ability.GLOWING.getName() + ".flavortext", "They cannot hide if they are glowing");
+        add("justdirethings." + Ability.INSTABREAK.getName() + ".detailtext", "Instantly breaks any block your tool can mine");
+        add("justdirethings." + Ability.INSTABREAK.getName() + ".flavortext", "Patience: uninstalled");
+        add("justdirethings." + Ability.DEATHPROTECTION.getName() + ".detailtext", "Prevents death once, restoring health from the killing blow");
+        add("justdirethings." + Ability.DEATHPROTECTION.getName() + ".flavortext", "Error: fatality.exe has been blocked");
+        add("justdirethings." + Ability.DEBUFFREMOVER.getName() + ".detailtext", "Activate to remove all negative potion effects instantly");
+        add("justdirethings." + Ability.DEBUFFREMOVER.getName() + ".flavortext", "The status bar clears like a summer storm");
+        add("justdirethings." + Ability.EARTHQUAKE.getName() + ".detailtext", "Activate to send a massive shockwave launching nearby mobs");
+        add("justdirethings." + Ability.EARTHQUAKE.getName() + ".flavortext", "Local seismologists are very concerned");
+        add("justdirethings." + Ability.NOAI.getName() + ".detailtext", "Activate to disable the AI of all nearby mobs");
+        add("justdirethings." + Ability.NOAI.getName() + ".flavortext", "404: Decision-making not found");
+        add("justdirethings." + Ability.FLIGHT.getName() + ".detailtext", "Enables creative-style flight, consuming FE per tick");
+        add("justdirethings." + Ability.FLIGHT.getName() + ".flavortext", "The sky always belonged to you");
+        add("justdirethings." + Ability.LAVAIMMUNITY.getName() + ".detailtext", "Provides immunity to lava and fire damage");
+        add("justdirethings." + Ability.LAVAIMMUNITY.getName() + ".flavortext", "You swim where dragons hesitate");
+        add("justdirethings." + Ability.PHASE.getName() + ".detailtext", "Allows phasing through solid blocks while active");
+        add("justdirethings." + Ability.PHASE.getName() + ".flavortext", "Walls are just a matter of perspective");
+        add("justdirethings." + Ability.TIMEPROTECTION.getName() + ".detailtext", "Protects you from time-based effects and distortions");
+        add("justdirethings." + Ability.TIMEPROTECTION.getName() + ".flavortext", "Tick rate? Never heard of her");
+
         //Fluid Buckets
         add(Registration.REFINED_T2_FLUID_BUCKET.get(), "Blaze Ember Fuel Bucket");
         add(Registration.REFINED_T3_FLUID_BUCKET.get(), "Voidflame Fuel Bucket");
