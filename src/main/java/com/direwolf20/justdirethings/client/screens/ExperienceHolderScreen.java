@@ -117,8 +117,9 @@ public class ExperienceHolderScreen extends BaseMachineScreen<ExperienceHolderCo
         guiGraphics.pose().popPose();
 
         String levelStr = String.valueOf(ExperienceUtils.getLevelFromTotalExperience(experienceHolderBE.exp));
-        int j = topSectionLeft + (topSectionWidth / 2) - font.width(levelStr) / 2;
-        int k = barY - font.lineHeight - 2;
+        int centerX = topSectionLeft + (topSectionWidth / 2);
+        int j = centerX - font.width(levelStr) / 2;
+        int k = topSectionTop + 62 + 9 - font.lineHeight / 2;
         guiGraphics.drawString(font, levelStr, j + 1, k, 0, false);
         guiGraphics.drawString(font, levelStr, j - 1, k, 0, false);
         guiGraphics.drawString(font, levelStr, j, k + 1, 0, false);
