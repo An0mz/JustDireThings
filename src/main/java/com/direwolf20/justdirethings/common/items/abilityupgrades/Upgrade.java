@@ -21,7 +21,6 @@ public class Upgrade extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, level, tooltip, flagIn);
-        if (level == null) return;
         if (Screen.hasShiftDown()) {
             appendUpgradeDetails(stack, tooltip);
         } else {
