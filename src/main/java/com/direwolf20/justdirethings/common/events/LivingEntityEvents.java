@@ -93,6 +93,10 @@ public class LivingEntityEvents {
             }
             heldItem = player.getItemBySlot(EquipmentSlot.FEET);
             if (heldItem.getItem() instanceof ToggleableTool toggleableTool) {
+                if (toggleableTool.canUseAbility(heldItem, Ability.NEGATEFALLDAMAGE)) {
+                    event.setDistance(0.0f);
+                    return;
+                }
                 if (toggleableTool.canUseAbilityAndDurability(heldItem, Ability.JUMPBOOST)) {
                     int jumpBoost = ToggleableTool.getToolValue(heldItem, Ability.JUMPBOOST.getName());
                     event.setDistance(event.getDistance() - jumpBoost);

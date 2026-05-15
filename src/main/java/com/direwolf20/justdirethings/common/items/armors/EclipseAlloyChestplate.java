@@ -5,6 +5,7 @@ import com.direwolf20.justdirethings.common.items.armors.utils.ArmorTiers;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredTool;
+import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,6 +13,12 @@ public class EclipseAlloyChestplate extends BaseChestplate implements PoweredToo
     public EclipseAlloyChestplate() {
         super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
         registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 400));
+        registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 40));
+        registerAbility(Ability.ELYTRA);
+        registerAbility(Ability.FLIGHT);
+        registerAbility(Ability.LAVAIMMUNITY);
+        registerAbility(Ability.DEATHPROTECTION, new AbilityParams(1, 1, 1, 1, 0, 6000));
+        registerAbility(Ability.TIMEPROTECTION);
     }
 
     @Override
@@ -32,9 +39,12 @@ public class EclipseAlloyChestplate extends BaseChestplate implements PoweredToo
         return color;
     }
 
+    public static boolean isFlyEnabled(ItemStack elytraStack) {
+        return elytraStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(elytraStack, Ability.ELYTRA);
+    }
+
     @Override
     public int getMaxEnergy() {
         return 500000;
     }
 }
-

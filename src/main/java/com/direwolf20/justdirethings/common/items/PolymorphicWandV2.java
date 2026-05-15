@@ -81,6 +81,11 @@ public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickab
     }
 
     @Override
+    public boolean showBarWhenFull() {
+        return true;
+    }
+
+    @Override
     public boolean isBarVisible(ItemStack stack) {
         return isPowerBarVisible(stack);
     }

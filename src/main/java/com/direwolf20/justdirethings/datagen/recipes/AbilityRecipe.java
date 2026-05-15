@@ -97,7 +97,8 @@ public class AbilityRecipe implements SmithingRecipe {
 
     @Override
     public boolean isIncomplete() {
-        return Stream.of(template, base, addition).anyMatch(Ingredient::isEmpty);
+        // Template is intentionally empty for ability upgrades — only check base and addition
+        return Stream.of(base, addition).anyMatch(Ingredient::isEmpty);
     }
 
     @Override

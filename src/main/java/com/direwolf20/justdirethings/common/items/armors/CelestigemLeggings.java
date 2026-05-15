@@ -13,6 +13,8 @@ public class CelestigemLeggings extends BaseLeggings implements PoweredTool {
         super(ArmorTiers.CELESTIGEM, new Item.Properties().fireResistant());
         registerAbility(Ability.RUNSPEED, new AbilityParams(1, 3, 1));
         registerAbility(Ability.WALKSPEED, new AbilityParams(1, 3, 1));
+        registerAbility(Ability.SWIMSPEED, new AbilityParams(1, 3, 1));
+        registerAbility(Ability.DECOY, new AbilityParams(1, 1, 1, 1, 200, 2400));
     }
 
     @Override

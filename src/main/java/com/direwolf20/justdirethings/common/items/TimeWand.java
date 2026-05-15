@@ -147,6 +147,10 @@ public class TimeWand extends BasePoweredItem implements FluidContainingItem {
     }
 
     @Override
+    public boolean showBarWhenFull() {
+        return true;
+    }
+
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         if (level == null) return;

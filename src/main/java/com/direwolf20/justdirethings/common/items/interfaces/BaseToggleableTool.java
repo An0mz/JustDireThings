@@ -130,6 +130,12 @@ public abstract class BaseToggleableTool extends Item implements ToggleableTool 
     }
 
     @Override
+    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+        if (oldStack.is(newStack.getItem())) return false;
+        return super.shouldCauseBlockBreakReset(oldStack, newStack);
+    }
+
+    @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (canUseAbility(stack, Ability.LAVAREPAIR))
             return Helpers.doLavaRepair(stack, entity);

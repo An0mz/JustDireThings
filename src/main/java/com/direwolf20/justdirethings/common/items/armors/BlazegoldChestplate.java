@@ -14,6 +14,7 @@ public class BlazegoldChestplate extends BaseChestplate {
         super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
         registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 1200));
         registerAbility(Ability.LAVAREPAIR);
+        registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 200));
     }
 
     @Override

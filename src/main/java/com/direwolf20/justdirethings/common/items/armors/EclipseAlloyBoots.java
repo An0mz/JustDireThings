@@ -13,6 +13,8 @@ public class EclipseAlloyBoots extends BaseBoots implements PoweredTool {
         super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
         registerAbility(Ability.STEPHEIGHT);
         registerAbility(Ability.JUMPBOOST, new AbilityParams(1, 5, 1, 5));
+        registerAbility(Ability.GROUNDSTOMP, new AbilityParams(1, 5, 1, 5, 0, 100));
+        registerAbility(Ability.NEGATEFALLDAMAGE);
     }
 
     @Override

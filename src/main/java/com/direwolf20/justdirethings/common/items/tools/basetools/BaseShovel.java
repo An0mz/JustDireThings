@@ -164,4 +164,10 @@ public class BaseShovel extends ShovelItem implements ToggleableTool, LeftClicka
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return false;
     }
+
+    @Override
+    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+        if (oldStack.is(newStack.getItem())) return false;
+        return super.shouldCauseBlockBreakReset(oldStack, newStack);
+    }
 }

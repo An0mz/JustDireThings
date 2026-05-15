@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Anomz\\\\Documents\\\\GitHub\\\\JustDireThings\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(Get-ChildItem -Recurse \"C:\\\\Users\\\\Anomz\\\\Downloads\\\\JustDireThings-1.21.1\\\\JustDireThings-1.21.1\\\\src\\\\main\\\\generated\" -Filter \"*time_crystal*\")",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(Get-ChildItem -Recurse \"C:\\\\Users\\\\Anomz\\\\Documents\\\\GitHub\\\\JustDireThings\\\\src\\\\main\\\\resources\\\\data\\\\justdirethings\")",
+      "Bash(*)",
+      "Bash(git -C \"C:\\\\Users\\\\Anomz\\\\Documents\\\\GitHub\\\\JustDireThings\" status --short)",
+      "WebFetch(domain:maven.blamejared.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}

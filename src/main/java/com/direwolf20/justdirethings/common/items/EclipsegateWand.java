@@ -13,6 +13,11 @@ public class EclipsegateWand extends BaseToggleableTool implements PoweredItem, 
     }
 
     @Override
+    public boolean showBarWhenFull() {
+        return true;
+    }
+
+    @Override
     public int getMaxEnergy() {
         return 100000;
     }

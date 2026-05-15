@@ -10,4 +10,9 @@ public class VoidshiftWand extends BaseToggleableTool implements PoweredItem, Le
         registerAbility(Ability.AIRBURST, new AbilityParams(1, 5, 1, 1));
         registerAbility(Ability.VOIDSHIFT, new AbilityParams(1, 15, 1, 15));
     }
+
+    @Override
+    public boolean showBarWhenFull() {
+        return true;
+    }
 }

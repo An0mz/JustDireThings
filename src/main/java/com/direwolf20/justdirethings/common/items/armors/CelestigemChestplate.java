@@ -5,6 +5,7 @@ import com.direwolf20.justdirethings.common.items.armors.utils.ArmorTiers;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredTool;
+import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,6 +13,8 @@ public class CelestigemChestplate extends BaseChestplate implements PoweredTool 
     public CelestigemChestplate() {
         super(ArmorTiers.CELESTIGEM, new Item.Properties().fireResistant());
         registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 600));
+        registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 100));
+        registerAbility(Ability.ELYTRA);
     }
 
     @Override
@@ -31,5 +34,8 @@ public class CelestigemChestplate extends BaseChestplate implements PoweredTool 
             return super.getBarColor(stack);
         return color;
     }
-}
 
+    public static boolean isFlyEnabled(ItemStack elytraStack) {
+        return elytraStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(elytraStack, Ability.ELYTRA);
+    }
+}
