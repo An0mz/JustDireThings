@@ -3,12 +3,17 @@ package com.direwolf20.justdirethings.common.items;
 import com.direwolf20.justdirethings.common.items.interfaces.*;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.util.MagicHelpers;
+import com.direwolf20.justdirethings.util.PolymorphicEntitySanitizer;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -30,8 +35,8 @@ public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickab
         super(new Properties()
                 .fireResistant()
                 .stacksTo(1));
-        registerAbility(Ability.LAVAREPAIR);
         registerAbility(Ability.POLYMORPH_RANDOM);
+        registerAbility(Ability.POLYMORPH_TARGET);
     }
 
     @Override
@@ -70,6 +75,11 @@ public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickab
     }
 
     @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        return InteractionResult.PASS;
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
@@ -78,6 +88,25 @@ public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickab
                 return InteractionResultHolder.fail(itemStack);
         }
         return super.use(level, player, hand);
+    }
+
+    public static void savePolymorphTarget(ItemStack stack, Player player, LivingEntity target) {
+        if (target instanceof Mob mob) {
+            CompoundTag tag = stack.getOrCreateTag();
+            tag.putString("polymorphTargetType", EntityType.getKey(mob.getType()).toString());
+
+            CompoundTag fullNbt = new CompoundTag();
+            mob.save(fullNbt);
+            tag.put("polymorphCosmeticData", PolymorphicEntitySanitizer.cosmeticOnly(fullNbt));
+
+            player.displayClientMessage(
+                    Component.translatable("justdirethings.polymorphset", mob.getType().getDescription()),
+                    true);
+        } else {
+            player.displayClientMessage(
+                    Component.translatable("justdirethings.invalidpolymorphentity"),
+                    true);
+        }
     }
 
     @Override
@@ -110,5 +139,14 @@ public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickab
         tooltip.add(Component.translatable("justdirethings.polymorphicfluidamt",
                 MagicHelpers.formatted(fluidHandler.getFluidInTank(0).getAmount()),
                 MagicHelpers.formatted(fluidHandler.getTankCapacity(0))).withStyle(ChatFormatting.GREEN));
+
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains("polymorphTargetType")) {
+            EntityType<?> savedType = EntityType.byString(tag.getString("polymorphTargetType")).orElse(null);
+            if (savedType != null) {
+                tooltip.add(Component.translatable("justdirethings.polymorphset", savedType.getDescription())
+                        .withStyle(ChatFormatting.AQUA));
+            }
+        }
     }
 }

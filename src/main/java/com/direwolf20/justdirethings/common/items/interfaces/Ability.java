@@ -133,7 +133,10 @@ public enum Ability {
     PHASE(SettingType.SLIDER, 1, 50000, UseType.PASSIVE, BindingType.CUSTOM_ONLY,
             Registration.UPGRADE_PHASE),
     TIMEPROTECTION(SettingType.SLIDER, 1, 5000, UseType.PASSIVE, BindingType.CUSTOM_ONLY,
-            Registration.UPGRADE_TIMEPROTECTION);
+            Registration.UPGRADE_TIMEPROTECTION),
+    POLYMORPH_TARGET(SettingType.TOGGLE, 10, 1000, UseType.USE, BindingType.LEFT_AND_CUSTOM,
+            AbilityMethods::polymorphTarget, false,
+            new ResourceLocation(JustDireThings.MODID, "textures/gui/overlay/polymorph_target.png"));
 
     public enum SettingType {
         TOGGLE,

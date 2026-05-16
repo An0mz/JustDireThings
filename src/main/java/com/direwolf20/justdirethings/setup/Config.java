@@ -76,6 +76,8 @@ public class Config {
     public static final String CATEGORY_POLYMORPHIC_WAND_V2 = "polymorphic_wand_v2";
     public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_V2_MAX_FE;
     public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_V2_MAX_FLUID;
+    public static ForgeConfigSpec.IntValue RANDOM_POLYMORPH_COST;
+    public static ForgeConfigSpec.IntValue TARGET_POLYMORPH_COST;
 
     public static final String CATEGORY_PORTAL_GUN = "portal_gun";
     public static ForgeConfigSpec.IntValue PORTAL_GUN_MAX_FE;
@@ -292,6 +294,10 @@ public class Config {
                 .defineInRange("polymorphic_wand_v2_max_fe", 200000, 1, Integer.MAX_VALUE);
         POLYMORPHIC_WAND_V2_MAX_FLUID = COMMON_BUILDER.comment("Maximum mB of polymorphic fluid the Polymorphic Wand V2 can hold")
                 .defineInRange("polymorphic_wand_v2_max_fluid", 32000, 1, Integer.MAX_VALUE);
+        RANDOM_POLYMORPH_COST = COMMON_BUILDER.comment("mB of polymorphic fluid consumed per random polymorph")
+                .defineInRange("random_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
+        TARGET_POLYMORPH_COST = COMMON_BUILDER.comment("mB of polymorphic fluid consumed per targeted polymorph")
+                .defineInRange("target_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
     }
 }

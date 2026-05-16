@@ -198,6 +198,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Ability.SMOKER.getLocalization(), "Auto Smoker");
         add(Ability.LAVAREPAIR.getLocalization(), "Lava Repair");
         add(Ability.POLYMORPH_RANDOM.getLocalization(), "Polymorph Random");
+        add(Ability.POLYMORPH_TARGET.getLocalization(), "Polymorph Target");
         add(Ability.CAUTERIZEWOUNDS.getLocalization(), "Cauterize Wounds");
         add(Ability.HAMMER.getLocalization(), "Hammer");
         add(Ability.HAMMER.getLocalization() + "_off", "Hammer: Disabled");
@@ -245,7 +246,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.TimeWand.get(), "Time Wand");
         add(Registration.PortalGun.get(), "Portal Gun");
         add(Registration.PortalGunV2.get(), "Advanced Portal Gun");
-        add(Registration.PolymorphicWandV2.get(), "Polymorphic Wand V2");
+        add(Registration.PolymorphicWandV2.get(), "Advanced Polymorphic Wand");
         add("entity.justdirethings.time_wand_entity", "Time Wand Effect");
         add("entity.justdirethings.portal_projectile", "Portal Projectile");
         add("entity.justdirethings.portal_entity", "DirePortal");
@@ -331,6 +332,9 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.settingscopied", "Settings Copied");
         add("justdirethings.settingspasted", "Settings Pasted");
         add("justdirethings.polymorphicfluidamt", "Polymorphic Fluid: %s / %s mB");
+        add("justdirethings.polymorphset", "Polymorph Target: %s");
+        add("justdirethings.invalidpolymorphentity", "Invalid Entity for Polymorphing");
+        add("justdirethings.polymorphsuccess", "Transformed into: %s");
         add("justdirethings.hint.dropinwater", "Drop in water to restore");
 
 

@@ -5,8 +5,10 @@ import com.direwolf20.justdirethings.common.blockentities.EclipseGateBE;
 import com.direwolf20.justdirethings.common.network.data.ClientSoundPayload;
 import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
 import com.direwolf20.justdirethings.datagen.JustDireEntityTags;
+import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MiscTools;
+import com.direwolf20.justdirethings.util.PolymorphicEntitySanitizer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,8 +25,11 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -38,7 +43,9 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -582,7 +589,123 @@ public class AbilityMethods {
     }
 
     public static boolean polymorphRandom(Level level, Player player, ItemStack itemStack) {
-        return false;
+        if (level.isClientSide()) return false;
+        if (!(itemStack.getItem() instanceof ToggleableTool toggleableTool
+                && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.POLYMORPH_RANDOM)))
+            return false;
+
+        Entity entity = MiscTools.getEntityLookedAt(player, 4);
+        if (!(entity instanceof Mob mob)) return false;
+
+        return polymorphRandom(level, player, itemStack, mob);
+    }
+
+    public static boolean polymorphRandom(Level level, Player player, ItemStack itemStack, Mob mob) {
+        if (level.isClientSide()) return false;
+        if (!(itemStack.getItem() instanceof ToggleableTool toggleableTool
+                && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.POLYMORPH_RANDOM)))
+            return false;
+
+        boolean sourceIsMonster = mob.getType().getCategory() == MobCategory.MONSTER;
+        List<EntityType<?>> mobTypes = ForgeRegistries.ENTITY_TYPES.getValues().stream()
+                .filter(et -> et.getCategory() != MobCategory.MISC)
+                .filter(et -> et != EntityType.WITHER && et != EntityType.ENDER_DRAGON)
+                .filter(et -> sourceIsMonster ? et.getCategory() == MobCategory.MONSTER : et.getCategory() != MobCategory.MONSTER)
+                .collect(Collectors.toList());
+        if (mobTypes.isEmpty()) return false;
+
+        Mob newMob = null;
+        EntityType<?> newType = null;
+        for (int attempts = 0; attempts < 10; attempts++) {
+            EntityType<?> candidate = mobTypes.get(level.random.nextInt(mobTypes.size()));
+            Entity created = candidate.create(level);
+            if (created instanceof Mob m) {
+                newType = candidate;
+                newMob = m;
+                break;
+            }
+            if (created != null) created.discard();
+        }
+        if (newMob == null || newType == null) return false;
+
+        int fuelAmt = Config.RANDOM_POLYMORPH_COST.get();
+        if (!FluidContainingItem.hasEnoughFluid(itemStack, fuelAmt)) return false;
+
+        ForgeEventFactory.onFinalizeSpawn(newMob, (ServerLevel) level,
+                ((ServerLevel) level).getCurrentDifficultyAt(player.blockPosition()),
+                MobSpawnType.SPAWNER, null, null);
+
+        newMob.moveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
+        newMob.setHealth(newMob.getMaxHealth());
+        boolean added = ((ServerLevel) level).addFreshEntity(newMob);
+        if (!added) return false;
+
+        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 0.5F, 0.75F);
+        mob.discard();
+        FluidContainingItem.consumeFluid(itemStack, fuelAmt);
+        damageTool(itemStack, player, Ability.POLYMORPH_RANDOM);
+        player.displayClientMessage(
+                net.minecraft.network.chat.Component.translatable("justdirethings.polymorphsuccess", newType.getDescription()),
+                true);
+        return true;
+    }
+
+    public static boolean polymorphTarget(Level level, Player player, ItemStack itemStack) {
+        if (level.isClientSide()) return false;
+        if (!(itemStack.getItem() instanceof ToggleableTool toggleableTool
+                && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.POLYMORPH_TARGET)))
+            return false;
+
+        Entity entity = MiscTools.getEntityLookedAt(player, 4);
+        if (!(entity instanceof Mob mob)) return false;
+
+        return polymorphTarget(level, player, itemStack, mob);
+    }
+
+    public static boolean polymorphTarget(Level level, Player player, ItemStack itemStack, Mob mob) {
+        if (level.isClientSide()) return false;
+        if (!(itemStack.getItem() instanceof ToggleableTool toggleableTool
+                && toggleableTool.canUseAbilityAndDurability(itemStack, Ability.POLYMORPH_TARGET)))
+            return false;
+
+        CompoundTag stackTag = itemStack.getOrCreateTag();
+        if (!stackTag.contains("polymorphTargetType")) {
+            player.displayClientMessage(net.minecraft.network.chat.Component.translatable("justdirethings.invalidpolymorphentity"), true);
+            return false;
+        }
+        EntityType<?> newType = EntityType.byString(stackTag.getString("polymorphTargetType")).orElse(null);
+        if (newType == null) return false;
+
+        int fuelAmt = Config.TARGET_POLYMORPH_COST.get();
+        if (!FluidContainingItem.hasEnoughFluid(itemStack, fuelAmt)) return false;
+
+        Mob newMob = (Mob) newType.create(level);
+        if (newMob == null) return false;
+
+        ForgeEventFactory.onFinalizeSpawn(newMob, (ServerLevel) level,
+                ((ServerLevel) level).getCurrentDifficultyAt(player.blockPosition()),
+                MobSpawnType.SPAWNER, null, null);
+
+        CompoundTag cosmetic = stackTag.getCompound("polymorphCosmeticData");
+        if (!cosmetic.isEmpty()) {
+            newMob.readAdditionalSaveData(cosmetic);
+        }
+
+        newMob.moveTo(mob.getX(), mob.getY(), mob.getZ(), mob.getYRot(), mob.getXRot());
+        newMob.setHealth(newMob.getMaxHealth());
+        boolean added = ((ServerLevel) level).addFreshEntity(newMob);
+        if (!added) return false;
+
+        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 0.5F, 0.75F);
+        mob.discard();
+        FluidContainingItem.consumeFluid(itemStack, fuelAmt);
+        damageTool(itemStack, player, Ability.POLYMORPH_TARGET);
+        player.displayClientMessage(
+                net.minecraft.network.chat.Component.translatable("justdirethings.polymorphsuccess", newType.getDescription()),
+                true);
+        return true;
     }
 
 }

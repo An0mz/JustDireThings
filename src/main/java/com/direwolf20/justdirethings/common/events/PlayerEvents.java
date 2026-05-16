@@ -1,14 +1,20 @@
 package com.direwolf20.justdirethings.common.events;
 
+import com.direwolf20.justdirethings.common.items.PolymorphicWandV2;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.AbilityMethods;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredTool;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Set;
@@ -56,6 +62,30 @@ public class PlayerEvents {
             }
             if (targetSpeed != event.getOriginalSpeed())
                 event.setNewSpeed(targetSpeed);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        ItemStack stack = event.getItemStack();
+        if (!(stack.getItem() instanceof PolymorphicWandV2)) return;
+        if (!(event.getTarget() instanceof Mob mob)) return;
+
+        event.setCanceled(true);
+        event.setCancellationResult(InteractionResult.SUCCESS);
+
+        Player player = event.getEntity();
+        if (player.isShiftKeyDown()) {
+            if (!player.level().isClientSide()) {
+                PolymorphicWandV2.savePolymorphTarget(stack, player, mob);
+            }
+        } else if (!player.level().isClientSide()) {
+            CompoundTag tag = stack.getOrCreateTag();
+            if (tag.contains("polymorphTargetType")) {
+                AbilityMethods.polymorphTarget(player.level(), player, stack, mob);
+            } else {
+                AbilityMethods.polymorphRandom(player.level(), player, stack, mob);
+            }
         }
     }
 }
