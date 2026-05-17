@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.events;
 
+import com.direwolf20.justdirethings.common.items.PolymorphicWand;
 import com.direwolf20.justdirethings.common.items.PolymorphicWandV2;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.AbilityMethods;
@@ -68,24 +69,27 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();
-        if (!(stack.getItem() instanceof PolymorphicWandV2)) return;
         if (!(event.getTarget() instanceof Mob mob)) return;
-
-        event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.SUCCESS);
-
         Player player = event.getEntity();
-        if (player.isShiftKeyDown()) {
-            if (!player.level().isClientSide()) {
-                PolymorphicWandV2.savePolymorphTarget(stack, player, mob);
+
+        if (stack.getItem() instanceof PolymorphicWandV2) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            if (player.isShiftKeyDown()) {
+                if (!player.level().isClientSide())
+                    PolymorphicWandV2.savePolymorphTarget(stack, player, mob);
+            } else if (!player.level().isClientSide()) {
+                CompoundTag tag = stack.getOrCreateTag();
+                if (tag.contains("polymorphTargetType"))
+                    AbilityMethods.polymorphTarget(player.level(), player, stack, mob);
+                else
+                    AbilityMethods.polymorphRandom(player.level(), player, stack, mob);
             }
-        } else if (!player.level().isClientSide()) {
-            CompoundTag tag = stack.getOrCreateTag();
-            if (tag.contains("polymorphTargetType")) {
-                AbilityMethods.polymorphTarget(player.level(), player, stack, mob);
-            } else {
+        } else if (stack.getItem() instanceof PolymorphicWand) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            if (!player.level().isClientSide())
                 AbilityMethods.polymorphRandom(player.level(), player, stack, mob);
-            }
         }
     }
 }

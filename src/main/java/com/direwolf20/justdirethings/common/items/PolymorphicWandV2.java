@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.common.items.interfaces.*;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.util.MagicHelpers;
 import com.direwolf20.justdirethings.util.PolymorphicEntitySanitizer;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -76,6 +77,14 @@ public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickab
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        if (hand != InteractionHand.MAIN_HAND || target.level().isClientSide()) return InteractionResult.PASS;
+        if (!(target instanceof Mob mob)) return InteractionResult.PASS;
+        if (player.isShiftKeyDown()) {
+            savePolymorphTarget(stack, player, target);
+            return InteractionResult.CONSUME;
+        }
+        if (AbilityMethods.polymorphTarget(target.level(), player, stack, mob)) return InteractionResult.CONSUME;
+        if (AbilityMethods.polymorphRandom(target.level(), player, stack, mob)) return InteractionResult.CONSUME;
         return InteractionResult.PASS;
     }
 

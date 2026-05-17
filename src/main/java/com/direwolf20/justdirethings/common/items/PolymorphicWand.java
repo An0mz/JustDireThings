@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -52,6 +53,11 @@ public class PolymorphicWand extends BaseToggleableTool implements LeftClickable
     }
 
     @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        return InteractionResult.PASS;
+    }
+
+    @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         Level level = player.level();
         if (level.isClientSide) return true;
@@ -72,6 +78,21 @@ public class PolymorphicWand extends BaseToggleableTool implements LeftClickable
                 return InteractionResultHolder.fail(itemStack);
         }
         return super.use(level, player, hand);
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack stack) {
+        return isFluidBarVisible(stack);
+    }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        return getFluidBarWidth(stack);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return getFluidBarColor(stack);
     }
 
     @Override

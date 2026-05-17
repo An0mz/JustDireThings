@@ -2,7 +2,7 @@
   "parent": "minecraft:item/handheld",
   "overrides": [
     {
-      "model": "justdirethings:item/polymorphic_wand_active",
+      "model": "justdirethings:item/polymorphic_wand",
       "predicate": {
         "justdirethings:enabled": 1.0
       }
