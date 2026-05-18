@@ -12,6 +12,7 @@ import com.direwolf20.justdirethings.client.entityrenders.TimeWandEntityRenderer
 import com.direwolf20.justdirethings.client.entityrenders.PortalEntityRenderer;
 import com.direwolf20.justdirethings.client.itemcustomrenders.FluidbarDecorator;
 import com.direwolf20.justdirethings.client.renderers.shader.DireRenderTypes;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import com.direwolf20.justdirethings.client.events.EventKeyInput;
@@ -208,6 +209,7 @@ public class ClientSetup {
         event.registerBlockEntityRenderer(Registration.ParadoxMachineBE.get(), ParadoxMachineBER::new);
 
         //Entities
+        event.registerEntityRenderer(Registration.ParadoxEntity.get(), NoopRenderer::new);
         event.registerEntityRenderer(Registration.CreatureCatcherEntity.get(), CreatureCatcherEntityRender::new);
         event.registerEntityRenderer(Registration.TimeWandEntity.get(), TimeWandEntityRenderer::new);
         event.registerEntityRenderer(Registration.PortalEntity.get(), PortalEntityRenderer::new);

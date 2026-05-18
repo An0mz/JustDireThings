@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.network.handler;
 import com.direwolf20.justdirethings.common.blockentities.ParadoxMachineBE;
 import com.direwolf20.justdirethings.common.containers.basecontainers.BaseMachineContainer;
 import com.direwolf20.justdirethings.common.network.data.ParadoxMachinePayload;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;
@@ -18,7 +19,12 @@ public class ParadoxMachinePacket {
             if (container instanceof BaseMachineContainer baseMachineContainer &&
                     baseMachineContainer.baseMachineBE instanceof ParadoxMachineBE be) {
                 switch (payload.action()) {
-                    case 0 -> be.snapshotArea();
+                    case 0 -> {
+                        be.snapshotArea();
+                        int blocks = be.snapshotData.contains("blocks") ? be.snapshotData.getList("blocks", 10).size() : 0;
+                        int entities = be.snapshotData.contains("entities") ? be.snapshotData.getList("entities", 10).size() : 0;
+                        sender.displayClientMessage(Component.translatable("justdirethings.paradox.snapshot_accepted", blocks, entities), true);
+                    }
                     case 1 -> be.setRenderParadox(payload.renderParadox(), payload.targetType());
                     case 2 -> be.setAreaOnly(payload.xRadius(), payload.yRadius(), payload.zRadius());
                 }

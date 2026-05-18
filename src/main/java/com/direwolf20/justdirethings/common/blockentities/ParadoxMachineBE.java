@@ -338,7 +338,9 @@ public class ParadoxMachineBE extends BaseMachineBE implements PoweredMachineBE,
 
     public boolean isBlockPosValid(ServerLevel serverLevel, BlockPos blockPos) {
         BlockState blockState = serverLevel.getBlockState(blockPos);
-        return blockState.is(JustDireBlockTags.PARADOX_ALLOW);
+        if (blockState.isAir()) return false;
+        if (blockState.is(JustDireBlockTags.PARADOX_DENY)) return false;
+        return true;
     }
 
     public Map<BlockPos, BlockState> getBlocksFromNBT() {

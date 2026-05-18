@@ -336,6 +336,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add("justdirethings.invalidpolymorphentity", "Invalid Entity for Polymorphing");
         add("justdirethings.polymorphsuccess", "Transformed into: %s");
         add("justdirethings.hint.dropinwater", "Drop in water to restore");
+        add("justdirethings.paradox.snapshot_accepted", "Snapshot taken: %d blocks, %d entities");
 
 
         //Buttons

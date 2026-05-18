@@ -341,6 +341,7 @@
   "justdirethings.orescanner.detailtext": "Show the location of nearby ores",
   "justdirethings.orexray.detailtext": "See all nearby ores",
   "justdirethings.orexray.flavortext": "Thats Overpowered!!",
+  "justdirethings.paradox.snapshot_accepted": "Snapshot taken: %d blocks, %d entities",
   "justdirethings.paradoxenergy": "Paradox Energy: %s/%s",
   "justdirethings.phase.detailtext": "Walk through walls",
   "justdirethings.pocketgeneratorburntime": "Burn Time: %f / %f",

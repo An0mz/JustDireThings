@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -39,6 +41,11 @@ public class ParadoxMachine extends BaseMachineBlock {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         BlockEntity te = level.getBlockEntity(blockPos);
         if (!(te instanceof ParadoxMachineBE)) return InteractionResult.FAIL;
+        // Allow bucket fill/drain before opening the GUI
+        if (FluidUtil.getFluidHandler(player.getItemInHand(hand)).isPresent()) {
+            if (FluidUtil.interactWithFluidHandler(player, hand, level, blockPos, hit.getDirection()))
+                return InteractionResult.sidedSuccess(level.isClientSide);
+        }
         NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
                 (windowId, playerInventory, playerEntity) -> new ParadoxMachineContainer(windowId, playerInventory, blockPos),
                 Component.translatable("")), buf -> buf.writeBlockPos(blockPos));

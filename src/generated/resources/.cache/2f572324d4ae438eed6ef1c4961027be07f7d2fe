@@ -1,9 +1,10 @@
-// 1.20.1	2026-05-12T13:17:56.921678	JustDireThings Tags
+// 1.20.1	2026-05-18T11:41:44.85823	JustDireThings Tags
 82c72c3a9660a4dcf836d04e2ee8acd9bdd5aefd data/forge/tags/blocks/ores.json
 6b759feacfe6972f14253353017194b6d77858d7 data/justdirethings/tags/blocks/eclipsegate_deny.json
 31c8bfc0be2cf25004f962a2e7bb03b8fe7da206 data/justdirethings/tags/blocks/lawnmowerable.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/blocks/noautoclick.json
-cb28339548a9f5c43f81c4715df14c62d24020ad data/justdirethings/tags/blocks/paradox_allow.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/blocks/paradox_allow.json
+f26d3813832f7b1b87e5c5fe8f22d0e73249e302 data/justdirethings/tags/blocks/paradox_deny.json
 cfab2ab481bf476a645d326b87627918009b9e50 data/justdirethings/tags/blocks/phase_deny.json
 b73bf681aa4023a1ac69623485bbec13846a282a data/justdirethings/tags/blocks/swapper_deny.json
 6b759feacfe6972f14253353017194b6d77858d7 data/justdirethings/tags/blocks/tick_speed_deny.json

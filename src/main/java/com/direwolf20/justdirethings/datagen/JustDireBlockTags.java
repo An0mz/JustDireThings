@@ -25,6 +25,7 @@ public class JustDireBlockTags extends BlockTagsProvider {
     public static final TagKey<Block> LAWNMOWERABLE = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "lawnmowerable"));
     public static final TagKey<Block> NO_AUTO_CLICK = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "noautoclick"));
     public static final TagKey<Block> PARADOX_ALLOW = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "paradox_allow"));
+    public static final TagKey<Block> PARADOX_DENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "paradox_deny"));
     public static final TagKey<Block> SWAPPERDENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "swapper_deny"));
     public static final TagKey<Block> ECLISEGATEDENY = BlockTags.create(new ResourceLocation(JustDireThings.MODID, "eclipsegate_deny"));
     public static final TagKey<Block> NO_MOVE = BlockTags.create(new ResourceLocation("forge", "relocation_not_supported"));
@@ -102,8 +103,13 @@ public class JustDireBlockTags extends BlockTagsProvider {
                 .add(Registration.GooSoil_Tier2.get())
                 .add(Registration.GooSoil_Tier3.get())
                 .add(Registration.GooSoil_Tier4.get());
-        tag(PARADOX_ALLOW)
-                .addTag(net.minecraftforge.common.Tags.Blocks.ORES);
+        tag(PARADOX_ALLOW);
+        tag(PARADOX_DENY)
+                .add(Blocks.BEDROCK)
+                .add(Blocks.END_PORTAL_FRAME)
+                .add(Blocks.END_PORTAL)
+                .add(Blocks.NETHER_PORTAL)
+                .addTag(BlockTags.PORTALS);
         tag(NO_AUTO_CLICK);
         tag(SWAPPERDENY)
                 .add(Blocks.PISTON_HEAD)
