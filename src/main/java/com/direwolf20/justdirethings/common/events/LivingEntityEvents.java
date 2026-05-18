@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.common.events;
 
 import com.direwolf20.justdirethings.common.items.TotemOfDeathRecall;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.Helpers;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.setup.Registration;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -33,16 +35,22 @@ import com.direwolf20.justdirethings.common.items.armors.utils.ArmorTiers;
 public class LivingEntityEvents {
 
     @SubscribeEvent
-    public static void blockDamage(LivingDamageEvent e) {
+    public static void blockAttack(LivingAttackEvent e) {
         LivingEntity target = e.getEntity();
-        if (target instanceof Player player) {
-            ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
-            if (chestplate.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.hasAbility(Ability.INVULNERABILITY)) {
-                int activeCooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, true);
-                if (activeCooldown == -1) return;
-                player.playNotifySound(SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (!(target instanceof Player player)) return;
+        ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chestplate.getItem() instanceof ToggleableTool lavaToggleable && lavaToggleable.canUseAbilityAndDurability(chestplate, Ability.LAVAIMMUNITY)) {
+            if (e.getSource().is(DamageTypes.LAVA) || e.getSource().is(DamageTypes.IN_FIRE) || e.getSource().is(DamageTypes.ON_FIRE)) {
                 e.setCanceled(true);
+                Helpers.damageTool(chestplate, player, Ability.LAVAIMMUNITY);
+                return;
             }
+        }
+        if (chestplate.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.hasAbility(Ability.INVULNERABILITY)) {
+            int activeCooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, true);
+            if (activeCooldown == -1) return;
+            player.playNotifySound(SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.0F);
+            e.setCanceled(true);
         }
     }
 
@@ -167,6 +175,17 @@ public class LivingEntityEvents {
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
+            int deathProtCooldown = ToggleableTool.getAnyCooldown(chestplate, Ability.DEATHPROTECTION);
+            if (deathProtCooldown == -1 && chestplate.getItem() instanceof ToggleableTool tt && tt.canUseAbilityAndDurability(chestplate, Ability.DEATHPROTECTION)) {
+                AbilityParams params = tt.getAbilityParams(Ability.DEATHPROTECTION);
+                ToggleableTool.addCooldown(chestplate, Ability.DEATHPROTECTION, params.cooldown, false);
+                player.playNotifySound(SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+                Helpers.damageTool(chestplate, player, Ability.DEATHPROTECTION);
+                player.setHealth(10.0F);
+                event.setCanceled(true);
+                return;
+            }
             // Check player's inventory for the totem
             ItemStack totemStack = findTotem(player);
             if (!totemStack.isEmpty()) {

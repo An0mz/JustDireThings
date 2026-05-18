@@ -1,11 +1,16 @@
 package com.direwolf20.justdirethings.common.items.resources;
 
+import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.Helpers;
+import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -22,6 +27,13 @@ public class TimeCrystal extends Item {
     @Override
     public void inventoryTick(ItemStack itemStack, Level world, Entity entity, int itemSlot, boolean isSelected) {
         if (world.isClientSide) return;
+        if (entity instanceof Player player) {
+            ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (chestplate.getItem() instanceof ToggleableTool tt && tt.canUseAbilityAndDurability(chestplate, Ability.TIMEPROTECTION)) {
+                Helpers.damageTool(chestplate, player, Ability.TIMEPROTECTION);
+                return;
+            }
+        }
         if (entity instanceof LivingEntity livingEntity) {
             if (world.random.nextFloat() < 0.005f) {
                 boolean applySlowness = world.random.nextBoolean();

@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,6 +26,32 @@ import static com.direwolf20.justdirethings.common.items.interfaces.ToggleableTo
 import static com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool.getToolValue;
 
 public class PlayerEvents {
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide()) return;
+        Player player = event.player;
+        ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
+        boolean hasFlight = chestplate.getItem() instanceof ToggleableTool toggleableTool
+                && toggleableTool.canUseAbilityAndDurability(chestplate, Ability.FLIGHT);
+        if (hasFlight) {
+            if (!player.getAbilities().mayfly) {
+                player.getAbilities().mayfly = true;
+                player.onUpdateAbilities();
+            }
+        } else if (!player.isCreative() && !player.isSpectator()) {
+            if (player.getAbilities().mayfly) {
+                player.getAbilities().mayfly = false;
+                player.getAbilities().flying = false;
+                player.onUpdateAbilities();
+            }
+        }
+        if (chestplate.getItem() instanceof ToggleableTool lavaToggleable
+                && lavaToggleable.canUseAbilityAndDurability(chestplate, Ability.LAVAIMMUNITY)
+                && player.isOnFire()) {
+            player.clearFire();
+        }
+    }
 
     @SubscribeEvent
     public static void BreakSpeed(PlayerEvent.BreakSpeed event) {
