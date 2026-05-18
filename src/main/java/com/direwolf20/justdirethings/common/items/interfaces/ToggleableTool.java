@@ -155,9 +155,10 @@ public interface ToggleableTool extends ToggleableItem {
         if (canUseAbility(pStack, Ability.SKYSWEEPER) && pStack.isCorrectToolForDrops(pState)) {
             Set<BlockPos> newPos = new HashSet<>();
             for (BlockPos blockPos : breakBlockPositions) {
-                BlockState blockState = pLevel.getBlockState(blockPos);
-                if (fallingBlockCondition.test(blockState))
-                    newPos.addAll(findLikeBlocks(pLevel, blockState, blockPos, Direction.UP, 64, 2)); //Todo: Balance and Config?
+                BlockPos abovePos = blockPos.above();
+                BlockState blockStateAbove = pLevel.getBlockState(abovePos);
+                if (fallingBlockCondition.test(blockStateAbove))
+                    newPos.addAll(findLikeBlocks(pLevel, blockStateAbove, abovePos, Direction.UP, 64, 2)); //Todo: Balance and Config?
             }
             breakBlockPositions.addAll(newPos);
         }

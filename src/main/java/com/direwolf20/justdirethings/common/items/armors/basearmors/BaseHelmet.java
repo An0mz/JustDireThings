@@ -110,4 +110,8 @@ public class BaseHelmet extends ArmorItem implements ToggleableTool, LeftClickab
         return enchantment != Enchantments.MENDING;
     }
 
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return slotChanged;
+    }
 }

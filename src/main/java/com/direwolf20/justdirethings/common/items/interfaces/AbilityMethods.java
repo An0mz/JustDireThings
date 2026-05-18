@@ -299,10 +299,14 @@ public class AbilityMethods {
     }
 
     public static boolean lawnmower(Level level, Player player, ItemStack itemStack) {
+        return lawnmower(level, player, itemStack, player.getOnPos());
+    }
+
+    public static boolean lawnmower(Level level, Player player, ItemStack itemStack, BlockPos startPos) {
         if (!level.isClientSide) {
             List<TagKey<Block>> tags = new ArrayList<>();
             tags.add(JustDireBlockTags.LAWNMOWERABLE);
-            Set<BlockPos> breakBlocks = findTaggedBlocks(level, tags, player.getOnPos(), 64, 5); //TODO Balance/Config?
+            Set<BlockPos> breakBlocks = findTaggedBlocks(level, tags, startPos, 64, 5); //TODO Balance/Config?
             List<ItemStack> drops = new ArrayList<>();
             for (BlockPos breakPos : breakBlocks) {
                 if (testUseTool(itemStack, Ability.LAWNMOWER) < 0)
@@ -351,8 +355,8 @@ public class AbilityMethods {
     }
 
     public static boolean runSpeed(Level level, Player player, ItemStack itemStack) {
-        if (player.isSprinting() && !player.isFallFlying() && player.zza > 0F && !player.isInWaterOrBubble()) {
-            float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.RUNSPEED.getName()) / 10;
+        if (player.isSprinting() && !player.isFallFlying() && player.zza > 0F && !player.isInWater()) {
+            float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.RUNSPEED.getName()) / 25;
             if (!player.onGround())
                 speed = speed / 4;
             player.moveRelative(speed, new Vec3(0, 0, 1));
@@ -361,8 +365,8 @@ public class AbilityMethods {
     }
 
     public static boolean walkSpeed(Level level, Player player, ItemStack itemStack) {
-        if (!player.isSprinting() && player.fallDistance <= 0 && !player.isFallFlying() && player.zza > 0F && !player.isInWaterOrBubble()) {
-            float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.WALKSPEED.getName()) / 10;
+        if (!player.isSprinting() && player.fallDistance <= 0 && !player.isFallFlying() && player.zza > 0F && !player.isInWater()) {
+            float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.WALKSPEED.getName()) / 25;
             if (!player.onGround())
                 speed = speed / 4;
             player.moveRelative(speed, new Vec3(0, 0, 1));
@@ -391,9 +395,10 @@ public class AbilityMethods {
     }
 
     public static boolean swimSpeed(Level level, Player player, ItemStack itemStack) {
-        if (player.fallDistance <= 0 && !player.isFallFlying() && player.zza > 0F && player.isInWaterOrBubble()) {
+        if (!player.isFallFlying() && player.zza > 0F && player.isInWater()) {
             float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.SWIMSPEED.getName()) / 50;
-            player.moveRelative(speed, new Vec3(0, 0, 1));
+            Vec3 lookVec = player.getLookAngle();
+            player.setDeltaMovement(player.getDeltaMovement().add(lookVec.scale(speed)));
         }
         return false;
     }

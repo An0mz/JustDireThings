@@ -145,6 +145,10 @@ public class JustDireItemModels extends ItemModelProvider {
             String path = tool.getId().getPath();
             // Skip items whose textures aren't available yet; their models are static in src/main/resources
             if (path.equals("polymorphic_wand_v2")) continue;
+            if (path.equals("polymorphic_wand")) {
+                registerEnabledTextureItem(path, path);
+                continue;
+            }
             registerEnabledTextureItem(path);
         }
     }
@@ -186,15 +190,19 @@ public class JustDireItemModels extends ItemModelProvider {
         }
     }
 
-    public void registerEnabledTextureItem(String path) {        ResourceLocation enabledModelPath = modLoc("item/" + path + "_active"); // Path to your enabled model
-        ResourceLocation defaultModelPath = modLoc("item/" + path); // Path to your default model
+    public void registerEnabledTextureItem(String path) {
+        registerEnabledTextureItem(path, path + "_active");
+    }
 
-        // Start building your item model
-        getBuilder(path) // This should match your item's registry name
+    public void registerEnabledTextureItem(String path, String activeTexturePath) {
+        ResourceLocation enabledModelPath = modLoc("item/" + activeTexturePath);
+        ResourceLocation defaultModelPath = modLoc("item/" + path);
+
+        getBuilder(path)
                 .parent(getExistingFile(mcLoc("item/handheld")))
                 .texture("layer0", defaultModelPath)
                 .override()
-                .predicate(new ResourceLocation("justdirethings", "enabled"), 1.0F) // Using custom property
+                .predicate(new ResourceLocation("justdirethings", "enabled"), 1.0F)
                 .model(singleTexture(path + "_active", mcLoc("item/handheld"), "layer0", enabledModelPath))
                 .end();
     }

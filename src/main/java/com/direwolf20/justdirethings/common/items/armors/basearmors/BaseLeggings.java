@@ -133,4 +133,9 @@ public class BaseLeggings extends ArmorItem implements ToggleableTool, LeftClick
     private boolean canAcceptEnchantments(Enchantment enchantment) {
         return enchantment != Enchantments.MENDING;
     }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return slotChanged;
+    }
 }

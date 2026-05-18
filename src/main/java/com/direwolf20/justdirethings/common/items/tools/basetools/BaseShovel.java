@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.items.tools.basetools;
 
 import com.direwolf20.justdirethings.common.items.interfaces.*;
+import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -42,9 +43,23 @@ public class BaseShovel extends ShovelItem implements ToggleableTool, LeftClicka
 
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
-        if (bindDrops(pContext))
-            return InteractionResult.SUCCESS;
-        useOnAbility(pContext);
+        if (bindDrops(pContext)) return InteractionResult.SUCCESS;
+        if (useOnAbility(pContext)) return InteractionResult.SUCCESS;
+        Player player = pContext.getPlayer();
+        Level level = pContext.getLevel();
+        ItemStack stack = pContext.getItemInHand();
+        if (player != null && !player.isShiftKeyDown() && canUseAbility(stack, Ability.LAWNMOWER)) {
+            BlockPos clickedPos = pContext.getClickedPos();
+            int radius = 5;
+            boolean hasNearbyGrass = BlockPos.betweenClosedStream(
+                            clickedPos.offset(-radius, 0, -radius),
+                            clickedPos.offset(radius, 2, radius))
+                    .anyMatch(pos -> level.getBlockState(pos).is(JustDireBlockTags.LAWNMOWERABLE));
+            if (hasNearbyGrass) {
+                AbilityMethods.lawnmower(level, player, stack, clickedPos);
+                return InteractionResult.sidedSuccess(level.isClientSide());
+            }
+        }
         return super.useOn(pContext);
     }
 

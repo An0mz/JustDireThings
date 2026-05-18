@@ -10,6 +10,11 @@ public abstract class BasePoweredItem extends Item implements PoweredItem {
     }
 
     @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return slotChanged;
+    }
+
+    @Override
     public boolean isBarVisible(ItemStack stack) {
         return isPowerBarVisible(stack);
     }

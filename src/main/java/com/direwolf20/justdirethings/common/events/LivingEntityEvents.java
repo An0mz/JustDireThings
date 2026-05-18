@@ -26,6 +26,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.Iterator;
+import net.minecraft.world.item.ArmorItem;
+import com.direwolf20.justdirethings.common.items.armors.utils.ArmorTiers;
 
 
 public class LivingEntityEvents {
@@ -53,7 +55,16 @@ public class LivingEntityEvents {
             if (helmet.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(helmet, Ability.MINDFOG)) {
                 double distance = source.position().distanceTo(target.position());
                 double defaultRange = source.getAttributes().hasAttribute(Attributes.FOLLOW_RANGE) ? source.getAttribute(Attributes.FOLLOW_RANGE).getValue() : 16;
-                if (distance > (defaultRange / 2))
+                int denominator = 2;
+                if (helmet.getItem() instanceof ArmorItem armorItem) {
+                    if (armorItem.getMaterial() == ArmorTiers.BLAZEGOLD)
+                        denominator = 3;
+                    else if (armorItem.getMaterial() == ArmorTiers.CELESTIGEM)
+                        denominator = 4;
+                    else if (armorItem.getMaterial() == ArmorTiers.ECLIPSEALLOY)
+                        denominator = 5;
+                }
+                if (distance > (defaultRange / denominator))
                     e.setCanceled(true);
             }
         }

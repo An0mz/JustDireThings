@@ -37,27 +37,28 @@ public class JustDireItemRenderer extends BlockEntityWithoutLevelRenderer {
             ItemRenderer irenderer = Minecraft.getInstance().getItemRenderer();
             BakedModel base = irenderer.getItemModelShaper().getModelManager().getModel(CREATURE_CATCHER_BASE);
             pPoseStack.pushPose();
-            if (pDisplayContext == ItemDisplayContext.FIXED) { //??
-                /*pPoseStack.translate(1, 1, 0);
+            if (pDisplayContext == ItemDisplayContext.GUI) {
+                pPoseStack.translate(0.5F, 0.5F, 0.5F);
+                pPoseStack.mulPose(Axis.XP.rotationDegrees(30));
+                pPoseStack.mulPose(Axis.YP.rotationDegrees(225));
+                float scale = 0.7F;
+                pPoseStack.scale(scale, scale, scale);
+                pPoseStack.translate(-0.5F, -0.5F, -0.5F);
+            } else if (pDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
+                    || pDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
+                    || pDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
+                    || pDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+                pPoseStack.translate(1, 0.5F, 0);
                 float scale = 0.5F;
                 pPoseStack.scale(scale, scale, scale);
                 pPoseStack.translate(-1.5F, -0.5F, 0.5F);
-                pPoseStack.mulPose(Axis.XP.rotationDegrees(90));
-                pPoseStack.mulPose(Axis.XP.rotationDegrees(90));
-                pPoseStack.translate(0, 0, -1);*/
-            } else if (pDisplayContext != ItemDisplayContext.GUI) { //Ground?
-                pPoseStack.translate(1, 1, 0);
-                float scale = 0.5F;
+                // No X rotation — jar stays upright
+            } else { // GROUND, FIXED, and others
+                pPoseStack.translate(0.5F, 0.125F, 0.5F);
+                float scale = 0.25F;
                 pPoseStack.scale(scale, scale, scale);
-                pPoseStack.translate(-1.5F, -0.5F, 0.5F);
-                pPoseStack.mulPose(Axis.XP.rotationDegrees(90));
-            } else { //GUI?
-                pPoseStack.translate(0, -.5F, -.5F);
-                pPoseStack.mulPose(Axis.XN.rotationDegrees(75));
-                pPoseStack.mulPose(Axis.ZP.rotationDegrees(45));
-                float scale = 0.9F;
-                pPoseStack.scale(scale, scale, scale);
-                pPoseStack.translate(0.775, 0, -0.0825);
+                pPoseStack.translate(-0.5F, 1F, -0.5F);
+                // No X rotation — jar stays upright
             }
             for (var model : base.getRenderPasses(pStack, true)) {
                 for (var rendertype : model.getRenderTypes(pStack, true)) {
