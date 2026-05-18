@@ -496,6 +496,19 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
         add(Registration.XP_FLUID_BUCKET.get(), "XP Fluid Bucket");
         add(Registration.POLYMORPHIC_FLUID_BUCKET.get(), "Polymorphic Fluid Bucket");
 
+        //Fluid Block Names (used by Jade/HWYLA and F3 overlay)
+        add("block.justdirethings.refined_t2_fluid_block", "Blaze Ember Fuel");
+        add("block.justdirethings.refined_t3_fluid_block", "Voidflame Fuel");
+        add("block.justdirethings.refined_t4_fluid_block", "Eclipse Ember Fuel");
+        add("block.justdirethings.unrefined_t2_fluid_block", "Unrefined Blaze Ember Fuel");
+        add("block.justdirethings.unrefined_t3_fluid_block", "Unrefined Voidflame Fuel");
+        add("block.justdirethings.unrefined_t4_fluid_block", "Unrefined Eclipse Ember Fuel");
+        add("block.justdirethings.portal_fluid_block", "Portal Fluid");
+        add("block.justdirethings.unstable_portal_fluid_block", "Unstable Portal Fluid");
+        add("block.justdirethings.time_fluid_block", "Time Fluid");
+        add("block.justdirethings.xp_fluid_block", "XP Fluid");
+        add("block.justdirethings.polymorphic_fluid_block", "Polymorphic Fluid");
+
         //Fluid Type Names
         add("fluid_type.justdirethings.refined_t2_fluid_type", "Blaze Ember Fuel");
         add("fluid_type.justdirethings.refined_t3_fluid_type", "Voidflame Fuel");
