@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.blockentities;
 
+import com.direwolf20.justdirethings.client.particles.glitterparticle.GlitterParticleData;
 import com.direwolf20.justdirethings.common.blockentities.basebe.*;
 import com.direwolf20.justdirethings.common.capabilities.JustDireFluidTank;
 import com.direwolf20.justdirethings.common.capabilities.MachineEnergyStorage;
@@ -75,10 +76,32 @@ public class ParadoxMachineBE extends BaseMachineBE implements PoweredMachineBE,
 
     @Override
     public void tickClient() {
-        if (isRunning) {
-            if (level == null) return;
-            timeRunning++;
+        if (!isRunning || level == null) return;
+        timeRunning++;
+        for (Map.Entry<BlockPos, BlockState> entry : restoringBlocks.entrySet()) {
+            drawRestoringParticles(entry.getKey().getCenter());
         }
+        for (Vec3 vec3 : restoringEntites) {
+            drawRestoringParticles(vec3);
+        }
+    }
+
+    public void drawRestoringParticles(Vec3 vec3) {
+        double d0 = vec3.x;
+        double d1 = vec3.y;
+        double d2 = vec3.z;
+
+        double offsetX = random.nextBoolean() ? -0.5 + random.nextDouble() * 0.5 : 1.0 + random.nextDouble() * 0.5;
+        double offsetY = random.nextBoolean() ? -0.5 + random.nextDouble() * 0.5 : 1.0 + random.nextDouble() * 0.5;
+        double offsetZ = random.nextBoolean() ? -0.5 + random.nextDouble() * 0.5 : 1.0 + random.nextDouble() * 0.5;
+
+        double startX = d0 - 0.5 + offsetX;
+        double startY = d1 - 0.5 + offsetY;
+        double startZ = d2 - 0.5 + offsetZ;
+
+        float size = 0.05f + (0.025f - 0.05f) * random.nextFloat();
+        GlitterParticleData data = new GlitterParticleData(d0, d1, d2, size, 0.4f, 1.0f, 0.39f, 1.0f, 120f);
+        level.addParticle(data, startX, startY, startZ, 0.00025, 0.00025, 0.00025);
     }
 
     @Override
@@ -125,12 +148,14 @@ public class ParadoxMachineBE extends BaseMachineBE implements PoweredMachineBE,
 
     public void startParadox() {
         if (!(isActiveRedstone() && canRun())) return;
+        System.out.println("[Paradox] startParadox triggered. canParadox=" + canParadox() + " hasSnapshot=" + hasSnapshotData() + " fluidEmpty=" + getFluidTank().isEmpty());
         if (!canParadox()) return;
-        if (paradoxExists()) return;
+        if (paradoxExists()) { System.out.println("[Paradox] paradoxExists=true, blocking start"); return; }
         if (!isRunning) {
             UsefulFakePlayer fakePlayer = getUsefulFakePlayer((ServerLevel) level);
             restoringBlocks = testRestoreBlocks(fakePlayer);
             restoringEntites = new ArrayList<>(getEntitiesFromNBT().keySet());
+            System.out.println("[Paradox] restoringBlocks=" + restoringBlocks.size() + " restoringEntities=" + restoringEntites.size() + " snapshotBlocks=" + (snapshotData.contains("blocks") ? snapshotData.getList("blocks", 10).size() : -1));
             if (restoringBlocks.isEmpty() && restoringEntites.isEmpty()) return;
             isRunning = true;
             fePerTick = getEnergyCostPerTick(getEnergyCost(restoringBlocks.size(), restoringEntites.size()));
@@ -540,6 +565,8 @@ public class ParadoxMachineBE extends BaseMachineBE implements PoweredMachineBE,
         if (tag.contains("targetType")) targetType = tag.getInt("targetType");
         if (tag.contains("isRunning")) isRunning = tag.getBoolean("isRunning");
         if (tag.contains("timeRunning")) timeRunning = tag.getInt("timeRunning");
+        if (tag.contains("fePerTick")) fePerTick = tag.getInt("fePerTick");
+        if (tag.contains("fluidPerTick")) fluidPerTick = tag.getInt("fluidPerTick");
         if (tag.contains("paradoxEnergy")) paradoxEnergy = tag.getFloat("paradoxEnergy");
 
         restoringBlocks.clear();

@@ -35,9 +35,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import com.direwolf20.justdirethings.client.particles.GlitterParticle;
 import com.direwolf20.justdirethings.client.particles.ModParticles;
 import com.direwolf20.justdirethings.client.particles.ParadoxParticle;
+import com.direwolf20.justdirethings.client.particles.glitterparticle.GlitterParticleType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -164,7 +164,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(ModParticles.GLITTER.get(), GlitterParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.GLITTER.get(), GlitterParticleType.Factory::new);
         event.registerSpriteSet(ModParticles.PARADOX.get(), ParadoxParticle.Provider::new);
     }
 

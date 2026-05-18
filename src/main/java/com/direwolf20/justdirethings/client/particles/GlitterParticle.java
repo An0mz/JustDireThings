@@ -1,51 +1,66 @@
 package com.direwolf20.justdirethings.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GlitterParticle extends TextureSheetParticle {
 
-    GlitterParticle(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-        super(level, x, y, z, dx, dy, dz);
-        this.xd = dx + (Math.random() - 0.5) * 0.05;
-        this.yd = dy + Math.random() * 0.05;
-        this.zd = dz + (Math.random() - 0.5) * 0.05;
-        this.lifetime = 20 + (int) (Math.random() * 15);
-        this.quadSize = 0.05f + (float) Math.random() * 0.05f;
-        this.alpha = 1.0f;
-        this.gravity = 0.02f;
-        this.rCol = 0.9f + (float) Math.random() * 0.1f;
-        this.gCol = 0.7f + (float) Math.random() * 0.3f;
-        this.bCol = 0.2f + (float) Math.random() * 0.5f;
+    private final double targetX, targetY, targetZ;
+
+    public GlitterParticle(ClientLevel level, double x, double y, double z,
+                            double targetX, double targetY, double targetZ,
+                            float size, float r, float g, float b, float a,
+                            float maxAgeMul, SpriteSet sprites) {
+        super(level, x, y, z, 0, 0, 0);
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetZ = targetZ;
+        this.quadSize = size;
+        this.rCol = r;
+        this.gCol = g;
+        this.bCol = b;
+        this.alpha = a;
+        this.lifetime = Math.round(120 * maxAgeMul);
+        this.gravity = 0f;
+        this.hasPhysics = false;
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
         this.setSpriteFromAge(sprites);
     }
 
     @Override
     public void tick() {
-        super.tick();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+
+        if (this.age++ >= this.lifetime) {
+            this.remove();
+            return;
+        }
+
+        double dx = targetX - this.x;
+        double dy = targetY - this.y;
+        double dz = targetZ - this.z;
+
+        if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 0.1) {
+            this.remove();
+            return;
+        }
+
+        double speed = 20.0;
+        this.move(dx / speed, dy / speed, dz / speed);
         this.alpha = 1.0f - (float) this.age / this.lifetime;
     }
 
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static class Provider implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet sprites;
-
-        public Provider(SpriteSet sprites) {
-            this.sprites = sprites;
-        }
-
-        @Override
-        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
-            return new GlitterParticle(level, x, y, z, dx, dy, dz, sprites);
-        }
     }
 }
