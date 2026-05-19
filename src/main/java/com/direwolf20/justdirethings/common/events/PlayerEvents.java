@@ -20,12 +20,23 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool.getInstantRFCost;
 import static com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool.getToolValue;
 
 public class PlayerEvents {
+
+    // Tracks which players have flight granted specifically by JDT, so we don't
+    // revoke mayfly granted by other mods (e.g. AttributeLib/Apotheosis).
+    private static final Set<UUID> jdtFlightGranted = new HashSet<>();
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        jdtFlightGranted.remove(event.getEntity().getUUID());
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -39,8 +50,10 @@ public class PlayerEvents {
                 player.getAbilities().mayfly = true;
                 player.onUpdateAbilities();
             }
+            jdtFlightGranted.add(player.getUUID());
         } else if (!player.isCreative() && !player.isSpectator()) {
-            if (player.getAbilities().mayfly) {
+            // Only revoke mayfly if JDT was the one that granted it; leave other mods' flight alone
+            if (jdtFlightGranted.remove(player.getUUID())) {
                 player.getAbilities().mayfly = false;
                 player.getAbilities().flying = false;
                 player.onUpdateAbilities();
