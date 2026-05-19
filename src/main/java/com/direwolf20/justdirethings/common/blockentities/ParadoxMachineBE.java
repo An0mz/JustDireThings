@@ -148,14 +148,12 @@ public class ParadoxMachineBE extends BaseMachineBE implements PoweredMachineBE,
 
     public void startParadox() {
         if (!(isActiveRedstone() && canRun())) return;
-        System.out.println("[Paradox] startParadox triggered. canParadox=" + canParadox() + " hasSnapshot=" + hasSnapshotData() + " fluidEmpty=" + getFluidTank().isEmpty());
         if (!canParadox()) return;
-        if (paradoxExists()) { System.out.println("[Paradox] paradoxExists=true, blocking start"); return; }
+        if (paradoxExists()) return;
         if (!isRunning) {
             UsefulFakePlayer fakePlayer = getUsefulFakePlayer((ServerLevel) level);
             restoringBlocks = testRestoreBlocks(fakePlayer);
             restoringEntites = new ArrayList<>(getEntitiesFromNBT().keySet());
-            System.out.println("[Paradox] restoringBlocks=" + restoringBlocks.size() + " restoringEntities=" + restoringEntites.size() + " snapshotBlocks=" + (snapshotData.contains("blocks") ? snapshotData.getList("blocks", 10).size() : -1));
             if (restoringBlocks.isEmpty() && restoringEntites.isEmpty()) return;
             isRunning = true;
             fePerTick = getEnergyCostPerTick(getEnergyCost(restoringBlocks.size(), restoringEntites.size()));

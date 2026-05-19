@@ -650,6 +650,8 @@ public class Registration {
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "portal_gun_close")));
     public static final RegistryObject<SoundEvent> PORTAL_GUN_OPEN = SOUNDS.register("portal_gun_open",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "portal_gun_open")));
+    public static final RegistryObject<SoundEvent> PARADOX_AMBIENT = SOUNDS.register("paradox_ambient",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "paradox_ambient")));
 
     public static final RegistryObject<TimeWand> TimeWand = ITEMS.register("time_wand", TimeWand::new);
     public static final RegistryObject<PortalGun> PortalGun = ITEMS.register("portal_gun", PortalGun::new);

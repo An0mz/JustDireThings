@@ -8,11 +8,11 @@ import com.direwolf20.justdirethings.client.blockentityrenders.gooblocks.GooBloc
 import com.direwolf20.justdirethings.client.blockentityrenders.gooblocks.GooBlockRender_Tier3;
 import com.direwolf20.justdirethings.client.blockentityrenders.gooblocks.GooBlockRender_Tier4;
 import com.direwolf20.justdirethings.client.entityrenders.CreatureCatcherEntityRender;
+import com.direwolf20.justdirethings.client.entityrenders.ParadoxEntityRender;
 import com.direwolf20.justdirethings.client.entityrenders.TimeWandEntityRenderer;
 import com.direwolf20.justdirethings.client.entityrenders.PortalEntityRenderer;
 import com.direwolf20.justdirethings.client.itemcustomrenders.FluidbarDecorator;
 import com.direwolf20.justdirethings.client.renderers.shader.DireRenderTypes;
-import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import com.direwolf20.justdirethings.client.events.EventKeyInput;
@@ -36,7 +36,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import com.direwolf20.justdirethings.client.particles.ModParticles;
-import com.direwolf20.justdirethings.client.particles.ParadoxParticle;
 import com.direwolf20.justdirethings.client.particles.glitterparticle.GlitterParticleType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
@@ -165,7 +164,6 @@ public class ClientSetup {
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.GLITTER.get(), GlitterParticleType.Factory::new);
-        event.registerSpriteSet(ModParticles.PARADOX.get(), ParadoxParticle.Provider::new);
     }
 
     @SubscribeEvent
@@ -209,7 +207,7 @@ public class ClientSetup {
         event.registerBlockEntityRenderer(Registration.ParadoxMachineBE.get(), ParadoxMachineBER::new);
 
         //Entities
-        event.registerEntityRenderer(Registration.ParadoxEntity.get(), NoopRenderer::new);
+        event.registerEntityRenderer(Registration.ParadoxEntity.get(), ParadoxEntityRender::new);
         event.registerEntityRenderer(Registration.CreatureCatcherEntity.get(), CreatureCatcherEntityRender::new);
         event.registerEntityRenderer(Registration.TimeWandEntity.get(), TimeWandEntityRenderer::new);
         event.registerEntityRenderer(Registration.PortalEntity.get(), PortalEntityRenderer::new);

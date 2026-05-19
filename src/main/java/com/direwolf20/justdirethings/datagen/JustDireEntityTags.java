@@ -20,6 +20,7 @@ public class JustDireEntityTags extends EntityTypeTagsProvider {
     }
 
     public static final TagKey<EntityType<?>> PARADOX_DENY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(JustDireThings.MODID, "paradox_deny"));
+    public static final TagKey<EntityType<?>> PARADOX_ABSORB_DENY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(JustDireThings.MODID, "paradox_absorb_deny"));
     public static final TagKey<EntityType<?>> CREATURE_CATCHER_DENY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(JustDireThings.MODID, "creature_catcher_deny"));
     public static final TagKey<EntityType<?>> NO_AI_DENY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(JustDireThings.MODID, "no_ai_deny"));
     public static final TagKey<EntityType<?>> NO_EARTHQUAKE = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(JustDireThings.MODID, "no_earthquake"));
@@ -31,5 +32,6 @@ public class JustDireEntityTags extends EntityTypeTagsProvider {
         // Keep these tags present even if empty so ability deny-list checks are data-pack extensible.
         tag(NO_AI_DENY);
         tag(NO_EARTHQUAKE);
+        tag(PARADOX_ABSORB_DENY);
     }
 }

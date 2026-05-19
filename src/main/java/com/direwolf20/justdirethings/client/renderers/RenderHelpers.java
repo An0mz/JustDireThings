@@ -145,6 +145,33 @@ public class RenderHelpers {
         matrix.popPose();
     }
 
+    public static void renderSphere(PoseStack matrix, MultiBufferSource buffer, float radius, float r, float g, float b, float a) {
+        VertexConsumer vc = buffer.getBuffer(OurRenderTypes.BlackSphere);
+        Matrix4f m4 = matrix.last().pose();
+        int latSegments = 12;
+        int lonSegments = 16;
+        for (int lat = 0; lat < latSegments; lat++) {
+            double theta1 = lat * Math.PI / latSegments;
+            double theta2 = (lat + 1) * Math.PI / latSegments;
+            float sinT1 = (float) Math.sin(theta1), cosT1 = (float) Math.cos(theta1);
+            float sinT2 = (float) Math.sin(theta2), cosT2 = (float) Math.cos(theta2);
+            for (int lon = 0; lon < lonSegments; lon++) {
+                double phi1 = lon * 2.0 * Math.PI / lonSegments;
+                double phi2 = (lon + 1) * 2.0 * Math.PI / lonSegments;
+                float cosP1 = (float) Math.cos(phi1), sinP1 = (float) Math.sin(phi1);
+                float cosP2 = (float) Math.cos(phi2), sinP2 = (float) Math.sin(phi2);
+                float x1 = radius * sinT1 * cosP1, y1 = radius * cosT1, z1 = radius * sinT1 * sinP1;
+                float x2 = radius * sinT2 * cosP1, y2 = radius * cosT2, z2 = radius * sinT2 * sinP1;
+                float x3 = radius * sinT2 * cosP2, y3 = y2,             z3 = radius * sinT2 * sinP2;
+                float x4 = radius * sinT1 * cosP2, y4 = y1,             z4 = radius * sinT1 * sinP2;
+                vc.vertex(m4, x1, y1, z1).color(r, g, b, a).endVertex();
+                vc.vertex(m4, x2, y2, z2).color(r, g, b, a).endVertex();
+                vc.vertex(m4, x3, y3, z3).color(r, g, b, a).endVertex();
+                vc.vertex(m4, x4, y4, z4).color(r, g, b, a).endVertex();
+            }
+        }
+    }
+
     public static void renderBoxSolid(Matrix4f matrix, MultiBufferSource buffer, BlockPos pos, float r, float g, float b, float alpha) {
         double x = pos.getX() - 0.001;
         double y = pos.getY() - 0.001;

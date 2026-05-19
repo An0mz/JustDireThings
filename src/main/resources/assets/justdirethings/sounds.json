@@ -10,6 +10,11 @@
       "mob/endermen/portal2"
     ],
     "subtitle": "sound.justdirethings.portal_gun_open"
+  },
+  "paradox_ambient": {
+    "sounds": [
+      "justdirethings:paradox_running"
+    ],
+    "subtitle": "sound.justdirethings.paradox_ambient"
   }
 }
-
