@@ -35,72 +35,76 @@ import java.util.List;
 @JeiPlugin
 public class JEIIntegration implements IModPlugin {
 
-    @Nonnull
-    @Override
-    public ResourceLocation getPluginUid() {
-        return new ResourceLocation(JustDireThings.MODID, "jei_plugin");
-    }
+	@Nonnull
+	@Override
+	public ResourceLocation getPluginUid() {
+		return new ResourceLocation(JustDireThings.MODID, "jei_plugin");
+	}
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        IRecipeManager recipeRegistry = jeiRuntime.getRecipeManager();
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        List<CraftingRecipe> hiddenRecipes = new ArrayList<>();
-        for (var sidedBlock : Registration.SIDEDBLOCKS.getEntries()) {
-            if (sidedBlock.get() instanceof BaseMachineBlock) {
-                var recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
-                recipe.ifPresent(r -> { if (r instanceof CraftingRecipe cr) hiddenRecipes.add(cr); });
-            }
-        }
-        for (var sidedBlock : Registration.BLOCKS.getEntries()) {
-            if (sidedBlock.get() instanceof BaseMachineBlock) {
-                var recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
-                recipe.ifPresent(r -> { if (r instanceof CraftingRecipe cr) hiddenRecipes.add(cr); });
-            }
-        }
+	@Override
+	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+		IRecipeManager recipeRegistry = jeiRuntime.getRecipeManager();
+		RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
+		List<CraftingRecipe> hiddenRecipes = new ArrayList<>();
+		for (var sidedBlock : Registration.SIDEDBLOCKS.getEntries()) {
+			if (sidedBlock.get() instanceof BaseMachineBlock) {
+				var recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
+				recipe.ifPresent(r -> {
+					if (r instanceof CraftingRecipe cr)
+						hiddenRecipes.add(cr);
+				});
+			}
+		}
+		for (var sidedBlock : Registration.BLOCKS.getEntries()) {
+			if (sidedBlock.get() instanceof BaseMachineBlock) {
+				var recipe = recipeManager.byKey(new ResourceLocation(sidedBlock.getId() + "_nbtclear"));
+				recipe.ifPresent(r -> {
+					if (r instanceof CraftingRecipe cr)
+						hiddenRecipes.add(cr);
+				});
+			}
+		}
 
+		recipeRegistry.hideRecipes(RecipeTypes.CRAFTING, hiddenRecipes);
 
-        recipeRegistry.hideRecipes(RecipeTypes.CRAFTING, hiddenRecipes);
+		jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK,
+				Collections.singletonList(new ItemStack(Registration.UPGRADE_PHASE.get())));
+	}
 
-        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK,
-                Collections.singletonList(new ItemStack(Registration.UPGRADE_PHASE.get())));
-    }
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registration) {
+		IJeiHelpers jeiHelpers = registration.getJeiHelpers();
+		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
+		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper));
+	}
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        IJeiHelpers jeiHelpers = registration.getJeiHelpers();
-        IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-        registration.addRecipeCategories(
-                new GooSpreadRecipeCategory(guiHelper)
-        );
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		assert Minecraft.getInstance().level != null;
+		RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
+		List<GooSpreadRecipe> goospreadrecipes = recipeManager
+				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get());
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        assert Minecraft.getInstance().level != null;
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        List<GooSpreadRecipe> goospreadrecipes = recipeManager.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get());
+		registration.addRecipes(GooSpreadRecipeCategory.TYPE, goospreadrecipes);
+	}
 
-        registration.addRecipes(GooSpreadRecipeCategory.TYPE, goospreadrecipes);
-    }
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier1.get()), GooSpreadRecipeCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier2.get()), GooSpreadRecipeCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier3.get()), GooSpreadRecipeCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier4.get()), GooSpreadRecipeCategory.TYPE);
+	}
 
-    @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
-        registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier1.get()), GooSpreadRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier2.get()), GooSpreadRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier3.get()), GooSpreadRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier4.get()), GooSpreadRecipeCategory.TYPE);
-    }
+	@Override
+	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+		IExtendableSmithingRecipeCategory smithingCategory = registration.getSmithingCategory();
+		smithingCategory.addExtension(AbilityRecipe.class, new AbilityRecipeCategory());
+	}
 
-    @Override
-    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-        IExtendableSmithingRecipeCategory smithingCategory = registration.getSmithingCategory();
-        smithingCategory.addExtension(AbilityRecipe.class, new AbilityRecipeCategory());
-    }
-
-    @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addGhostIngredientHandler(BaseScreen.class, new GhostFilterBasic());
-    }
+	@Override
+	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+		registration.addGhostIngredientHandler(BaseScreen.class, new GhostFilterBasic());
+	}
 
 }

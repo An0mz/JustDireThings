@@ -8,40 +8,40 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class EclipseAlloyBow extends BaseBow implements PoweredTool {
-    public EclipseAlloyBow() {
-        super(new Item.Properties().durability(450).fireResistant());
-        registerAbility(Ability.POTIONARROW);
-        registerAbility(Ability.SPLASH);
-        registerAbility(Ability.LINGERING);
-        registerAbility(Ability.HOMING);
-        registerAbility(Ability.EPICARROW, new AbilityParams(1, 1, 1, 1, 200, 2400));
-        registerAbility(Ability.PHASE);
-    }
+	public EclipseAlloyBow() {
+		super(new Item.Properties().durability(450).fireResistant());
+		registerAbility(Ability.POTIONARROW);
+		registerAbility(Ability.SPLASH);
+		registerAbility(Ability.LINGERING);
+		registerAbility(Ability.HOMING);
+		registerAbility(Ability.EPICARROW, new AbilityParams(1, 1, 1, 1, 200, 2400));
+		registerAbility(Ability.PHASE);
+	}
 
-    public float getMaxDraw() {
-        return 10;
-    }
+	public float getMaxDraw() {
+		return 10;
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1) return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 
-    @Override
-    public int getMaxEnergy() {
-        return 500000;
-    }
+	@Override
+	public int getMaxEnergy() {
+		return 500000;
+	}
 }
-

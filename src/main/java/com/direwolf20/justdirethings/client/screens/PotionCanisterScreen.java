@@ -20,63 +20,69 @@ import net.minecraft.world.item.alchemy.Potions;
 import java.awt.*;
 
 public class PotionCanisterScreen extends AbstractContainerScreen<PotionCanisterContainer> {
-    private static final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/fuelcanister.png");
+	private static final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID,
+			"textures/gui/fuelcanister.png");
 
-    protected final PotionCanisterContainer container;
-    private final ItemStack potionCanister;
+	protected final PotionCanisterContainer container;
+	private final ItemStack potionCanister;
 
-    public PotionCanisterScreen(PotionCanisterContainer container, Inventory inv, Component name) {
-        super(container, inv, name);
-        this.container = container;
-        this.potionCanister = container.potionCanister;
-    }
+	public PotionCanisterScreen(PotionCanisterContainer container, Inventory inv, Component name) {
+		super(container, inv, name);
+		this.container = container;
+		this.potionCanister = container.potionCanister;
+	}
 
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(guiGraphics, mouseX, mouseY);
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 
-        Potion potion = PotionCanister.getStoredPotion(potionCanister);
-        int amt = PotionCanister.getPotionAmount(potionCanister);
+		Potion potion = PotionCanister.getStoredPotion(potionCanister);
+		int amt = PotionCanister.getPotionAmount(potionCanister);
 
-        if (potion != Potions.EMPTY) {
-            int color = PotionUtils.getColor(potion);
-            MutableComponent potionName = Component.literal(potion.getName("item.minecraft.potion.effect.")).withStyle(s -> s.withColor(color));
-            guiGraphics.drawString(font, potionName, this.getGuiLeft() + this.imageWidth / 2 - font.width(potionName) / 2, getGuiTop() + 5, Color.DARK_GRAY.getRGB(), false);
-        }
+		if (potion != Potions.EMPTY) {
+			int color = PotionUtils.getColor(potion);
+			MutableComponent potionName = Component.literal(potion.getName("item.minecraft.potion.effect."))
+					.withStyle(s -> s.withColor(color));
+			guiGraphics.drawString(font, potionName,
+					this.getGuiLeft() + this.imageWidth / 2 - font.width(potionName) / 2, getGuiTop() + 5,
+					Color.DARK_GRAY.getRGB(), false);
+		}
 
-        MutableComponent amtMsg = Component.literal(MagicHelpers.formatted(amt) + "/" + MagicHelpers.formatted(PotionCanister.getMaxMB()) + " mB");
-        guiGraphics.drawString(font, amtMsg, this.getGuiLeft() + this.imageWidth / 2 - font.width(amtMsg) / 2, getGuiTop() + 15, Color.DARK_GRAY.getRGB(), false);
-    }
+		MutableComponent amtMsg = Component
+				.literal(MagicHelpers.formatted(amt) + "/" + MagicHelpers.formatted(PotionCanister.getMaxMB()) + " mB");
+		guiGraphics.drawString(font, amtMsg, this.getGuiLeft() + this.imageWidth / 2 - font.width(amtMsg) / 2,
+				getGuiTop() + 15, Color.DARK_GRAY.getRGB(), false);
+	}
 
-    @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, GUI);
-        int relX = (this.width - this.imageWidth) / 2;
-        int relY = (this.height - this.imageHeight) / 2;
-        guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-    }
+	@Override
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+		RenderSystem.setShaderTexture(0, GUI);
+		int relX = (this.width - this.imageWidth) / 2;
+		int relY = (this.height - this.imageHeight) / 2;
+		guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+	}
 
-    @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-    }
+	@Override
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+	}
 
-    @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
 
-    @Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-        InputConstants.Key mouseKey = InputConstants.getKey(key, scanCode);
-        if (key == 256 || minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
-            onClose();
-            return true;
-        }
-        return super.keyPressed(key, scanCode, modifiers);
-    }
+	@Override
+	public boolean keyPressed(int key, int scanCode, int modifiers) {
+		InputConstants.Key mouseKey = InputConstants.getKey(key, scanCode);
+		if (key == 256 || minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
+			onClose();
+			return true;
+		}
+		return super.keyPressed(key, scanCode, modifiers);
+	}
 
-    private static MutableComponent getTrans(String key, Object... args) {
-        return Component.translatable(JustDireThings.MODID + "." + key, args);
-    }
+	private static MutableComponent getTrans(String key, Object... args) {
+		return Component.translatable(JustDireThings.MODID + "." + key, args);
+	}
 }

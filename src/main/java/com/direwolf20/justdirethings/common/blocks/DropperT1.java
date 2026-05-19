@@ -52,43 +52,45 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public class DropperT1 extends BaseMachineBlock {
-    public DropperT1() {
-        super(Properties.of()
-                .sound(SoundType.METAL)
-                .strength(2.0f)
-                .isRedstoneConductor(BaseMachineBlock::never)
-        );
-    }
+	public DropperT1() {
+		super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DropperT1BE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new DropperT1BE(pos, state);
+	}
 
-    @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide)
-            return InteractionResult.SUCCESS;
+	@Override
+	public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
 
-        BlockEntity te = level.getBlockEntity(blockPos);
-        if (!(te instanceof DropperT1BE))
-            return InteractionResult.FAIL;
+		BlockEntity te = level.getBlockEntity(blockPos);
+		if (!(te instanceof DropperT1BE))
+			return InteractionResult.FAIL;
 
-        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
-                (windowId, playerInventory, playerEntity) -> new DropperT1Container(windowId, playerInventory, blockPos), Component.translatable("")), (buf -> {
-            buf.writeBlockPos(blockPos);
-        }));
-        return InteractionResult.SUCCESS;
-    }
+		NetworkHooks
+				.openScreen((ServerPlayer) player,
+						new SimpleMenuProvider((windowId, playerInventory,
+								playerEntity) -> new DropperT1Container(windowId, playerInventory, blockPos),
+								Component.translatable("")),
+						(buf -> {
+							buf.writeBlockPos(blockPos);
+						}));
+		return InteractionResult.SUCCESS;
+	}
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-    }
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return this.defaultBlockState().setValue(BlockStateProperties.FACING,
+				context.getNearestLookingDirection().getOpposite());
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.FACING);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.FACING);
+	}
 }

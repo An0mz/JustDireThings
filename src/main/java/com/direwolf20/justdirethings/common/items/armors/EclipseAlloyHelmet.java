@@ -9,36 +9,36 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class EclipseAlloyHelmet extends BaseHelmet implements PoweredTool {
-    public EclipseAlloyHelmet() {
-        super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
-        registerAbility(Ability.MINDFOG);
-        registerAbility(Ability.STUPEFY, new AbilityParams(1, 1, 1, 1, 100, 200));
-        registerAbility(Ability.NIGHTVISION);
-        registerAbility(Ability.NOAI, new AbilityParams(1, 1, 1, 1, 0, 2400));
-        registerAbility(Ability.DEBUFFREMOVER, new AbilityParams(1, 1, 1, 1, 0, 400));
-        registerAbility(Ability.WATERBREATHING);
-    }
+	public EclipseAlloyHelmet() {
+		super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
+		registerAbility(Ability.MINDFOG);
+		registerAbility(Ability.STUPEFY, new AbilityParams(1, 1, 1, 1, 100, 200));
+		registerAbility(Ability.NIGHTVISION);
+		registerAbility(Ability.NOAI, new AbilityParams(1, 1, 1, 1, 0, 2400));
+		registerAbility(Ability.DEBUFFREMOVER, new AbilityParams(1, 1, 1, 1, 0, 400));
+		registerAbility(Ability.WATERBREATHING);
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1)
-            return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 
-    @Override
-    public int getMaxEnergy() {
-        return 500000;
-    }
+	@Override
+	public int getMaxEnergy() {
+		return 500000;
+	}
 }

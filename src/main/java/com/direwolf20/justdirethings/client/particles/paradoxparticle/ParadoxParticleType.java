@@ -4,12 +4,12 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.particles.ParticleType;
 
 public class ParadoxParticleType extends ParticleType<ParadoxParticleData> {
-    public ParadoxParticleType() {
-        super(false, ParadoxParticleData.DESERIALIZER);
-    }
+	public ParadoxParticleType() {
+		super(false, ParadoxParticleData.DESERIALIZER);
+	}
 
-    @Override
-    public Codec<ParadoxParticleData> codec() {
-        return null;
-    }
+	@Override
+	public Codec<ParadoxParticleData> codec() {
+		return null;
+	}
 }

@@ -13,43 +13,43 @@ import net.minecraftforge.items.IItemHandler;
 
 public class GeneratorFluidT1Container extends BaseMachineContainer {
 
-    public GeneratorFluidT1Container(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
-        this(windowId, playerInventory, extraData.readBlockPos());
-    }
+	public GeneratorFluidT1Container(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
+		this(windowId, playerInventory, extraData.readBlockPos());
+	}
 
-    public GeneratorFluidT1Container(int windowId, Inventory playerInventory, BlockPos blockPos) {
-        super(Registration.GeneratorFluidT1_Container.get(), windowId, playerInventory, blockPos);
-        addPlayerSlots(player.getInventory());
-    }
+	public GeneratorFluidT1Container(int windowId, Inventory playerInventory, BlockPos blockPos) {
+		super(Registration.GeneratorFluidT1_Container.get(), windowId, playerInventory, blockPos);
+		addPlayerSlots(player.getInventory());
+	}
 
-    @Override
-    public void addMachineSlots() {
-        machineHandler = baseMachineBE.getMachineHandler();
-        addFuelSlotRange(machineHandler, 0, 80, 13, 1, 18);
-    }
+	@Override
+	public void addMachineSlots() {
+		machineHandler = baseMachineBE.getMachineHandler();
+		addFuelSlotRange(machineHandler, 0, 80, 13, 1, 18);
+	}
 
-    protected int addFuelSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
-        for (int i = 0; i < amount; i++) {
-            addSlot(new RefinedFuelSlot(handler, index, x, y));
-            x += dx;
-            index++;
-        }
-        return index;
-    }
+	protected int addFuelSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
+		for (int i = 0; i < amount; i++) {
+			addSlot(new RefinedFuelSlot(handler, index, x, y));
+			x += dx;
+			index++;
+		}
+		return index;
+	}
 
-    @Override
-    public boolean stillValid(Player playerIn) {
-        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, Registration.GeneratorFluidT1.get());
-    }
+	@Override
+	public boolean stillValid(Player playerIn) {
+		return stillValid(ContainerLevelAccess.create(player.level(), pos), player,
+				Registration.GeneratorFluidT1.get());
+	}
 
-    @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
-        return super.quickMoveStack(playerIn, index);
-    }
+	@Override
+	public ItemStack quickMoveStack(Player playerIn, int index) {
+		return super.quickMoveStack(playerIn, index);
+	}
 
-    @Override
-    public void removed(Player playerIn) {
-        super.removed(playerIn);
-    }
+	@Override
+	public void removed(Player playerIn) {
+		super.removed(playerIn);
+	}
 }
-

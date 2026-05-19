@@ -23,101 +23,105 @@ import net.minecraft.world.phys.AABB;
 import static net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect;
 
 public class JustDireItemRenderer extends BlockEntityWithoutLevelRenderer {
-    public JustDireItemRenderer() {
-        super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-    }
+	public JustDireItemRenderer() {
+		super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+	}
 
-    private static final ResourceLocation CREATURE_CATCHER_BASE = new ResourceLocation(JustDireThings.MODID, "item/creaturecatcher_base");
-    private static final ResourceLocation CREATURE_CATCHER = new ResourceLocation(JustDireThings.MODID, "item/creaturecatcher");
+	private static final ResourceLocation CREATURE_CATCHER_BASE = new ResourceLocation(JustDireThings.MODID,
+			"item/creaturecatcher_base");
+	private static final ResourceLocation CREATURE_CATCHER = new ResourceLocation(JustDireThings.MODID,
+			"item/creaturecatcher");
 
+	@Override
+	public void renderByItem(ItemStack pStack, ItemDisplayContext pDisplayContext, PoseStack pPoseStack,
+			MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
+		if (pStack.getItem() instanceof CreatureCatcher) {
+			ItemRenderer irenderer = Minecraft.getInstance().getItemRenderer();
+			BakedModel base = irenderer.getItemModelShaper().getModelManager().getModel(CREATURE_CATCHER_BASE);
+			pPoseStack.pushPose();
+			if (pDisplayContext == ItemDisplayContext.GUI) {
+				pPoseStack.translate(0.5F, 0.5F, 0.5F);
+				pPoseStack.mulPose(Axis.XP.rotationDegrees(30));
+				pPoseStack.mulPose(Axis.YP.rotationDegrees(225));
+				float scale = 0.7F;
+				pPoseStack.scale(scale, scale, scale);
+				pPoseStack.translate(-0.5F, -0.5F, -0.5F);
+			} else if (pDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
+					|| pDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
+					|| pDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
+					|| pDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+				pPoseStack.translate(1, 0.5F, 0);
+				float scale = 0.5F;
+				pPoseStack.scale(scale, scale, scale);
+				pPoseStack.translate(-1.5F, -0.5F, 0.5F);
+				// No X rotation — jar stays upright
+			} else { // GROUND, FIXED, and others
+				pPoseStack.translate(0.5F, 0.125F, 0.5F);
+				float scale = 0.25F;
+				pPoseStack.scale(scale, scale, scale);
+				pPoseStack.translate(-0.5F, 1F, -0.5F);
+				// No X rotation — jar stays upright
+			}
+			for (var model : base.getRenderPasses(pStack, true)) {
+				for (var rendertype : model.getRenderTypes(pStack, true)) {
+					VertexConsumer vertexconsumer = getFoilBufferDirect(pBuffer, rendertype, true, pStack.hasFoil());
+					irenderer.renderModelLists(base, pStack, pPackedLight, pPackedOverlay, pPoseStack, vertexconsumer);
+				}
+			}
+			pPoseStack.popPose();
 
-    @Override
-    public void renderByItem(ItemStack pStack, ItemDisplayContext pDisplayContext, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
-        if (pStack.getItem() instanceof CreatureCatcher) {
-            ItemRenderer irenderer = Minecraft.getInstance().getItemRenderer();
-            BakedModel base = irenderer.getItemModelShaper().getModelManager().getModel(CREATURE_CATCHER_BASE);
-            pPoseStack.pushPose();
-            if (pDisplayContext == ItemDisplayContext.GUI) {
-                pPoseStack.translate(0.5F, 0.5F, 0.5F);
-                pPoseStack.mulPose(Axis.XP.rotationDegrees(30));
-                pPoseStack.mulPose(Axis.YP.rotationDegrees(225));
-                float scale = 0.7F;
-                pPoseStack.scale(scale, scale, scale);
-                pPoseStack.translate(-0.5F, -0.5F, -0.5F);
-            } else if (pDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
-                    || pDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
-                    || pDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
-                    || pDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
-                pPoseStack.translate(1, 0.5F, 0);
-                float scale = 0.5F;
-                pPoseStack.scale(scale, scale, scale);
-                pPoseStack.translate(-1.5F, -0.5F, 0.5F);
-                // No X rotation — jar stays upright
-            } else { // GROUND, FIXED, and others
-                pPoseStack.translate(0.5F, 0.125F, 0.5F);
-                float scale = 0.25F;
-                pPoseStack.scale(scale, scale, scale);
-                pPoseStack.translate(-0.5F, 1F, -0.5F);
-                // No X rotation — jar stays upright
-            }
-            for (var model : base.getRenderPasses(pStack, true)) {
-                for (var rendertype : model.getRenderTypes(pStack, true)) {
-                    VertexConsumer vertexconsumer = getFoilBufferDirect(pBuffer, rendertype, true, pStack.hasFoil());
-                    irenderer.renderModelLists(base, pStack, pPackedLight, pPackedOverlay, pPoseStack, vertexconsumer);
-                }
-            }
-            pPoseStack.popPose();
+			Mob mob = CreatureCatcherEntity.getEntityFromItemStack(pStack, Minecraft.getInstance().level);
+			if (mob != null)
+				renderEntityInInventory(pPoseStack, pDisplayContext, mob, pBuffer);
+		}
+	}
 
-            Mob mob = CreatureCatcherEntity.getEntityFromItemStack(pStack, Minecraft.getInstance().level);
-            if (mob != null)
-                renderEntityInInventory(pPoseStack, pDisplayContext, mob, pBuffer);
-        }
-    }
+	public void renderEntityInInventory(PoseStack matrix, ItemDisplayContext type, LivingEntity pLivingEntity,
+			MultiBufferSource pBuffer) {
+		matrix.pushPose();
+		matrix.translate(0.5, 0.5, 0.5);
 
-    public void renderEntityInInventory(PoseStack matrix, ItemDisplayContext type, LivingEntity pLivingEntity, MultiBufferSource pBuffer) {
-        matrix.pushPose();
-        matrix.translate(0.5, 0.5, 0.5);
+		// Get entity dimensions
+		AABB boundingBox = pLivingEntity.getBoundingBox();
+		double entityHeight = boundingBox.maxY - boundingBox.minY;
+		double entityWidth = Math.max(boundingBox.maxX - boundingBox.minX, boundingBox.maxZ - boundingBox.minZ);
 
-        // Get entity dimensions
-        AABB boundingBox = pLivingEntity.getBoundingBox();
-        double entityHeight = boundingBox.maxY - boundingBox.minY;
-        double entityWidth = Math.max(boundingBox.maxX - boundingBox.minX, boundingBox.maxZ - boundingBox.minZ);
+		// Determine scaling factor
+		double maxDimension = Math.max(entityWidth, entityHeight);
+		float scale = 0.25F / (float) maxDimension; // Adjust this factor based on your UI needs
 
-        // Determine scaling factor
-        double maxDimension = Math.max(entityWidth, entityHeight);
-        float scale = 0.25F / (float) maxDimension; // Adjust this factor based on your UI needs
+		if (type == ItemDisplayContext.FIXED) {
+			// matrix.translate(0, -0.5, 0);
+			// matrix.translate(0, 1.45, 0);
+			matrix.mulPose(Axis.XN.rotationDegrees(90));
+			matrix.mulPose(Axis.YN.rotationDegrees(180));
+			matrix.scale(scale, scale, scale);
+		} else if (type == ItemDisplayContext.GUI) {
+			// matrix.translate(0, -0.25, 0);
+			matrix.translate(0, -entityHeight / 2 * scale * 2, 0); // Centering entity vertically
+			matrix.scale(scale * 2, scale * 2, scale * 2);
+		} else { // In hand / On ground
+			matrix.translate(0, 0.02, 0);
+			matrix.scale(scale, scale, scale);
+		}
 
-
-        if (type == ItemDisplayContext.FIXED) {
-            //matrix.translate(0, -0.5, 0);
-            //matrix.translate(0, 1.45, 0);
-            matrix.mulPose(Axis.XN.rotationDegrees(90));
-            matrix.mulPose(Axis.YN.rotationDegrees(180));
-            matrix.scale(scale, scale, scale);
-        } else if (type == ItemDisplayContext.GUI) {
-            //matrix.translate(0, -0.25, 0);
-            matrix.translate(0, -entityHeight / 2 * scale * 2, 0); // Centering entity vertically
-            matrix.scale(scale * 2, scale * 2, scale * 2);
-        } else { //In hand / On ground
-            matrix.translate(0, 0.02, 0);
-            matrix.scale(scale, scale, scale);
-        }
-
-        float rotation = -30;
-        if (type == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
-            rotation = 30;
-        if (type == ItemDisplayContext.FIXED) rotation = 180;
-        matrix.mulPose(Axis.YP.rotationDegrees(rotation));
-        pLivingEntity.setYRot(0);
-        pLivingEntity.yBodyRot = pLivingEntity.getYRot();
-        pLivingEntity.yHeadRot = pLivingEntity.getYRot();
-        pLivingEntity.yHeadRotO = pLivingEntity.getYRot();
-        EntityRenderDispatcher entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
-        entityrenderermanager.setRenderShadow(false);
-        RenderSystem.runAsFancy(() -> {
-            entityrenderermanager.render(pLivingEntity, 0, 0, 0, 0.0F, Minecraft.getInstance().getDeltaFrameTime(), matrix, pBuffer, 15728880);
-        });
-        entityrenderermanager.setRenderShadow(true);
-        matrix.popPose();
-    }
+		float rotation = -30;
+		if (type == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
+			rotation = 30;
+		if (type == ItemDisplayContext.FIXED)
+			rotation = 180;
+		matrix.mulPose(Axis.YP.rotationDegrees(rotation));
+		pLivingEntity.setYRot(0);
+		pLivingEntity.yBodyRot = pLivingEntity.getYRot();
+		pLivingEntity.yHeadRot = pLivingEntity.getYRot();
+		pLivingEntity.yHeadRotO = pLivingEntity.getYRot();
+		EntityRenderDispatcher entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
+		entityrenderermanager.setRenderShadow(false);
+		RenderSystem.runAsFancy(() -> {
+			entityrenderermanager.render(pLivingEntity, 0, 0, 0, 0.0F, Minecraft.getInstance().getDeltaFrameTime(),
+					matrix, pBuffer, 15728880);
+		});
+		entityrenderermanager.setRenderShadow(true);
+		matrix.popPose();
+	}
 }

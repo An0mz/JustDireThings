@@ -14,17 +14,17 @@ import static com.direwolf20.justdirethings.util.TooltipHelpers.appendShiftForIn
 import static com.direwolf20.justdirethings.util.TooltipHelpers.appendUpgradeDetails;
 
 public class Upgrade extends Item {
-    public Upgrade() {
-        super(new Properties().stacksTo(1));
-    }
+	public Upgrade() {
+		super(new Properties().stacksTo(1));
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, level, tooltip, flagIn);
-        if (Screen.hasShiftDown()) {
-            appendUpgradeDetails(stack, tooltip);
-        } else {
-            appendShiftForInfo(stack, tooltip);
-        }
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
+		if (Screen.hasShiftDown()) {
+			appendUpgradeDetails(stack, tooltip);
+		} else {
+			appendShiftForInfo(stack, tooltip);
+		}
+	}
 }

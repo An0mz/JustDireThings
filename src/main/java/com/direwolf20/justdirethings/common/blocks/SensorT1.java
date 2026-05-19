@@ -58,77 +58,77 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public class SensorT1 extends BaseMachineBlock {
-    public SensorT1() {
-        super(Properties.of()
-                .sound(SoundType.METAL)
-                .strength(2.0f)
-                .isRedstoneConductor(BaseMachineBlock::never)
-        );
-    }
+	public SensorT1() {
+		super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new SensorT1BE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new SensorT1BE(pos, state);
+	}
 
-    @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide)
-            return InteractionResult.SUCCESS;
+	@Override
+	public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
 
-        BlockEntity te = level.getBlockEntity(blockPos);
-        if (!(te instanceof SensorT1BE))
-            return InteractionResult.FAIL;
+		BlockEntity te = level.getBlockEntity(blockPos);
+		if (!(te instanceof SensorT1BE))
+			return InteractionResult.FAIL;
 
-        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
-                (windowId, playerInventory, playerEntity) -> new SensorT1Container(windowId, playerInventory, blockPos), Component.translatable("")), (buf -> {
-            buf.writeBlockPos(blockPos);
-        }));
-        return InteractionResult.SUCCESS;
-    }
+		NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
+				(windowId, playerInventory, playerEntity) -> new SensorT1Container(windowId, playerInventory, blockPos),
+				Component.translatable("")), (buf -> {
+					buf.writeBlockPos(blockPos);
+				}));
+		return InteractionResult.SUCCESS;
+	}
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-    }
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return this.defaultBlockState().setValue(BlockStateProperties.FACING,
+				context.getNearestLookingDirection().getOpposite());
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.FACING);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.FACING);
+	}
 
-    @Override
-    public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @javax.annotation.Nullable Direction direction) {
-        if (direction == (state.getValue(BlockStateProperties.FACING).getOpposite()))
-            return false; //Don't emit on facing side
-        return true;
-    }
+	@Override
+	public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos,
+			@javax.annotation.Nullable Direction direction) {
+		if (direction == (state.getValue(BlockStateProperties.FACING).getOpposite()))
+			return false; // Don't emit on facing side
+		return true;
+	}
 
-    @Override
-    public boolean isSignalSource(BlockState pState) {
-        return true;
-    }
+	@Override
+	public boolean isSignalSource(BlockState pState) {
+		return true;
+	}
 
-    @Override
-    public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
-        if (side == (blockState.getValue(BlockStateProperties.FACING).getOpposite()))
-            return 0; //Don't emit on facing side
-        BlockEntity blockEntity = blockAccess.getBlockEntity(pos);
-        if (blockEntity instanceof SensorT1BE sensorT1BE) {
-            return sensorT1BE.emitRedstone ? 15 : 0; // Emit full power if true, no power if false
-        }
-        return 0;
-    }
+	@Override
+	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+		if (side == (blockState.getValue(BlockStateProperties.FACING).getOpposite()))
+			return 0; // Don't emit on facing side
+		BlockEntity blockEntity = blockAccess.getBlockEntity(pos);
+		if (blockEntity instanceof SensorT1BE sensorT1BE) {
+			return sensorT1BE.emitRedstone ? 15 : 0; // Emit full power if true, no power if false
+		}
+		return 0;
+	}
 
-    @Override
-    public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
-        if (side == (blockState.getValue(BlockStateProperties.FACING).getOpposite()))
-            return 0; //Don't emit on facing side
-        BlockEntity blockEntity = blockAccess.getBlockEntity(pos);
-        if (blockEntity instanceof SensorT1BE sensorT1BE && sensorT1BE.strongSignal) {
-            return getSignal(blockState, blockAccess, pos, side);
-        }
-        return 0;
-    }
+	@Override
+	public int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side) {
+		if (side == (blockState.getValue(BlockStateProperties.FACING).getOpposite()))
+			return 0; // Don't emit on facing side
+		BlockEntity blockEntity = blockAccess.getBlockEntity(pos);
+		if (blockEntity instanceof SensorT1BE sensorT1BE && sensorT1BE.strongSignal) {
+			return getSignal(blockState, blockAccess, pos, side);
+		}
+		return 0;
+	}
 }

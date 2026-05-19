@@ -20,117 +20,127 @@ import java.util.List;
 import java.util.Map;
 
 public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollList.BlockStateEntry> {
-    private static String stripControlCodes(String value) {
-        return net.minecraft.util.StringUtil.stripColor(value);
-    }
+	private static String stripControlCodes(String value) {
+		return net.minecraft.util.StringUtil.stripColor(value);
+	}
 
-    private final int listWidth;
-    private ItemStack stateStack = ItemStack.EMPTY;
-    private SensorScreenInterface parent;
+	private final int listWidth;
+	private ItemStack stateStack = ItemStack.EMPTY;
+	private SensorScreenInterface parent;
 
-    public BlockStateScrollList(SensorScreenInterface parent, int left, int listWidth, int top, int bottom) {
-        super(Minecraft.getInstance(), listWidth, bottom - top, top, bottom, parent.getFontRenderer().lineHeight * 2 + 8);
-        this.parent = parent;
-        this.listWidth = listWidth;
-        this.setRenderBackground(false);
-        this.refreshList();
-        setLeftPos(left);
-    }
+	public BlockStateScrollList(SensorScreenInterface parent, int left, int listWidth, int top, int bottom) {
+		super(Minecraft.getInstance(), listWidth, bottom - top, top, bottom,
+				parent.getFontRenderer().lineHeight * 2 + 8);
+		this.parent = parent;
+		this.listWidth = listWidth;
+		this.setRenderBackground(false);
+		this.refreshList();
+		setLeftPos(left);
+	}
 
-    public ItemStack getStateStack() {
-        return stateStack;
-    }
+	public ItemStack getStateStack() {
+		return stateStack;
+	}
 
-    public void setStateStack(ItemStack stack) {
-        this.stateStack = stack;
-    }
+	public void setStateStack(ItemStack stack) {
+		this.stateStack = stack;
+	}
 
-    @Override
-    protected int getScrollbarPosition() {
-        return this.x0 + this.listWidth - 5;
-    }
+	@Override
+	protected int getScrollbarPosition() {
+		return this.x0 + this.listWidth - 5;
+	}
 
-    @Override
-    public int getRowWidth() {
-        return this.listWidth;
-    }
+	@Override
+	public int getRowWidth() {
+		return this.listWidth;
+	}
 
-    public void refreshList() {
-        this.clearEntries();
-        if (stateStack.getItem() instanceof BlockItem blockItem) {
-            Block block = blockItem.getBlock();
-            BlockState defaultState = block.defaultBlockState();
-            for (Property<?> property : defaultState.getProperties()) {
-                List<Comparable<?>> values = new ArrayList<>(property.getPossibleValues());
-                Comparable<?> setValue = parent.getValue(property);
-                boolean isAny = false;
-                if (setValue == null) {
-                    setValue = defaultState.getValue(property);
-                    isAny = true;
-                }
-                addEntry(new BlockStateEntry(property, setValue, defaultState.getValue(property), parent, values, isAny));
-            }
-        }
-    }
+	public void refreshList() {
+		this.clearEntries();
+		if (stateStack.getItem() instanceof BlockItem blockItem) {
+			Block block = blockItem.getBlock();
+			BlockState defaultState = block.defaultBlockState();
+			for (Property<?> property : defaultState.getProperties()) {
+				List<Comparable<?>> values = new ArrayList<>(property.getPossibleValues());
+				Comparable<?> setValue = parent.getValue(property);
+				boolean isAny = false;
+				if (setValue == null) {
+					setValue = defaultState.getValue(property);
+					isAny = true;
+				}
+				addEntry(new BlockStateEntry(property, setValue, defaultState.getValue(property), parent, values,
+						isAny));
+			}
+		}
+	}
 
-    @Override
-    public void render(GuiGraphics p_282708_, int p_283242_, int p_282891_, float p_283683_) {
-        renderContentBackground(p_282708_);
-        super.render(p_282708_, p_283242_, p_282891_, p_283683_);
-    }
+	@Override
+	public void render(GuiGraphics p_282708_, int p_283242_, int p_282891_, float p_283683_) {
+		renderContentBackground(p_282708_);
+		super.render(p_282708_, p_283242_, p_282891_, p_283683_);
+	}
 
-    protected void renderContentBackground(GuiGraphics guiGraphics) {
-        guiGraphics.fillGradient(this.x0, this.y0, this.x0 + listWidth, this.y0 + this.height, 0xC0101010, 0xD0101010);
-    }
+	protected void renderContentBackground(GuiGraphics guiGraphics) {
+		guiGraphics.fillGradient(this.x0, this.y0, this.x0 + listWidth, this.y0 + this.height, 0xC0101010, 0xD0101010);
+	}
 
-    public class BlockStateEntry extends ObjectSelectionList.Entry<BlockStateEntry> {
-        private final Property<?> property;
-        private final SensorScreenInterface parent;
-        private Comparable<?> currentValue;
-        private final List<Comparable<?>> possibleValues;
-        private final int anyIndex;
-        private boolean isAny;
-        private Map<Property<?>, Comparable<?>> assignedValues = new HashMap<>();
+	public class BlockStateEntry extends ObjectSelectionList.Entry<BlockStateEntry> {
+		private final Property<?> property;
+		private final SensorScreenInterface parent;
+		private Comparable<?> currentValue;
+		private final List<Comparable<?>> possibleValues;
+		private final int anyIndex;
+		private boolean isAny;
+		private Map<Property<?>, Comparable<?>> assignedValues = new HashMap<>();
 
-        BlockStateEntry(Property<?> property, Comparable<?> currentValue, Comparable<?> defaultValue, SensorScreenInterface parent, List<Comparable<?>> possibleValues, boolean isAny) {
-            this.property = property;
-            this.currentValue = currentValue;
-            this.anyIndex = possibleValues.indexOf(defaultValue);
-            this.parent = parent;
-            this.possibleValues = possibleValues;
-            this.isAny = isAny;
-        }
+		BlockStateEntry(Property<?> property, Comparable<?> currentValue, Comparable<?> defaultValue,
+				SensorScreenInterface parent, List<Comparable<?>> possibleValues, boolean isAny) {
+			this.property = property;
+			this.currentValue = currentValue;
+			this.anyIndex = possibleValues.indexOf(defaultValue);
+			this.parent = parent;
+			this.possibleValues = possibleValues;
+			this.isAny = isAny;
+		}
 
-        @Override
-        public Component getNarration() {
-            return Component.translatable("narrator.select", property.getName());
-        }
+		@Override
+		public Component getNarration() {
+			return Component.translatable("narrator.select", property.getName());
+		}
 
-        @Override
-        public void render(GuiGraphics guiGraphics, int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean isMouseOver, float partialTick) {
-            Component name = Component.literal(stripControlCodes(property.getName()));
-            Component value = Component.literal(stripControlCodes(isAny ? "ANY" : this.currentValue.toString()));
-            Font font = this.parent.getFontRenderer();
-            guiGraphics.drawString(font, Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(name, listWidth))), left + 3, top + 2, 0xFFFFFF, false);
-            guiGraphics.drawString(font, Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(value, listWidth))), left + 3, top + 2 + font.lineHeight, 0xCCCCCC, false);
-        }
+		@Override
+		public void render(GuiGraphics guiGraphics, int entryIdx, int top, int left, int entryWidth, int entryHeight,
+				int mouseX, int mouseY, boolean isMouseOver, float partialTick) {
+			Component name = Component.literal(stripControlCodes(property.getName()));
+			Component value = Component.literal(stripControlCodes(isAny ? "ANY" : this.currentValue.toString()));
+			Font font = this.parent.getFontRenderer();
+			guiGraphics.drawString(font,
+					Language.getInstance().getVisualOrder(FormattedText.composite(font.substrByWidth(name, listWidth))),
+					left + 3, top + 2, 0xFFFFFF, false);
+			guiGraphics.drawString(font,
+					Language.getInstance()
+							.getVisualOrder(FormattedText.composite(font.substrByWidth(value, listWidth))),
+					left + 3, top + 2 + font.lineHeight, 0xCCCCCC, false);
+		}
 
-        @Override
-        public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-            BlockStateScrollList.this.setSelected(this);
-            int currentIndex = possibleValues.indexOf(this.currentValue);
-            int nextIndex;
-            if (currentIndex == anyIndex && isAny) {
-                nextIndex = anyIndex;
-                isAny = false;
-            } else {
-                nextIndex = (currentIndex + 1) % possibleValues.size();
-                if (nextIndex == anyIndex) isAny = true;
-            }
-            currentValue = possibleValues.get(nextIndex);
-            parent.setPropertyValue(property, currentValue, isAny);
+		@Override
+		public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+			BlockStateScrollList.this.setSelected(this);
+			int currentIndex = possibleValues.indexOf(this.currentValue);
+			int nextIndex;
+			if (currentIndex == anyIndex && isAny) {
+				nextIndex = anyIndex;
+				isAny = false;
+			} else {
+				nextIndex = (currentIndex + 1) % possibleValues.size();
+				if (nextIndex == anyIndex)
+					isAny = true;
+			}
+			currentValue = possibleValues.get(nextIndex);
+			parent.setPropertyValue(property, currentValue, isAny);
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 }

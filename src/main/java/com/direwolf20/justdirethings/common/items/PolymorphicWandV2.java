@@ -29,132 +29,143 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class PolymorphicWandV2 extends BaseToggleableTool implements LeftClickableTool, FluidContainingItem, PoweredItem {
+public class PolymorphicWandV2 extends BaseToggleableTool
+		implements
+			LeftClickableTool,
+			FluidContainingItem,
+			PoweredItem {
 
-    public PolymorphicWandV2() {
-        super(new Properties()
-                .fireResistant()
-                .stacksTo(1));
-        registerAbility(Ability.POLYMORPH_RANDOM);
-        registerAbility(Ability.POLYMORPH_TARGET);
-    }
+	public PolymorphicWandV2() {
+		super(new Properties().fireResistant().stacksTo(1));
+		registerAbility(Ability.POLYMORPH_RANDOM);
+		registerAbility(Ability.POLYMORPH_TARGET);
+	}
 
-    @Override
-    public int getMaxMB() {
-        return Config.POLYMORPHIC_WAND_V2_MAX_FLUID.get();
-    }
+	@Override
+	public int getMaxMB() {
+		return Config.POLYMORPHIC_WAND_V2_MAX_FLUID.get();
+	}
 
-    @Override
-    public int getMaxEnergy() {
-        return Config.POLYMORPHIC_WAND_V2_MAX_FE.get();
-    }
+	@Override
+	public int getMaxEnergy() {
+		return Config.POLYMORPHIC_WAND_V2_MAX_FE.get();
+	}
 
-    @Override
-    public InteractionResult useOn(UseOnContext pContext) {
-        ItemStack itemStack = pContext.getItemInHand();
-        Player player = pContext.getPlayer();
-        if (player == null || itemStack.isEmpty()) return InteractionResult.FAIL;
-        BlockHitResult blockhitresult = getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.SOURCE_ONLY);
-        if (blockhitresult.getType() == HitResult.Type.BLOCK) {
-            if (FluidContainingItem.pickupFluid(player.level(), player, itemStack, blockhitresult))
-                return InteractionResult.SUCCESS;
-        }
-        return super.useOn(pContext);
-    }
+	@Override
+	public InteractionResult useOn(UseOnContext pContext) {
+		ItemStack itemStack = pContext.getItemInHand();
+		Player player = pContext.getPlayer();
+		if (player == null || itemStack.isEmpty())
+			return InteractionResult.FAIL;
+		BlockHitResult blockhitresult = getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.SOURCE_ONLY);
+		if (blockhitresult.getType() == HitResult.Type.BLOCK) {
+			if (FluidContainingItem.pickupFluid(player.level(), player, itemStack, blockhitresult))
+				return InteractionResult.SUCCESS;
+		}
+		return super.useOn(pContext);
+	}
 
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        Level level = player.level();
-        if (level.isClientSide) return true;
-        ItemStack itemStack = player.getMainHandItem();
-        Set<Ability> abilities = LeftClickableTool.getLeftClickList(itemStack);
-        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && !abilities.isEmpty()) {
-            toggleableTool.useAbility(level, player, InteractionHand.MAIN_HAND, false);
-        }
-        return true;
-    }
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+		Level level = player.level();
+		if (level.isClientSide)
+			return true;
+		ItemStack itemStack = player.getMainHandItem();
+		Set<Ability> abilities = LeftClickableTool.getLeftClickList(itemStack);
+		if (itemStack.getItem() instanceof ToggleableTool toggleableTool && !abilities.isEmpty()) {
+			toggleableTool.useAbility(level, player, InteractionHand.MAIN_HAND, false);
+		}
+		return true;
+	}
 
-    @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if (hand != InteractionHand.MAIN_HAND || target.level().isClientSide()) return InteractionResult.PASS;
-        if (!(target instanceof Mob mob)) return InteractionResult.PASS;
-        if (player.isShiftKeyDown()) {
-            savePolymorphTarget(stack, player, target);
-            return InteractionResult.CONSUME;
-        }
-        if (AbilityMethods.polymorphTarget(target.level(), player, stack, mob)) return InteractionResult.CONSUME;
-        if (AbilityMethods.polymorphRandom(target.level(), player, stack, mob)) return InteractionResult.CONSUME;
-        return InteractionResult.PASS;
-    }
+	@Override
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target,
+			InteractionHand hand) {
+		if (hand != InteractionHand.MAIN_HAND || target.level().isClientSide())
+			return InteractionResult.PASS;
+		if (!(target instanceof Mob mob))
+			return InteractionResult.PASS;
+		if (player.isShiftKeyDown()) {
+			savePolymorphTarget(stack, player, target);
+			return InteractionResult.CONSUME;
+		}
+		if (AbilityMethods.polymorphTarget(target.level(), player, stack, mob))
+			return InteractionResult.CONSUME;
+		if (AbilityMethods.polymorphRandom(target.level(), player, stack, mob))
+			return InteractionResult.CONSUME;
+		return InteractionResult.PASS;
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-        if (blockhitresult.getType() == HitResult.Type.BLOCK) {
-            if (FluidContainingItem.pickupFluid(level, player, itemStack, blockhitresult))
-                return InteractionResultHolder.fail(itemStack);
-        }
-        return super.use(level, player, hand);
-    }
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack itemStack = player.getItemInHand(hand);
+		BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+		if (blockhitresult.getType() == HitResult.Type.BLOCK) {
+			if (FluidContainingItem.pickupFluid(level, player, itemStack, blockhitresult))
+				return InteractionResultHolder.fail(itemStack);
+		}
+		return super.use(level, player, hand);
+	}
 
-    public static void savePolymorphTarget(ItemStack stack, Player player, LivingEntity target) {
-        if (target instanceof Mob mob) {
-            CompoundTag tag = stack.getOrCreateTag();
-            tag.putString("polymorphTargetType", EntityType.getKey(mob.getType()).toString());
+	public static void savePolymorphTarget(ItemStack stack, Player player, LivingEntity target) {
+		if (target instanceof Mob mob) {
+			CompoundTag tag = stack.getOrCreateTag();
+			tag.putString("polymorphTargetType", EntityType.getKey(mob.getType()).toString());
 
-            CompoundTag fullNbt = new CompoundTag();
-            mob.save(fullNbt);
-            tag.put("polymorphCosmeticData", PolymorphicEntitySanitizer.cosmeticOnly(fullNbt));
+			CompoundTag fullNbt = new CompoundTag();
+			mob.save(fullNbt);
+			tag.put("polymorphCosmeticData", PolymorphicEntitySanitizer.cosmeticOnly(fullNbt));
 
-            player.displayClientMessage(
-                    Component.translatable("justdirethings.polymorphset", mob.getType().getDescription()),
-                    true);
-        } else {
-            player.displayClientMessage(
-                    Component.translatable("justdirethings.invalidpolymorphentity"),
-                    true);
-        }
-    }
+			player.displayClientMessage(
+					Component.translatable("justdirethings.polymorphset", mob.getType().getDescription()), true);
+		} else {
+			player.displayClientMessage(Component.translatable("justdirethings.invalidpolymorphentity"), true);
+		}
+	}
 
-    @Override
-    public boolean showBarWhenFull() {
-        return true;
-    }
+	@Override
+	public boolean showBarWhenFull() {
+		return true;
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        return color == -1 ? super.getBarColor(stack) : color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		return color == -1 ? super.getBarColor(stack) : color;
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, level, tooltip, flagIn);
-        if (level == null) return;
-        IFluidHandlerItem fluidHandler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
-        if (fluidHandler == null) return;
-        tooltip.add(Component.translatable("justdirethings.polymorphicfluidamt",
-                MagicHelpers.formatted(fluidHandler.getFluidInTank(0).getAmount()),
-                MagicHelpers.formatted(fluidHandler.getTankCapacity(0))).withStyle(ChatFormatting.GREEN));
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
+		if (level == null)
+			return;
+		IFluidHandlerItem fluidHandler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
+		if (fluidHandler == null)
+			return;
+		tooltip.add(
+				Component
+						.translatable("justdirethings.polymorphicfluidamt",
+								MagicHelpers.formatted(fluidHandler.getFluidInTank(0).getAmount()),
+								MagicHelpers.formatted(fluidHandler.getTankCapacity(0)))
+						.withStyle(ChatFormatting.GREEN));
 
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains("polymorphTargetType")) {
-            EntityType<?> savedType = EntityType.byString(tag.getString("polymorphTargetType")).orElse(null);
-            if (savedType != null) {
-                tooltip.add(Component.translatable("justdirethings.polymorphset", savedType.getDescription())
-                        .withStyle(ChatFormatting.AQUA));
-            }
-        }
-    }
+		CompoundTag tag = stack.getTag();
+		if (tag != null && tag.contains("polymorphTargetType")) {
+			EntityType<?> savedType = EntityType.byString(tag.getString("polymorphTargetType")).orElse(null);
+			if (savedType != null) {
+				tooltip.add(Component.translatable("justdirethings.polymorphset", savedType.getDescription())
+						.withStyle(ChatFormatting.AQUA));
+			}
+		}
+	}
 }

@@ -8,22 +8,21 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class BlazegoldBow extends BaseBow {
-    public BlazegoldBow() {
-        super(new Item.Properties().durability(450).fireResistant());
-        registerAbility(Ability.POTIONARROW);
-        registerAbility(Ability.SPLASH);
-        registerAbility(Ability.LAVAREPAIR);
-    }
+	public BlazegoldBow() {
+		super(new Item.Properties().durability(450).fireResistant());
+		registerAbility(Ability.POTIONARROW);
+		registerAbility(Ability.SPLASH);
+		registerAbility(Ability.LAVAREPAIR);
+	}
 
-    public float getMaxDraw() {
-        return 17;
-    }
+	public float getMaxDraw() {
+		return 17;
+	}
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (canUseAbility(stack, Ability.LAVAREPAIR))
-            return Helpers.doLavaRepair(stack, entity);
-        return false;
-    }
+	@Override
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+		if (canUseAbility(stack, Ability.LAVAREPAIR))
+			return Helpers.doLavaRepair(stack, entity);
+		return false;
+	}
 }
-

@@ -24,35 +24,40 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 public class FluidCollectorT2 extends BaseMachineBlock {
-    public FluidCollectorT2() {
-        super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
-    }
+	public FluidCollectorT2() {
+		super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new FluidCollectorT2BE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new FluidCollectorT2BE(pos, state);
+	}
 
-    @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) return InteractionResult.SUCCESS;
-        BlockEntity te = level.getBlockEntity(blockPos);
-        if (!(te instanceof FluidCollectorT2BE)) return InteractionResult.FAIL;
-        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
-                (windowId, playerInventory, playerEntity) -> new FluidCollectorT2Container(windowId, playerInventory, blockPos),
-                Component.translatable("")), buf -> buf.writeBlockPos(blockPos));
-        return InteractionResult.SUCCESS;
-    }
+	@Override
+	public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
+		BlockEntity te = level.getBlockEntity(blockPos);
+		if (!(te instanceof FluidCollectorT2BE))
+			return InteractionResult.FAIL;
+		NetworkHooks.openScreen((ServerPlayer) player,
+				new SimpleMenuProvider((windowId, playerInventory,
+						playerEntity) -> new FluidCollectorT2Container(windowId, playerInventory, blockPos),
+						Component.translatable("")),
+				buf -> buf.writeBlockPos(blockPos));
+		return InteractionResult.SUCCESS;
+	}
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-    }
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return this.defaultBlockState().setValue(BlockStateProperties.FACING,
+				context.getNearestLookingDirection().getOpposite());
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.FACING);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.FACING);
+	}
 }
-

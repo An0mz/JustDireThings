@@ -4,24 +4,18 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record ToggleToolSlotPayload(
-        String settingName,
-        int slot,
-        int type,
-        int value
-) {
-    public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "toggle_tool_slot_setting");
+public record ToggleToolSlotPayload(String settingName, int slot, int type, int value) {
+	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "toggle_tool_slot_setting");
 
-    public ToggleToolSlotPayload(final FriendlyByteBuf buffer) {
-        this(buffer.readUtf(), buffer.readInt(), buffer.readInt(), buffer.readInt());
-    }
+	public ToggleToolSlotPayload(final FriendlyByteBuf buffer) {
+		this(buffer.readUtf(), buffer.readInt(), buffer.readInt(), buffer.readInt());
+	}
 
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeUtf(settingName);
-        buffer.writeInt(slot);
-        buffer.writeInt(type);
-        buffer.writeInt(value);
-    }
+	public void write(FriendlyByteBuf buffer) {
+		buffer.writeUtf(settingName);
+		buffer.writeInt(slot);
+		buffer.writeInt(type);
+		buffer.writeInt(value);
+	}
 
 }
-

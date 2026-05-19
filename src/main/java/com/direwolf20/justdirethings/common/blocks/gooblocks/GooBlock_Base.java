@@ -25,62 +25,60 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public class GooBlock_Base extends Block implements EntityBlock {
-    public static final BooleanProperty ALIVE = BooleanProperty.create("alive");
+	public static final BooleanProperty ALIVE = BooleanProperty.create("alive");
 
-    public GooBlock_Base() {
-        super(Properties.of()
-                .sound(SoundType.FUNGUS)
-                .strength(2.0f)
-                .noOcclusion()
-        );
-        this.registerDefaultState(this.stateDefinition.any().setValue(ALIVE, false));
-    }
+	public GooBlock_Base() {
+		super(Properties.of().sound(SoundType.FUNGUS).strength(2.0f).noOcclusion());
+		this.registerDefaultState(this.stateDefinition.any().setValue(ALIVE, false));
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(ALIVE);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(ALIVE);
+	}
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        if (!state.getValue(ALIVE) && validRevivalItem(itemStack)) {
-            if (!level.isClientSide) {
-                level.setBlock(pos, state.setValue(ALIVE, true), 3);
-                level.playSound(null, pos, SoundEvents.SCULK_BLOCK_SPREAD, SoundSource.BLOCKS, 1.0f, 0.5f);
-                if (!player.isCreative()) {
-                    itemStack.shrink(1);
-                }
-            }
-            return InteractionResult.sidedSuccess(level.isClientSide);
-        }
-        return super.use(state, level, pos, player, hand, hit);
-    }
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+			BlockHitResult hit) {
+		ItemStack itemStack = player.getItemInHand(hand);
+		if (!state.getValue(ALIVE) && validRevivalItem(itemStack)) {
+			if (!level.isClientSide) {
+				level.setBlock(pos, state.setValue(ALIVE, true), 3);
+				level.playSound(null, pos, SoundEvents.SCULK_BLOCK_SPREAD, SoundSource.BLOCKS, 1.0f, 0.5f);
+				if (!player.isCreative()) {
+					itemStack.shrink(1);
+				}
+			}
+			return InteractionResult.sidedSuccess(level.isClientSide);
+		}
+		return super.use(state, level, pos, player, hand, hit);
+	}
 
-    protected boolean validRevivalItem(ItemStack itemStack) {
-        return itemStack.is(JustDireItemTags.GOO_REVIVE_TIER_1);
-    }
+	protected boolean validRevivalItem(ItemStack itemStack) {
+		return itemStack.is(JustDireItemTags.GOO_REVIVE_TIER_1);
+	}
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide()) {
-            return (lvl, pos, blockState, t) -> {
-                if (t instanceof GooBlockBE_Base tile) {
-                    tile.tickClient();
-                }
-            };
-        }
-        return (lvl, pos, blockState, t) -> {
-            if (t instanceof GooBlockBE_Base tile) {
-                tile.tickServer();
-            }
-        };
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
+			BlockEntityType<T> type) {
+		if (level.isClientSide()) {
+			return (lvl, pos, blockState, t) -> {
+				if (t instanceof GooBlockBE_Base tile) {
+					tile.tickClient();
+				}
+			};
+		}
+		return (lvl, pos, blockState, t) -> {
+			if (t instanceof GooBlockBE_Base tile) {
+				tile.tickServer();
+			}
+		};
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GooBlockBE_Base(Registration.GooBlockBE_Tier1.get(), pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new GooBlockBE_Base(Registration.GooBlockBE_Tier1.get(), pos, state);
+	}
 }

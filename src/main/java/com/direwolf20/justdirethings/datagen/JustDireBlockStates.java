@@ -20,278 +20,292 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
-
 public class JustDireBlockStates extends BlockStateProvider {
-    public JustDireBlockStates(PackOutput output, ExistingFileHelper helper) {
-        super(output, JustDireThings.MODID, helper);
-    }
+	public JustDireBlockStates(PackOutput output, ExistingFileHelper helper) {
+		super(output, JustDireThings.MODID, helper);
+	}
 
-    @Override
-    protected void registerStatesAndModels() {
-        gooBlock(Registration.GooBlock_Tier1.get(), "gooblock_tier1");
-        gooBlock(Registration.GooBlock_Tier2.get(), "gooblock_tier2");
-        gooBlock(Registration.GooBlock_Tier3.get(), "gooblock_tier3");
-        gooBlock(Registration.GooBlock_Tier4.get(), "gooblock_tier4");
-        simpleBlock(Registration.FerricoreBlock.get(), models().cubeAll(Registration.FerricoreBlock_ITEM.getId().getPath(), blockTexture(Registration.FerricoreBlock.get())));
-        simpleBlock(Registration.BlazeGoldBlock.get(), models().cubeAll(Registration.BlazeGoldBlock_ITEM.getId().getPath(), blockTexture(Registration.BlazeGoldBlock.get())));
-        simpleBlock(Registration.CelestigemBlock.get(), models().cubeAll(Registration.CelestigemBlock_ITEM.getId().getPath(), blockTexture(Registration.CelestigemBlock.get())));
-        simpleBlock(Registration.EclipseAlloyBlock.get(), models().cubeAll(Registration.EclipseAlloyBlock_ITEM.getId().getPath(), blockTexture(Registration.EclipseAlloyBlock.get())));
-        //simpleBlock(Registration.GeneratorT1.get(), models().cubeAll(Registration.GeneratorT1.getId().getPath(), blockTexture(Registration.GeneratorT1.get())));
-        simpleBlock(Registration.CoalBlock_T1.get(), models().cubeAll(Registration.CoalBlock_T1.getId().getPath(), blockTexture(Registration.CoalBlock_T1.get())));
-        simpleBlock(Registration.CoalBlock_T2.get(), models().cubeAll(Registration.CoalBlock_T2.getId().getPath(), blockTexture(Registration.CoalBlock_T2.get())));
-        simpleBlock(Registration.CoalBlock_T3.get(), models().cubeAll(Registration.CoalBlock_T3.getId().getPath(), blockTexture(Registration.CoalBlock_T3.get())));
-        simpleBlock(Registration.CoalBlock_T4.get(), models().cubeAll(Registration.CoalBlock_T4.getId().getPath(), blockTexture(Registration.CoalBlock_T4.get())));
-        simpleBlock(Registration.PlayerAccessor.get(), models().cubeAll(Registration.PlayerAccessor.getId().getPath(), blockTexture(Registration.PlayerAccessor.get())));
-        simpleBlock(Registration.EclipseGateBlock.get(), models().cubeAll(Registration.EclipseGateBlock.getId().getPath(), blockTexture(Registration.EclipseGateBlock.get())).renderType("cutout"));
-        simpleBlock(Registration.TimeCrystalBlock.get(), models().cubeAll(Registration.TimeCrystalBlock_ITEM.getId().getPath(), blockTexture(Registration.TimeCrystalBlock.get())));
-        simpleBlock(Registration.CharcoalBlock.get(), models().cubeAll(Registration.CharcoalBlock_ITEM.getId().getPath(), blockTexture(Registration.CharcoalBlock.get())));
-        timeCrystalCluster(Registration.TimeCrystalCluster);
-        timeCrystalCluster(Registration.TimeCrystalCluster_Small);
-        timeCrystalCluster(Registration.TimeCrystalCluster_Medium);
-        timeCrystalCluster(Registration.TimeCrystalCluster_Large);
+	@Override
+	protected void registerStatesAndModels() {
+		gooBlock(Registration.GooBlock_Tier1.get(), "gooblock_tier1");
+		gooBlock(Registration.GooBlock_Tier2.get(), "gooblock_tier2");
+		gooBlock(Registration.GooBlock_Tier3.get(), "gooblock_tier3");
+		gooBlock(Registration.GooBlock_Tier4.get(), "gooblock_tier4");
+		simpleBlock(Registration.FerricoreBlock.get(), models().cubeAll(
+				Registration.FerricoreBlock_ITEM.getId().getPath(), blockTexture(Registration.FerricoreBlock.get())));
+		simpleBlock(Registration.BlazeGoldBlock.get(), models().cubeAll(
+				Registration.BlazeGoldBlock_ITEM.getId().getPath(), blockTexture(Registration.BlazeGoldBlock.get())));
+		simpleBlock(Registration.CelestigemBlock.get(), models().cubeAll(
+				Registration.CelestigemBlock_ITEM.getId().getPath(), blockTexture(Registration.CelestigemBlock.get())));
+		simpleBlock(Registration.EclipseAlloyBlock.get(),
+				models().cubeAll(Registration.EclipseAlloyBlock_ITEM.getId().getPath(),
+						blockTexture(Registration.EclipseAlloyBlock.get())));
+		// simpleBlock(Registration.GeneratorT1.get(),
+		// models().cubeAll(Registration.GeneratorT1.getId().getPath(),
+		// blockTexture(Registration.GeneratorT1.get())));
+		simpleBlock(Registration.CoalBlock_T1.get(), models().cubeAll(Registration.CoalBlock_T1.getId().getPath(),
+				blockTexture(Registration.CoalBlock_T1.get())));
+		simpleBlock(Registration.CoalBlock_T2.get(), models().cubeAll(Registration.CoalBlock_T2.getId().getPath(),
+				blockTexture(Registration.CoalBlock_T2.get())));
+		simpleBlock(Registration.CoalBlock_T3.get(), models().cubeAll(Registration.CoalBlock_T3.getId().getPath(),
+				blockTexture(Registration.CoalBlock_T3.get())));
+		simpleBlock(Registration.CoalBlock_T4.get(), models().cubeAll(Registration.CoalBlock_T4.getId().getPath(),
+				blockTexture(Registration.CoalBlock_T4.get())));
+		simpleBlock(Registration.PlayerAccessor.get(), models().cubeAll(Registration.PlayerAccessor.getId().getPath(),
+				blockTexture(Registration.PlayerAccessor.get())));
+		simpleBlock(Registration.EclipseGateBlock.get(),
+				models().cubeAll(Registration.EclipseGateBlock.getId().getPath(),
+						blockTexture(Registration.EclipseGateBlock.get())).renderType("cutout"));
+		simpleBlock(Registration.TimeCrystalBlock.get(),
+				models().cubeAll(Registration.TimeCrystalBlock_ITEM.getId().getPath(),
+						blockTexture(Registration.TimeCrystalBlock.get())));
+		simpleBlock(Registration.CharcoalBlock.get(), models().cubeAll(
+				Registration.CharcoalBlock_ITEM.getId().getPath(), blockTexture(Registration.CharcoalBlock.get())));
+		timeCrystalCluster(Registration.TimeCrystalCluster);
+		timeCrystalCluster(Registration.TimeCrystalCluster_Small);
+		timeCrystalCluster(Registration.TimeCrystalCluster_Medium);
+		timeCrystalCluster(Registration.TimeCrystalCluster_Large);
 
-        getVariantBuilder(Registration.TimeCrystalBuddingBlock.get()).forAllStates(s -> {
-            ModelFile model;
-            int stage = s.getValue(TimeCrystalBuddingBlock.STAGE);
-            if (stage == 0) {
-                model = models().cubeAll("time_crystal_budding_block_state_0", modLoc("block/time_crystal_budding_block_state_0")).renderType("solid");
-            } else if (stage == 1) {
-                model = models().cubeAll("time_crystal_budding_block_state_1", modLoc("block/time_crystal_budding_block_state_1")).renderType("solid");
-            } else if (stage == 2) {
-                model = models().cubeAll("time_crystal_budding_block_state_2", modLoc("block/time_crystal_budding_block_state_2")).renderType("solid");
-            } else {
-                model = models().cubeAll("time_crystal_budding_block", modLoc("block/time_crystal_budding_block")).renderType("solid");
-            }
-            return ConfiguredModel.builder().modelFile(model).build();
-        });
+		getVariantBuilder(Registration.TimeCrystalBuddingBlock.get()).forAllStates(s -> {
+			ModelFile model;
+			int stage = s.getValue(TimeCrystalBuddingBlock.STAGE);
+			if (stage == 0) {
+				model = models().cubeAll("time_crystal_budding_block_state_0",
+						modLoc("block/time_crystal_budding_block_state_0")).renderType("solid");
+			} else if (stage == 1) {
+				model = models().cubeAll("time_crystal_budding_block_state_1",
+						modLoc("block/time_crystal_budding_block_state_1")).renderType("solid");
+			} else if (stage == 2) {
+				model = models().cubeAll("time_crystal_budding_block_state_2",
+						modLoc("block/time_crystal_budding_block_state_2")).renderType("solid");
+			} else {
+				model = models().cubeAll("time_crystal_budding_block", modLoc("block/time_crystal_budding_block"))
+						.renderType("solid");
+			}
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
 
-        // InventoryHolder — simple cubeAll
-        simpleBlock(Registration.InventoryHolder.get(), models().cubeAll(
-                Registration.InventoryHolder.getId().getPath(),
-                modLoc("block/inventory_holder")));
+		// InventoryHolder — simple cubeAll
+		simpleBlock(Registration.InventoryHolder.get(),
+				models().cubeAll(Registration.InventoryHolder.getId().getPath(), modLoc("block/inventory_holder")));
 
-        patternBlock();
-        soilBlocks();
-        sidedBlocks();
-        sidedNonRotating();
-    }
+		patternBlock();
+		soilBlocks();
+		sidedBlocks();
+		sidedNonRotating();
+	}
 
-    private void timeCrystalCluster(RegistryObject<TimeCrystalCluster> block) {
-        var texturePath = block.getId().getPath();
-        var texture = modLoc("block/" + texturePath);
-        var model = models().cross(texturePath, texture).renderType("cutout");
-        directionalBlock(block.get(), model);
-    }
+	private void timeCrystalCluster(RegistryObject<TimeCrystalCluster> block) {
+		var texturePath = block.getId().getPath();
+		var texture = modLoc("block/" + texturePath);
+		var model = models().cross(texturePath, texture).renderType("cutout");
+		directionalBlock(block.get(), model);
+	}
 
-    private void sidedNonRotating() {
-        simpleBlock(Registration.BlockBreakerT2.get(), models().cubeBottomTop(
-                Registration.BlockBreakerT2.getId().getPath(),
-                modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_side"),
-                modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_bottom"),
-                modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_top")));
-        simpleBlock(Registration.BlockPlacerT2.get(), models().cubeBottomTop(
-                Registration.BlockPlacerT2.getId().getPath(),
-                modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_side"),
-                modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_bottom"),
-                modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_top")));
-        simpleBlock(Registration.ClickerT2.get(), models().cubeBottomTop(
-                Registration.ClickerT2.getId().getPath(),
-                modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_side"),
-                modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_bottom"),
-                modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_top")));
-        simpleBlock(Registration.SensorT2.get(), models().cubeBottomTop(
-                Registration.SensorT2.getId().getPath(),
-                modLoc("block/" + Registration.SensorT2.getId().getPath() + "_side"),
-                modLoc("block/" + Registration.SensorT2.getId().getPath() + "_bottom"),
-                modLoc("block/" + Registration.SensorT2.getId().getPath() + "_top")));
-        simpleBlock(Registration.DropperT2.get(), models().cubeBottomTop(
-                Registration.DropperT2.getId().getPath(),
-                modLoc("block/" + Registration.DropperT2.getId().getPath() + "_side"),
-                modLoc("block/" + Registration.DropperT2.getId().getPath() + "_bottom"),
-                modLoc("block/" + Registration.DropperT2.getId().getPath() + "_top")));
-        simpleBlock(Registration.BlockSwapperT2.get(), models().cubeBottomTop(
-                Registration.BlockSwapperT2.getId().getPath(),
-                modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_side"),
-                modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_bottom"),
-                modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_top")));
-        simpleBlock(Registration.FluidCollectorT2.get(), models().cubeBottomTop(
-                Registration.FluidCollectorT2.getId().getPath(),
-                modLoc("block/fluidcollectort2_side"),
-                modLoc("block/fluidcollectort2_bottom"),
-                modLoc("block/fluidcollectort2_top")));
-        simpleBlock(Registration.FluidPlacerT2.get(), models().cubeBottomTop(
-                Registration.FluidPlacerT2.getId().getPath(),
-                modLoc("block/fluidplacert2_side"),
-                modLoc("block/fluidplacert2_bottom"),
-                modLoc("block/fluidplacert2_top")));
-        simpleBlock(Registration.GeneratorFluidT1.get(), models().cubeBottomTop(
-                Registration.GeneratorFluidT1.getId().getPath(),
-                modLoc("block/generatorfluidt1_side"),
-                modLoc("block/generatorfluidt1_bottom"),
-                modLoc("block/generatorfluidt1_top")));
-        simpleBlock(Registration.ParadoxMachine.get(), models().cubeBottomTop(
-                Registration.ParadoxMachine.getId().getPath(),
-                modLoc("block/paradoxmachine_side"),
-                modLoc("block/paradoxmachine_bottom"),
-                modLoc("block/paradoxmachine_top")));
-    }
+	private void sidedNonRotating() {
+		simpleBlock(Registration.BlockBreakerT2.get(),
+				models().cubeBottomTop(Registration.BlockBreakerT2.getId().getPath(),
+						modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_side"),
+						modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_bottom"),
+						modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_top")));
+		simpleBlock(Registration.BlockPlacerT2.get(),
+				models().cubeBottomTop(Registration.BlockPlacerT2.getId().getPath(),
+						modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_side"),
+						modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_bottom"),
+						modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_top")));
+		simpleBlock(Registration.ClickerT2.get(),
+				models().cubeBottomTop(Registration.ClickerT2.getId().getPath(),
+						modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_side"),
+						modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_bottom"),
+						modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_top")));
+		simpleBlock(Registration.SensorT2.get(),
+				models().cubeBottomTop(Registration.SensorT2.getId().getPath(),
+						modLoc("block/" + Registration.SensorT2.getId().getPath() + "_side"),
+						modLoc("block/" + Registration.SensorT2.getId().getPath() + "_bottom"),
+						modLoc("block/" + Registration.SensorT2.getId().getPath() + "_top")));
+		simpleBlock(Registration.DropperT2.get(),
+				models().cubeBottomTop(Registration.DropperT2.getId().getPath(),
+						modLoc("block/" + Registration.DropperT2.getId().getPath() + "_side"),
+						modLoc("block/" + Registration.DropperT2.getId().getPath() + "_bottom"),
+						modLoc("block/" + Registration.DropperT2.getId().getPath() + "_top")));
+		simpleBlock(Registration.BlockSwapperT2.get(),
+				models().cubeBottomTop(Registration.BlockSwapperT2.getId().getPath(),
+						modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_side"),
+						modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_bottom"),
+						modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_top")));
+		simpleBlock(Registration.FluidCollectorT2.get(),
+				models().cubeBottomTop(Registration.FluidCollectorT2.getId().getPath(),
+						modLoc("block/fluidcollectort2_side"), modLoc("block/fluidcollectort2_bottom"),
+						modLoc("block/fluidcollectort2_top")));
+		simpleBlock(Registration.FluidPlacerT2.get(),
+				models().cubeBottomTop(Registration.FluidPlacerT2.getId().getPath(), modLoc("block/fluidplacert2_side"),
+						modLoc("block/fluidplacert2_bottom"), modLoc("block/fluidplacert2_top")));
+		simpleBlock(Registration.GeneratorFluidT1.get(),
+				models().cubeBottomTop(Registration.GeneratorFluidT1.getId().getPath(),
+						modLoc("block/generatorfluidt1_side"), modLoc("block/generatorfluidt1_bottom"),
+						modLoc("block/generatorfluidt1_top")));
+		simpleBlock(Registration.ParadoxMachine.get(),
+				models().cubeBottomTop(Registration.ParadoxMachine.getId().getPath(),
+						modLoc("block/paradoxmachine_side"), modLoc("block/paradoxmachine_bottom"),
+						modLoc("block/paradoxmachine_top")));
+	}
 
-    private void sidedBlocks() {
-        for (var sidedBlock : Registration.SIDEDBLOCKS.getEntries()) {
-            if (sidedBlock.equals(Registration.BlockBreakerT1)) {
-                getVariantBuilder(Registration.BlockBreakerT1.get()).forAllStates(s -> {
-                    ModelFile model;
-                    boolean active = s.getValue(BlockBreakerT1.ACTIVE);
-                    Direction dir = s.getValue(BlockStateProperties.FACING);
-                    if (active) { //Active
-                        model = models().orientableWithBottom(
-                                Objects.requireNonNull(sidedBlock.getId()).getPath() + "_active",
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_bottom"),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_top_active")
-                        ).renderType("solid");
-                    } else {
-                        model = models().orientableWithBottom(
-                                Objects.requireNonNull(sidedBlock.getId()).getPath(),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_bottom"),
-                                modLoc("block/" + sidedBlock.getId().getPath() + "_top")
-                        ).renderType("solid");
-                    }
-                    return ConfiguredModel.builder()
-                            .modelFile(model)
-                            .rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
-                            .rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360)
-                            .build();
-                });
-            } else {
-                ModelFile model = models().orientableWithBottom(
-                        Objects.requireNonNull(sidedBlock.getId()).getPath(),
-                        modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
-                        modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
-                        modLoc("block/" + sidedBlock.getId().getPath() + "_bottom"),
-                        modLoc("block/" + sidedBlock.getId().getPath() + "_top")
-                ).renderType("solid");
+	private void sidedBlocks() {
+		for (var sidedBlock : Registration.SIDEDBLOCKS.getEntries()) {
+			if (sidedBlock.equals(Registration.BlockBreakerT1)) {
+				getVariantBuilder(Registration.BlockBreakerT1.get()).forAllStates(s -> {
+					ModelFile model;
+					boolean active = s.getValue(BlockBreakerT1.ACTIVE);
+					Direction dir = s.getValue(BlockStateProperties.FACING);
+					if (active) { // Active
+						model = models()
+								.orientableWithBottom(Objects.requireNonNull(sidedBlock.getId()).getPath() + "_active",
+										modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
+										modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
+										modLoc("block/" + sidedBlock.getId().getPath() + "_bottom"),
+										modLoc("block/" + sidedBlock.getId().getPath() + "_top_active"))
+								.renderType("solid");
+					} else {
+						model = models().orientableWithBottom(Objects.requireNonNull(sidedBlock.getId()).getPath(),
+								modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
+								modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
+								modLoc("block/" + sidedBlock.getId().getPath() + "_bottom"),
+								modLoc("block/" + sidedBlock.getId().getPath() + "_top")).renderType("solid");
+					}
+					return ConfiguredModel.builder().modelFile(model)
+							.rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
+							.rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360).build();
+				});
+			} else {
+				ModelFile model = models().orientableWithBottom(Objects.requireNonNull(sidedBlock.getId()).getPath(),
+						modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
+						modLoc("block/" + sidedBlock.getId().getPath() + "_side"),
+						modLoc("block/" + sidedBlock.getId().getPath() + "_bottom"),
+						modLoc("block/" + sidedBlock.getId().getPath() + "_top")).renderType("solid");
 
-                directionalBlock(sidedBlock.get(), model);
-            }
-        }
-    }
+				directionalBlock(sidedBlock.get(), model);
+			}
+		}
+	}
 
-    private void soilBlocks() {
-        getVariantBuilder(Registration.GooSoil_Tier1.get()).forAllStates(s -> {
-            ModelFile model;
-            int Moisture = s.getValue(BlockStateProperties.MOISTURE);
-            if (Moisture == 7) { //Moist
-                model = models().withExistingParent(Registration.GooSoil_Tier1.getId().getPath() + "_moist", new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier1"))
-                        .texture("top", modLoc("block/goofarmland_tier1_moist"));
-            } else {
-                model = models().withExistingParent(Registration.GooSoil_Tier1.getId().getPath(), new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier1"))
-                        .texture("top", modLoc("block/goofarmland_tier1"));
-            }
-            return ConfiguredModel.builder()
-                    .modelFile(model).build();
-        });
+	private void soilBlocks() {
+		getVariantBuilder(Registration.GooSoil_Tier1.get()).forAllStates(s -> {
+			ModelFile model;
+			int Moisture = s.getValue(BlockStateProperties.MOISTURE);
+			if (Moisture == 7) { // Moist
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier1.getId().getPath() + "_moist",
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier1"))
+						.texture("top", modLoc("block/goofarmland_tier1_moist"));
+			} else {
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier1.getId().getPath(),
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier1"))
+						.texture("top", modLoc("block/goofarmland_tier1"));
+			}
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
 
-        getVariantBuilder(Registration.GooSoil_Tier2.get()).forAllStates(s -> {
-            ModelFile model;
-            int Moisture = s.getValue(BlockStateProperties.MOISTURE);
-            if (Moisture == 7) { //Moist
-                model = models().withExistingParent(Registration.GooSoil_Tier2.getId().getPath() + "_moist", new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier2"))
-                        .texture("top", modLoc("block/goofarmland_tier2_moist"));
-            } else {
-                model = models().withExistingParent(Registration.GooSoil_Tier2.getId().getPath(), new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier2"))
-                        .texture("top", modLoc("block/goofarmland_tier2"));
-            }
-            return ConfiguredModel.builder()
-                    .modelFile(model).build();
-        });
+		getVariantBuilder(Registration.GooSoil_Tier2.get()).forAllStates(s -> {
+			ModelFile model;
+			int Moisture = s.getValue(BlockStateProperties.MOISTURE);
+			if (Moisture == 7) { // Moist
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier2.getId().getPath() + "_moist",
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier2"))
+						.texture("top", modLoc("block/goofarmland_tier2_moist"));
+			} else {
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier2.getId().getPath(),
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier2"))
+						.texture("top", modLoc("block/goofarmland_tier2"));
+			}
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
 
-        getVariantBuilder(Registration.GooSoil_Tier3.get()).forAllStates(s -> {
-            ModelFile model;
-            int Moisture = s.getValue(BlockStateProperties.MOISTURE);
-            if (Moisture == 7) { //Moist
-                model = models().withExistingParent(Registration.GooSoil_Tier3.getId().getPath() + "_moist", new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier3"))
-                        .texture("top", modLoc("block/goofarmland_tier3_moist"));
-            } else {
-                model = models().withExistingParent(Registration.GooSoil_Tier3.getId().getPath(), new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier3"))
-                        .texture("top", modLoc("block/goofarmland_tier3"));
-            }
-            return ConfiguredModel.builder()
-                    .modelFile(model).build();
-        });
-        getVariantBuilder(Registration.GooSoil_Tier4.get()).forAllStates(s -> {
-            ModelFile model;
-            int Moisture = s.getValue(BlockStateProperties.MOISTURE);
-            if (Moisture == 7) { //Moist
-                model = models().withExistingParent(Registration.GooSoil_Tier4.getId().getPath() + "_moist", new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier4"))
-                        .texture("top", modLoc("block/goofarmland_tier4_moist"));
-            } else {
-                model = models().withExistingParent(Registration.GooSoil_Tier4.getId().getPath(), new ResourceLocation("minecraft:block/template_farmland"))
-                        .texture("dirt", modLoc("block/goosoilside_tier4"))
-                        .texture("top", modLoc("block/goofarmland_tier4"));
-            }
-            return ConfiguredModel.builder()
-                    .modelFile(model).build();
-        });
-    }
+		getVariantBuilder(Registration.GooSoil_Tier3.get()).forAllStates(s -> {
+			ModelFile model;
+			int Moisture = s.getValue(BlockStateProperties.MOISTURE);
+			if (Moisture == 7) { // Moist
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier3.getId().getPath() + "_moist",
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier3"))
+						.texture("top", modLoc("block/goofarmland_tier3_moist"));
+			} else {
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier3.getId().getPath(),
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier3"))
+						.texture("top", modLoc("block/goofarmland_tier3"));
+			}
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
+		getVariantBuilder(Registration.GooSoil_Tier4.get()).forAllStates(s -> {
+			ModelFile model;
+			int Moisture = s.getValue(BlockStateProperties.MOISTURE);
+			if (Moisture == 7) { // Moist
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier4.getId().getPath() + "_moist",
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier4"))
+						.texture("top", modLoc("block/goofarmland_tier4_moist"));
+			} else {
+				model = models()
+						.withExistingParent(Registration.GooSoil_Tier4.getId().getPath(),
+								new ResourceLocation("minecraft:block/template_farmland"))
+						.texture("dirt", modLoc("block/goosoilside_tier4"))
+						.texture("top", modLoc("block/goofarmland_tier4"));
+			}
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
+	}
 
-    private void gooBlock(Block block, String name) {
-        ModelFile alive = models().cubeAll(name, modLoc("block/" + name)).renderType("cutout");
-        ModelFile dead = models().cubeAll(name + "_dead", modLoc("block/" + name + "_dead")).renderType("cutout");
-        getVariantBuilder(block)
-                .partialState().with(GooBlock_Base.ALIVE, false).addModels(new ConfiguredModel(dead))
-                .partialState().with(GooBlock_Base.ALIVE, true).addModels(new ConfiguredModel(alive));
-    }
+	private void gooBlock(Block block, String name) {
+		ModelFile alive = models().cubeAll(name, modLoc("block/" + name)).renderType("cutout");
+		ModelFile dead = models().cubeAll(name + "_dead", modLoc("block/" + name + "_dead")).renderType("cutout");
+		getVariantBuilder(block).partialState().with(GooBlock_Base.ALIVE, false).addModels(new ConfiguredModel(dead))
+				.partialState().with(GooBlock_Base.ALIVE, true).addModels(new ConfiguredModel(alive));
+	}
 
-    private void patternBlock() {
-        getVariantBuilder(Registration.GooPatternBlock.get()).forAllStates(s -> {
-            int stage = s.getValue(GooPatternBlock.GOOSTAGE);
-            ModelFile model;
-            if (stage == 11) {
-                model = models().orientableWithBottom(
-                        Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + "11",
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full")
-                ).renderType("cutout");
-            } else if (stage == 10) {
-                model = models().orientableWithBottom(
-                        Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + "10",
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full")
-                ).renderType("cutout");
-            } else if (stage == 9) {
-                model = models().orientableWithBottom(
-                        Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + "9",
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goopatterblock_top")
-                ).renderType("cutout");
-            } else {
-                model = models().orientableWithBottom(
-                        Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + stage,
-                        modLoc("block/goopatterns/goorender_side" + stage),
-                        modLoc("block/goopatterns/goorender_side" + stage),
-                        modLoc("block/goopatterns/goorender_full"),
-                        modLoc("block/goopatterns/goorender_blank")
-                ).renderType("cutout");
-            }
-            return ConfiguredModel.builder()
-                    .modelFile(model).build();
-        });
-    }
+	private void patternBlock() {
+		getVariantBuilder(Registration.GooPatternBlock.get()).forAllStates(s -> {
+			int stage = s.getValue(GooPatternBlock.GOOSTAGE);
+			ModelFile model;
+			if (stage == 11) {
+				model = models()
+						.orientableWithBottom(
+								Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + "11",
+								modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goorender_full"),
+								modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goorender_full"))
+						.renderType("cutout");
+			} else if (stage == 10) {
+				model = models()
+						.orientableWithBottom(
+								Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + "10",
+								modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goorender_full"),
+								modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goorender_full"))
+						.renderType("cutout");
+			} else if (stage == 9) {
+				model = models().orientableWithBottom(
+						Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + "9",
+						modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goorender_full"),
+						modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goopatterblock_top"))
+						.renderType("cutout");
+			} else {
+				model = models()
+						.orientableWithBottom(
+								Objects.requireNonNull(Registration.GooPatternBlock.getId()).getPath() + stage,
+								modLoc("block/goopatterns/goorender_side" + stage),
+								modLoc("block/goopatterns/goorender_side" + stage),
+								modLoc("block/goopatterns/goorender_full"), modLoc("block/goopatterns/goorender_blank"))
+						.renderType("cutout");
+			}
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
+	}
 }

@@ -25,83 +25,105 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FluidCollectorT2BE extends FluidCollectorT1BE implements PoweredMachineBE, AreaAffectingBE, FilterableBE {
-    public FilterData filterData = new FilterData();
-    public AreaAffectingData areaAffectingData = new AreaAffectingData(getBlockState().getValue(BlockStateProperties.FACING));
-    public final PoweredMachineContainerData poweredMachineData;
-    private final MachineEnergyStorage energyStorage;
-    private final FilterBasicHandler filterHandler;
+	public FilterData filterData = new FilterData();
+	public AreaAffectingData areaAffectingData = new AreaAffectingData(
+			getBlockState().getValue(BlockStateProperties.FACING));
+	public final PoweredMachineContainerData poweredMachineData;
+	private final MachineEnergyStorage energyStorage;
+	private final FilterBasicHandler filterHandler;
 
-    public FluidCollectorT2BE(BlockPos pPos, BlockState pBlockState) {
-        super(Registration.FluidCollectorT2BE.get(), pPos, pBlockState);
-        fluidTank.setCapacity(getMaxMB());
-        energyStorage = new MachineEnergyStorage(getMaxEnergy());
-        filterHandler = new FilterBasicHandler(9);
-        poweredMachineData = new PoweredMachineContainerData(this);
-    }
+	public FluidCollectorT2BE(BlockPos pPos, BlockState pBlockState) {
+		super(Registration.FluidCollectorT2BE.get(), pPos, pBlockState);
+		fluidTank.setCapacity(getMaxMB());
+		energyStorage = new MachineEnergyStorage(getMaxEnergy());
+		filterHandler = new FilterBasicHandler(9);
+		poweredMachineData = new PoweredMachineContainerData(this);
+	}
 
-    @Override
-    public int getMaxMB() { return 32000; }
+	@Override
+	public int getMaxMB() {
+		return 32000;
+	}
 
-    @Override
-    public ContainerData getContainerData() { return poweredMachineData; }
+	@Override
+	public ContainerData getContainerData() {
+		return poweredMachineData;
+	}
 
-    @Override
-    public MachineEnergyStorage getEnergyStorage() { return energyStorage; }
+	@Override
+	public MachineEnergyStorage getEnergyStorage() {
+		return energyStorage;
+	}
 
-    @Override
-    public int getStandardEnergyCost() { return 500; }
+	@Override
+	public int getStandardEnergyCost() {
+		return 500;
+	}
 
-    @Override
-    public BlockEntity getBlockEntity() { return this; }
+	@Override
+	public BlockEntity getBlockEntity() {
+		return this;
+	}
 
-    @Override
-    public AreaAffectingData getAreaAffectingData() { return areaAffectingData; }
+	@Override
+	public AreaAffectingData getAreaAffectingData() {
+		return areaAffectingData;
+	}
 
-    @Override
-    public FilterBasicHandler getFilterHandler() { return filterHandler; }
+	@Override
+	public FilterBasicHandler getFilterHandler() {
+		return filterHandler;
+	}
 
-    @Override
-    public FilterData getFilterData() { return filterData; }
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
+	}
 
-    @Override
-    public boolean canCollect() { return hasEnoughPower(getStandardEnergyCost()); }
+	@Override
+	public boolean canCollect() {
+		return hasEnoughPower(getStandardEnergyCost());
+	}
 
-    @Override
-    public boolean collectFluid(BlockPos blockPos) {
-        boolean success = super.collectFluid(blockPos);
-        if (success) extractEnergy(getStandardEnergyCost(), false);
-        return success;
-    }
+	@Override
+	public boolean collectFluid(BlockPos blockPos) {
+		boolean success = super.collectFluid(blockPos);
+		if (success)
+			extractEnergy(getStandardEnergyCost(), false);
+		return success;
+	}
 
-    @Override
-    public List<BlockPos> findSpotsToCollect(FakePlayer fakePlayer) {
-        AABB area = getAABB(getBlockPos());
-        return BlockPos.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1, (int) area.maxY - 1, (int) area.maxZ - 1)
-                .filter(blockPos -> isBlockPosValid(blockPos, fakePlayer))
-                .map(BlockPos::immutable)
-                .sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos())))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<BlockPos> findSpotsToCollect(FakePlayer fakePlayer) {
+		AABB area = getAABB(getBlockPos());
+		return BlockPos
+				.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1,
+						(int) area.maxY - 1, (int) area.maxZ - 1)
+				.filter(blockPos -> isBlockPosValid(blockPos, fakePlayer)).map(BlockPos::immutable)
+				.sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos()))).collect(Collectors.toList());
+	}
 
-    @Override
-    public boolean isBlockPosValid(BlockPos blockPos, FakePlayer fakePlayer) {
-        if (!super.isBlockPosValid(blockPos, fakePlayer)) return false;
-        if (!(level.getBlockState(blockPos).getBlock() instanceof LiquidBlock liquidBlock)) return false;
-        FluidStack testFluid = new FluidStack(level.getFluidState(blockPos).getType(), 1000);
-        return isStackValidFilter(new net.minecraft.world.item.ItemStack(level.getBlockState(blockPos).getBlock().asItem()));
-    }
+	@Override
+	public boolean isBlockPosValid(BlockPos blockPos, FakePlayer fakePlayer) {
+		if (!super.isBlockPosValid(blockPos, fakePlayer))
+			return false;
+		if (!(level.getBlockState(blockPos).getBlock() instanceof LiquidBlock liquidBlock))
+			return false;
+		FluidStack testFluid = new FluidStack(level.getFluidState(blockPos).getType(), 1000);
+		return isStackValidFilter(
+				new net.minecraft.world.item.ItemStack(level.getBlockState(blockPos).getBlock().asItem()));
+	}
 
-    @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("energy", energyStorage.getEnergyStored());
-    }
+	@Override
+	public void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("energy", energyStorage.getEnergyStored());
+	}
 
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        if (tag.contains("energy"))
-            energyStorage.setEnergy(tag.getInt("energy"));
-    }
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		if (tag.contains("energy"))
+			energyStorage.setEnergy(tag.getInt("energy"));
+	}
 }
-

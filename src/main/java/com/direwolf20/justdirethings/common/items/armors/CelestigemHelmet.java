@@ -9,29 +9,29 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class CelestigemHelmet extends BaseHelmet implements PoweredTool {
-    public CelestigemHelmet() {
-        super(ArmorTiers.CELESTIGEM, new Item.Properties().fireResistant());
-        registerAbility(Ability.MINDFOG);
-        registerAbility(Ability.STUPEFY, new AbilityParams(1, 1, 1, 1, 100, 400));
-        registerAbility(Ability.NIGHTVISION);
-        registerAbility(Ability.WATERBREATHING);
-    }
+	public CelestigemHelmet() {
+		super(ArmorTiers.CELESTIGEM, new Item.Properties().fireResistant());
+		registerAbility(Ability.MINDFOG);
+		registerAbility(Ability.STUPEFY, new AbilityParams(1, 1, 1, 1, 100, 400));
+		registerAbility(Ability.NIGHTVISION);
+		registerAbility(Ability.WATERBREATHING);
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1)
-            return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 }

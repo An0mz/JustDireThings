@@ -10,38 +10,40 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class AlwaysVisibleParticleData implements ParticleOptions {
-    ResourceLocation resourceLocation;
+	ResourceLocation resourceLocation;
 
-    public AlwaysVisibleParticleData(ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
-    }
+	public AlwaysVisibleParticleData(ResourceLocation resourceLocation) {
+		this.resourceLocation = resourceLocation;
+	}
 
-    @Override
-    public ParticleType<?> getType() {
-        return ModParticles.ALWAYSVISIBLEPARTICLE.get();
-    }
+	@Override
+	public ParticleType<?> getType() {
+		return ModParticles.ALWAYSVISIBLEPARTICLE.get();
+	}
 
-    @Override
-    public void writeToNetwork(FriendlyByteBuf pBuffer) {
-        pBuffer.writeResourceLocation(resourceLocation);
-    }
+	@Override
+	public void writeToNetwork(FriendlyByteBuf pBuffer) {
+		pBuffer.writeResourceLocation(resourceLocation);
+	}
 
-    @Override
-    public String writeToString() {
-        return BuiltInRegistries.PARTICLE_TYPE.getKey(ModParticles.ALWAYSVISIBLEPARTICLE.get()).toString();
-    }
+	@Override
+	public String writeToString() {
+		return BuiltInRegistries.PARTICLE_TYPE.getKey(ModParticles.ALWAYSVISIBLEPARTICLE.get()).toString();
+	}
 
-    public static final ParticleOptions.Deserializer<AlwaysVisibleParticleData> DESERIALIZER = new ParticleOptions.Deserializer<AlwaysVisibleParticleData>() {
-        @Override
-        public AlwaysVisibleParticleData fromCommand(ParticleType<AlwaysVisibleParticleData> pParticleType, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            String RL = reader.readString();
+	public static final ParticleOptions.Deserializer<AlwaysVisibleParticleData> DESERIALIZER = new ParticleOptions.Deserializer<AlwaysVisibleParticleData>() {
+		@Override
+		public AlwaysVisibleParticleData fromCommand(ParticleType<AlwaysVisibleParticleData> pParticleType,
+				StringReader reader) throws CommandSyntaxException {
+			reader.expect(' ');
+			String RL = reader.readString();
 
-            return new AlwaysVisibleParticleData(new ResourceLocation(RL));
-        }
+			return new AlwaysVisibleParticleData(new ResourceLocation(RL));
+		}
 
-        public AlwaysVisibleParticleData fromNetwork(ParticleType<AlwaysVisibleParticleData> pParticleType, FriendlyByteBuf pBuffer) {
-            return new AlwaysVisibleParticleData(pBuffer.readResourceLocation());
-        }
-    };
+		public AlwaysVisibleParticleData fromNetwork(ParticleType<AlwaysVisibleParticleData> pParticleType,
+				FriendlyByteBuf pBuffer) {
+			return new AlwaysVisibleParticleData(pBuffer.readResourceLocation());
+		}
+	};
 }

@@ -8,23 +8,23 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class FluidPlacerT1Screen extends BaseMachineScreen<FluidPlacerT1Container> {
 
-    public FluidPlacerT1Screen(FluidPlacerT1Container container, Inventory inv, Component name) {
-        super(container, inv, name);
-    }
+	public FluidPlacerT1Screen(FluidPlacerT1Container container, Inventory inv, Component name) {
+		super(container, inv, name);
+	}
 
-    @Override
-    public void init() {
-        super.init();
-    }
+	@Override
+	public void init() {
+		super.init();
+	}
 
-    @Override
-    public void setTopSection() {
-        extraWidth = 0;
-        extraHeight = 0;
-    }
+	@Override
+	public void setTopSection() {
+		extraWidth = 0;
+		extraHeight = 0;
+	}
 
-    @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-        super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
-    }
+	@Override
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+		super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
+	}
 }

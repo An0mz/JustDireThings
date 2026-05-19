@@ -10,18 +10,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class BlazegoldChestplate extends BaseChestplate {
-    public BlazegoldChestplate() {
-        super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
-        registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 1200));
-        registerAbility(Ability.LAVAREPAIR);
-        registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 200));
-    }
+	public BlazegoldChestplate() {
+		super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
+		registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 1200));
+		registerAbility(Ability.LAVAREPAIR);
+		registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 200));
+	}
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (canUseAbility(stack, Ability.LAVAREPAIR))
-            return Helpers.doLavaRepair(stack, entity);
-        return false;
-    }
+	@Override
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+		if (canUseAbility(stack, Ability.LAVAREPAIR))
+			return Helpers.doLavaRepair(stack, entity);
+		return false;
+	}
 }
-

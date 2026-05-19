@@ -10,18 +10,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class BlazegoldHelmet extends BaseHelmet {
-    public BlazegoldHelmet() {
-        super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
-        registerAbility(Ability.MINDFOG);
-        registerAbility(Ability.LAVAREPAIR);
-        registerAbility(Ability.STUPEFY, new AbilityParams(1, 1, 1, 1, 100, 600));
-    }
+	public BlazegoldHelmet() {
+		super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
+		registerAbility(Ability.MINDFOG);
+		registerAbility(Ability.LAVAREPAIR);
+		registerAbility(Ability.STUPEFY, new AbilityParams(1, 1, 1, 1, 100, 600));
+	}
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (canUseAbility(stack, Ability.LAVAREPAIR))
-            return Helpers.doLavaRepair(stack, entity);
-        return false;
-    }
+	@Override
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+		if (canUseAbility(stack, Ability.LAVAREPAIR))
+			return Helpers.doLavaRepair(stack, entity);
+		return false;
+	}
 }
-

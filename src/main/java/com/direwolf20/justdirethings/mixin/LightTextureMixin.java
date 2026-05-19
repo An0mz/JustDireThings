@@ -16,27 +16,23 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(LightTexture.class)
 public abstract class LightTextureMixin {
 
-    @Redirect(
-            method = "updateLightTexture",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;hasEffect(Lnet/minecraft/world/effect/MobEffect;)Z")
-    )
-    private boolean redirectHasEffect(LocalPlayer instance, MobEffect effect) {
-        ItemStack helmet = instance.getItemBySlot(EquipmentSlot.HEAD);
-        if (helmet.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(helmet, Ability.NIGHTVISION)) {
-            return true;
-        }
-        return instance.hasEffect(effect);
-    }
+	@Redirect(method = "updateLightTexture", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;hasEffect(Lnet/minecraft/world/effect/MobEffect;)Z"))
+	private boolean redirectHasEffect(LocalPlayer instance, MobEffect effect) {
+		ItemStack helmet = instance.getItemBySlot(EquipmentSlot.HEAD);
+		if (helmet.getItem() instanceof ToggleableTool toggleableTool
+				&& toggleableTool.canUseAbilityAndDurability(helmet, Ability.NIGHTVISION)) {
+			return true;
+		}
+		return instance.hasEffect(effect);
+	}
 
-    @Redirect(
-            method = "updateLightTexture",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;getNightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F")
-    )
-    private float redirectNightVisionScale(LivingEntity livingEntity, float nanoTime) {
-        ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-        if (helmet.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(helmet, Ability.NIGHTVISION)) {
-            return 1f;
-        }
-        return GameRenderer.getNightVisionScale(livingEntity, nanoTime);
-    }
+	@Redirect(method = "updateLightTexture", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GameRenderer;getNightVisionScale(Lnet/minecraft/world/entity/LivingEntity;F)F"))
+	private float redirectNightVisionScale(LivingEntity livingEntity, float nanoTime) {
+		ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
+		if (helmet.getItem() instanceof ToggleableTool toggleableTool
+				&& toggleableTool.canUseAbilityAndDurability(helmet, Ability.NIGHTVISION)) {
+			return 1f;
+		}
+		return GameRenderer.getNightVisionScale(livingEntity, nanoTime);
+	}
 }

@@ -11,22 +11,23 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Map;
 
 public interface PoweredTool extends PoweredItem {
-    default Multimap<Attribute, AttributeModifier> getPoweredAttributeModifiers(EquipmentSlot slot, ItemStack stack, Multimap<Attribute, AttributeModifier> originalModifiers) {
-        Multimap<Attribute, AttributeModifier> modifiers = HashMultimap.create();
-        if (slot == EquipmentSlot.MAINHAND) {
-            if (getAvailableEnergy(stack) >= getBlockBreakFECost()) {
-                return originalModifiers;
-            } else {
-                for (Map.Entry<Attribute, AttributeModifier> entry : originalModifiers.entries()) {
-                    if (!entry.getKey().equals(Attributes.ATTACK_DAMAGE))
-                        modifiers.put(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-        return modifiers;
-    }
+	default Multimap<Attribute, AttributeModifier> getPoweredAttributeModifiers(EquipmentSlot slot, ItemStack stack,
+			Multimap<Attribute, AttributeModifier> originalModifiers) {
+		Multimap<Attribute, AttributeModifier> modifiers = HashMultimap.create();
+		if (slot == EquipmentSlot.MAINHAND) {
+			if (getAvailableEnergy(stack) >= getBlockBreakFECost()) {
+				return originalModifiers;
+			} else {
+				for (Map.Entry<Attribute, AttributeModifier> entry : originalModifiers.entries()) {
+					if (!entry.getKey().equals(Attributes.ATTACK_DAMAGE))
+						modifiers.put(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+		return modifiers;
+	}
 
-    default int getBlockBreakFECost() {
-        return 50; //Todo Config?
-    }
+	default int getBlockBreakFECost() {
+		return 50; // Todo Config?
+	}
 }

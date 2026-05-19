@@ -7,20 +7,19 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import java.util.function.Predicate;
 
 public class JustDireFluidTank extends FluidTank {
-    public JustDireFluidTank(int capacity) {
-        super(capacity);
-    }
+	public JustDireFluidTank(int capacity) {
+		super(capacity);
+	}
 
-    public JustDireFluidTank(int capacity, Predicate<FluidStack> validator) {
-        super(capacity, validator);
-    }
+	public JustDireFluidTank(int capacity, Predicate<FluidStack> validator) {
+		super(capacity, validator);
+	}
 
-    public CompoundTag serializeToNBT() {
-        return writeToNBT(new CompoundTag());
-    }
+	public CompoundTag serializeToNBT() {
+		return writeToNBT(new CompoundTag());
+	}
 
-    public void deserializeFromNBT(CompoundTag nbt) {
-        readFromNBT(nbt);
-    }
+	public void deserializeFromNBT(CompoundTag nbt) {
+		readFromNBT(nbt);
+	}
 }
-

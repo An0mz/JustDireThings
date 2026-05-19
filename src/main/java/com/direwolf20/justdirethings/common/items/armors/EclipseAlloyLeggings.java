@@ -9,35 +9,34 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class EclipseAlloyLeggings extends BaseLeggings implements PoweredTool {
-    public EclipseAlloyLeggings() {
-        super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
-        registerAbility(Ability.RUNSPEED, new AbilityParams(1, 5, 1));
-        registerAbility(Ability.WALKSPEED, new AbilityParams(1, 5, 1));
-        registerAbility(Ability.SWIMSPEED, new AbilityParams(1, 5, 1));
-        registerAbility(Ability.DECOY, new AbilityParams(1, 1, 1, 1, 200, 1200));
-    }
+	public EclipseAlloyLeggings() {
+		super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
+		registerAbility(Ability.RUNSPEED, new AbilityParams(1, 5, 1));
+		registerAbility(Ability.WALKSPEED, new AbilityParams(1, 5, 1));
+		registerAbility(Ability.SWIMSPEED, new AbilityParams(1, 5, 1));
+		registerAbility(Ability.DECOY, new AbilityParams(1, 1, 1, 1, 200, 1200));
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1)
-            return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 
-    @Override
-    public int getMaxEnergy() {
-        return 500000;
-    }
+	@Override
+	public int getMaxEnergy() {
+		return 500000;
+	}
 }
-

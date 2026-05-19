@@ -16,25 +16,25 @@ import org.slf4j.Logger;
 
 @Mod(JustDireThings.MODID)
 public class JustDireThings {
-    public static final String MODID = "justdirethings";
-    private static final Logger LOGGER = LogUtils.getLogger();
+	public static final String MODID = "justdirethings";
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    public JustDireThings() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public JustDireThings() {
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        Registration.init(modEventBus);
-        Config.register();
+		Registration.init(modEventBus);
+		Config.register();
 
-        modEventBus.addListener(ModSetup::init);
-        ModSetup.CREATIVE_MODE_TABS.register(modEventBus);
-        modEventBus.addListener(PacketHandler::registerNetworking);
-        modEventBus.addListener(JustDireThings::registerEntityAttributes);
-        if (FMLLoader.getDist().isClient()) {
-            modEventBus.addListener(ClientSetup::init);
-        }
-    }
+		modEventBus.addListener(ModSetup::init);
+		ModSetup.CREATIVE_MODE_TABS.register(modEventBus);
+		modEventBus.addListener(PacketHandler::registerNetworking);
+		modEventBus.addListener(JustDireThings::registerEntityAttributes);
+		if (FMLLoader.getDist().isClient()) {
+			modEventBus.addListener(ClientSetup::init);
+		}
+	}
 
-    private static void registerEntityAttributes(EntityAttributeModificationEvent event) {
-        event.add(EntityType.PLAYER, Registration.PHASE.get());
-    }
+	private static void registerEntityAttributes(EntityAttributeModificationEvent event) {
+		event.add(EntityType.PLAYER, Registration.PHASE.get());
+	}
 }

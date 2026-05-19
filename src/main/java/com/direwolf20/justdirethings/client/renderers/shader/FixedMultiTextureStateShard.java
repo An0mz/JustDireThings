@@ -11,28 +11,28 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Avoids texture slot collisions with lightmap/overlay by skipping to slot 3 after slot 0.
+ * Avoids texture slot collisions with lightmap/overlay by skipping to slot 3
+ * after slot 0.
  */
 public class FixedMultiTextureStateShard extends RenderStateShard.EmptyTextureStateShard {
-    private final Optional<ResourceLocation> cutoutTexture;
+	private final Optional<ResourceLocation> cutoutTexture;
 
-    public FixedMultiTextureStateShard(List<ShaderTexture> textures) {
-        super(() -> {
-            int slot = 0;
-            for (ShaderTexture texture : textures) {
-                TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-                textureManager.getTexture(texture.location()).setFilter(texture.blur(), texture.mipmap());
-                RenderSystem.setShaderTexture(slot, texture.location());
-                slot = (slot == 0) ? 3 : slot + 1;
-            }
-        }, () -> {
-        });
-        this.cutoutTexture = textures.stream().findFirst().map(ShaderTexture::location);
-    }
+	public FixedMultiTextureStateShard(List<ShaderTexture> textures) {
+		super(() -> {
+			int slot = 0;
+			for (ShaderTexture texture : textures) {
+				TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+				textureManager.getTexture(texture.location()).setFilter(texture.blur(), texture.mipmap());
+				RenderSystem.setShaderTexture(slot, texture.location());
+				slot = (slot == 0) ? 3 : slot + 1;
+			}
+		}, () -> {
+		});
+		this.cutoutTexture = textures.stream().findFirst().map(ShaderTexture::location);
+	}
 
-    @Override
-    protected @NotNull Optional<ResourceLocation> cutoutTexture() {
-        return this.cutoutTexture;
-    }
+	@Override
+	protected @NotNull Optional<ResourceLocation> cutoutTexture() {
+		return this.cutoutTexture;
+	}
 }
-

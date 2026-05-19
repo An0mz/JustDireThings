@@ -29,95 +29,103 @@ import java.util.List;
 import static net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
 
 public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, AreaAffectingBE, RedstoneControlledBE {
-    public FilterData filterData = new FilterData();
-    public AreaAffectingData areaAffectingData = new AreaAffectingData();
-    public RedstoneControlData redstoneControlData = new RedstoneControlData();
-    private final FilterBasicHandler filterHandler = new FilterBasicHandler(9);
+	public FilterData filterData = new FilterData();
+	public AreaAffectingData areaAffectingData = new AreaAffectingData();
+	public RedstoneControlData redstoneControlData = new RedstoneControlData();
+	private final FilterBasicHandler filterHandler = new FilterBasicHandler(9);
 
-    public ItemCollectorBE(BlockPos pPos, BlockState pBlockState) {
-        super(Registration.ItemCollectorBE.get(), pPos, pBlockState);
-    }
+	public ItemCollectorBE(BlockPos pPos, BlockState pBlockState) {
+		super(Registration.ItemCollectorBE.get(), pPos, pBlockState);
+	}
 
-    @Override
-    public BlockEntity getBlockEntity() {
-        return this;
-    }
+	@Override
+	public BlockEntity getBlockEntity() {
+		return this;
+	}
 
-    @Override
-    public FilterData getFilterData() {
-        return filterData;
-    }
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
+	}
 
-    @Override
-    public RedstoneControlData getRedstoneControlData() {
-        return redstoneControlData;
-    }
+	@Override
+	public RedstoneControlData getRedstoneControlData() {
+		return redstoneControlData;
+	}
 
-    @Override
-    public AreaAffectingData getAreaAffectingData() {
-        return areaAffectingData;
-    }
+	@Override
+	public AreaAffectingData getAreaAffectingData() {
+		return areaAffectingData;
+	}
 
-    @Override
-    public void tickClient() {
-    }
+	@Override
+	public void tickClient() {
+	}
 
-    public void tickServer() {
-        super.tickServer();
-        findItemsAndStore();
-    }
+	public void tickServer() {
+		super.tickServer();
+		findItemsAndStore();
+	}
 
-    @Override
-    public FilterBasicHandler getFilterHandler() {
-        return filterHandler;
-    }
+	@Override
+	public FilterBasicHandler getFilterHandler() {
+		return filterHandler;
+	}
 
-    public void doParticles(ItemStack itemStack, Vec3 sourcePos) {
-        Direction direction = getBlockState().getValue(BlockStateProperties.FACING);
-        BlockPos blockPos = getBlockPos();
-        ItemFlowParticleData data = new ItemFlowParticleData(itemStack, blockPos.getX() + 0.5f - (0.3 * direction.getStepX()), blockPos.getY() + 0.5f - (0.3 * direction.getStepY()), blockPos.getZ() + 0.5f - (0.3 * direction.getStepZ()), 5);
-        double d0 = sourcePos.x();
-        double d1 = sourcePos.y();
-        double d2 = sourcePos.z();
-        ((ServerLevel) level).sendParticles(data, d0, d1, d2, 10, 0, 0, 0, 0);
-    }
+	public void doParticles(ItemStack itemStack, Vec3 sourcePos) {
+		Direction direction = getBlockState().getValue(BlockStateProperties.FACING);
+		BlockPos blockPos = getBlockPos();
+		ItemFlowParticleData data = new ItemFlowParticleData(itemStack,
+				blockPos.getX() + 0.5f - (0.3 * direction.getStepX()),
+				blockPos.getY() + 0.5f - (0.3 * direction.getStepY()),
+				blockPos.getZ() + 0.5f - (0.3 * direction.getStepZ()), 5);
+		double d0 = sourcePos.x();
+		double d1 = sourcePos.y();
+		double d2 = sourcePos.z();
+		((ServerLevel) level).sendParticles(data, d0, d1, d2, 10, 0, 0, 0, 0);
+	}
 
-    private void findItemsAndStore() {
-        if (!isActiveRedstone() || !canRun()) return;
-        assert level != null;
-        AABB searchArea = getAABB(getBlockPos());
+	private void findItemsAndStore() {
+		if (!isActiveRedstone() || !canRun())
+			return;
+		assert level != null;
+		AABB searchArea = getAABB(getBlockPos());
 
-        List<ItemEntity> entityList = level.getEntitiesOfClass(ItemEntity.class, searchArea, entity -> true)
-                .stream().toList();
+		List<ItemEntity> entityList = level.getEntitiesOfClass(ItemEntity.class, searchArea, entity -> true).stream()
+				.toList();
 
-        if (entityList.isEmpty()) return;
+		if (entityList.isEmpty())
+			return;
 
-        IItemHandler handler = getAttachedInventory();
+		IItemHandler handler = getAttachedInventory();
 
-        if (handler == null) return;
+		if (handler == null)
+			return;
 
-        for (ItemEntity itemEntity : entityList) {
-            ItemStack stack = itemEntity.getItem();
-            if (!isStackValidFilter(stack)) continue;
-            ItemStack leftover = ItemHandlerHelper.insertItemStacked(handler, stack, false);
-            if (leftover.isEmpty()) {
-                // If the stack is now empty, remove the ItemEntity from the collection
-                doParticles(itemEntity.getItem(), itemEntity.getPosition(0));
-                itemEntity.remove(DISCARDED);
-            } else {
-                // Otherwise, update the ItemEntity with the modified stack
-                itemEntity.setItem(leftover);
-            }
-        }
-    }
+		for (ItemEntity itemEntity : entityList) {
+			ItemStack stack = itemEntity.getItem();
+			if (!isStackValidFilter(stack))
+				continue;
+			ItemStack leftover = ItemHandlerHelper.insertItemStacked(handler, stack, false);
+			if (leftover.isEmpty()) {
+				// If the stack is now empty, remove the ItemEntity from the collection
+				doParticles(itemEntity.getItem(), itemEntity.getPosition(0));
+				itemEntity.remove(DISCARDED);
+			} else {
+				// Otherwise, update the ItemEntity with the modified stack
+				itemEntity.setItem(leftover);
+			}
+		}
+	}
 
-    private IItemHandler getAttachedInventory() {
-        assert this.level != null;
-        BlockState state = level.getBlockState(getBlockPos());
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        BlockPos inventoryPos = getBlockPos().relative(facing);
-        BlockEntity be = level.getBlockEntity(inventoryPos);
-        if (be == null) return null;
-        return be.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
-    }
+	private IItemHandler getAttachedInventory() {
+		assert this.level != null;
+		BlockState state = level.getBlockState(getBlockPos());
+		Direction facing = state.getValue(BlockStateProperties.FACING);
+		BlockPos inventoryPos = getBlockPos().relative(facing);
+		BlockEntity be = level.getBlockEntity(inventoryPos);
+		if (be == null)
+			return null;
+		return be.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
+	}
 }

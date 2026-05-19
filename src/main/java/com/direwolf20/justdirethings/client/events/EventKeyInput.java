@@ -33,85 +33,100 @@ import com.direwolf20.justdirethings.common.network.PacketHandler;
 @Mod.EventBusSubscriber(modid = JustDireThings.MODID, value = Dist.CLIENT)
 public class EventKeyInput {
 
-    @SubscribeEvent
-    public static void handleEventInput(TickEvent.ClientTickEvent event) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || event.phase == TickEvent.Phase.START)
-            return;
+	@SubscribeEvent
+	public static void handleEventInput(TickEvent.ClientTickEvent event) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player == null || event.phase == TickEvent.Phase.START)
+			return;
 
-        ItemStack toggleableItem = ToggleableItem.getToggleableItem(mc.player);
-        ItemStack portalGun = PortalGunV2.getPortalGunv2(mc.player);
+		ItemStack toggleableItem = ToggleableItem.getToggleableItem(mc.player);
+		ItemStack portalGun = PortalGunV2.getPortalGunv2(mc.player);
 
-        if (!portalGun.isEmpty()) {
-            if (!(mc.screen instanceof AdvPortalRadialMenu) && KeyBindings.toggleTool.consumeClick()) {
-                mc.setScreen(new AdvPortalRadialMenu(portalGun));
-                return;
-            }
-        }
+		if (!portalGun.isEmpty()) {
+			if (!(mc.screen instanceof AdvPortalRadialMenu) && KeyBindings.toggleTool.consumeClick()) {
+				mc.setScreen(new AdvPortalRadialMenu(portalGun));
+				return;
+			}
+		}
 
-        if (!toggleableItem.isEmpty()) {
-            if (KeyBindings.toggleTool.consumeClick()) {
-                PacketHandler.CHANNEL.sendToServer(new ToggleToolPayload("enabled"));
-            }
-        }
-    }
+		if (!toggleableItem.isEmpty()) {
+			if (KeyBindings.toggleTool.consumeClick()) {
+				PacketHandler.CHANNEL.sendToServer(new ToggleToolPayload("enabled"));
+			}
+		}
+	}
 
-    // Handling key presses
-    @SubscribeEvent
-    public static void onKeyInput(InputEvent.Key event) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.screen != null)
-            return;
-        Player player = mc.player;
-        if (event.getAction() == InputConstants.PRESS) {
-            for (int i = 0; i < mc.player.getInventory().items.size(); i++) {
-                ItemStack itemStack = mc.player.getInventory().getItem(i);
-                if (itemStack.getItem() instanceof ToggleableTool toggleableTool && itemStack.getItem() instanceof LeftClickableTool) {
-                    activateAbilities(itemStack, event.getKey(), toggleableTool, player, i, false);
-                }
-            }
-            for (int i = mc.player.getInventory().items.size(); i < mc.player.getInventory().items.size() + mc.player.getInventory().armor.size(); i++) {
-                ItemStack itemStack = mc.player.getInventory().getItem(i);
-                if (itemStack.getItem() instanceof ToggleableTool toggleableTool && itemStack.getItem() instanceof LeftClickableTool) {
-                    activateAbilities(itemStack, event.getKey(), toggleableTool, player, i, false);
-                }
-            }
-            for (int i = mc.player.getInventory().items.size() + mc.player.getInventory().armor.size(); i < mc.player.getInventory().items.size() + mc.player.getInventory().armor.size() + mc.player.getInventory().offhand.size(); i++) {
-                ItemStack itemStack = mc.player.getInventory().getItem(i);
-                if (itemStack.getItem() instanceof ToggleableTool toggleableTool && itemStack.getItem() instanceof LeftClickableTool) {
-                    activateAbilities(itemStack, event.getKey(), toggleableTool, player, i, false);
-                }
-            }
+	// Handling key presses
+	@SubscribeEvent
+	public static void onKeyInput(InputEvent.Key event) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player == null || mc.screen != null)
+			return;
+		Player player = mc.player;
+		if (event.getAction() == InputConstants.PRESS) {
+			for (int i = 0; i < mc.player.getInventory().items.size(); i++) {
+				ItemStack itemStack = mc.player.getInventory().getItem(i);
+				if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+						&& itemStack.getItem() instanceof LeftClickableTool) {
+					activateAbilities(itemStack, event.getKey(), toggleableTool, player, i, false);
+				}
+			}
+			for (int i = mc.player.getInventory().items.size(); i < mc.player.getInventory().items.size()
+					+ mc.player.getInventory().armor.size(); i++) {
+				ItemStack itemStack = mc.player.getInventory().getItem(i);
+				if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+						&& itemStack.getItem() instanceof LeftClickableTool) {
+					activateAbilities(itemStack, event.getKey(), toggleableTool, player, i, false);
+				}
+			}
+			for (int i = mc.player.getInventory().items.size()
+					+ mc.player.getInventory().armor.size(); i < mc.player.getInventory().items.size()
+							+ mc.player.getInventory().armor.size() + mc.player.getInventory().offhand.size(); i++) {
+				ItemStack itemStack = mc.player.getInventory().getItem(i);
+				if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+						&& itemStack.getItem() instanceof LeftClickableTool) {
+					activateAbilities(itemStack, event.getKey(), toggleableTool, player, i, false);
+				}
+			}
 
-        }
-    }
+		}
+	}
 
-    // Handling mouse clicks
-    @SubscribeEvent
-    public static void onMouseInput(InputEvent.MouseButton.Post event) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.screen != null || event.getButton() == 0 || event.getButton() == 1 || event.getAction() != InputConstants.PRESS)
-            return;
-        Player player = mc.player;
-        for (int i = 0; i < mc.player.getInventory().items.size(); i++) {
-            ItemStack itemStack = mc.player.getInventory().getItem(i);
-            if (itemStack.getItem() instanceof ToggleableTool toggleableTool && itemStack.getItem() instanceof LeftClickableTool) {
-                activateAbilities(itemStack, event.getButton(), toggleableTool, player, i, true);
-            }
-        }
-    }
+	// Handling mouse clicks
+	@SubscribeEvent
+	public static void onMouseInput(InputEvent.MouseButton.Post event) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player == null || mc.screen != null || event.getButton() == 0 || event.getButton() == 1
+				|| event.getAction() != InputConstants.PRESS)
+			return;
+		Player player = mc.player;
+		for (int i = 0; i < mc.player.getInventory().items.size(); i++) {
+			ItemStack itemStack = mc.player.getInventory().getItem(i);
+			if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+					&& itemStack.getItem() instanceof LeftClickableTool) {
+				activateAbilities(itemStack, event.getButton(), toggleableTool, player, i, true);
+			}
+		}
+	}
 
-    private static void activateAbilities(ItemStack itemStack, int key, ToggleableTool toggleableTool, Player player, int invSlot, boolean isMouse) {
-        Set<Ability> abilities = LeftClickableTool.getCustomBindingList(itemStack, new LeftClickableTool.Binding(key, isMouse));
-        if (!abilities.isEmpty()) {
-            //Do them client side and Server side, since some abilities (like ore scanner) are client side activated.
-            toggleableTool.useAbility(player.level(), player, itemStack, key, isMouse);
-            BlockHitResult blockHitResult = getHitResult(player);
-            if (blockHitResult.getType() == HitResult.Type.BLOCK) {
-                UseOnContext useoncontext = new UseOnContext(player.level(), player, InteractionHand.MAIN_HAND, itemStack, blockHitResult);
-                toggleableTool.useOnAbility(useoncontext, itemStack, key, isMouse);
-            }
-            PacketHandler.CHANNEL.sendToServer(new LeftClickPayload(0, false, BlockPos.ZERO, -1, invSlot, key, isMouse)); //Type 0 == air
-        }
-    }
+	private static void activateAbilities(ItemStack itemStack, int key, ToggleableTool toggleableTool, Player player,
+			int invSlot, boolean isMouse) {
+		Set<Ability> abilities = LeftClickableTool.getCustomBindingList(itemStack,
+				new LeftClickableTool.Binding(key, isMouse));
+		if (!abilities.isEmpty()) {
+			// Do them client side and Server side, since some abilities (like ore scanner)
+			// are client side activated.
+			toggleableTool.useAbility(player.level(), player, itemStack, key, isMouse);
+			BlockHitResult blockHitResult = getHitResult(player);
+			if (blockHitResult.getType() == HitResult.Type.BLOCK) {
+				UseOnContext useoncontext = new UseOnContext(player.level(), player, InteractionHand.MAIN_HAND,
+						itemStack, blockHitResult);
+				toggleableTool.useOnAbility(useoncontext, itemStack, key, isMouse);
+			}
+			PacketHandler.CHANNEL
+					.sendToServer(new LeftClickPayload(0, false, BlockPos.ZERO, -1, invSlot, key, isMouse)); // Type 0
+																												// ==
+																												// air
+		}
+	}
 }

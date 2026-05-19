@@ -15,34 +15,28 @@ import java.util.List;
 import java.util.function.Function;
 
 public class DireRenderTypes extends RenderType {
-    private static ShaderInstance portalEntityShader;
+	private static ShaderInstance portalEntityShader;
 
-    private static final Function<ResourceLocation, RenderType> PORTAL_ENTITY = Util.memoize(texture ->
-            create("justdirethings_portal_entity",
-                    DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false,
-                    CompositeState.builder()
-                            .setShaderState(new ShaderStateShard(() -> portalEntityShader != null
-                                    ? portalEntityShader
-                                    : GameRenderer.getPositionTexShader()))
-                            .setTextureState(new FixedMultiTextureStateShard(List.of(new ShaderTexture(texture))))
-                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                            .setCullState(NO_CULL)
-                            .createCompositeState(false))
-    );
+	private static final Function<ResourceLocation, RenderType> PORTAL_ENTITY = Util.memoize(texture -> create(
+			"justdirethings_portal_entity", DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false,
+			false,
+			CompositeState.builder().setShaderState(new ShaderStateShard(
+					() -> portalEntityShader != null ? portalEntityShader : GameRenderer.getPositionTexShader()))
+					.setTextureState(new FixedMultiTextureStateShard(List.of(new ShaderTexture(texture))))
+					.setTransparencyState(TRANSLUCENT_TRANSPARENCY).setCullState(NO_CULL).createCompositeState(false)));
 
-    public static RenderType portalEntity(ResourceLocation texture) {
-        return PORTAL_ENTITY.apply(texture);
-    }
+	public static RenderType portalEntity(ResourceLocation texture) {
+		return PORTAL_ENTITY.apply(texture);
+	}
 
-    public static void registerShaders(RegisterShadersEvent event) throws IOException {
-        event.registerShader(
-                new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(JustDireThings.MODID, "portal_entity"), DefaultVertexFormat.POSITION_TEX),
-                shader -> portalEntityShader = shader
-        );
-    }
+	public static void registerShaders(RegisterShadersEvent event) throws IOException {
+		event.registerShader(new ShaderInstance(event.getResourceProvider(),
+				ResourceLocation.fromNamespaceAndPath(JustDireThings.MODID, "portal_entity"),
+				DefaultVertexFormat.POSITION_TEX), shader -> portalEntityShader = shader);
+	}
 
-    private DireRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
-        super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
-    }
+	private DireRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize,
+			boolean affectsCrumbling, boolean sortOnUpload, Runnable setupState, Runnable clearState) {
+		super(name, format, mode, bufferSize, affectsCrumbling, sortOnUpload, setupState, clearState);
+	}
 }
-

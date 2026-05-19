@@ -1,6 +1,5 @@
 package com.direwolf20.justdirethings.common.blocks.gooblocks;
 
-
 import com.direwolf20.justdirethings.common.blockentities.gooblocks.GooBlockBE_Tier4;
 import com.direwolf20.justdirethings.datagen.JustDireItemTags;
 import net.minecraft.core.BlockPos;
@@ -12,19 +11,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class GooBlock_Tier4 extends GooBlock_Base implements EntityBlock {
-    public GooBlock_Tier4() {
-        super();
-    }
+	public GooBlock_Tier4() {
+		super();
+	}
 
-    @Override
-    protected boolean validRevivalItem(ItemStack itemStack) {
-        return itemStack.is(JustDireItemTags.GOO_REVIVE_TIER_4);
-    }
+	@Override
+	protected boolean validRevivalItem(ItemStack itemStack) {
+		return itemStack.is(JustDireItemTags.GOO_REVIVE_TIER_4);
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GooBlockBE_Tier4(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new GooBlockBE_Tier4(pos, state);
+	}
 
 }

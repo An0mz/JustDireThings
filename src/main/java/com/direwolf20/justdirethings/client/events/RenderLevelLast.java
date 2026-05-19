@@ -27,81 +27,84 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class RenderLevelLast {
-    @SubscribeEvent
-    static void renderWorldLastEvent(RenderLevelStageEvent evt) {
-        if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-            return;
-        }
-        Player player = Minecraft.getInstance().player;
-        if (player == null)
-            return;
+	@SubscribeEvent
+	static void renderWorldLastEvent(RenderLevelStageEvent evt) {
+		if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
+			return;
+		}
+		Player player = Minecraft.getInstance().player;
+		if (player == null)
+			return;
 
-        ItemStack heldItemMain = player.getMainHandItem();
-        ItemStack heldItemOff = player.getOffhandItem();
+		ItemStack heldItemMain = player.getMainHandItem();
+		ItemStack heldItemOff = player.getOffhandItem();
 
-        if (heldItemMain.getItem() instanceof ToggleableTool toggleableTool) {
-            ThingFinder.render(evt, player, heldItemMain);
-            if (toggleableTool.canUseAbilityAndDurability(heldItemMain, Ability.VOIDSHIFT) && ToggleableTool.getSetting(heldItemMain, Ability.VOIDSHIFT.getName() + "_render"))
-                MiscRenders.renderTransparentPlayer(evt, player, heldItemMain);
-        }
-        if (heldItemOff.getItem() instanceof ToggleableTool toggleableTool) {
-            ThingFinder.render(evt, player, heldItemOff);
-            if (toggleableTool.canUseAbilityAndDurability(heldItemOff, Ability.VOIDSHIFT) && ToggleableTool.getSetting(heldItemOff, Ability.VOIDSHIFT.getName() + "_render"))
-                MiscRenders.renderTransparentPlayer(evt, player, heldItemOff);
-        }
+		if (heldItemMain.getItem() instanceof ToggleableTool toggleableTool) {
+			ThingFinder.render(evt, player, heldItemMain);
+			if (toggleableTool.canUseAbilityAndDurability(heldItemMain, Ability.VOIDSHIFT)
+					&& ToggleableTool.getSetting(heldItemMain, Ability.VOIDSHIFT.getName() + "_render"))
+				MiscRenders.renderTransparentPlayer(evt, player, heldItemMain);
+		}
+		if (heldItemOff.getItem() instanceof ToggleableTool toggleableTool) {
+			ThingFinder.render(evt, player, heldItemOff);
+			if (toggleableTool.canUseAbilityAndDurability(heldItemOff, Ability.VOIDSHIFT)
+					&& ToggleableTool.getSetting(heldItemOff, Ability.VOIDSHIFT.getName() + "_render"))
+				MiscRenders.renderTransparentPlayer(evt, player, heldItemOff);
+		}
 
-        renderAreaPreviews(evt, player);
-    }
+		renderAreaPreviews(evt, player);
+	}
 
-    private static void renderAreaPreviews(RenderLevelStageEvent evt, Player player) {
-        Minecraft mc = Minecraft.getInstance();
-        ClientLevel level = mc.level;
-        if (level == null) return;
+	private static void renderAreaPreviews(RenderLevelStageEvent evt, Player player) {
+		Minecraft mc = Minecraft.getInstance();
+		ClientLevel level = mc.level;
+		if (level == null)
+			return;
 
-        Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
-        MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
-        PoseStack matrix = evt.getPoseStack();
+		Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
+		MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
+		PoseStack matrix = evt.getPoseStack();
 
-        int chunkX = player.chunkPosition().x;
-        int chunkZ = player.chunkPosition().z;
-        int chunkRadius = 6;
-        boolean rendered = false;
+		int chunkX = player.chunkPosition().x;
+		int chunkZ = player.chunkPosition().z;
+		int chunkRadius = 6;
+		boolean rendered = false;
 
-        for (int cx = chunkX - chunkRadius; cx <= chunkX + chunkRadius; cx++) {
-            for (int cz = chunkZ - chunkRadius; cz <= chunkZ + chunkRadius; cz++) {
-                ChunkAccess chunkAccess = level.getChunkSource().getChunkNow(cx, cz);
-                if (!(chunkAccess instanceof LevelChunk chunk)) continue;
-                for (BlockEntity be : new ArrayList<>(chunk.getBlockEntities().values())) {
-                    if (!(be instanceof AreaAffectingBE areaAffectingBE)) continue;
-                    if (!areaAffectingBE.getAreaAffectingData().renderArea) continue;
+		for (int cx = chunkX - chunkRadius; cx <= chunkX + chunkRadius; cx++) {
+			for (int cz = chunkZ - chunkRadius; cz <= chunkZ + chunkRadius; cz++) {
+				ChunkAccess chunkAccess = level.getChunkSource().getChunkNow(cx, cz);
+				if (!(chunkAccess instanceof LevelChunk chunk))
+					continue;
+				for (BlockEntity be : new ArrayList<>(chunk.getBlockEntities().values())) {
+					if (!(be instanceof AreaAffectingBE areaAffectingBE))
+						continue;
+					if (!areaAffectingBE.getAreaAffectingData().renderArea)
+						continue;
 
-                    BlockPos bePos = be.getBlockPos();
-                    matrix.pushPose();
-                    matrix.translate(
-                        bePos.getX() - cameraPos.x(),
-                        bePos.getY() - cameraPos.y(),
-                        bePos.getZ() - cameraPos.z()
-                    );
-                    Matrix4f matrix4f = matrix.last().pose();
-                    AABB aabb = areaAffectingBE.getAABB(BlockPos.ZERO);
-                    RenderHelpers.renderLines(matrix, aabb, Color.GREEN, bufferSource);
-                    RenderHelpers.renderBoxSolid(matrix4f, bufferSource, aabb, 1, 0, 0, 0.125f);
-                    if (areaAffectingBE.getAreaAffectingData().xRadius > 0 ||
-                        areaAffectingBE.getAreaAffectingData().yRadius > 0 ||
-                        areaAffectingBE.getAreaAffectingData().zRadius > 0) {
-                        AABB offsetAABB = areaAffectingBE.getAABBOffsetOnly(BlockPos.ZERO);
-                        RenderHelpers.renderLines(matrix, offsetAABB, Color.WHITE, bufferSource);
-                        RenderHelpers.renderBoxSolid(matrix4f, bufferSource, offsetAABB, 0, 0, 1, 0.125f);
-                    }
-                    matrix.popPose();
-                    rendered = true;
-                }
-            }
-        }
+					BlockPos bePos = be.getBlockPos();
+					matrix.pushPose();
+					matrix.translate(bePos.getX() - cameraPos.x(), bePos.getY() - cameraPos.y(),
+							bePos.getZ() - cameraPos.z());
+					Matrix4f matrix4f = matrix.last().pose();
+					AABB aabb = areaAffectingBE.getAABB(BlockPos.ZERO);
+					RenderHelpers.renderLines(matrix, aabb, Color.GREEN, bufferSource);
+					RenderHelpers.renderBoxSolid(matrix4f, bufferSource, aabb, 1, 0, 0, 0.125f);
+					if (areaAffectingBE.getAreaAffectingData().xRadius > 0
+							|| areaAffectingBE.getAreaAffectingData().yRadius > 0
+							|| areaAffectingBE.getAreaAffectingData().zRadius > 0) {
+						AABB offsetAABB = areaAffectingBE.getAABBOffsetOnly(BlockPos.ZERO);
+						RenderHelpers.renderLines(matrix, offsetAABB, Color.WHITE, bufferSource);
+						RenderHelpers.renderBoxSolid(matrix4f, bufferSource, offsetAABB, 0, 0, 1, 0.125f);
+					}
+					matrix.popPose();
+					rendered = true;
+				}
+			}
+		}
 
-        if (rendered) {
-            bufferSource.endBatch(OurRenderTypes.lines());
-            bufferSource.endBatch(OurRenderTypes.SolidBoxArea);
-        }
-    }
+		if (rendered) {
+			bufferSource.endBatch(OurRenderTypes.lines());
+			bufferSource.endBatch(OurRenderTypes.SolidBoxArea);
+		}
+	}
 }

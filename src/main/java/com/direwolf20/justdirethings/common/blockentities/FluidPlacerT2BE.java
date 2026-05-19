@@ -25,83 +25,104 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FluidPlacerT2BE extends FluidPlacerT1BE implements PoweredMachineBE, AreaAffectingBE, FilterableBE {
-    public FilterData filterData = new FilterData();
-    public AreaAffectingData areaAffectingData = new AreaAffectingData(getBlockState().getValue(BlockStateProperties.FACING));
-    public final PoweredMachineContainerData poweredMachineData;
-    private final MachineEnergyStorage energyStorage;
-    private final FilterBasicHandler filterHandler;
+	public FilterData filterData = new FilterData();
+	public AreaAffectingData areaAffectingData = new AreaAffectingData(
+			getBlockState().getValue(BlockStateProperties.FACING));
+	public final PoweredMachineContainerData poweredMachineData;
+	private final MachineEnergyStorage energyStorage;
+	private final FilterBasicHandler filterHandler;
 
-    public FluidPlacerT2BE(BlockPos pPos, BlockState pBlockState) {
-        super(Registration.FluidPlacerT2BE.get(), pPos, pBlockState);
-        fluidTank.setCapacity(getMaxMB());
-        energyStorage = new MachineEnergyStorage(getMaxEnergy());
-        filterHandler = new FilterBasicHandler(9);
-        poweredMachineData = new PoweredMachineContainerData(this);
-    }
+	public FluidPlacerT2BE(BlockPos pPos, BlockState pBlockState) {
+		super(Registration.FluidPlacerT2BE.get(), pPos, pBlockState);
+		fluidTank.setCapacity(getMaxMB());
+		energyStorage = new MachineEnergyStorage(getMaxEnergy());
+		filterHandler = new FilterBasicHandler(9);
+		poweredMachineData = new PoweredMachineContainerData(this);
+	}
 
-    @Override
-    public int getMaxMB() { return 32000; }
+	@Override
+	public int getMaxMB() {
+		return 32000;
+	}
 
-    @Override
-    public ContainerData getContainerData() { return poweredMachineData; }
+	@Override
+	public ContainerData getContainerData() {
+		return poweredMachineData;
+	}
 
-    @Override
-    public MachineEnergyStorage getEnergyStorage() { return energyStorage; }
+	@Override
+	public MachineEnergyStorage getEnergyStorage() {
+		return energyStorage;
+	}
 
-    @Override
-    public int getStandardEnergyCost() { return 500; }
+	@Override
+	public int getStandardEnergyCost() {
+		return 500;
+	}
 
-    @Override
-    public BlockEntity getBlockEntity() { return this; }
+	@Override
+	public BlockEntity getBlockEntity() {
+		return this;
+	}
 
-    @Override
-    public AreaAffectingData getAreaAffectingData() { return areaAffectingData; }
+	@Override
+	public AreaAffectingData getAreaAffectingData() {
+		return areaAffectingData;
+	}
 
-    @Override
-    public FilterBasicHandler getFilterHandler() { return filterHandler; }
+	@Override
+	public FilterBasicHandler getFilterHandler() {
+		return filterHandler;
+	}
 
-    @Override
-    public FilterData getFilterData() { return filterData; }
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
+	}
 
-    @Override
-    public boolean canPlace() { return hasEnoughPower(getStandardEnergyCost()); }
+	@Override
+	public boolean canPlace() {
+		return hasEnoughPower(getStandardEnergyCost());
+	}
 
-    @Override
-    public boolean placeFluid(FluidStack fluidStack, BlockPos blockPos) {
-        boolean success = super.placeFluid(fluidStack, blockPos);
-        if (success) extractEnergy(getStandardEnergyCost(), false);
-        return success;
-    }
+	@Override
+	public boolean placeFluid(FluidStack fluidStack, BlockPos blockPos) {
+		boolean success = super.placeFluid(fluidStack, blockPos);
+		if (success)
+			extractEnergy(getStandardEnergyCost(), false);
+		return success;
+	}
 
-    @Override
-    public List<BlockPos> findSpotsToPlace(FakePlayer fakePlayer) {
-        AABB area = getAABB(getBlockPos());
-        return BlockPos.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1, (int) area.maxY - 1, (int) area.maxZ - 1)
-                .filter(blockPos -> isBlockPosValid(blockPos, fakePlayer))
-                .map(BlockPos::immutable)
-                .sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos())))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<BlockPos> findSpotsToPlace(FakePlayer fakePlayer) {
+		AABB area = getAABB(getBlockPos());
+		return BlockPos
+				.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1,
+						(int) area.maxY - 1, (int) area.maxZ - 1)
+				.filter(blockPos -> isBlockPosValid(blockPos, fakePlayer)).map(BlockPos::immutable)
+				.sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos()))).collect(Collectors.toList());
+	}
 
-    @Override
-    public boolean isBlockPosValid(BlockPos blockPos, FakePlayer fakePlayer) {
-        if (!super.isBlockPosValid(blockPos, fakePlayer)) return false;
-        ItemStack blockItemStack = level.getBlockState(blockPos.relative(getDirectionValue())).getCloneItemStack(
-                new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.ZERO, getDirectionValue(), blockPos, false), level, blockPos, null);
-        return isStackValidFilter(blockItemStack);
-    }
+	@Override
+	public boolean isBlockPosValid(BlockPos blockPos, FakePlayer fakePlayer) {
+		if (!super.isBlockPosValid(blockPos, fakePlayer))
+			return false;
+		ItemStack blockItemStack = level.getBlockState(blockPos.relative(getDirectionValue()))
+				.getCloneItemStack(new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.ZERO,
+						getDirectionValue(), blockPos, false), level, blockPos, null);
+		return isStackValidFilter(blockItemStack);
+	}
 
-    @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("energy", energyStorage.getEnergyStored());
-    }
+	@Override
+	public void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("energy", energyStorage.getEnergyStored());
+	}
 
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        if (tag.contains("energy"))
-            energyStorage.setEnergy(tag.getInt("energy"));
-    }
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		if (tag.contains("energy"))
+			energyStorage.setEnergy(tag.getInt("energy"));
+	}
 }
-

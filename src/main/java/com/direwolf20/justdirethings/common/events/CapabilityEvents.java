@@ -22,39 +22,39 @@ import javax.annotation.Nullable;
 
 public class CapabilityEvents {
 
-    private static final ResourceLocation ENERGY_CAP_KEY = new ResourceLocation(JustDireThings.MODID, "energy");
-    private static final ResourceLocation FLUID_CAP_KEY = new ResourceLocation(JustDireThings.MODID, "fluid");
+	private static final ResourceLocation ENERGY_CAP_KEY = new ResourceLocation(JustDireThings.MODID, "energy");
+	private static final ResourceLocation FLUID_CAP_KEY = new ResourceLocation(JustDireThings.MODID, "fluid");
 
-    @SubscribeEvent
-    public static void onAttachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
-        ItemStack stack = event.getObject();
+	@SubscribeEvent
+	public static void onAttachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
+		ItemStack stack = event.getObject();
 
-        if (stack.getItem() instanceof PoweredItem poweredItem) {
-            int capacity = poweredItem.getMaxEnergy();
-            EnergyStorageItemstack storage = new EnergyStorageItemstack(stack, capacity);
-            LazyOptional<IEnergyStorage> holder = LazyOptional.of(() -> storage);
-            event.addCapability(ENERGY_CAP_KEY, new ICapabilityProvider() {
-                @Nonnull
-                @Override
-                public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-                    return cap == ForgeCapabilities.ENERGY ? holder.cast() : LazyOptional.empty();
-                }
-            });
-            event.addListener(holder::invalidate);
-        }
+		if (stack.getItem() instanceof PoweredItem poweredItem) {
+			int capacity = poweredItem.getMaxEnergy();
+			EnergyStorageItemstack storage = new EnergyStorageItemstack(stack, capacity);
+			LazyOptional<IEnergyStorage> holder = LazyOptional.of(() -> storage);
+			event.addCapability(ENERGY_CAP_KEY, new ICapabilityProvider() {
+				@Nonnull
+				@Override
+				public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+					return cap == ForgeCapabilities.ENERGY ? holder.cast() : LazyOptional.empty();
+				}
+			});
+			event.addListener(holder::invalidate);
+		}
 
-        if (stack.getItem() instanceof FluidContainingItem fluidContainingItem) {
-            int capacity = fluidContainingItem.getMaxMB();
-            FluidHandlerItemStack storage = new FluidHandlerItemStack(stack, capacity);
-            LazyOptional<IFluidHandlerItem> holder = LazyOptional.of(() -> storage);
-            event.addCapability(FLUID_CAP_KEY, new ICapabilityProvider() {
-                @Nonnull
-                @Override
-                public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-                    return cap == ForgeCapabilities.FLUID_HANDLER_ITEM ? holder.cast() : LazyOptional.empty();
-                }
-            });
-            event.addListener(holder::invalidate);
-        }
-    }
+		if (stack.getItem() instanceof FluidContainingItem fluidContainingItem) {
+			int capacity = fluidContainingItem.getMaxMB();
+			FluidHandlerItemStack storage = new FluidHandlerItemStack(stack, capacity);
+			LazyOptional<IFluidHandlerItem> holder = LazyOptional.of(() -> storage);
+			event.addCapability(FLUID_CAP_KEY, new ICapabilityProvider() {
+				@Nonnull
+				@Override
+				public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+					return cap == ForgeCapabilities.FLUID_HANDLER_ITEM ? holder.cast() : LazyOptional.empty();
+				}
+			});
+			event.addListener(holder::invalidate);
+		}
+	}
 }

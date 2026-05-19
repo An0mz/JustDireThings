@@ -19,47 +19,51 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public class ParadoxMachine extends BaseMachineBlock {
-    public ParadoxMachine() {
-        super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
-    }
+	public ParadoxMachine() {
+		super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ParadoxMachineBE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new ParadoxMachineBE(pos, state);
+	}
 
-    @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide) return InteractionResult.SUCCESS;
-        BlockEntity te = level.getBlockEntity(blockPos);
-        if (!(te instanceof ParadoxMachineBE)) return InteractionResult.FAIL;
-        // Allow bucket fill/drain before opening the GUI
-        if (FluidUtil.getFluidHandler(player.getItemInHand(hand)).isPresent()) {
-            if (FluidUtil.interactWithFluidHandler(player, hand, level, blockPos, hit.getDirection()))
-                return InteractionResult.sidedSuccess(level.isClientSide);
-        }
-        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
-                (windowId, playerInventory, playerEntity) -> new ParadoxMachineContainer(windowId, playerInventory, blockPos),
-                Component.translatable("")), buf -> buf.writeBlockPos(blockPos));
-        return InteractionResult.SUCCESS;
-    }
+	@Override
+	public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
+		BlockEntity te = level.getBlockEntity(blockPos);
+		if (!(te instanceof ParadoxMachineBE))
+			return InteractionResult.FAIL;
+		// Allow bucket fill/drain before opening the GUI
+		if (FluidUtil.getFluidHandler(player.getItemInHand(hand)).isPresent()) {
+			if (FluidUtil.interactWithFluidHandler(player, hand, level, blockPos, hit.getDirection()))
+				return InteractionResult.sidedSuccess(level.isClientSide);
+		}
+		NetworkHooks.openScreen((ServerPlayer) player,
+				new SimpleMenuProvider((windowId, playerInventory,
+						playerEntity) -> new ParadoxMachineContainer(windowId, playerInventory, blockPos),
+						Component.translatable("")),
+				buf -> buf.writeBlockPos(blockPos));
+		return InteractionResult.SUCCESS;
+	}
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite());
-    }
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return this.defaultBlockState().setValue(BlockStateProperties.FACING,
+				context.getNearestLookingDirection().getOpposite());
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.FACING);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.FACING);
+	}
 }
-

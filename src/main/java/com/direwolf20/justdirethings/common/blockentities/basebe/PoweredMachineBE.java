@@ -7,44 +7,44 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public interface PoweredMachineBE {
-    default int getMaxEnergy() {
-        return 100000;
-    }
+	default int getMaxEnergy() {
+		return 100000;
+	}
 
-    ContainerData getContainerData();
+	ContainerData getContainerData();
 
-    MachineEnergyStorage getEnergyStorage();
+	MachineEnergyStorage getEnergyStorage();
 
-    default int getEnergyStored() {
-        return getEnergyStorage().getEnergyStored();
-    }
+	default int getEnergyStored() {
+		return getEnergyStorage().getEnergyStored();
+	}
 
-    default void setEnergyStored(int value) {
-        getEnergyStorage().setEnergy(value);
-    }
+	default void setEnergyStored(int value) {
+		getEnergyStorage().setEnergy(value);
+	}
 
-    int getStandardEnergyCost();
+	int getStandardEnergyCost();
 
-    default boolean hasEnoughPower(int power) {
-        return getEnergyStorage().extractEnergy(power, true) >= power;
-    }
+	default boolean hasEnoughPower(int power) {
+		return getEnergyStorage().extractEnergy(power, true) >= power;
+	}
 
-    default int insertEnergy(int power, boolean simulate) {
-        return getEnergyStorage().receiveEnergy(power, simulate);
-    }
+	default int insertEnergy(int power, boolean simulate) {
+		return getEnergyStorage().receiveEnergy(power, simulate);
+	}
 
-    default int extractEnergy(int power, boolean simulate) {
-        return getEnergyStorage().extractEnergy(power, simulate);
-    }
+	default int extractEnergy(int power, boolean simulate) {
+		return getEnergyStorage().extractEnergy(power, simulate);
+	}
 
-    default void chargeItemStack(ItemStack itemStack) {
-        IEnergyStorage slotEnergy = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
-        if (slotEnergy != null) {
-            int acceptedEnergy = slotEnergy.receiveEnergy(500, true); //Todo Config?
-            if (acceptedEnergy > 0) {
-                int extractedEnergy = getEnergyStorage().extractEnergy(acceptedEnergy, false);
-                slotEnergy.receiveEnergy(extractedEnergy, false);
-            }
-        }
-    }
+	default void chargeItemStack(ItemStack itemStack) {
+		IEnergyStorage slotEnergy = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+		if (slotEnergy != null) {
+			int acceptedEnergy = slotEnergy.receiveEnergy(500, true); // Todo Config?
+			if (acceptedEnergy > 0) {
+				int extractedEnergy = getEnergyStorage().extractEnergy(acceptedEnergy, false);
+				slotEnergy.receiveEnergy(extractedEnergy, false);
+			}
+		}
+	}
 }

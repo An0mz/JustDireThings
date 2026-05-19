@@ -4,17 +4,15 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record DropperSettingPayload(
-        int dropCount
-) {
-    public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "dropper_setting_packet");
+public record DropperSettingPayload(int dropCount) {
+	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "dropper_setting_packet");
 
-    public DropperSettingPayload(final FriendlyByteBuf buffer) {
-        this(buffer.readInt());
-    }
+	public DropperSettingPayload(final FriendlyByteBuf buffer) {
+		this(buffer.readInt());
+	}
 
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeInt(dropCount);
-    }
+	public void write(FriendlyByteBuf buffer) {
+		buffer.writeInt(dropCount);
+	}
 
 }

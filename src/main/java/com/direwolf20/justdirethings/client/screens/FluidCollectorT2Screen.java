@@ -7,18 +7,18 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class FluidCollectorT2Screen extends BaseMachineScreen<FluidCollectorT2Container> {
 
-    public FluidCollectorT2Screen(FluidCollectorT2Container container, Inventory inv, Component name) {
-        super(container, inv, name);
-    }
+	public FluidCollectorT2Screen(FluidCollectorT2Container container, Inventory inv, Component name) {
+		super(container, inv, name);
+	}
 
-    @Override
-    public void setTopSection() {
-        extraWidth = 60;
-        extraHeight = 0;
-    }
+	@Override
+	public void setTopSection() {
+		extraWidth = 60;
+		extraHeight = 0;
+	}
 
-    @Override
-    public int getFluidBarOffset() {
-        return 204;
-    }
+	@Override
+	public int getFluidBarOffset() {
+		return 204;
+	}
 }

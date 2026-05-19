@@ -12,53 +12,55 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class FinishedGooSpreadRecipe implements FinishedRecipe {
-    private final ResourceLocation id;
-    private final BlockState input;
-    private final BlockState output;
-    private final int tierRequirement;
-    private final int craftingDuration;
-    private final Advancement.Builder advancement;
-    private final ResourceLocation advancementId;
+	private final ResourceLocation id;
+	private final BlockState input;
+	private final BlockState output;
+	private final int tierRequirement;
+	private final int craftingDuration;
+	private final Advancement.Builder advancement;
+	private final ResourceLocation advancementId;
 
-    public FinishedGooSpreadRecipe(ResourceLocation id, BlockState input, BlockState output, int tierRequirement, int craftingDuration) {
-        this.id = id;
-        this.input = input;
-        this.output = output;
-        this.tierRequirement = tierRequirement;
-        this.craftingDuration = craftingDuration;
-        this.advancement = null;
-        this.advancementId = null;
-    }
+	public FinishedGooSpreadRecipe(ResourceLocation id, BlockState input, BlockState output, int tierRequirement,
+			int craftingDuration) {
+		this.id = id;
+		this.input = input;
+		this.output = output;
+		this.tierRequirement = tierRequirement;
+		this.craftingDuration = craftingDuration;
+		this.advancement = null;
+		this.advancementId = null;
+	}
 
-    @Override
-    public void serializeRecipeData(JsonObject json) {
-        json.addProperty("id", id.toString());
-        json.add("input", BlockState.CODEC.encodeStart(JsonOps.INSTANCE, input).getOrThrow(false, e -> {}));
-        json.add("output", BlockState.CODEC.encodeStart(JsonOps.INSTANCE, output).getOrThrow(false, e -> {}));
-        json.addProperty("tierRequirement", tierRequirement);
-        json.addProperty("craftingDuration", craftingDuration);
-    }
+	@Override
+	public void serializeRecipeData(JsonObject json) {
+		json.addProperty("id", id.toString());
+		json.add("input", BlockState.CODEC.encodeStart(JsonOps.INSTANCE, input).getOrThrow(false, e -> {
+		}));
+		json.add("output", BlockState.CODEC.encodeStart(JsonOps.INSTANCE, output).getOrThrow(false, e -> {
+		}));
+		json.addProperty("tierRequirement", tierRequirement);
+		json.addProperty("craftingDuration", craftingDuration);
+	}
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
 
-    @Override
-    public RecipeSerializer<?> getType() {
-        return Registration.GOO_SPREAD_RECIPE_SERIALIZER.get();
-    }
+	@Override
+	public RecipeSerializer<?> getType() {
+		return Registration.GOO_SPREAD_RECIPE_SERIALIZER.get();
+	}
 
-    @Nullable
-    @Override
-    public JsonObject serializeAdvancement() {
-        return null;
-    }
+	@Nullable
+	@Override
+	public JsonObject serializeAdvancement() {
+		return null;
+	}
 
-    @Nullable
-    @Override
-    public ResourceLocation getAdvancementId() {
-        return advancementId;
-    }
+	@Nullable
+	@Override
+	public ResourceLocation getAdvancementId() {
+		return advancementId;
+	}
 }
-

@@ -8,59 +8,64 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class InventoryHolderSlot extends SlotItemHandler {
-    private final InventoryHolderBE inventoryHolderBE;
-    private final int handlerSlotIndex;
+	private final InventoryHolderBE inventoryHolderBE;
+	private final int handlerSlotIndex;
 
-    public InventoryHolderSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, InventoryHolderBE inventoryHolderBE) {
-        super(itemHandler, index, xPosition, yPosition);
-        this.inventoryHolderBE = inventoryHolderBE;
-        this.handlerSlotIndex = index;
-    }
+	public InventoryHolderSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition,
+			InventoryHolderBE inventoryHolderBE) {
+		super(itemHandler, index, xPosition, yPosition);
+		this.inventoryHolderBE = inventoryHolderBE;
+		this.handlerSlotIndex = index;
+	}
 
-    @Override
-    public boolean mayPlace(ItemStack stack) {
-        return mayPlaceFiltered(stack);
-    }
+	@Override
+	public boolean mayPlace(ItemStack stack) {
+		return mayPlaceFiltered(stack);
+	}
 
-    @Override
-    public int getMaxStackSize() {
-        if (inventoryHolderBE.compareCounts)
-            return getFilterStackSize();
-        return super.getMaxStackSize();
-    }
+	@Override
+	public int getMaxStackSize() {
+		if (inventoryHolderBE.compareCounts)
+			return getFilterStackSize();
+		return super.getMaxStackSize();
+	}
 
-    @Override
-    public int getMaxStackSize(ItemStack stack) {
-        if (inventoryHolderBE.compareCounts)
-            return getFilterStackSize(stack);
-        return super.getMaxStackSize(stack);
-    }
+	@Override
+	public int getMaxStackSize(ItemStack stack) {
+		if (inventoryHolderBE.compareCounts)
+			return getFilterStackSize(stack);
+		return super.getMaxStackSize(stack);
+	}
 
-    public boolean mayPlaceFiltered(ItemStack currentStack) {
-        if (this.inventoryHolderBE == null) return false;
-        ItemStackKey key = new ItemStackKey(currentStack, inventoryHolderBE.compareNBT);
+	public boolean mayPlaceFiltered(ItemStack currentStack) {
+		if (this.inventoryHolderBE == null)
+			return false;
+		ItemStackKey key = new ItemStackKey(currentStack, inventoryHolderBE.compareNBT);
 
-        FilterBasicHandler filteredItems = inventoryHolderBE.filterBasicHandler;
-        ItemStack stack = filteredItems.getStackInSlot(this.handlerSlotIndex);
-        if (stack.isEmpty()) return !inventoryHolderBE.filtersOnly;
-        return key.equals(new ItemStackKey(stack, inventoryHolderBE.compareNBT));
-    }
+		FilterBasicHandler filteredItems = inventoryHolderBE.filterBasicHandler;
+		ItemStack stack = filteredItems.getStackInSlot(this.handlerSlotIndex);
+		if (stack.isEmpty())
+			return !inventoryHolderBE.filtersOnly;
+		return key.equals(new ItemStackKey(stack, inventoryHolderBE.compareNBT));
+	}
 
-    public int getFilterStackSize() {
-        if (this.inventoryHolderBE == null) return 0;
-        FilterBasicHandler filteredItems = inventoryHolderBE.filterBasicHandler;
-        ItemStack filterStack = filteredItems.getStackInSlot(this.handlerSlotIndex);
-        if (filterStack.isEmpty())
-            return super.getMaxStackSize();
-        return filterStack.getCount();
-    }
+	public int getFilterStackSize() {
+		if (this.inventoryHolderBE == null)
+			return 0;
+		FilterBasicHandler filteredItems = inventoryHolderBE.filterBasicHandler;
+		ItemStack filterStack = filteredItems.getStackInSlot(this.handlerSlotIndex);
+		if (filterStack.isEmpty())
+			return super.getMaxStackSize();
+		return filterStack.getCount();
+	}
 
-    public int getFilterStackSize(ItemStack stack) {
-        if (this.inventoryHolderBE == null) return 0;
-        FilterBasicHandler filteredItems = inventoryHolderBE.filterBasicHandler;
-        ItemStack filterStack = filteredItems.getStackInSlot(this.handlerSlotIndex);
-        if (filterStack.isEmpty())
-            return super.getMaxStackSize(stack);
-        return filterStack.getCount();
-    }
+	public int getFilterStackSize(ItemStack stack) {
+		if (this.inventoryHolderBE == null)
+			return 0;
+		FilterBasicHandler filteredItems = inventoryHolderBE.filterBasicHandler;
+		ItemStack filterStack = filteredItems.getStackInSlot(this.handlerSlotIndex);
+		if (filterStack.isEmpty())
+			return super.getMaxStackSize(stack);
+		return filterStack.getCount();
+	}
 }

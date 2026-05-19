@@ -28,121 +28,123 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClickerT2BE extends ClickerT1BE implements PoweredMachineBE, AreaAffectingBE, FilterableBE {
-    public FilterData filterData = new FilterData();
-    public AreaAffectingData areaAffectingData = new AreaAffectingData();
-    public final PoweredMachineContainerData poweredMachineData;
-    private final MachineEnergyStorage energyStorage;
-    private final FilterBasicHandler filterHandler;
+	public FilterData filterData = new FilterData();
+	public AreaAffectingData areaAffectingData = new AreaAffectingData();
+	public final PoweredMachineContainerData poweredMachineData;
+	private final MachineEnergyStorage energyStorage;
+	private final FilterBasicHandler filterHandler;
 
-    public ClickerT2BE(BlockPos pPos, BlockState pBlockState) {
-        super(Registration.ClickerT2BE.get(), pPos, pBlockState);
-        poweredMachineData = new PoweredMachineContainerData(this);
-        energyStorage = new MachineEnergyStorage(getMaxEnergy());
-        filterHandler = new FilterBasicHandler(9);
-    }
+	public ClickerT2BE(BlockPos pPos, BlockState pBlockState) {
+		super(Registration.ClickerT2BE.get(), pPos, pBlockState);
+		poweredMachineData = new PoweredMachineContainerData(this);
+		energyStorage = new MachineEnergyStorage(getMaxEnergy());
+		filterHandler = new FilterBasicHandler(9);
+	}
 
-    @Override
-    public PoweredMachineContainerData getContainerData() {
-        return poweredMachineData;
-    }
+	@Override
+	public PoweredMachineContainerData getContainerData() {
+		return poweredMachineData;
+	}
 
-    @Override
-    public MachineEnergyStorage getEnergyStorage() {
-        return energyStorage;
-    }
+	@Override
+	public MachineEnergyStorage getEnergyStorage() {
+		return energyStorage;
+	}
 
-    @Override
-    public int getStandardEnergyCost() {
-        return 250; // Todo Config?
-    }
+	@Override
+	public int getStandardEnergyCost() {
+		return 250; // Todo Config?
+	}
 
-    @Override
-    public AreaAffectingData getAreaAffectingData() {
-        return areaAffectingData;
-    }
+	@Override
+	public AreaAffectingData getAreaAffectingData() {
+		return areaAffectingData;
+	}
 
-    @Override
-    public FilterBasicHandler getFilterHandler() {
-        return filterHandler;
-    }
+	@Override
+	public FilterBasicHandler getFilterHandler() {
+		return filterHandler;
+	}
 
-    @Override
-    public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("energy", energyStorage.getEnergyStored());
-    }
+	@Override
+	public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("energy", energyStorage.getEnergyStored());
+	}
 
-    @Override
-    public void load(net.minecraft.nbt.CompoundTag tag) {
-        if (tag.contains("energy")) energyStorage.setEnergy(tag.getInt("energy"));
-        super.load(tag);
-    }
+	@Override
+	public void load(net.minecraft.nbt.CompoundTag tag) {
+		if (tag.contains("energy"))
+			energyStorage.setEnergy(tag.getInt("energy"));
+		super.load(tag);
+	}
 
-    @Override
-    public FilterData getFilterData() {
-        return filterData;
-    }
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
+	}
 
-    @Override
-    public void tickServer() {
-        super.tickServer();
-        chargeItemStack(getClickStack());
-    }
+	@Override
+	public void tickServer() {
+		super.tickServer();
+		chargeItemStack(getClickStack());
+	}
 
-    @Override
-    public boolean canClick() {
-        return hasEnoughPower(getStandardEnergyCost());
-    }
+	@Override
+	public boolean canClick() {
+		return hasEnoughPower(getStandardEnergyCost());
+	}
 
-    @Override
-    public InteractionResult clickEntity(ItemStack itemStack, UsefulFakePlayer fakePlayer, LivingEntity entity) {
-        InteractionResult interactionResult = super.clickEntity(itemStack, fakePlayer, entity);
-        if (interactionResult.equals(InteractionResult.SUCCESS))
-            extractEnergy(getStandardEnergyCost(), false);
-        return interactionResult;
-    }
+	@Override
+	public InteractionResult clickEntity(ItemStack itemStack, UsefulFakePlayer fakePlayer, LivingEntity entity) {
+		InteractionResult interactionResult = super.clickEntity(itemStack, fakePlayer, entity);
+		if (interactionResult.equals(InteractionResult.SUCCESS))
+			extractEnergy(getStandardEnergyCost(), false);
+		return interactionResult;
+	}
 
-    @Override
-    public InteractionResult clickBlock(ItemStack itemStack, UsefulFakePlayer fakePlayer, BlockPos blockPos) {
-        InteractionResult interactionResult = super.clickBlock(itemStack, fakePlayer, blockPos);
-        if (interactionResult.equals(InteractionResult.SUCCESS))
-            extractEnergy(getStandardEnergyCost(), false);
-        return interactionResult;
-    }
+	@Override
+	public InteractionResult clickBlock(ItemStack itemStack, UsefulFakePlayer fakePlayer, BlockPos blockPos) {
+		InteractionResult interactionResult = super.clickBlock(itemStack, fakePlayer, blockPos);
+		if (interactionResult.equals(InteractionResult.SUCCESS))
+			extractEnergy(getStandardEnergyCost(), false);
+		return interactionResult;
+	}
 
-    @Override
-    public boolean isBlockPosValid(FakePlayer fakePlayer, BlockPos blockPos) {
-        if (!super.isBlockPosValid(fakePlayer, blockPos))
-            return false; //Do the same checks as normal, then check the filters
-        ItemStack blockItemStack = level.getBlockState(blockPos).getCloneItemStack(new BlockHitResult(Vec3.ZERO, getDirectionValue(), blockPos, false), level, blockPos, fakePlayer);
-        return isStackValidFilter(blockItemStack);
-    }
+	@Override
+	public boolean isBlockPosValid(FakePlayer fakePlayer, BlockPos blockPos) {
+		if (!super.isBlockPosValid(fakePlayer, blockPos))
+			return false; // Do the same checks as normal, then check the filters
+		ItemStack blockItemStack = level.getBlockState(blockPos).getCloneItemStack(
+				new BlockHitResult(Vec3.ZERO, getDirectionValue(), blockPos, false), level, blockPos, fakePlayer);
+		return isStackValidFilter(blockItemStack);
+	}
 
-    @Override
-    public List<BlockPos> findSpotsToClick(FakePlayer fakePlayer) {
-        AABB area = getAABB(getBlockPos());
-        return BlockPos.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1, (int) area.maxY - 1, (int) area.maxZ - 1)
-                .filter(blockPos -> isBlockPosValid(fakePlayer, blockPos))
-                .map(BlockPos::immutable)
-                .sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos())))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<BlockPos> findSpotsToClick(FakePlayer fakePlayer) {
+		AABB area = getAABB(getBlockPos());
+		return BlockPos
+				.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1,
+						(int) area.maxY - 1, (int) area.maxZ - 1)
+				.filter(blockPos -> isBlockPosValid(fakePlayer, blockPos)).map(BlockPos::immutable)
+				.sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos()))).collect(Collectors.toList());
+	}
 
-    @Override
-    public AABB getAABB() {
-        return getAABB(getBlockPos());
-    }
+	@Override
+	public AABB getAABB() {
+		return getAABB(getBlockPos());
+	}
 
-    @Override
-    public boolean isValidEntity(Entity entity) {
-        if (!super.isValidEntity(entity))
-            return false; //Do the same checks as normal, then check the filters
-        Item eggItem = SpawnEggItem.byId(entity.getType());
-        ItemStack eggItemStack;
-        if (eggItem == null)
-            eggItemStack = ItemStack.EMPTY;
-        else
-            eggItemStack = new ItemStack(eggItem);
-        return isStackValidFilter(eggItemStack);
-    }
+	@Override
+	public boolean isValidEntity(Entity entity) {
+		if (!super.isValidEntity(entity))
+			return false; // Do the same checks as normal, then check the filters
+		Item eggItem = SpawnEggItem.byId(entity.getType());
+		ItemStack eggItemStack;
+		if (eggItem == null)
+			eggItemStack = ItemStack.EMPTY;
+		else
+			eggItemStack = new ItemStack(eggItem);
+		return isStackValidFilter(eggItemStack);
+	}
 }

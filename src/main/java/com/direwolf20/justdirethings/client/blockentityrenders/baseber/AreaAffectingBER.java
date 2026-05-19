@@ -9,18 +9,20 @@ import net.minecraft.world.phys.AABB;
 
 public class AreaAffectingBER implements BlockEntityRenderer<BlockEntity> {
 
-    @Override
-    public void render(BlockEntity blockentity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightsIn, int combinedOverlayIn) {
-        // Area previews are rendered in RenderLevelLast so they show regardless of camera direction
-    }
+	@Override
+	public void render(BlockEntity blockentity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn,
+			int combinedLightsIn, int combinedOverlayIn) {
+		// Area previews are rendered in RenderLevelLast so they show regardless of
+		// camera direction
+	}
 
-    @Override
-    public boolean shouldRenderOffScreen(BlockEntity blockEntity) {
-        return true;
-    }
+	@Override
+	public boolean shouldRenderOffScreen(BlockEntity blockEntity) {
+		return true;
+	}
 
-    public AABB getRenderBoundingBox(BlockEntity blockEntity) {
-        BlockPos pos = blockEntity.getBlockPos();
-        return new AABB(pos.offset(-10, -10, -10), pos.offset(10, 10, 10));
-    }
+	public AABB getRenderBoundingBox(BlockEntity blockEntity) {
+		BlockPos pos = blockEntity.getBlockPos();
+		return new AABB(pos.offset(-10, -10, -10), pos.offset(10, 10, 10));
+	}
 }

@@ -11,21 +11,21 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class ParadoxSyncPacket {
-    public static void handle(final ParadoxSyncPayload payload, final Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            handleClient(payload);
-        });
-        ctx.get().setPacketHandled(true);
-    }
+	public static void handle(final ParadoxSyncPayload payload, final Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> {
+			handleClient(payload);
+		});
+		ctx.get().setPacketHandled(true);
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    private static void handleClient(ParadoxSyncPayload payload) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null) return;
-        BlockEntity be = mc.level.getBlockEntity(payload.pos());
-        if (be instanceof ParadoxMachineBE paradoxMachineBE) {
-            paradoxMachineBE.receiveRunTime(payload.timeRunning());
-        }
-    }
+	@OnlyIn(Dist.CLIENT)
+	private static void handleClient(ParadoxSyncPayload payload) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null)
+			return;
+		BlockEntity be = mc.level.getBlockEntity(payload.pos());
+		if (be instanceof ParadoxMachineBE paradoxMachineBE) {
+			paradoxMachineBE.receiveRunTime(payload.timeRunning());
+		}
+	}
 }
-

@@ -11,43 +11,44 @@ import net.minecraft.world.entity.player.Inventory;
 
 import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class EnergyTransmitterScreen extends BaseMachineScreen<EnergyTransmitterContainer> {
-    public boolean showParticles;
-    public EnergyTransmitterScreen(EnergyTransmitterContainer container, Inventory inv, Component name) {
-        super(container, inv, name);
-        if (container.baseMachineBE instanceof EnergyTransmitterBE energyTransmitterBE) {
-            showParticles = energyTransmitterBE.showParticles;
-        }
-    }
+	public boolean showParticles;
+	public EnergyTransmitterScreen(EnergyTransmitterContainer container, Inventory inv, Component name) {
+		super(container, inv, name);
+		if (container.baseMachineBE instanceof EnergyTransmitterBE energyTransmitterBE) {
+			showParticles = energyTransmitterBE.showParticles;
+		}
+	}
 
-    @Override
-    public void init() {
-        super.init();
-        addRenderableWidget(ToggleButtonFactory.SHOWPARTICLESBUTTON(getGuiLeft() + 116, topSectionTop + 62, showParticles, b -> {
-            showParticles = !showParticles;
-            ((GrayscaleButton) b).toggleActive();
-            saveSettings();
-        }));
-    }
+	@Override
+	public void init() {
+		super.init();
+		addRenderableWidget(
+				ToggleButtonFactory.SHOWPARTICLESBUTTON(getGuiLeft() + 116, topSectionTop + 62, showParticles, b -> {
+					showParticles = !showParticles;
+					((GrayscaleButton) b).toggleActive();
+					saveSettings();
+				}));
+	}
 
-    @Override
-    public void addRedstoneButtons() {
-        super.addRedstoneButtons();
-    }
+	@Override
+	public void addRedstoneButtons() {
+		super.addRedstoneButtons();
+	}
 
-    @Override
-    public void setTopSection() {
-        extraWidth = 60;
-        extraHeight = 0;
-    }
+	@Override
+	public void setTopSection() {
+		extraWidth = 60;
+		extraHeight = 0;
+	}
 
-    @Override
-    public void addTickSpeedButton() {
-        //No-Op
-    }
+	@Override
+	public void addTickSpeedButton() {
+		// No-Op
+	}
 
-    @Override
-    public void saveSettings() {
-        super.saveSettings();
-        PacketHandler.CHANNEL.sendToServer(new EnergyTransmitterSettingPayload(showParticles));
-    }
+	@Override
+	public void saveSettings() {
+		super.saveSettings();
+		PacketHandler.CHANNEL.sendToServer(new EnergyTransmitterSettingPayload(showParticles));
+	}
 }

@@ -28,113 +28,129 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class FuelCanister extends Item {
-    public FuelCanister() {
-        super(new Properties()
-                .stacksTo(1));
-    }
+	public FuelCanister() {
+		super(new Properties().stacksTo(1));
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, level, tooltip, flagIn);
-        boolean sneakPressed = Screen.hasShiftDown();
-        if (sneakPressed)
-            tooltip.add(Component.translatable("justdirethings.fuelcanisteramt", MagicHelpers.formatted(getFuelLevel(stack))).withStyle(ChatFormatting.AQUA));
-        else
-            tooltip.add(Component.translatable("justdirethings.fuelcanisteritemsamt", MagicHelpers.formatted(((float) getFuelLevel(stack) / 200))).withStyle(ChatFormatting.AQUA));
+	@Override
+	public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> tooltip,
+			TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
+		boolean sneakPressed = Screen.hasShiftDown();
+		if (sneakPressed)
+			tooltip.add(Component
+					.translatable("justdirethings.fuelcanisteramt", MagicHelpers.formatted(getFuelLevel(stack)))
+					.withStyle(ChatFormatting.AQUA));
+		else
+			tooltip.add(Component
+					.translatable("justdirethings.fuelcanisteritemsamt",
+							MagicHelpers.formatted(((float) getFuelLevel(stack) / 200)))
+					.withStyle(ChatFormatting.AQUA));
 
-    }
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (level.isClientSide()) return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack itemstack = player.getItemInHand(hand);
+		if (level.isClientSide())
+			return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
 
-        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
-                (windowId, playerInventory, playerEntity) -> new FuelCanisterContainer(windowId, playerInventory, player, itemstack), Component.translatable("")), (buf -> {
-            buf.writeItem(itemstack);
-        }));
+		NetworkHooks.openScreen((ServerPlayer) player,
+				new SimpleMenuProvider((windowId, playerInventory, playerEntity) -> new FuelCanisterContainer(windowId,
+						playerInventory, player, itemstack), Component.translatable("")),
+				(buf -> {
+					buf.writeItem(itemstack);
+				}));
 
-        return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
-    }
+		return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+	}
 
-    @Override
-    public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
-        return getFuelLevel(stack) >= Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get() ? Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get() : 0;
-    }
+	@Override
+	public int getBurnTime(ItemStack stack, @Nullable RecipeType<?> recipeType) {
+		return getFuelLevel(stack) >= Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get()
+				? Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get()
+				: 0;
+	}
 
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return true;
-    }
+	@Override
+	public boolean hasCraftingRemainingItem(ItemStack stack) {
+		return true;
+	}
 
-    @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack) {
-        ItemStack copy = stack.copy();
-        decrementFuel(copy);
-        return copy;
-    }
+	@Override
+	public ItemStack getCraftingRemainingItem(ItemStack stack) {
+		ItemStack copy = stack.copy();
+		decrementFuel(copy);
+		return copy;
+	}
 
-    public static int getFuelLevel(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        return tag != null && tag.contains("FuelLevel") ? tag.getInt("FuelLevel") : 0;
-    }
+	public static int getFuelLevel(ItemStack stack) {
+		CompoundTag tag = stack.getTag();
+		return tag != null && tag.contains("FuelLevel") ? tag.getInt("FuelLevel") : 0;
+	}
 
-    public static void setFuelLevel(ItemStack stack, int fuelLevel) {
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putInt("FuelLevel", fuelLevel);
-    }
+	public static void setFuelLevel(ItemStack stack, int fuelLevel) {
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.putInt("FuelLevel", fuelLevel);
+	}
 
-    public static double getBurnSpeed(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        return tag != null && tag.contains("BurnSpeed") ? tag.getDouble("BurnSpeed") : 1.0;
-    }
+	public static double getBurnSpeed(ItemStack stack) {
+		CompoundTag tag = stack.getTag();
+		return tag != null && tag.contains("BurnSpeed") ? tag.getDouble("BurnSpeed") : 1.0;
+	}
 
-    public static int getBurnSpeedMultiplier(ItemStack stack) {
-        double burnSpeed = getBurnSpeed(stack);
-        return (int) Math.round(burnSpeed);
-    }
+	public static int getBurnSpeedMultiplier(ItemStack stack) {
+		double burnSpeed = getBurnSpeed(stack);
+		return (int) Math.round(burnSpeed);
+	}
 
-    public static void setBurnSpeed(ItemStack stack, double burnSpeed) {
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putDouble("BurnSpeed", burnSpeed);
-    }
+	public static void setBurnSpeed(ItemStack stack, double burnSpeed) {
+		CompoundTag tag = stack.getOrCreateTag();
+		tag.putDouble("BurnSpeed", burnSpeed);
+	}
 
-    public static void decrementFuel(ItemStack stack) {
-        int currentFuel = getFuelLevel(stack);
-        if (currentFuel >= Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get()) //Should always be true but lets be sure!
-            currentFuel = currentFuel - Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get();
-        setFuelLevel(stack, currentFuel);
-    }
+	public static void decrementFuel(ItemStack stack) {
+		int currentFuel = getFuelLevel(stack);
+		if (currentFuel >= Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get()) // Should always be true but lets be sure!
+			currentFuel = currentFuel - Config.FUEL_CANISTER_MINIMUM_TICKS_CONSUMED.get();
+		setFuelLevel(stack, currentFuel);
+	}
 
-    public static double calculateBurnSpeed(int currentFuelLevel, double currentBurnSpeedMultiplier, int newFuelLevel, double newFuelMultiplier) {
-        double totalFuel = currentFuelLevel + newFuelLevel;
-        // Calculate the weighted average of the multipliers based on the fuel levels.
-        double newBurnSpeedMultiplier = ((currentFuelLevel * currentBurnSpeedMultiplier) + (newFuelLevel * newFuelMultiplier)) / totalFuel;
-        return newBurnSpeedMultiplier;
-    }
+	public static double calculateBurnSpeed(int currentFuelLevel, double currentBurnSpeedMultiplier, int newFuelLevel,
+			double newFuelMultiplier) {
+		double totalFuel = currentFuelLevel + newFuelLevel;
+		// Calculate the weighted average of the multipliers based on the fuel levels.
+		double newBurnSpeedMultiplier = ((currentFuelLevel * currentBurnSpeedMultiplier)
+				+ (newFuelLevel * newFuelMultiplier)) / totalFuel;
+		return newBurnSpeedMultiplier;
+	}
 
-    public static void incrementFuel(ItemStack stack, ItemStack fuelStack) {
-        int currentFuel = getFuelLevel(stack);
-        int fuelPerPiece = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
-        if (fuelPerPiece == 0) return;
-        double currentBurnSpeedMultiplier = getBurnSpeed(stack);
-        int fuelMultiplier = 1;
-        if (fuelStack.getItem() instanceof Coal_T1 direCoal)
-            fuelMultiplier = direCoal.getBurnSpeedMultiplier();
-        else if (fuelStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof CoalBlock_T1 coalBlock)
-            fuelMultiplier = coalBlock.getBurnSpeedMultiplier();
-        int totalNewFuel = 0;
-        while ((currentFuel + totalNewFuel) + fuelPerPiece <= Config.FUEL_CANISTER_MAXIMUM_FUEL.get() && !fuelStack.isEmpty()) {
-            totalNewFuel += fuelPerPiece;
-            fuelStack.shrink(1); // Consume one unit of the fuel stack.
-        }
+	public static void incrementFuel(ItemStack stack, ItemStack fuelStack) {
+		int currentFuel = getFuelLevel(stack);
+		int fuelPerPiece = ForgeHooks.getBurnTime(fuelStack, RecipeType.SMELTING);
+		if (fuelPerPiece == 0)
+			return;
+		double currentBurnSpeedMultiplier = getBurnSpeed(stack);
+		int fuelMultiplier = 1;
+		if (fuelStack.getItem() instanceof Coal_T1 direCoal)
+			fuelMultiplier = direCoal.getBurnSpeedMultiplier();
+		else if (fuelStack.getItem() instanceof BlockItem blockItem
+				&& blockItem.getBlock() instanceof CoalBlock_T1 coalBlock)
+			fuelMultiplier = coalBlock.getBurnSpeedMultiplier();
+		int totalNewFuel = 0;
+		while ((currentFuel + totalNewFuel) + fuelPerPiece <= Config.FUEL_CANISTER_MAXIMUM_FUEL.get()
+				&& !fuelStack.isEmpty()) {
+			totalNewFuel += fuelPerPiece;
+			fuelStack.shrink(1); // Consume one unit of the fuel stack.
+		}
 
-        if (totalNewFuel > 0) {
-            currentBurnSpeedMultiplier = calculateBurnSpeed(currentFuel, currentBurnSpeedMultiplier, totalNewFuel, fuelMultiplier);
-        }
+		if (totalNewFuel > 0) {
+			currentBurnSpeedMultiplier = calculateBurnSpeed(currentFuel, currentBurnSpeedMultiplier, totalNewFuel,
+					fuelMultiplier);
+		}
 
-        setFuelLevel(stack, currentFuel + totalNewFuel);
-        setBurnSpeed(stack, currentBurnSpeedMultiplier);
-    }
+		setFuelLevel(stack, currentFuel + totalNewFuel);
+		setBurnSpeed(stack, currentBurnSpeedMultiplier);
+	}
 
 }

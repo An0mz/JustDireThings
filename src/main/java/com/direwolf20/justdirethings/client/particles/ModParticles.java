@@ -1,16 +1,13 @@
 package com.direwolf20.justdirethings.client.particles;
 
-
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.client.particles.alwaysvisibleparticle.AlwaysVisibleParticleData;
 import com.direwolf20.justdirethings.client.particles.alwaysvisibleparticle.AlwaysVisibleParticleType;
-import com.direwolf20.justdirethings.client.particles.glitterparticle.GlitterParticleData;
 import com.direwolf20.justdirethings.client.particles.glitterparticle.GlitterParticleType;
 import com.direwolf20.justdirethings.client.particles.gooexplodeparticle.GooExplodeParticleData;
 import com.direwolf20.justdirethings.client.particles.gooexplodeparticle.GooExplodeParticleType;
 import com.direwolf20.justdirethings.client.particles.itemparticle.ItemFlowParticleData;
 import com.direwolf20.justdirethings.client.particles.itemparticle.ItemFlowParticleType;
-import com.direwolf20.justdirethings.client.particles.paradoxparticle.ParadoxParticleData;
 import com.direwolf20.justdirethings.client.particles.paradoxparticle.ParadoxParticleType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
@@ -19,10 +16,16 @@ import net.minecraftforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class ModParticles {
-    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, JustDireThings.MODID);
-    public static final Supplier<ParticleType<GooExplodeParticleData>> GOOEXPLODEPARTICLE = PARTICLE_TYPES.register("gooexplodeparticle", GooExplodeParticleType::new);
-    public static final Supplier<ParticleType<ItemFlowParticleData>> ITEMFLOWPARTICLE = PARTICLE_TYPES.register("itemflowparticle", ItemFlowParticleType::new);
-    public static final Supplier<ParticleType<AlwaysVisibleParticleData>> ALWAYSVISIBLEPARTICLE = PARTICLE_TYPES.register("alwaysvisibleparticle", AlwaysVisibleParticleType::new);
-    public static final Supplier<GlitterParticleType> GLITTER = PARTICLE_TYPES.register("glitter", GlitterParticleType::new);
-    public static final Supplier<ParadoxParticleType> PARADOX = PARTICLE_TYPES.register("paradox", ParadoxParticleType::new);
+	public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister
+			.create(Registries.PARTICLE_TYPE, JustDireThings.MODID);
+	public static final Supplier<ParticleType<GooExplodeParticleData>> GOOEXPLODEPARTICLE = PARTICLE_TYPES
+			.register("gooexplodeparticle", GooExplodeParticleType::new);
+	public static final Supplier<ParticleType<ItemFlowParticleData>> ITEMFLOWPARTICLE = PARTICLE_TYPES
+			.register("itemflowparticle", ItemFlowParticleType::new);
+	public static final Supplier<ParticleType<AlwaysVisibleParticleData>> ALWAYSVISIBLEPARTICLE = PARTICLE_TYPES
+			.register("alwaysvisibleparticle", AlwaysVisibleParticleType::new);
+	public static final Supplier<GlitterParticleType> GLITTER = PARTICLE_TYPES.register("glitter",
+			GlitterParticleType::new);
+	public static final Supplier<ParadoxParticleType> PARADOX = PARTICLE_TYPES.register("paradox",
+			ParadoxParticleType::new);
 }

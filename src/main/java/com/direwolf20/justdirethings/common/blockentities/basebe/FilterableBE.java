@@ -8,52 +8,53 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public interface FilterableBE {
-    FilterBasicHandler getFilterHandler();
+	FilterBasicHandler getFilterHandler();
 
-    FilterData getFilterData();
+	FilterData getFilterData();
 
-    default void setFilterData(FilterData filterData) {
-        FilterData existingData = getFilterData();
-        existingData = filterData;
-    }
+	default void setFilterData(FilterData filterData) {
+		FilterData existingData = getFilterData();
+		existingData = filterData;
+	}
 
-    BlockEntity getBlockEntity();
+	BlockEntity getBlockEntity();
 
+	default void saveFilterSettings(CompoundTag tag) {
+		tag.putBoolean("allowlist", getFilterData().allowlist);
+		tag.putBoolean("compareNBT", getFilterData().compareNBT);
+		tag.putInt("blockitemfilter", getFilterData().blockItemFilter);
+	}
 
-    default void saveFilterSettings(CompoundTag tag) {
-        tag.putBoolean("allowlist", getFilterData().allowlist);
-        tag.putBoolean("compareNBT", getFilterData().compareNBT);
-        tag.putInt("blockitemfilter", getFilterData().blockItemFilter);
-    }
+	default void loadFilterSettings(CompoundTag tag) {
+		getFilterData().allowlist = tag.getBoolean("allowlist");
+		getFilterData().compareNBT = tag.getBoolean("compareNBT");
+		getFilterData().blockItemFilter = tag.getInt("blockitemfilter");
+	}
 
-    default void loadFilterSettings(CompoundTag tag) {
-        getFilterData().allowlist = tag.getBoolean("allowlist");
-        getFilterData().compareNBT = tag.getBoolean("compareNBT");
-        getFilterData().blockItemFilter = tag.getInt("blockitemfilter");
-    }
+	default void setFilterSettings(FilterData filterData) {
+		getFilterData().allowlist = filterData.allowlist;
+		getFilterData().compareNBT = filterData.compareNBT;
+		getFilterData().blockItemFilter = filterData.blockItemFilter;
+		if (getBlockEntity() instanceof BaseMachineBE baseMachineBE)
+			baseMachineBE.markDirtyClient();
+	}
 
-    default void setFilterSettings(FilterData filterData) {
-        getFilterData().allowlist = filterData.allowlist;
-        getFilterData().compareNBT = filterData.compareNBT;
-        getFilterData().blockItemFilter = filterData.blockItemFilter;
-        if (getBlockEntity() instanceof BaseMachineBE baseMachineBE)
-            baseMachineBE.markDirtyClient();
-    }
+	default boolean isStackValidFilter(ItemStack testStack) {
+		ItemStackKey key = new ItemStackKey(testStack, getFilterData().compareNBT);
+		if (getFilterData().filterCache.containsKey(key))
+			return getFilterData().filterCache.get(key);
 
-    default boolean isStackValidFilter(ItemStack testStack) {
-        ItemStackKey key = new ItemStackKey(testStack, getFilterData().compareNBT);
-        if (getFilterData().filterCache.containsKey(key)) return getFilterData().filterCache.get(key);
-
-        FilterBasicHandler filteredItems = getFilterHandler();
-        for (int i = 0; i < filteredItems.getSlots(); i++) {
-            ItemStack stack = filteredItems.getStackInSlot(i);
-            if (stack.isEmpty()) continue;
-            if (key.equals(new ItemStackKey(stack, getFilterData().compareNBT))) {
-                getFilterData().filterCache.put(key, getFilterData().allowlist);
-                return getFilterData().allowlist;
-            }
-        }
-        getFilterData().filterCache.put(key, !getFilterData().allowlist);
-        return !getFilterData().allowlist;
-    }
+		FilterBasicHandler filteredItems = getFilterHandler();
+		for (int i = 0; i < filteredItems.getSlots(); i++) {
+			ItemStack stack = filteredItems.getStackInSlot(i);
+			if (stack.isEmpty())
+				continue;
+			if (key.equals(new ItemStackKey(stack, getFilterData().compareNBT))) {
+				getFilterData().filterCache.put(key, getFilterData().allowlist);
+				return getFilterData().allowlist;
+			}
+		}
+		getFilterData().filterCache.put(key, !getFilterData().allowlist);
+		return !getFilterData().allowlist;
+	}
 }

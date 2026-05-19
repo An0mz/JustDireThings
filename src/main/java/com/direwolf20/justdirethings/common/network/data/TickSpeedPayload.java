@@ -4,17 +4,15 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record TickSpeedPayload(
-        int tickSpeed
-) {
-    public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "tick_speed_packet");
+public record TickSpeedPayload(int tickSpeed) {
+	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "tick_speed_packet");
 
-    public TickSpeedPayload(final FriendlyByteBuf buffer) {
-        this(buffer.readInt());
-    }
+	public TickSpeedPayload(final FriendlyByteBuf buffer) {
+		this(buffer.readInt());
+	}
 
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeInt(tickSpeed);
-    }
+	public void write(FriendlyByteBuf buffer) {
+		buffer.writeInt(tickSpeed);
+	}
 
 }

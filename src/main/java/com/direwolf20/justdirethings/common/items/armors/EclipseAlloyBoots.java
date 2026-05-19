@@ -9,35 +9,34 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class EclipseAlloyBoots extends BaseBoots implements PoweredTool {
-    public EclipseAlloyBoots() {
-        super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
-        registerAbility(Ability.STEPHEIGHT);
-        registerAbility(Ability.JUMPBOOST, new AbilityParams(1, 5, 1, 5));
-        registerAbility(Ability.GROUNDSTOMP, new AbilityParams(1, 5, 1, 5, 0, 100));
-        registerAbility(Ability.NEGATEFALLDAMAGE);
-    }
+	public EclipseAlloyBoots() {
+		super(ArmorTiers.ECLIPSEALLOY, new Item.Properties().fireResistant());
+		registerAbility(Ability.STEPHEIGHT);
+		registerAbility(Ability.JUMPBOOST, new AbilityParams(1, 5, 1, 5));
+		registerAbility(Ability.GROUNDSTOMP, new AbilityParams(1, 5, 1, 5, 0, 100));
+		registerAbility(Ability.NEGATEFALLDAMAGE);
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1)
-            return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 
-    @Override
-    public int getMaxEnergy() {
-        return 500000;
-    }
+	@Override
+	public int getMaxEnergy() {
+		return 500000;
+	}
 }
-

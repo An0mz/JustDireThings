@@ -44,36 +44,37 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public class BlockSwapperT2 extends BaseMachineBlock {
-    public BlockSwapperT2() {
-        super(Properties.of()
-                .sound(SoundType.METAL)
-                .strength(2.0f)
-                .isRedstoneConductor(BaseMachineBlock::never)
-        );
-    }
+	public BlockSwapperT2() {
+		super(Properties.of().sound(SoundType.METAL).strength(2.0f).isRedstoneConductor(BaseMachineBlock::never));
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BlockSwapperT2BE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new BlockSwapperT2BE(pos, state);
+	}
 
-    @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide)
-            return InteractionResult.SUCCESS;
+	@Override
+	public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
 
-        ItemStack playerHolding = player.getItemInHand(hand);
-        if (playerHolding.getItem() instanceof FerricoreWrench) return InteractionResult.PASS;
+		ItemStack playerHolding = player.getItemInHand(hand);
+		if (playerHolding.getItem() instanceof FerricoreWrench)
+			return InteractionResult.PASS;
 
-        BlockEntity te = level.getBlockEntity(blockPos);
-        if (!(te instanceof BlockSwapperT2BE))
-            return InteractionResult.FAIL;
+		BlockEntity te = level.getBlockEntity(blockPos);
+		if (!(te instanceof BlockSwapperT2BE))
+			return InteractionResult.FAIL;
 
-        NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider(
-                (windowId, playerInventory, playerEntity) -> new BlockSwapperT2Container(windowId, playerInventory, blockPos), Component.translatable("")), (buf -> {
-            buf.writeBlockPos(blockPos);
-        }));
-        return InteractionResult.SUCCESS;
-    }
+		NetworkHooks.openScreen((ServerPlayer) player,
+				new SimpleMenuProvider((windowId, playerInventory,
+						playerEntity) -> new BlockSwapperT2Container(windowId, playerInventory, blockPos),
+						Component.translatable("")),
+				(buf -> {
+					buf.writeBlockPos(blockPos);
+				}));
+		return InteractionResult.SUCCESS;
+	}
 }

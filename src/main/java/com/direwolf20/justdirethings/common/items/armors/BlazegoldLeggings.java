@@ -10,19 +10,18 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class BlazegoldLeggings extends BaseLeggings {
-    public BlazegoldLeggings() {
-        super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
-        registerAbility(Ability.RUNSPEED, new AbilityParams(1, 2, 1));
-        registerAbility(Ability.WALKSPEED, new AbilityParams(1, 2, 1));
-        registerAbility(Ability.SWIMSPEED, new AbilityParams(1, 2, 1));
-        registerAbility(Ability.LAVAREPAIR);
-    }
+	public BlazegoldLeggings() {
+		super(ArmorTiers.BLAZEGOLD, new Item.Properties().fireResistant());
+		registerAbility(Ability.RUNSPEED, new AbilityParams(1, 2, 1));
+		registerAbility(Ability.WALKSPEED, new AbilityParams(1, 2, 1));
+		registerAbility(Ability.SWIMSPEED, new AbilityParams(1, 2, 1));
+		registerAbility(Ability.LAVAREPAIR);
+	}
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (canUseAbility(stack, Ability.LAVAREPAIR))
-            return Helpers.doLavaRepair(stack, entity);
-        return false;
-    }
+	@Override
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+		if (canUseAbility(stack, Ability.LAVAREPAIR))
+			return Helpers.doLavaRepair(stack, entity);
+		return false;
+	}
 }
-

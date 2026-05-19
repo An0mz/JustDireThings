@@ -28,115 +28,121 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BlockBreakerT2BE extends BlockBreakerT1BE implements PoweredMachineBE, AreaAffectingBE, FilterableBE {
-    public FilterData filterData = new FilterData(false, false, 0);
-    public AreaAffectingData areaAffectingData = new AreaAffectingData();
-    public final PoweredMachineContainerData poweredMachineData;
-    private final MachineEnergyStorage energyStorage;
-    private final FilterBasicHandler filterHandler;
+	public FilterData filterData = new FilterData(false, false, 0);
+	public AreaAffectingData areaAffectingData = new AreaAffectingData();
+	public final PoweredMachineContainerData poweredMachineData;
+	private final MachineEnergyStorage energyStorage;
+	private final FilterBasicHandler filterHandler;
 
-    public BlockBreakerT2BE(BlockPos pPos, BlockState pBlockState) {
-        super(Registration.BlockBreakerT2BE.get(), pPos, pBlockState);
-        poweredMachineData = new PoweredMachineContainerData(this);
-        energyStorage = new MachineEnergyStorage(getMaxEnergy());
-        filterHandler = new FilterBasicHandler(9);
-    }
+	public BlockBreakerT2BE(BlockPos pPos, BlockState pBlockState) {
+		super(Registration.BlockBreakerT2BE.get(), pPos, pBlockState);
+		poweredMachineData = new PoweredMachineContainerData(this);
+		energyStorage = new MachineEnergyStorage(getMaxEnergy());
+		filterHandler = new FilterBasicHandler(9);
+	}
 
-    @Override
-    public PoweredMachineContainerData getContainerData() {
-        return poweredMachineData;
-    }
+	@Override
+	public PoweredMachineContainerData getContainerData() {
+		return poweredMachineData;
+	}
 
-    @Override
-    public MachineEnergyStorage getEnergyStorage() {
-        return energyStorage;
-    }
+	@Override
+	public MachineEnergyStorage getEnergyStorage() {
+		return energyStorage;
+	}
 
-    @Override
-    public int getStandardEnergyCost() {
-        return 500; // Todo Config?
-    }
+	@Override
+	public int getStandardEnergyCost() {
+		return 500; // Todo Config?
+	}
 
-    @Override
-    public AreaAffectingData getAreaAffectingData() {
-        return areaAffectingData;
-    }
+	@Override
+	public AreaAffectingData getAreaAffectingData() {
+		return areaAffectingData;
+	}
 
-    @Override
-    public FilterBasicHandler getFilterHandler() {
-        return filterHandler;
-    }
+	@Override
+	public FilterBasicHandler getFilterHandler() {
+		return filterHandler;
+	}
 
-    @Override
-    public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("energy", energyStorage.getEnergyStored());
-    }
+	@Override
+	public void saveAdditional(net.minecraft.nbt.CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("energy", energyStorage.getEnergyStored());
+	}
 
-    @Override
-    public void load(net.minecraft.nbt.CompoundTag tag) {
-        if (tag.contains("energy")) energyStorage.setEnergy(tag.getInt("energy"));
-        super.load(tag);
-    }
+	@Override
+	public void load(net.minecraft.nbt.CompoundTag tag) {
+		if (tag.contains("energy"))
+			energyStorage.setEnergy(tag.getInt("energy"));
+		super.load(tag);
+	}
 
-    @Override
-    public FilterData getFilterData() {
-        return filterData;
-    }
+	@Override
+	public FilterData getFilterData() {
+		return filterData;
+	}
 
-    @Override
-    public FilterData getDefaultFilterData() {
-        return new FilterData(false, false, 0);
-    }
+	@Override
+	public FilterData getDefaultFilterData() {
+		return new FilterData(false, false, 0);
+	}
 
-    @Override
-    public void tickServer() {
-        super.tickServer();
-        chargeItemStack(getMachineHandler().getStackInSlot(0));
-    }
+	@Override
+	public void tickServer() {
+		super.tickServer();
+		chargeItemStack(getMachineHandler().getStackInSlot(0));
+	}
 
-    @Override
-    public boolean canMine() {
-        return hasEnoughPower(getStandardEnergyCost());
-    }
+	@Override
+	public boolean canMine() {
+		return hasEnoughPower(getStandardEnergyCost());
+	}
 
-    @Override
-    public boolean tryBreakBlock(ItemStack tool, FakePlayer fakePlayer, BlockPos breakPos, BlockState blockState) {
-        if (extractEnergy(getStandardEnergyCost(), false) < getStandardEnergyCost())
-            return false;
-        return super.tryBreakBlock(tool, fakePlayer, breakPos, blockState);
-    }
+	@Override
+	public boolean tryBreakBlock(ItemStack tool, FakePlayer fakePlayer, BlockPos breakPos, BlockState blockState) {
+		if (extractEnergy(getStandardEnergyCost(), false) < getStandardEnergyCost())
+			return false;
+		return super.tryBreakBlock(tool, fakePlayer, breakPos, blockState);
+	}
 
-    public Direction getFacing() {
-        return getDirectionValue();
-    }
+	public Direction getFacing() {
+		return getDirectionValue();
+	}
 
-    @Override
-    public List<BlockPos> findBlocksToMine(FakePlayer fakePlayer) {
-        AABB area = getAABB(getBlockPos());
-        return BlockPos.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1, (int) area.maxY - 1, (int) area.maxZ - 1)
-                .filter(blockPos -> isBlockValid(fakePlayer, blockPos))
-                .map(BlockPos::immutable)
-                .sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos())))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<BlockPos> findBlocksToMine(FakePlayer fakePlayer) {
+		AABB area = getAABB(getBlockPos());
+		return BlockPos
+				.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1,
+						(int) area.maxY - 1, (int) area.maxZ - 1)
+				.filter(blockPos -> isBlockValid(fakePlayer, blockPos)).map(BlockPos::immutable)
+				.sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos()))).collect(Collectors.toList());
+	}
 
-    public boolean isBlockValid(FakePlayer fakePlayer, BlockPos blockPos) {
-        if (!super.isBlockValid(fakePlayer, blockPos))
-            return false; //Do the same checks as normal, then check the filters
-        if (filterData.blockItemFilter == 0) { //Block Comparison
-            ItemStack blockItemStack = level.getBlockState(blockPos).getCloneItemStack(new BlockHitResult(Vec3.ZERO, Direction.UP, blockPos, false), level, blockPos, fakePlayer);
-            return isStackValidFilter(blockItemStack);
-        } else { //Item Drop Comparison
-            ItemStack tool = getTool();
-            List<ItemStack> drops = Block.getDrops(level.getBlockState(blockPos), (ServerLevel) level, blockPos, level.getBlockEntity(blockPos), fakePlayer, tool);
-            for (ItemStack drop : drops) {
-                if (tool.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbility(tool, Ability.SMELTER)) {
-                    if (isStackValidFilter(Helpers.getSmeltedItem(level, drop))) return true;
-                } else {
-                    if (isStackValidFilter(drop)) return true;
-                }
-            }
-        }
-        return false;
-    }
+	public boolean isBlockValid(FakePlayer fakePlayer, BlockPos blockPos) {
+		if (!super.isBlockValid(fakePlayer, blockPos))
+			return false; // Do the same checks as normal, then check the filters
+		if (filterData.blockItemFilter == 0) { // Block Comparison
+			ItemStack blockItemStack = level.getBlockState(blockPos).getCloneItemStack(
+					new BlockHitResult(Vec3.ZERO, Direction.UP, blockPos, false), level, blockPos, fakePlayer);
+			return isStackValidFilter(blockItemStack);
+		} else { // Item Drop Comparison
+			ItemStack tool = getTool();
+			List<ItemStack> drops = Block.getDrops(level.getBlockState(blockPos), (ServerLevel) level, blockPos,
+					level.getBlockEntity(blockPos), fakePlayer, tool);
+			for (ItemStack drop : drops) {
+				if (tool.getItem() instanceof ToggleableTool toggleableTool
+						&& toggleableTool.canUseAbility(tool, Ability.SMELTER)) {
+					if (isStackValidFilter(Helpers.getSmeltedItem(level, drop)))
+						return true;
+				} else {
+					if (isStackValidFilter(drop))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
 }

@@ -8,36 +8,36 @@ import com.direwolf20.justdirethings.common.items.tools.utils.GooTier;
 import net.minecraft.world.item.ItemStack;
 
 public class EclipseAlloyPickaxe extends BasePickaxe implements PoweredTool {
-    public EclipseAlloyPickaxe() {
-        super(GooTier.ECLIPSEALLOY, 1, -2.8F, new Properties().fireResistant());
-        registerAbility(Ability.OREXRAY);
-        registerAbility(Ability.OREMINER);
-        registerAbility(Ability.SMELTER);
-        registerAbility(Ability.HAMMER, new AbilityParams(3, 7, 2));
-        registerAbility(Ability.DROPTELEPORT);
-        registerAbility(Ability.INSTABREAK);
-    }
+	public EclipseAlloyPickaxe() {
+		super(GooTier.ECLIPSEALLOY, 1, -2.8F, new Properties().fireResistant());
+		registerAbility(Ability.OREXRAY);
+		registerAbility(Ability.OREMINER);
+		registerAbility(Ability.SMELTER);
+		registerAbility(Ability.HAMMER, new AbilityParams(3, 7, 2));
+		registerAbility(Ability.DROPTELEPORT);
+		registerAbility(Ability.INSTABREAK);
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1)
-            return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 
-    @Override
-    public int getMaxEnergy() {
-        return 500000;
-    }
+	@Override
+	public int getMaxEnergy() {
+		return 500000;
+	}
 }

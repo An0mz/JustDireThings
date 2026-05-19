@@ -26,83 +26,89 @@ import java.util.List;
 import java.util.Set;
 
 public class PolymorphicWand extends BaseToggleableTool implements LeftClickableTool, FluidContainingItem {
-    public PolymorphicWand() {
-        super(new Properties()
-                .fireResistant()
-                .durability(200));
-        registerAbility(Ability.LAVAREPAIR);
-        registerAbility(Ability.POLYMORPH_RANDOM);
-    }
+	public PolymorphicWand() {
+		super(new Properties().fireResistant().durability(200));
+		registerAbility(Ability.LAVAREPAIR);
+		registerAbility(Ability.POLYMORPH_RANDOM);
+	}
 
-    @Override
-    public int getMaxMB() {
-        return Config.POLYMORPHIC_WAND_MAX_FLUID.get();
-    }
+	@Override
+	public int getMaxMB() {
+		return Config.POLYMORPHIC_WAND_MAX_FLUID.get();
+	}
 
-    @Override
-    public InteractionResult useOn(UseOnContext pContext) {
-        ItemStack itemStack = pContext.getItemInHand();
-        Player player = pContext.getPlayer();
-        if (player == null || itemStack.isEmpty()) return InteractionResult.FAIL;
-        BlockHitResult blockhitresult = getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.SOURCE_ONLY);
-        if (blockhitresult.getType() == HitResult.Type.BLOCK) {
-            if (FluidContainingItem.pickupFluid(player.level(), player, itemStack, blockhitresult))
-                return InteractionResult.SUCCESS;
-        }
-        return super.useOn(pContext);
-    }
+	@Override
+	public InteractionResult useOn(UseOnContext pContext) {
+		ItemStack itemStack = pContext.getItemInHand();
+		Player player = pContext.getPlayer();
+		if (player == null || itemStack.isEmpty())
+			return InteractionResult.FAIL;
+		BlockHitResult blockhitresult = getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.SOURCE_ONLY);
+		if (blockhitresult.getType() == HitResult.Type.BLOCK) {
+			if (FluidContainingItem.pickupFluid(player.level(), player, itemStack, blockhitresult))
+				return InteractionResult.SUCCESS;
+		}
+		return super.useOn(pContext);
+	}
 
-    @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        return InteractionResult.PASS;
-    }
+	@Override
+	public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target,
+			InteractionHand hand) {
+		return InteractionResult.PASS;
+	}
 
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        Level level = player.level();
-        if (level.isClientSide) return true;
-        ItemStack itemStack = player.getMainHandItem();
-        Set<Ability> abilities = LeftClickableTool.getLeftClickList(itemStack);
-        if (itemStack.getItem() instanceof ToggleableTool toggleableTool && !abilities.isEmpty()) {
-            toggleableTool.useAbility(player.level(), player, InteractionHand.MAIN_HAND, false);
-        }
-        return true;
-    }
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+		Level level = player.level();
+		if (level.isClientSide)
+			return true;
+		ItemStack itemStack = player.getMainHandItem();
+		Set<Ability> abilities = LeftClickableTool.getLeftClickList(itemStack);
+		if (itemStack.getItem() instanceof ToggleableTool toggleableTool && !abilities.isEmpty()) {
+			toggleableTool.useAbility(player.level(), player, InteractionHand.MAIN_HAND, false);
+		}
+		return true;
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-        if (blockhitresult.getType() == HitResult.Type.BLOCK) {
-            if (FluidContainingItem.pickupFluid(level, player, itemStack, blockhitresult))
-                return InteractionResultHolder.fail(itemStack);
-        }
-        return super.use(level, player, hand);
-    }
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack itemStack = player.getItemInHand(hand);
+		BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+		if (blockhitresult.getType() == HitResult.Type.BLOCK) {
+			if (FluidContainingItem.pickupFluid(level, player, itemStack, blockhitresult))
+				return InteractionResultHolder.fail(itemStack);
+		}
+		return super.use(level, player, hand);
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isFluidBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isFluidBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getFluidBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getFluidBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return getFluidBarColor(stack);
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		return getFluidBarColor(stack);
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, level, tooltip, flagIn);
-        if (level == null) return;
-        IFluidHandlerItem fluidHandler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
-        if (fluidHandler == null) return;
-        tooltip.add(Component.translatable("justdirethings.polymorphicfluidamt",
-                MagicHelpers.formatted(fluidHandler.getFluidInTank(0).getAmount()),
-                MagicHelpers.formatted(fluidHandler.getTankCapacity(0))).withStyle(ChatFormatting.GREEN));
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
+		if (level == null)
+			return;
+		IFluidHandlerItem fluidHandler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
+		if (fluidHandler == null)
+			return;
+		tooltip.add(
+				Component
+						.translatable("justdirethings.polymorphicfluidamt",
+								MagicHelpers.formatted(fluidHandler.getFluidInTank(0).getAmount()),
+								MagicHelpers.formatted(fluidHandler.getTankCapacity(0)))
+						.withStyle(ChatFormatting.GREEN));
+	}
 }

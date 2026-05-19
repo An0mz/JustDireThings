@@ -13,33 +13,34 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class GooSoilTier4 extends GooSoilBase implements EntityBlock {
-    public GooSoilTier4() {
-        super();
-    }
+	public GooSoilTier4() {
+		super();
+	}
 
-    /**
-     * Performs a random tick on a block.
-     */
-    @Override
-    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        super.randomTick(pState, pLevel, pPos, pRandom);
-        for (int i = 0; i < 4; i++) {
-            bonemealMe(pLevel, pPos);
-        }
-        autoHarvest(pLevel, pPos);
-    }
+	/**
+	 * Performs a random tick on a block.
+	 */
+	@Override
+	public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		super.randomTick(pState, pLevel, pPos, pRandom);
+		for (int i = 0; i < 4; i++) {
+			bonemealMe(pLevel, pPos);
+		}
+		autoHarvest(pLevel, pPos);
+	}
 
-    @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
-        if (facing == Direction.UP && level instanceof ServerLevel serverLevel) {
-            autoHarvest(serverLevel, currentPos);
-        }
-        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
-    }
+	@Override
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level,
+			BlockPos currentPos, BlockPos facingPos) {
+		if (facing == Direction.UP && level instanceof ServerLevel serverLevel) {
+			autoHarvest(serverLevel, currentPos);
+		}
+		return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new GooSoilBE(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new GooSoilBE(pos, state);
+	}
 }

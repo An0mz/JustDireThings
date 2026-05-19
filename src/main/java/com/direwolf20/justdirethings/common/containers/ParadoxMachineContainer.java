@@ -11,28 +11,27 @@ import net.minecraft.world.item.ItemStack;
 
 public class ParadoxMachineContainer extends BaseMachineContainer {
 
-    public ParadoxMachineContainer(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
-        this(windowId, playerInventory, extraData.readBlockPos());
-    }
+	public ParadoxMachineContainer(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
+		this(windowId, playerInventory, extraData.readBlockPos());
+	}
 
-    public ParadoxMachineContainer(int windowId, Inventory playerInventory, BlockPos blockPos) {
-        super(Registration.ParadoxMachine_Container.get(), windowId, playerInventory, blockPos);
-        addPlayerSlots(player.getInventory());
-    }
+	public ParadoxMachineContainer(int windowId, Inventory playerInventory, BlockPos blockPos) {
+		super(Registration.ParadoxMachine_Container.get(), windowId, playerInventory, blockPos);
+		addPlayerSlots(player.getInventory());
+	}
 
-    @Override
-    public boolean stillValid(Player playerIn) {
-        return stillValid(ContainerLevelAccess.create(player.level(), pos), player, Registration.ParadoxMachine.get());
-    }
+	@Override
+	public boolean stillValid(Player playerIn) {
+		return stillValid(ContainerLevelAccess.create(player.level(), pos), player, Registration.ParadoxMachine.get());
+	}
 
-    @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
-        return super.quickMoveStack(playerIn, index);
-    }
+	@Override
+	public ItemStack quickMoveStack(Player playerIn, int index) {
+		return super.quickMoveStack(playerIn, index);
+	}
 
-    @Override
-    public void removed(Player playerIn) {
-        super.removed(playerIn);
-    }
+	@Override
+	public void removed(Player playerIn) {
+		super.removed(playerIn);
+	}
 }
-

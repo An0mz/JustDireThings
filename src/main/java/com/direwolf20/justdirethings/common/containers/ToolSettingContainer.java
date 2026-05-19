@@ -14,86 +14,88 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class ToolSettingContainer extends BaseContainer {
-    public Player playerEntity;
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = new ResourceLocation("item/empty_armor_slot_helmet");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_CHESTPLATE = new ResourceLocation("item/empty_armor_slot_chestplate");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_LEGGINGS = new ResourceLocation("item/empty_armor_slot_leggings");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_BOOTS = new ResourceLocation("item/empty_armor_slot_boots");
-    public static final ResourceLocation EMPTY_ARMOR_SLOT_SHIELD = new ResourceLocation("item/empty_armor_slot_shield");
-    static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{
-            EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET
-    };
-    private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+	public Player playerEntity;
+	public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = new ResourceLocation("item/empty_armor_slot_helmet");
+	public static final ResourceLocation EMPTY_ARMOR_SLOT_CHESTPLATE = new ResourceLocation(
+			"item/empty_armor_slot_chestplate");
+	public static final ResourceLocation EMPTY_ARMOR_SLOT_LEGGINGS = new ResourceLocation(
+			"item/empty_armor_slot_leggings");
+	public static final ResourceLocation EMPTY_ARMOR_SLOT_BOOTS = new ResourceLocation("item/empty_armor_slot_boots");
+	public static final ResourceLocation EMPTY_ARMOR_SLOT_SHIELD = new ResourceLocation("item/empty_armor_slot_shield");
+	static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS,
+			EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
+	private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST,
+			EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
+	public ToolSettingContainer(int windowId, Inventory playerInventory, Player player, FriendlyByteBuf extraData) {
+		this(windowId, playerInventory, player);
+	}
 
-    public ToolSettingContainer(int windowId, Inventory playerInventory, Player player, FriendlyByteBuf extraData) {
-        this(windowId, playerInventory, player);
-    }
+	public ToolSettingContainer(int windowId, Inventory playerInventory, Player player) {
+		super(Registration.Tool_Settings_Container.get(), windowId);
+		playerEntity = player;
+		for (int k = 0; k < 4; ++k) {
+			final EquipmentSlot equipmentslot = SLOT_IDS[k];
+			this.addSlot(new Slot(playerInventory, 39 - k, 44 + k * 18, 66) {
+				@Override
+				public void set(ItemStack newItem) {
+					ItemStack oldItem = this.getItem();
+					onEquipItem(playerEntity, equipmentslot, newItem, oldItem);
+					super.set(newItem);
+				}
 
-    public ToolSettingContainer(int windowId, Inventory playerInventory, Player player) {
-        super(Registration.Tool_Settings_Container.get(), windowId);
-        playerEntity = player;
-        for (int k = 0; k < 4; ++k) {
-            final EquipmentSlot equipmentslot = SLOT_IDS[k];
-            this.addSlot(new Slot(playerInventory, 39 - k, 44 + k * 18, 66) {
-                @Override
-                public void set(ItemStack newItem) {
-                    ItemStack oldItem = this.getItem();
-                    onEquipItem(playerEntity, equipmentslot, newItem, oldItem);
-                    super.set(newItem);
-                }
+				@Override
+				public int getMaxStackSize() {
+					return 1;
+				}
 
-                @Override
-                public int getMaxStackSize() {
-                    return 1;
-                }
+				@Override
+				public boolean mayPlace(ItemStack p_39746_) {
+					return p_39746_.canEquip(equipmentslot, playerEntity);
+				}
 
-                @Override
-                public boolean mayPlace(ItemStack p_39746_) {
-                    return p_39746_.canEquip(equipmentslot, playerEntity);
-                }
+				@Override
+				public boolean mayPickup(Player p_39744_) {
+					ItemStack itemstack = this.getItem();
+					return !itemstack.isEmpty() && !p_39744_.isCreative()
+							&& EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(p_39744_);
+				}
 
-                @Override
-                public boolean mayPickup(Player p_39744_) {
-                    ItemStack itemstack = this.getItem();
-                    return !itemstack.isEmpty() && !p_39744_.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(p_39744_);
-                }
+				@Override
+				public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+					return Pair.of(InventoryMenu.BLOCK_ATLAS, TEXTURE_EMPTY_SLOTS[equipmentslot.getIndex()]);
+				}
+			});
+		}
 
-                @Override
-                public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                    return Pair.of(InventoryMenu.BLOCK_ATLAS, TEXTURE_EMPTY_SLOTS[equipmentslot.getIndex()]);
-                }
-            });
-        }
+		this.addSlot(new Slot(playerInventory, 40, 44 + 4 * 18, 66) {
+			@Override
+			public void set(ItemStack newItem) {
+				ItemStack oldItem = this.getItem();
+				onEquipItem(playerEntity, EquipmentSlot.OFFHAND, newItem, oldItem);
+				super.set(newItem);
+			}
 
-        this.addSlot(new Slot(playerInventory, 40, 44 + 4 * 18, 66) {
-            @Override
-            public void set(ItemStack newItem) {
-                ItemStack oldItem = this.getItem();
-                onEquipItem(playerEntity, EquipmentSlot.OFFHAND, newItem, oldItem);
-                super.set(newItem);
-            }
+			@Override
+			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_ARMOR_SLOT_SHIELD);
+			}
+		});
 
-            @Override
-            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_ARMOR_SLOT_SHIELD);
-            }
-        });
+		addPlayerSlots(playerInventory, 8, 84);
+	}
 
-        addPlayerSlots(playerInventory, 8, 84);
-    }
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
-        return ItemStack.EMPTY;
-    }
+	@Override
+	public boolean stillValid(Player pPlayer) {
+		return true;
+	}
 
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return true;
-    }
-
-    static void onEquipItem(Player pPlayer, EquipmentSlot pSlot, ItemStack pNewItem, ItemStack pOldItem) {
-        pPlayer.onEquipItem(pSlot, pOldItem, pNewItem);
-    }
+	static void onEquipItem(Player pPlayer, EquipmentSlot pSlot, ItemStack pNewItem, ItemStack pOldItem) {
+		pPlayer.onEquipItem(pSlot, pOldItem, pNewItem);
+	}
 }

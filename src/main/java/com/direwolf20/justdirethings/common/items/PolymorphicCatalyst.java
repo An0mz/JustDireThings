@@ -14,17 +14,19 @@ import java.util.List;
 import static com.direwolf20.justdirethings.util.TooltipHelpers.appendShiftForInfo;
 
 public class PolymorphicCatalyst extends Item {
-    public PolymorphicCatalyst() {
-        super(new Properties());
-    }
+	public PolymorphicCatalyst() {
+		super(new Properties());
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, level, tooltip, flagIn);
-        if (level == null) return;
-        if (Screen.hasShiftDown())
-            tooltip.add(Component.translatable("justdirethings.hint.dropinwater").withStyle(ChatFormatting.LIGHT_PURPLE));
-        else
-            appendShiftForInfo(stack, tooltip);
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
+		super.appendHoverText(stack, level, tooltip, flagIn);
+		if (level == null)
+			return;
+		if (Screen.hasShiftDown())
+			tooltip.add(
+					Component.translatable("justdirethings.hint.dropinwater").withStyle(ChatFormatting.LIGHT_PURPLE));
+		else
+			appendShiftForInfo(stack, tooltip);
+	}
 }

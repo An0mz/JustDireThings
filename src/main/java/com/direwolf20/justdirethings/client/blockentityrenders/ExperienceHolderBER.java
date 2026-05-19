@@ -14,23 +14,25 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ExperienceHolderBER extends AreaAffectingBER {
-    private static final ItemStack XP_BOTTLE = new ItemStack(Items.EXPERIENCE_BOTTLE);
+	private static final ItemStack XP_BOTTLE = new ItemStack(Items.EXPERIENCE_BOTTLE);
 
-    public ExperienceHolderBER(BlockEntityRendererProvider.Context context) {
-    }
+	public ExperienceHolderBER(BlockEntityRendererProvider.Context context) {
+	}
 
-    @Override
-    public void render(BlockEntity blockentity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightsIn, int combinedOverlayIn) {
-        super.render(blockentity, partialTicks, matrixStackIn, bufferIn, combinedLightsIn, combinedOverlayIn);
+	@Override
+	public void render(BlockEntity blockentity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn,
+			int combinedLightsIn, int combinedOverlayIn) {
+		super.render(blockentity, partialTicks, matrixStackIn, bufferIn, combinedLightsIn, combinedOverlayIn);
 
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        float angle = ((System.currentTimeMillis() / 15) % 360);
+		ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+		float angle = ((System.currentTimeMillis() / 15) % 360);
 
-        matrixStackIn.pushPose();
-        matrixStackIn.translate(0.5, 0.8, 0.5);
-        matrixStackIn.mulPose(Axis.YP.rotationDegrees(angle));
-        matrixStackIn.scale(0.2f, 0.2f, 0.2f);
-        itemRenderer.renderStatic(XP_BOTTLE, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, combinedOverlayIn, matrixStackIn, bufferIn, Minecraft.getInstance().level, 0);
-        matrixStackIn.popPose();
-    }
+		matrixStackIn.pushPose();
+		matrixStackIn.translate(0.5, 0.8, 0.5);
+		matrixStackIn.mulPose(Axis.YP.rotationDegrees(angle));
+		matrixStackIn.scale(0.2f, 0.2f, 0.2f);
+		itemRenderer.renderStatic(XP_BOTTLE, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, combinedOverlayIn,
+				matrixStackIn, bufferIn, Minecraft.getInstance().level, 0);
+		matrixStackIn.popPose();
+	}
 }

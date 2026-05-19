@@ -6,17 +6,17 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 
 public class FilterBasicHandler extends ItemStackHandler {
-    public FilterBasicHandler(int size) {
-        super(size);
-    }
+	public FilterBasicHandler(int size) {
+		super(size);
+	}
 
-    @Override
-    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return super.isItemValid(slot, stack);
-    }
+	@Override
+	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+		return super.isItemValid(slot, stack);
+	}
 
-    @Override
-    public int getSlotLimit(int slot) {
-        return 1;
-    }
+	@Override
+	public int getSlotLimit(int slot) {
+		return 1;
+	}
 }

@@ -4,11 +4,11 @@ import net.minecraftforge.energy.EnergyStorage;
 
 public class MachineEnergyStorage extends EnergyStorage {
 
-    public MachineEnergyStorage(int capacity) {
-        super(capacity);
-    }
+	public MachineEnergyStorage(int capacity) {
+		super(capacity);
+	}
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
+	public void setEnergy(int energy) {
+		this.energy = energy;
+	}
 }

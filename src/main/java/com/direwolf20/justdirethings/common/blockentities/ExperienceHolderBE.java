@@ -33,262 +33,291 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE, RedstoneControlledBE {
-    public AreaAffectingData areaAffectingData = new AreaAffectingData(getBlockState().getValue(BlockStateProperties.FACING).getOpposite());
-    public RedstoneControlData redstoneControlData = getDefaultRedstoneData();
-    public int exp;
-    public int targetExp;
-    private Player currentPlayer;
-    public boolean collectExp;
-    public boolean ownerOnly;
-    public boolean showParticles = true;
+	public AreaAffectingData areaAffectingData = new AreaAffectingData(
+			getBlockState().getValue(BlockStateProperties.FACING).getOpposite());
+	public RedstoneControlData redstoneControlData = getDefaultRedstoneData();
+	public int exp;
+	public int targetExp;
+	private Player currentPlayer;
+	public boolean collectExp;
+	public boolean ownerOnly;
+	public boolean showParticles = true;
 
-    private ExperienceHolderFluidTank xpTank;
-    private LazyOptional<IFluidHandler> lazyXpTank = LazyOptional.empty();
+	private ExperienceHolderFluidTank xpTank;
+	private LazyOptional<IFluidHandler> lazyXpTank = LazyOptional.empty();
 
-    private ExperienceHolderFluidTank getXpTank() {
-        if (xpTank == null) xpTank = new ExperienceHolderFluidTank(this);
-        return xpTank;
-    }
+	private ExperienceHolderFluidTank getXpTank() {
+		if (xpTank == null)
+			xpTank = new ExperienceHolderFluidTank(this);
+		return xpTank;
+	}
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            if (!lazyXpTank.isPresent()) lazyXpTank = LazyOptional.of(this::getXpTank);
-            return lazyXpTank.cast();
-        }
-        return super.getCapability(cap, side);
-    }
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		if (cap == ForgeCapabilities.FLUID_HANDLER) {
+			if (!lazyXpTank.isPresent())
+				lazyXpTank = LazyOptional.of(this::getXpTank);
+			return lazyXpTank.cast();
+		}
+		return super.getCapability(cap, side);
+	}
 
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyXpTank.invalidate();
-    }
+	@Override
+	public void invalidateCaps() {
+		super.invalidateCaps();
+		lazyXpTank.invalidate();
+	}
 
-    public ExperienceHolderBE(BlockPos pPos, BlockState pBlockState) {
-        super(Registration.ExperienceHolderBE.get(), pPos, pBlockState);
-    }
+	public ExperienceHolderBE(BlockPos pPos, BlockState pBlockState) {
+		super(Registration.ExperienceHolderBE.get(), pPos, pBlockState);
+	}
 
-    @Override
-    public BlockEntity getBlockEntity() {
-        return this;
-    }
+	@Override
+	public BlockEntity getBlockEntity() {
+		return this;
+	}
 
-    @Override
-    public RedstoneControlData getRedstoneControlData() {
-        return redstoneControlData;
-    }
+	@Override
+	public RedstoneControlData getRedstoneControlData() {
+		return redstoneControlData;
+	}
 
-    @Override
-    public AreaAffectingData getAreaAffectingData() {
-        return areaAffectingData;
-    }
+	@Override
+	public AreaAffectingData getAreaAffectingData() {
+		return areaAffectingData;
+	}
 
-    public void changeSettings(Player player, int targetExp, boolean ownerOnly, boolean collectExp, boolean showParticles) {
-        if (this.ownerOnly && !player.getUUID().equals(placedByUUID)) return;
-        this.targetExp = targetExp;
-        this.ownerOnly = ownerOnly;
-        this.collectExp = collectExp;
-        this.showParticles = showParticles;
-        markDirtyClient();
-    }
+	public void changeSettings(Player player, int targetExp, boolean ownerOnly, boolean collectExp,
+			boolean showParticles) {
+		if (this.ownerOnly && !player.getUUID().equals(placedByUUID))
+			return;
+		this.targetExp = targetExp;
+		this.ownerOnly = ownerOnly;
+		this.collectExp = collectExp;
+		this.showParticles = showParticles;
+		markDirtyClient();
+	}
 
-    public int addExp(int addition) {
-        if (this.exp > Integer.MAX_VALUE - addition) {
-            int remainingExp = addition - (Integer.MAX_VALUE - this.exp);
-            this.exp = Integer.MAX_VALUE;
-            return remainingExp;
-        } else {
-            this.exp += addition;
-            return 0;
-        }
-    }
+	public int addExp(int addition) {
+		if (this.exp > Integer.MAX_VALUE - addition) {
+			int remainingExp = addition - (Integer.MAX_VALUE - this.exp);
+			this.exp = Integer.MAX_VALUE;
+			return remainingExp;
+		} else {
+			this.exp += addition;
+			return 0;
+		}
+	}
 
-    public int subExp(int subtraction) {
-        int amtToRemove = Math.min(exp, subtraction);
-        this.exp = this.exp - amtToRemove;
-        return subtraction - amtToRemove;
-    }
+	public int subExp(int subtraction) {
+		int amtToRemove = Math.min(exp, subtraction);
+		this.exp = this.exp - amtToRemove;
+		return subtraction - amtToRemove;
+	}
 
-    public void storeExp(Player player, int levelChange) {
-        if (ownerOnly && !player.getUUID().equals(placedByUUID)) return;
-        if (levelChange == -1) {
-            int totalExp = ExperienceUtils.getPlayerTotalExperience(player);
-            int remaining = addExp(totalExp);
-            player.giveExperiencePoints(-totalExp);
-            player.giveExperienceLevels(-1);
-            if (remaining > 0) player.giveExperiencePoints(remaining);
-        } else if (levelChange > 0) {
-            int expInCurrentLevel = (int) (player.experienceProgress * player.getXpNeededForNextLevel());
-            if (player.experienceProgress > 0.0f) {
-                int expRemoved = ExperienceUtils.removePoints(player, expInCurrentLevel);
-                int remaining = addExp(expRemoved);
-                levelChange--;
-                player.experienceProgress = 0f;
-                if (remaining > 0) player.giveExperiencePoints(remaining);
-            }
-            if (levelChange > 0) {
-                int expRemoved = ExperienceUtils.removeLevels(player, levelChange);
-                int remaining = addExp(expRemoved);
-                if (remaining > 0) player.giveExperiencePoints(remaining);
-            }
-        }
-        markDirtyClient();
-    }
+	public void storeExp(Player player, int levelChange) {
+		if (ownerOnly && !player.getUUID().equals(placedByUUID))
+			return;
+		if (levelChange == -1) {
+			int totalExp = ExperienceUtils.getPlayerTotalExperience(player);
+			int remaining = addExp(totalExp);
+			player.giveExperiencePoints(-totalExp);
+			player.giveExperienceLevels(-1);
+			if (remaining > 0)
+				player.giveExperiencePoints(remaining);
+		} else if (levelChange > 0) {
+			int expInCurrentLevel = (int) (player.experienceProgress * player.getXpNeededForNextLevel());
+			if (player.experienceProgress > 0.0f) {
+				int expRemoved = ExperienceUtils.removePoints(player, expInCurrentLevel);
+				int remaining = addExp(expRemoved);
+				levelChange--;
+				player.experienceProgress = 0f;
+				if (remaining > 0)
+					player.giveExperiencePoints(remaining);
+			}
+			if (levelChange > 0) {
+				int expRemoved = ExperienceUtils.removeLevels(player, levelChange);
+				int remaining = addExp(expRemoved);
+				if (remaining > 0)
+					player.giveExperiencePoints(remaining);
+			}
+		}
+		markDirtyClient();
+	}
 
-    public void extractExp(Player player, int levelChange) {
-        if (exp == 0) return;
-        if (ownerOnly && !player.getUUID().equals(placedByUUID)) return;
-        if (levelChange == -1) {
-            int expToGive = exp;
-            player.giveExperiencePoints(expToGive);
-            this.exp = 0;
-        } else if (levelChange > 0) {
-            if (roundUpToNextLevel(player)) levelChange--;
-            if (levelChange > 0 && this.exp > 0) {
-                int expForNextLevels = ExperienceUtils.getTotalExperienceForLevel(player.experienceLevel + levelChange) - ExperienceUtils.getPlayerTotalExperience(player);
-                int expToGive = Math.min(this.exp, expForNextLevels);
-                player.giveExperiencePoints(expToGive);
-                this.exp -= expToGive;
-                roundUpToNextLevel(player);
-            }
-        }
-        markDirtyClient();
-    }
+	public void extractExp(Player player, int levelChange) {
+		if (exp == 0)
+			return;
+		if (ownerOnly && !player.getUUID().equals(placedByUUID))
+			return;
+		if (levelChange == -1) {
+			int expToGive = exp;
+			player.giveExperiencePoints(expToGive);
+			this.exp = 0;
+		} else if (levelChange > 0) {
+			if (roundUpToNextLevel(player))
+				levelChange--;
+			if (levelChange > 0 && this.exp > 0) {
+				int expForNextLevels = ExperienceUtils.getTotalExperienceForLevel(player.experienceLevel + levelChange)
+						- ExperienceUtils.getPlayerTotalExperience(player);
+				int expToGive = Math.min(this.exp, expForNextLevels);
+				player.giveExperiencePoints(expToGive);
+				this.exp -= expToGive;
+				roundUpToNextLevel(player);
+			}
+		}
+		markDirtyClient();
+	}
 
-    public boolean roundUpToNextLevel(Player player) {
-        if (this.exp <= 0) return false;
-        int expInCurrentLevel = (int) (player.experienceProgress * player.getXpNeededForNextLevel());
-        if (expInCurrentLevel > 0) {
-            int expToGive = Math.min(exp, ExperienceUtils.getExpNeededForNextLevel(player));
-            player.giveExperiencePoints(expToGive);
-            this.exp -= expToGive;
-            return true;
-        }
-        return false;
-    }
+	public boolean roundUpToNextLevel(Player player) {
+		if (this.exp <= 0)
+			return false;
+		int expInCurrentLevel = (int) (player.experienceProgress * player.getXpNeededForNextLevel());
+		if (expInCurrentLevel > 0) {
+			int expToGive = Math.min(exp, ExperienceUtils.getExpNeededForNextLevel(player));
+			player.giveExperiencePoints(expToGive);
+			this.exp -= expToGive;
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public void tickClient() {}
+	@Override
+	public void tickClient() {
+	}
 
-    @Override
-    public void tickServer() {
-        super.tickServer();
-        if (collectExp) collectExp();
-        handleExperience();
-    }
+	@Override
+	public void tickServer() {
+		super.tickServer();
+		if (collectExp)
+			collectExp();
+		handleExperience();
+	}
 
-    private void handleExperience() {
-        assert level != null;
-        if (isActiveRedstone() && canRun() && currentPlayer == null)
-            findTargetPlayer();
-        if (currentPlayer == null) return;
-        int currentLevel = currentPlayer.experienceLevel;
-        if (currentLevel < targetExp && exp > 0) {
-            extractExp(currentPlayer, 1);
-            doParticles(new ItemStack(Items.EXPERIENCE_BOTTLE), currentPlayer.getEyePosition().subtract(0, 0.25f, 0), false);
-            if (exp == 0) currentPlayer = null;
-        } else if (currentLevel > targetExp || (currentLevel == targetExp && currentPlayer.experienceProgress > 0.01f)) {
-            storeExp(currentPlayer, 1);
-            doParticles(new ItemStack(Items.EXPERIENCE_BOTTLE), currentPlayer.getEyePosition().subtract(0, 0.25f, 0), true);
-        } else {
-            currentPlayer = null;
-        }
-    }
+	private void handleExperience() {
+		assert level != null;
+		if (isActiveRedstone() && canRun() && currentPlayer == null)
+			findTargetPlayer();
+		if (currentPlayer == null)
+			return;
+		int currentLevel = currentPlayer.experienceLevel;
+		if (currentLevel < targetExp && exp > 0) {
+			extractExp(currentPlayer, 1);
+			doParticles(new ItemStack(Items.EXPERIENCE_BOTTLE), currentPlayer.getEyePosition().subtract(0, 0.25f, 0),
+					false);
+			if (exp == 0)
+				currentPlayer = null;
+		} else if (currentLevel > targetExp
+				|| (currentLevel == targetExp && currentPlayer.experienceProgress > 0.01f)) {
+			storeExp(currentPlayer, 1);
+			doParticles(new ItemStack(Items.EXPERIENCE_BOTTLE), currentPlayer.getEyePosition().subtract(0, 0.25f, 0),
+					true);
+		} else {
+			currentPlayer = null;
+		}
+	}
 
-    public void doParticles(ItemStack itemStack, Vec3 sourcePos, boolean toBlock) {
-        if (!showParticles) return;
-        if (!(level instanceof ServerLevel serverLevel)) return;
-        Direction direction = getBlockState().getValue(BlockStateProperties.FACING);
-        BlockPos blockPos = getBlockPos();
-        Vec3 baubleSpot = new Vec3(
-                blockPos.getX() + 0.5f - (0.3 * direction.getStepX()),
-                blockPos.getY() + 0.5f - (0.3 * direction.getStepY()),
-                blockPos.getZ() + 0.5f - (0.3 * direction.getStepZ())
-        );
-        double d0 = sourcePos.x();
-        double d1 = sourcePos.y();
-        double d2 = sourcePos.z();
-        if (toBlock) {
-            ItemFlowParticleData data = new ItemFlowParticleData(itemStack, baubleSpot.x, baubleSpot.y, baubleSpot.z, 1);
-            serverLevel.sendParticles(data, d0, d1, d2, 10, 0, 0, 0, 0);
-        } else {
-            ItemFlowParticleData data = new ItemFlowParticleData(itemStack, d0, d1, d2, 1);
-            serverLevel.sendParticles(data, baubleSpot.x, baubleSpot.y, baubleSpot.z, 10, 0, 0, 0, 0);
-        }
-    }
+	public void doParticles(ItemStack itemStack, Vec3 sourcePos, boolean toBlock) {
+		if (!showParticles)
+			return;
+		if (!(level instanceof ServerLevel serverLevel))
+			return;
+		Direction direction = getBlockState().getValue(BlockStateProperties.FACING);
+		BlockPos blockPos = getBlockPos();
+		Vec3 baubleSpot = new Vec3(blockPos.getX() + 0.5f - (0.3 * direction.getStepX()),
+				blockPos.getY() + 0.5f - (0.3 * direction.getStepY()),
+				blockPos.getZ() + 0.5f - (0.3 * direction.getStepZ()));
+		double d0 = sourcePos.x();
+		double d1 = sourcePos.y();
+		double d2 = sourcePos.z();
+		if (toBlock) {
+			ItemFlowParticleData data = new ItemFlowParticleData(itemStack, baubleSpot.x, baubleSpot.y, baubleSpot.z,
+					1);
+			serverLevel.sendParticles(data, d0, d1, d2, 10, 0, 0, 0, 0);
+		} else {
+			ItemFlowParticleData data = new ItemFlowParticleData(itemStack, d0, d1, d2, 1);
+			serverLevel.sendParticles(data, baubleSpot.x, baubleSpot.y, baubleSpot.z, 10, 0, 0, 0, 0);
+		}
+	}
 
-    private void collectExp() {
-        if (operationTicks != 0) return;
-        assert level != null;
-        AABB searchArea = getAABB(getBlockPos());
-        List<ExperienceOrb> entityList = level.getEntitiesOfClass(ExperienceOrb.class, searchArea, entity -> true)
-                .stream().toList();
-        if (entityList.isEmpty()) return;
-        for (ExperienceOrb experienceOrb : entityList) {
-            int orbValue = experienceOrb.getValue();
-            addExp(orbValue);
-            experienceOrb.discard();
-        }
-        markDirtyClient();
-    }
+	private void collectExp() {
+		if (operationTicks != 0)
+			return;
+		assert level != null;
+		AABB searchArea = getAABB(getBlockPos());
+		List<ExperienceOrb> entityList = level.getEntitiesOfClass(ExperienceOrb.class, searchArea, entity -> true)
+				.stream().toList();
+		if (entityList.isEmpty())
+			return;
+		for (ExperienceOrb experienceOrb : entityList) {
+			int orbValue = experienceOrb.getValue();
+			addExp(orbValue);
+			experienceOrb.discard();
+		}
+		markDirtyClient();
+	}
 
-    private void findTargetPlayer() {
-        assert level != null;
-        AABB searchArea = getAABB(getBlockPos());
-        List<Player> entityList = level.getEntitiesOfClass(Player.class, searchArea, entity -> true)
-                .stream().toList();
-        if (entityList.isEmpty()) return;
-        for (Player player : entityList) {
-            if (ownerOnly && !player.getUUID().equals(placedByUUID)) continue;
-            if (player.experienceLevel != targetExp || player.experienceProgress > 0.01f) {
-                this.currentPlayer = player;
-                return;
-            }
-        }
-    }
+	private void findTargetPlayer() {
+		assert level != null;
+		AABB searchArea = getAABB(getBlockPos());
+		List<Player> entityList = level.getEntitiesOfClass(Player.class, searchArea, entity -> true).stream().toList();
+		if (entityList.isEmpty())
+			return;
+		for (Player player : entityList) {
+			if (ownerOnly && !player.getUUID().equals(placedByUUID))
+				continue;
+			if (player.experienceLevel != targetExp || player.experienceProgress > 0.01f) {
+				this.currentPlayer = player;
+				return;
+			}
+		}
+	}
 
-    @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("exp", exp);
-        tag.putInt("targetExp", targetExp);
-        tag.putBoolean("collectExp", collectExp);
-        tag.putBoolean("ownerOnly", ownerOnly);
-        tag.putBoolean("showParticles", showParticles);
-    }
+	@Override
+	public void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putInt("exp", exp);
+		tag.putInt("targetExp", targetExp);
+		tag.putBoolean("collectExp", collectExp);
+		tag.putBoolean("ownerOnly", ownerOnly);
+		tag.putBoolean("showParticles", showParticles);
+	}
 
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        exp = tag.getInt("exp");
-        targetExp = tag.getInt("targetExp");
-        collectExp = tag.getBoolean("collectExp");
-        ownerOnly = tag.getBoolean("ownerOnly");
-        showParticles = tag.getBoolean("showParticles");
-    }
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		exp = tag.getInt("exp");
+		targetExp = tag.getInt("targetExp");
+		collectExp = tag.getBoolean("collectExp");
+		ownerOnly = tag.getBoolean("ownerOnly");
+		showParticles = tag.getBoolean("showParticles");
+	}
 
-    @Override
-    public AreaAffectingData getDefaultAreaData() {
-        if (level != null)
-            return new AreaAffectingData(getBlockState().getValue(BlockStateProperties.FACING).getOpposite());
-        return new AreaAffectingData();
-    }
+	@Override
+	public AreaAffectingData getDefaultAreaData() {
+		if (level != null)
+			return new AreaAffectingData(getBlockState().getValue(BlockStateProperties.FACING).getOpposite());
+		return new AreaAffectingData();
+	}
 
-    @Override
-    public RedstoneControlData getDefaultRedstoneData() {
-        return new RedstoneControlData(MiscHelpers.RedstoneMode.PULSE);
-    }
+	@Override
+	public RedstoneControlData getDefaultRedstoneData() {
+		return new RedstoneControlData(MiscHelpers.RedstoneMode.PULSE);
+	}
 
-    @Override
-    public boolean isDefaultSettings() {
-        if (!super.isDefaultSettings()) return false;
-        if (exp != 0) return false;
-        if (targetExp != 0) return false;
-        if (collectExp) return false;
-        if (ownerOnly) return false;
-        return true;
-    }
+	@Override
+	public boolean isDefaultSettings() {
+		if (!super.isDefaultSettings())
+			return false;
+		if (exp != 0)
+			return false;
+		if (targetExp != 0)
+			return false;
+		if (collectExp)
+			return false;
+		if (ownerOnly)
+			return false;
+		return true;
+	}
 }
-

@@ -13,44 +13,45 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class CelestigemChestplate extends BaseChestplate implements PoweredTool {
-    public CelestigemChestplate() {
-        super(ArmorTiers.CELESTIGEM, new Item.Properties().fireResistant());
-        registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 600));
-        registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 100));
-        registerAbility(Ability.ELYTRA);
-    }
+	public CelestigemChestplate() {
+		super(ArmorTiers.CELESTIGEM, new Item.Properties().fireResistant());
+		registerAbility(Ability.INVULNERABILITY, new AbilityParams(1, 1, 1, 1, 200, 600));
+		registerAbility(Ability.EXTINGUISH, new AbilityParams(1, 1, 1, 1, 0, 100));
+		registerAbility(Ability.ELYTRA);
+	}
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return isPowerBarVisible(stack);
-    }
+	@Override
+	public boolean isBarVisible(ItemStack stack) {
+		return isPowerBarVisible(stack);
+	}
 
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return getPowerBarWidth(stack);
-    }
+	@Override
+	public int getBarWidth(ItemStack stack) {
+		return getPowerBarWidth(stack);
+	}
 
-    @Override
-    public int getBarColor(ItemStack stack) {
-        int color = getPowerBarColor(stack);
-        if (color == -1)
-            return super.getBarColor(stack);
-        return color;
-    }
+	@Override
+	public int getBarColor(ItemStack stack) {
+		int color = getPowerBarColor(stack);
+		if (color == -1)
+			return super.getBarColor(stack);
+		return color;
+	}
 
-    public static boolean isFlyEnabled(ItemStack elytraStack) {
-        return elytraStack.getItem() instanceof ToggleableTool toggleableTool && toggleableTool.canUseAbilityAndDurability(elytraStack, Ability.ELYTRA);
-    }
+	public static boolean isFlyEnabled(ItemStack elytraStack) {
+		return elytraStack.getItem() instanceof ToggleableTool toggleableTool
+				&& toggleableTool.canUseAbilityAndDurability(elytraStack, Ability.ELYTRA);
+	}
 
-    @Override
-    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
-        return isFlyEnabled(stack);
-    }
+	@Override
+	public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
+		return isFlyEnabled(stack);
+	}
 
-    @Override
-    public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
-        if (entity instanceof Player player)
-            Helpers.damageTool(stack, player, Ability.ELYTRA);
-        return isFlyEnabled(stack);
-    }
+	@Override
+	public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
+		if (entity instanceof Player player)
+			Helpers.damageTool(stack, player, Ability.ELYTRA);
+		return isFlyEnabled(stack);
+	}
 }

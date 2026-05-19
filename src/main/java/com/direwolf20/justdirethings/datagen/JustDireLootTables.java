@@ -14,141 +14,117 @@ import java.util.List;
 
 public class JustDireLootTables extends VanillaBlockLoot {
 
-    @Override
-    protected void generate() {
-        dropSelf(Registration.GooBlock_Tier1.get());
-        dropSelf(Registration.GooBlock_Tier2.get());
-        dropSelf(Registration.GooBlock_Tier3.get());
-        dropSelf(Registration.GooBlock_Tier4.get());
-        dropSelf(Registration.FerricoreBlock.get());
-        dropSelf(Registration.BlazeGoldBlock.get());
-        dropSelf(Registration.CelestigemBlock.get());
-        dropSelf(Registration.EclipseAlloyBlock.get());
-        dropSelf(Registration.CoalBlock_T1.get());
-        dropSelf(Registration.CoalBlock_T2.get());
-        dropSelf(Registration.CoalBlock_T3.get());
-        dropSelf(Registration.CoalBlock_T4.get());
-        dropSelf(Registration.GooPatternBlock.get());
-        dropSelf(Registration.ItemCollector.get());
-        dropSelf(Registration.BlockBreakerT1.get());
-        dropSelf(Registration.BlockBreakerT2.get());
-        dropSelf(Registration.BlockPlacerT1.get());
-        dropSelf(Registration.BlockPlacerT2.get());
-        dropSelf(Registration.ClickerT1.get());
-        dropSelf(Registration.ClickerT2.get());
-        dropSelf(Registration.SensorT1.get());
-        dropSelf(Registration.SensorT2.get());
-        dropSelf(Registration.DropperT1.get());
-        dropSelf(Registration.DropperT2.get());
-        dropSelf(Registration.GeneratorT1.get());
-        dropSelf(Registration.EnergyTransmitter.get());
-        dropSelf(Registration.PlayerAccessor.get());
-        dropOther(Registration.GooSoil_Tier1.get(), Items.DIRT);
-        dropOther(Registration.GooSoil_Tier2.get(), Items.DIRT);
-        dropOther(Registration.GooSoil_Tier3.get(), Items.DIRT);
-        dropOther(Registration.GooSoil_Tier4.get(), Items.DIRT);
-        dropSelf(Registration.BlockSwapperT1.get());
-        dropSelf(Registration.BlockSwapperT2.get());
-        add(Registration.EclipseGateBlock.get(), noDrop());
-        dropSelf(Registration.ExperienceHolder.get());
-        dropSelf(Registration.FluidCollectorT1.get());
-        dropSelf(Registration.FluidCollectorT2.get());
-        dropSelf(Registration.FluidPlacerT1.get());
-        dropSelf(Registration.FluidPlacerT2.get());
-        dropSelf(Registration.GeneratorFluidT1.get());
-        dropSelf(Registration.InventoryHolder.get());
-        dropSelf(Registration.ParadoxMachine.get());
+	@Override
+	protected void generate() {
+		dropSelf(Registration.GooBlock_Tier1.get());
+		dropSelf(Registration.GooBlock_Tier2.get());
+		dropSelf(Registration.GooBlock_Tier3.get());
+		dropSelf(Registration.GooBlock_Tier4.get());
+		dropSelf(Registration.FerricoreBlock.get());
+		dropSelf(Registration.BlazeGoldBlock.get());
+		dropSelf(Registration.CelestigemBlock.get());
+		dropSelf(Registration.EclipseAlloyBlock.get());
+		dropSelf(Registration.CoalBlock_T1.get());
+		dropSelf(Registration.CoalBlock_T2.get());
+		dropSelf(Registration.CoalBlock_T3.get());
+		dropSelf(Registration.CoalBlock_T4.get());
+		dropSelf(Registration.GooPatternBlock.get());
+		dropSelf(Registration.ItemCollector.get());
+		dropSelf(Registration.BlockBreakerT1.get());
+		dropSelf(Registration.BlockBreakerT2.get());
+		dropSelf(Registration.BlockPlacerT1.get());
+		dropSelf(Registration.BlockPlacerT2.get());
+		dropSelf(Registration.ClickerT1.get());
+		dropSelf(Registration.ClickerT2.get());
+		dropSelf(Registration.SensorT1.get());
+		dropSelf(Registration.SensorT2.get());
+		dropSelf(Registration.DropperT1.get());
+		dropSelf(Registration.DropperT2.get());
+		dropSelf(Registration.GeneratorT1.get());
+		dropSelf(Registration.EnergyTransmitter.get());
+		dropSelf(Registration.PlayerAccessor.get());
+		dropOther(Registration.GooSoil_Tier1.get(), Items.DIRT);
+		dropOther(Registration.GooSoil_Tier2.get(), Items.DIRT);
+		dropOther(Registration.GooSoil_Tier3.get(), Items.DIRT);
+		dropOther(Registration.GooSoil_Tier4.get(), Items.DIRT);
+		dropSelf(Registration.BlockSwapperT1.get());
+		dropSelf(Registration.BlockSwapperT2.get());
+		add(Registration.EclipseGateBlock.get(), noDrop());
+		dropSelf(Registration.ExperienceHolder.get());
+		dropSelf(Registration.FluidCollectorT1.get());
+		dropSelf(Registration.FluidCollectorT2.get());
+		dropSelf(Registration.FluidPlacerT1.get());
+		dropSelf(Registration.FluidPlacerT2.get());
+		dropSelf(Registration.GeneratorFluidT1.get());
+		dropSelf(Registration.InventoryHolder.get());
+		dropSelf(Registration.ParadoxMachine.get());
 
-        //Time Crystal blocks
-        dropSelf(Registration.TimeCrystalBlock.get());
-        add(Registration.TimeCrystalBuddingBlock.get(), noDrop());
-        add(Registration.TimeCrystalCluster.get(), createSilkTouchDispatchTable(
-                Registration.TimeCrystalCluster.get(),
-                this.applyExplosionDecay(
-                        Registration.TimeCrystalCluster.get(),
-                        LootItem.lootTableItem(Registration.TimeCrystal.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F)))
-                )
-        ));
-        add(Registration.TimeCrystalCluster_Small.get(), createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Small_ITEM.get()));
-        add(Registration.TimeCrystalCluster_Medium.get(), createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Medium_ITEM.get()));
-        add(Registration.TimeCrystalCluster_Large.get(), createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Large_ITEM.get()));
+		// Time Crystal blocks
+		dropSelf(Registration.TimeCrystalBlock.get());
+		add(Registration.TimeCrystalBuddingBlock.get(), noDrop());
+		add(Registration.TimeCrystalCluster.get(),
+				createSilkTouchDispatchTable(Registration.TimeCrystalCluster.get(),
+						this.applyExplosionDecay(Registration.TimeCrystalCluster.get(),
+								LootItem.lootTableItem(Registration.TimeCrystal.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 4.0F))))));
+		add(Registration.TimeCrystalCluster_Small.get(),
+				createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Small_ITEM.get()));
+		add(Registration.TimeCrystalCluster_Medium.get(),
+				createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Medium_ITEM.get()));
+		add(Registration.TimeCrystalCluster_Large.get(),
+				createSilkTouchOnlyTable(Registration.TimeCrystalCluster_Large_ITEM.get()));
 
-        //Charcoal block
-        dropSelf(Registration.CharcoalBlock.get());
+		// Charcoal block
+		dropSelf(Registration.CharcoalBlock.get());
 
-        //Raw Ores
-        add(Registration.RawFerricoreOre.get(), createSilkTouchDispatchTable(
-                Registration.RawFerricoreOre.get(),
-                this.applyExplosionDecay(
-                        Registration.RawFerricoreOre.get(),
-                        LootItem.lootTableItem(Registration.RawFerricore.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawBlazegoldOre.get(), createSilkTouchDispatchTable(
-                Registration.RawBlazegoldOre.get(),
-                this.applyExplosionDecay(
-                        Registration.RawBlazegoldOre.get(),
-                        LootItem.lootTableItem(Registration.RawBlazegold.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawCelestigemOre.get(), createSilkTouchDispatchTable(
-                Registration.RawCelestigemOre.get(),
-                this.applyExplosionDecay(
-                        Registration.RawCelestigemOre.get(),
-                        LootItem.lootTableItem(Registration.Celestigem.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawEclipseAlloyOre.get(), createSilkTouchDispatchTable(
-                Registration.RawEclipseAlloyOre.get(),
-                this.applyExplosionDecay(
-                        Registration.RawEclipseAlloyOre.get(),
-                        LootItem.lootTableItem(Registration.RawEclipseAlloy.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawCoal_T1.get(), createSilkTouchDispatchTable(
-                Registration.RawCoal_T1.get(),
-                this.applyExplosionDecay(
-                        Registration.RawCoal_T1.get(),
-                        LootItem.lootTableItem(Registration.Coal_T1.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawCoal_T2.get(), createSilkTouchDispatchTable(
-                Registration.RawCoal_T2.get(),
-                this.applyExplosionDecay(
-                        Registration.RawCoal_T2.get(),
-                        LootItem.lootTableItem(Registration.Coal_T2.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawCoal_T3.get(), createSilkTouchDispatchTable(
-                Registration.RawCoal_T3.get(),
-                this.applyExplosionDecay(
-                        Registration.RawCoal_T3.get(),
-                        LootItem.lootTableItem(Registration.Coal_T3.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-        add(Registration.RawCoal_T4.get(), createSilkTouchDispatchTable(
-                Registration.RawCoal_T4.get(),
-                this.applyExplosionDecay(
-                        Registration.RawCoal_T4.get(),
-                        LootItem.lootTableItem(Registration.Coal_T4.get())
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F)))
-                )
-        ));
-    }
+		// Raw Ores
+		add(Registration.RawFerricoreOre.get(),
+				createSilkTouchDispatchTable(Registration.RawFerricoreOre.get(),
+						this.applyExplosionDecay(Registration.RawFerricoreOre.get(),
+								LootItem.lootTableItem(Registration.RawFerricore.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawBlazegoldOre.get(),
+				createSilkTouchDispatchTable(Registration.RawBlazegoldOre.get(),
+						this.applyExplosionDecay(Registration.RawBlazegoldOre.get(),
+								LootItem.lootTableItem(Registration.RawBlazegold.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawCelestigemOre.get(),
+				createSilkTouchDispatchTable(Registration.RawCelestigemOre.get(),
+						this.applyExplosionDecay(Registration.RawCelestigemOre.get(),
+								LootItem.lootTableItem(Registration.Celestigem.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawEclipseAlloyOre.get(),
+				createSilkTouchDispatchTable(Registration.RawEclipseAlloyOre.get(),
+						this.applyExplosionDecay(Registration.RawEclipseAlloyOre.get(),
+								LootItem.lootTableItem(Registration.RawEclipseAlloy.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawCoal_T1.get(),
+				createSilkTouchDispatchTable(Registration.RawCoal_T1.get(),
+						this.applyExplosionDecay(Registration.RawCoal_T1.get(),
+								LootItem.lootTableItem(Registration.Coal_T1.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawCoal_T2.get(),
+				createSilkTouchDispatchTable(Registration.RawCoal_T2.get(),
+						this.applyExplosionDecay(Registration.RawCoal_T2.get(),
+								LootItem.lootTableItem(Registration.Coal_T2.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawCoal_T3.get(),
+				createSilkTouchDispatchTable(Registration.RawCoal_T3.get(),
+						this.applyExplosionDecay(Registration.RawCoal_T3.get(),
+								LootItem.lootTableItem(Registration.Coal_T3.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+		add(Registration.RawCoal_T4.get(),
+				createSilkTouchDispatchTable(Registration.RawCoal_T4.get(),
+						this.applyExplosionDecay(Registration.RawCoal_T4.get(),
+								LootItem.lootTableItem(Registration.Coal_T4.get())
+										.apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 4.0F))))));
+	}
 
-    @Override
-    protected Iterable<Block> getKnownBlocks() {
-        List<Block> knownBlocks = new ArrayList<>();
-        knownBlocks.addAll(Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).toList());
-        knownBlocks.addAll(Registration.SIDEDBLOCKS.getEntries().stream().map(RegistryObject::get).toList());
-        return knownBlocks;
-    }
+	@Override
+	protected Iterable<Block> getKnownBlocks() {
+		List<Block> knownBlocks = new ArrayList<>();
+		knownBlocks.addAll(Registration.BLOCKS.getEntries().stream().map(RegistryObject::get).toList());
+		knownBlocks.addAll(Registration.SIDEDBLOCKS.getEntries().stream().map(RegistryObject::get).toList());
+		return knownBlocks;
+	}
 }

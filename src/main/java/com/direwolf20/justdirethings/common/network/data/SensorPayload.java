@@ -4,23 +4,18 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record SensorPayload(
-        int senseTarget,
-        boolean strongSignal,
-        int senseCount,
-        int equality
-) {
-    public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "sensor_packet");
+public record SensorPayload(int senseTarget, boolean strongSignal, int senseCount, int equality) {
+	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "sensor_packet");
 
-    public SensorPayload(final FriendlyByteBuf buffer) {
-        this(buffer.readInt(), buffer.readBoolean(), buffer.readInt(), buffer.readInt());
-    }
+	public SensorPayload(final FriendlyByteBuf buffer) {
+		this(buffer.readInt(), buffer.readBoolean(), buffer.readInt(), buffer.readInt());
+	}
 
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeInt(senseTarget);
-        buffer.writeBoolean(strongSignal);
-        buffer.writeInt(senseCount);
-        buffer.writeInt(equality);
-    }
+	public void write(FriendlyByteBuf buffer) {
+		buffer.writeInt(senseTarget);
+		buffer.writeBoolean(strongSignal);
+		buffer.writeInt(senseCount);
+		buffer.writeInt(equality);
+	}
 
 }
