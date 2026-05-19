@@ -50,6 +50,10 @@ public class Config {
     public static ForgeConfigSpec.IntValue FUEL_TIER3_FE_PER_MB;
     public static ForgeConfigSpec.IntValue FUEL_TIER4_FE_PER_MB;
 
+    public static final String CATEGORY_GOO = "goo";
+    public static ForgeConfigSpec.BooleanValue GOO_CAN_DIE;
+    public static ForgeConfigSpec.DoubleValue GOO_DEATH_CHANCE;
+
     public static final String CATEGORY_PARADOX = "paradox_machine";
     public static ForgeConfigSpec.IntValue PARADOX_TOTAL_RF_CAPACITY;
     public static ForgeConfigSpec.IntValue PARADOX_TOTAL_FLUID_CAPACITY;
@@ -104,6 +108,7 @@ public class Config {
 
     private static void registerCommonConfigs() {
         generalConfig();
+        gooConfig();
         generatorT1Config();
         generatorFluidT1Config();
         energyTransmitter();
@@ -129,6 +134,15 @@ public class Config {
         COMMON_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
         MINIMUM_MACHINE_TICK_SPEED = COMMON_BUILDER.comment("The minimum tick speed machines can be set to. Defaults to 1, meaning every tick")
                 .defineInRange("minimum_machine_tick_speed", 1, 1, 100);
+        COMMON_BUILDER.pop();
+    }
+
+    private static void gooConfig() {
+        COMMON_BUILDER.comment("Goo settings").push(CATEGORY_GOO);
+        GOO_CAN_DIE = COMMON_BUILDER.comment("If true, goo blocks have a chance to deactivate after each successful block conversion")
+                .define("goo_can_die", true);
+        GOO_DEATH_CHANCE = COMMON_BUILDER.comment("The chance (0.0 to 1.0) that a goo block deactivates after each block conversion. Default is 0.1 (10%)")
+                .defineInRange("goo_death_chance", 0.1, 0.0, 1.0);
         COMMON_BUILDER.pop();
     }
 

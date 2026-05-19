@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.blockentities.basebe;
 import com.direwolf20.justdirethings.client.particles.gooexplodeparticle.GooExplodeParticleData;
 import com.direwolf20.justdirethings.common.blocks.gooblocks.GooBlock_Base;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
+import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -131,6 +132,17 @@ public class GooBlockBE_Base extends BlockEntity {
         updateSideCounter(direction, -1);
         sidedDurations.put(direction, -1);
         level.playSound(null, getBlockPos(), SoundEvents.SCULK_BLOCK_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+        killGoo();
+    }
+
+    private void killGoo() {
+        if (!Config.GOO_CAN_DIE.get()) return;
+        if (level == null || level.isClientSide) return;
+        BlockState state = getBlockState();
+        if (state.getValue(GooBlock_Base.ALIVE) && level.random.nextFloat() < Config.GOO_DEATH_CHANCE.get().floatValue()) {
+            level.setBlock(worldPosition, state.setValue(GooBlock_Base.ALIVE, false), 3);
+            level.playSound(null, getBlockPos(), SoundEvents.VEX_DEATH, SoundSource.BLOCKS, 1.0F, 0.25F);
+        }
     }
 
     @Nullable
