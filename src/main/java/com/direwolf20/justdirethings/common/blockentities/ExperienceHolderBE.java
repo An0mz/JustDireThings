@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.client.particles.itemparticle.ItemFlowParti
 import com.direwolf20.justdirethings.common.blockentities.basebe.AreaAffectingBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
+import com.direwolf20.justdirethings.common.capabilities.ExperienceHolderFluidTank;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.ExperienceUtils;
 import com.direwolf20.justdirethings.util.MiscHelpers;
@@ -22,7 +23,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE, RedstoneControlledBE {
@@ -34,6 +41,30 @@ public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE
     public boolean collectExp;
     public boolean ownerOnly;
     public boolean showParticles = true;
+
+    private ExperienceHolderFluidTank xpTank;
+    private LazyOptional<IFluidHandler> lazyXpTank = LazyOptional.empty();
+
+    private ExperienceHolderFluidTank getXpTank() {
+        if (xpTank == null) xpTank = new ExperienceHolderFluidTank(this);
+        return xpTank;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
+            if (!lazyXpTank.isPresent()) lazyXpTank = LazyOptional.of(this::getXpTank);
+            return lazyXpTank.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyXpTank.invalidate();
+    }
 
     public ExperienceHolderBE(BlockPos pPos, BlockState pBlockState) {
         super(Registration.ExperienceHolderBE.get(), pPos, pBlockState);
