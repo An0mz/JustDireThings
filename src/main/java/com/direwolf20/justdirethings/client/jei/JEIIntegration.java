@@ -76,7 +76,8 @@ public class JEIIntegration implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		IJeiHelpers jeiHelpers = registration.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper), new FluidDropRecipeCategory(guiHelper));
+		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper),
+				new FluidDropRecipeCategory(guiHelper));
 	}
 
 	@Override

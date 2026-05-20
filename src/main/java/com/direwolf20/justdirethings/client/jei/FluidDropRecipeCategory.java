@@ -24,8 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class FluidDropRecipeCategory implements IRecipeCategory<FluidDropRecipe> {
 
-	public static final RecipeType<FluidDropRecipe> TYPE =
-			RecipeType.create(JustDireThings.MODID, "fluid_drop_recipe", FluidDropRecipe.class);
+	public static final RecipeType<FluidDropRecipe> TYPE = RecipeType.create(JustDireThings.MODID, "fluid_drop_recipe",
+			FluidDropRecipe.class);
 
 	public static final int width = 120;
 	public static final int height = 40;
@@ -63,8 +63,8 @@ public class FluidDropRecipeCategory implements IRecipeCategory<FluidDropRecipe>
 	}
 
 	@Override
-	public void draw(
-			FluidDropRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics gui, double mouseX, double mouseY) {
+	public void draw(FluidDropRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics gui, double mouseX,
+			double mouseY) {
 		RenderSystem.enableBlend();
 		arrow.draw(gui, 34, 20);
 		RenderSystem.disableBlend();
@@ -72,8 +72,7 @@ public class FluidDropRecipeCategory implements IRecipeCategory<FluidDropRecipe>
 
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, FluidDropRecipe recipe, IFocusGroup focuses) {
-		builder.addSlot(RecipeIngredientRole.CATALYST, 9, 0)
-				.addItemStack(new ItemStack(recipe.getCatalyst()));
+		builder.addSlot(RecipeIngredientRole.CATALYST, 9, 0).addItemStack(new ItemStack(recipe.getCatalyst()));
 
 		BlockState input = recipe.getInput();
 		IRecipeSlotBuilder inputSlotBuilder = builder.addSlot(RecipeIngredientRole.INPUT, 9, 20);
@@ -85,11 +84,10 @@ public class FluidDropRecipeCategory implements IRecipeCategory<FluidDropRecipe>
 		BlockState output = recipe.getOutput();
 		FluidState outputFluidState = output.getFluidState();
 		if (!outputFluidState.isEmpty()) {
-			builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 20)
-					.addIngredient(ForgeTypes.FLUID_STACK, new FluidStack(outputFluidState.getType(), 1000));
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 20).addIngredient(ForgeTypes.FLUID_STACK,
+					new FluidStack(outputFluidState.getType(), 1000));
 		} else {
-			builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 20)
-					.addItemStack(new ItemStack(output.getBlock()));
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 20).addItemStack(new ItemStack(output.getBlock()));
 		}
 	}
 }
