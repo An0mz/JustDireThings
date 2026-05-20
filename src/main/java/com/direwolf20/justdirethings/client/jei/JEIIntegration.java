@@ -5,6 +5,7 @@ import com.direwolf20.justdirethings.client.jei.ghostfilters.GhostFilterBasic;
 import com.direwolf20.justdirethings.client.screens.basescreens.BaseScreen;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import com.direwolf20.justdirethings.setup.Registration;
 import mezz.jei.api.IModPlugin;
@@ -75,7 +76,7 @@ public class JEIIntegration implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		IJeiHelpers jeiHelpers = registration.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper));
+		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper), new FluidDropRecipeCategory(guiHelper));
 	}
 
 	@Override
@@ -84,8 +85,11 @@ public class JEIIntegration implements IModPlugin {
 		RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 		List<GooSpreadRecipe> goospreadrecipes = recipeManager
 				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get());
-
 		registration.addRecipes(GooSpreadRecipeCategory.TYPE, goospreadrecipes);
+
+		List<FluidDropRecipe> fluidDropRecipes = recipeManager
+				.getAllRecipesFor(Registration.FLUID_DROP_RECIPE_TYPE.get());
+		registration.addRecipes(FluidDropRecipeCategory.TYPE, fluidDropRecipes);
 	}
 
 	@Override
