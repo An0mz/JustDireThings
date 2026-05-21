@@ -4,9 +4,11 @@ import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.mojang.blaze3d.systems.RenderSystem;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -18,6 +20,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +37,14 @@ public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe>
 	private final IDrawable slot;
 	private final IDrawable icon;
 	private final Component localizedName;
+	private final IDrawableStatic arrow;
 
 	public GooSpreadRecipeCategory(IGuiHelper guiHelper) {
 		background = guiHelper.createBlankDrawable(width, height);
 		slot = guiHelper.getSlotDrawable();
 		icon = guiHelper.createDrawableItemStack(new ItemStack(Registration.GooBlock_Tier1.get()));
 		localizedName = Component.translatable("justdirethings.goospreadrecipe.title");
+		arrow = guiHelper.getRecipeArrow();
 	}
 
 	@Override
@@ -63,8 +69,9 @@ public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe>
 
 	@Override
 	public void draw(GooSpreadRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics gui, double mouseX,
-			double mouseY) {
+					 double mouseY) {
 		RenderSystem.enableBlend();
+		arrow.draw(gui, 54, 12);
 		background.draw(gui, 17, 0);
 		RenderSystem.disableBlend();
 	}
@@ -73,11 +80,14 @@ public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe>
 	public void setRecipe(IRecipeLayoutBuilder builder, GooSpreadRecipe recipe, IFocusGroup focuses) {
 		BlockState input = recipe.getInput();
 		IRecipeSlotBuilder inputSlotBuilder = builder.addSlot(RecipeIngredientRole.INPUT, 9, 12);
-		if (input.getBlock().asItem() != Items.AIR) {
+		FluidState inputFluid = input.getFluidState();
+		if (!inputFluid.isEmpty()) {
+			inputSlotBuilder.addIngredient(ForgeTypes.FLUID_STACK, new FluidStack(inputFluid.getType(), 1000));
+		} else if (input.getBlock().asItem() != Items.AIR) {
 			inputSlotBuilder.addItemStack(new ItemStack(input.getBlock()));
 		}
-		List<ItemStack> catalystlist = new ArrayList<>();
 
+		List<ItemStack> catalystlist = new ArrayList<>();
 		if (recipe.getTierRequirement() <= 1)
 			catalystlist.add(new ItemStack(Registration.GooBlock_Tier1.get()));
 		if (recipe.getTierRequirement() <= 2)
@@ -86,11 +96,15 @@ public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe>
 			catalystlist.add(new ItemStack(Registration.GooBlock_Tier3.get()));
 		if (recipe.getTierRequirement() <= 4)
 			catalystlist.add(new ItemStack(Registration.GooBlock_Tier4.get()));
-		builder.addSlot(RecipeIngredientRole.CATALYST, 39, 12).addItemStacks(catalystlist);
+		builder.addSlot(RecipeIngredientRole.CATALYST, 29, 12).addItemStacks(catalystlist);
 
 		BlockState output = recipe.getOutput();
-		if (output.getBlock().asItem() != Items.AIR) {
-			builder.addSlot(RecipeIngredientRole.OUTPUT, 68, 12).addItemStack(new ItemStack(output.getBlock()));
+		FluidState outputFluid = output.getFluidState();
+		if (!outputFluid.isEmpty()) {
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 12)
+					.addIngredient(ForgeTypes.FLUID_STACK, new FluidStack(outputFluid.getType(), 1000));
+		} else if (output.getBlock().asItem() != Items.AIR) {
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 12).addItemStack(new ItemStack(output.getBlock()));
 		}
 	}
 }
