@@ -69,7 +69,7 @@ public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe>
 
 	@Override
 	public void draw(GooSpreadRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics gui, double mouseX,
-					 double mouseY) {
+			double mouseY) {
 		RenderSystem.enableBlend();
 		arrow.draw(gui, 54, 12);
 		background.draw(gui, 17, 0);
@@ -101,8 +101,8 @@ public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe>
 		BlockState output = recipe.getOutput();
 		FluidState outputFluid = output.getFluidState();
 		if (!outputFluid.isEmpty()) {
-			builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 12)
-					.addIngredient(ForgeTypes.FLUID_STACK, new FluidStack(outputFluid.getType(), 1000));
+			builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 12).addIngredient(ForgeTypes.FLUID_STACK,
+					new FluidStack(outputFluid.getType(), 1000));
 		} else if (output.getBlock().asItem() != Items.AIR) {
 			builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 12).addItemStack(new ItemStack(output.getBlock()));
 		}

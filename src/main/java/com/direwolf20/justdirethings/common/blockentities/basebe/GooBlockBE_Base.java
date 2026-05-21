@@ -33,10 +33,8 @@ public class GooBlockBE_Base extends BlockEntity {
 	public GooBlockBE_Base(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		for (Direction direction : Direction.values()) {
-			sidedCounters.put(direction, -1); // Init the counters, -1 means we aren't operating on anything on that
-												// side
-			sidedDurations.put(direction, -1); // Init the durations, -1 means we aren't operating on anything on that
-												// side
+			sidedCounters.put(direction, -1);
+			sidedDurations.put(direction, -1);
 		}
 	}
 
@@ -69,7 +67,7 @@ public class GooBlockBE_Base extends BlockEntity {
 	}
 
 	public void tickClient() {
-		tickCounters(); // We tick on client side too, just for rendering of course!
+		tickCounters();
 	}
 
 	public void tickServer() {
@@ -112,12 +110,13 @@ public class GooBlockBE_Base extends BlockEntity {
 	}
 
 	public void checkSides() {
-		if (level == null) return;
+		if (level == null)
+			return;
 		for (Direction direction : Direction.values()) {
 			GooSpreadRecipe gooSpreadRecipe = findRecipe(getBlockPos().relative(direction));
 			int sideCounter = sidedCounters.get(direction);
 			if (gooSpreadRecipe != null) {
-				if (sideCounter == -1 && getBlockState().getValue(GooBlock_Base.ALIVE)) { // Valid Recipe and not running yet
+				if (sideCounter == -1 && getBlockState().getValue(GooBlock_Base.ALIVE)) {
 					sideCounter = gooSpreadRecipe.getCraftingDuration();
 					updateSideCounter(direction, sideCounter);
 					sidedDurations.put(direction, sideCounter);

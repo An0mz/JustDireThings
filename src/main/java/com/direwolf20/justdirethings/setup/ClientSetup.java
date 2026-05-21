@@ -157,11 +157,8 @@ public class ClientSetup {
 	public static void registerBowPredicates(Item item) {
 		if (!(item instanceof BowItem))
 			return;
-		ItemProperties.register(item, new ResourceLocation("pulling"),
-				(stack, level, entity, seed) -> entity != null && entity.isUsingItem()
-						&& entity.getUseItem().is(stack.getItem())
-						? 1.0F
-						: 0.0F);
+		ItemProperties.register(item, new ResourceLocation("pulling"), (stack, level, entity, seed) -> entity != null
+				&& entity.isUsingItem() && entity.getUseItem().is(stack.getItem()) ? 1.0F : 0.0F);
 		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, seed) -> {
 			if (entity == null || !entity.isUsingItem() || !entity.getUseItem().is(stack.getItem()))
 				return 0.0F;
