@@ -77,6 +77,8 @@ public class PacketHandler {
 
 		CHANNEL.registerMessage(nextId(), CopyMachineSettingsPayload.class, CopyMachineSettingsPayload::write,
 				CopyMachineSettingsPayload::new, CopyMachineSettingsPacket::handle);
+		CHANNEL.registerMessage(nextId(), ToolSettingsGUIPayload.class, ToolSettingsGUIPayload::write,
+				ToolSettingsGUIPayload::new, ToolSettingsGUIPacket::handle);
 
 		// Client-bound packets
 		CHANNEL.registerMessage(nextId(), ClientSoundPayload.class, ClientSoundPayload::write, ClientSoundPayload::new,

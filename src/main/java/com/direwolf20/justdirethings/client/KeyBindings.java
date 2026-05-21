@@ -28,6 +28,7 @@ public class KeyBindings {
 	private static final List<KeyMapping> keyMappings = new ArrayList<>();
 
 	public static KeyMapping toggleTool = createBinding("toggle_tool", GLFW.GLFW_KEY_V);
+	public static KeyMapping toolUI = createBindingInGame("tool_ui", -1);
 	/*
 	 * public static KeyMapping undo = createBinding("undo", GLFW.GLFW_KEY_U);
 	 * public static KeyMapping anchor = createBinding("anchor", GLFW.GLFW_KEY_H);
@@ -36,6 +37,13 @@ public class KeyBindings {
 
 	private static KeyMapping createBinding(String name, int key) {
 		KeyMapping keyBinding = new KeyMapping(getKey(name), CONFLICT_CONTEXT_GADGET,
+				InputConstants.Type.KEYSYM.getOrCreate(key), getKey("category"));
+		keyMappings.add(keyBinding);
+		return keyBinding;
+	}
+
+	private static KeyMapping createBindingInGame(String name, int key) {
+		KeyMapping keyBinding = new KeyMapping(getKey(name), KeyConflictContext.IN_GAME,
 				InputConstants.Type.KEYSYM.getOrCreate(key), getKey("category"));
 		keyMappings.add(keyBinding);
 		return keyBinding;

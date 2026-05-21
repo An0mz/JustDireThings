@@ -10,6 +10,7 @@ import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.common.network.data.LeftClickPayload;
 import com.direwolf20.justdirethings.common.network.data.ToggleToolPayload;
+import com.direwolf20.justdirethings.common.network.data.ToolSettingsGUIPayload;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -41,6 +42,11 @@ public class EventKeyInput {
 
 		ItemStack toggleableItem = ToggleableItem.getToggleableItem(mc.player);
 		ItemStack portalGun = PortalGunV2.getPortalGunv2(mc.player);
+
+		if (KeyBindings.toolUI.consumeClick()) {
+			PacketHandler.CHANNEL.sendToServer(new ToolSettingsGUIPayload());
+			return;
+		}
 
 		if (!portalGun.isEmpty()) {
 			if (!(mc.screen instanceof AdvPortalRadialMenu) && KeyBindings.toggleTool.consumeClick()) {
