@@ -93,6 +93,8 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
 																			// go ahead and let it rip
 				for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
 					ItemStack slotStack = player.getInventory().getItem(i);
+					if (player.isUsingItem() && player.getUseItem() == slotStack)
+						continue;
 					IEnergyStorage slotEnergy = slotStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
 					if (slotEnergy != null) {
 						int acceptedEnergy = slotEnergy.receiveEnergy(getFEPerTick(), true);

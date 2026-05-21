@@ -194,6 +194,8 @@ public class BaseBow extends BowItem implements ToggleableTool, LeftClickableToo
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
 		if ((!getPassiveTickAbilities(pStack).isEmpty() || !getCooldownAbilities().isEmpty())
 				&& pEntity instanceof Player player) {
+			if (player.isUsingItem() && player.getUseItem() == pStack)
+				return;
 			ToggleableTool.tickCooldowns(pStack, player);
 		}
 	}

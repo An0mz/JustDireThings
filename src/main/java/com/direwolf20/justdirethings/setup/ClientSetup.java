@@ -158,14 +158,14 @@ public class ClientSetup {
 		if (!(item instanceof BowItem))
 			return;
 		ItemProperties.register(item, new ResourceLocation("pulling"),
-				(stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack
+				(stack, level, entity, seed) -> entity != null && entity.isUsingItem()
+						&& entity.getUseItem().is(stack.getItem())
 						? 1.0F
 						: 0.0F);
 		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, seed) -> {
-			if (entity == null)
+			if (entity == null || !entity.isUsingItem() || !entity.getUseItem().is(stack.getItem()))
 				return 0.0F;
-			return entity.getUseItem() != stack ? 0.0F
-					: (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
+			return (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
 		});
 	}
 
