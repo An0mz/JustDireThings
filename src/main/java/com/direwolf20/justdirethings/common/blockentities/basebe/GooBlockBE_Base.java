@@ -40,12 +40,16 @@ public class GooBlockBE_Base extends BlockEntity {
 		}
 	}
 
-	public void updateSideCounter(Direction direction, int newCounter) {
+	public boolean updateSideCounter(Direction direction, int newCounter) {
 		int oldCounter = sidedCounters.get(direction);
 		sidedCounters.put(direction, newCounter);
 		if (oldCounter >= 0 && newCounter == -1 && level.isClientSide) {
 			spawnParticles(direction);
 		}
+		int duration = sidedDurations.get(direction);
+		if (newCounter <= 0 || duration <= 0)
+			return false;
+		return (newCounter % (60 * counterReducer())) == 0;
 	}
 
 	public int counterReducer() {
@@ -69,10 +73,8 @@ public class GooBlockBE_Base extends BlockEntity {
 	}
 
 	public void tickServer() {
-		if (getBlockState().getValue(GooBlock_Base.ALIVE)) {
-			checkSides();
-			tickCounters();
-		}
+		checkSides();
+		tickCounters();
 		this.setChanged();
 	}
 
@@ -96,32 +98,36 @@ public class GooBlockBE_Base extends BlockEntity {
 	}
 
 	public void tickCounters() {
+		boolean needsUpdate = false;
 		for (Direction direction : Direction.values()) {
 			int sideCounter = sidedCounters.get(direction);
 			if (sideCounter > 0) {
 				sideCounter = Math.max(sideCounter - counterReducer(), 0);
-				updateSideCounter(direction, sideCounter);
+				if (updateSideCounter(direction, sideCounter))
+					needsUpdate = true;
 			}
 		}
+		if (needsUpdate && !level.isClientSide)
+			markDirtyClient();
 	}
 
 	public void checkSides() {
+		if (level == null) return;
 		for (Direction direction : Direction.values()) {
 			GooSpreadRecipe gooSpreadRecipe = findRecipe(getBlockPos().relative(direction));
 			int sideCounter = sidedCounters.get(direction);
 			if (gooSpreadRecipe != null) {
-				if (sideCounter == -1) { // Valid Recipe and not running yet
+				if (sideCounter == -1 && getBlockState().getValue(GooBlock_Base.ALIVE)) { // Valid Recipe and not running yet
 					sideCounter = gooSpreadRecipe.getCraftingDuration();
 					updateSideCounter(direction, sideCounter);
 					sidedDurations.put(direction, sideCounter);
-					markDirtyClient(); // Either way, update the client with the new sideCounters
-				} else if (sideCounter == 0) { // Craftings done!
+					markDirtyClient();
+				} else if (sideCounter == 0) { // Crafting done!
 					setBlockToTarget(gooSpreadRecipe, direction);
-					markDirtyClient(); // Either way, update the client with the new sideCounters
+					markDirtyClient();
 				}
-			} else { // If the recipe is null, it means this isn't a valid input block (or its
-						// already been converted!)
-				if (sideCounter != -1) { // If we have a timer running, cancel it
+			} else { // No valid recipe — cancel any running timer
+				if (sideCounter != -1) {
 					sideCounter = -1;
 					updateSideCounter(direction, sideCounter);
 					sidedDurations.put(direction, sideCounter);
