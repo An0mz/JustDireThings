@@ -13,6 +13,7 @@ import com.direwolf20.justdirethings.client.entityrenders.TimeWandEntityRenderer
 import com.direwolf20.justdirethings.client.entityrenders.PortalEntityRenderer;
 import com.direwolf20.justdirethings.client.itemcustomrenders.FluidbarDecorator;
 import com.direwolf20.justdirethings.client.renderers.shader.DireRenderTypes;
+import com.direwolf20.justdirethings.client.entityrenders.JustDireArrowRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import com.direwolf20.justdirethings.client.events.EventKeyInput;
@@ -29,6 +30,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -118,6 +120,10 @@ public class ClientSetup {
 			for (var tool : Registration.TOOLS.getEntries()) {
 				registerEnabledToolTextures(tool.get());
 			}
+			for (var bow : Registration.BOWS.getEntries()) {
+				registerEnabledToolTextures(bow.get());
+				registerBowPredicates(bow.get());
+			}
 			registerEnabledToolTextures(Registration.Pocket_Generator.get());
 		});
 	}
@@ -146,6 +152,21 @@ public class ClientSetup {
 							return toggleableItem.getEnabled(stack) ? 1.0f : 0.0f;
 					});
 		}
+	}
+
+	public static void registerBowPredicates(Item item) {
+		if (!(item instanceof BowItem))
+			return;
+		ItemProperties.register(item, new ResourceLocation("pulling"),
+				(stack, level, entity, seed) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack
+						? 1.0F
+						: 0.0F);
+		ItemProperties.register(item, new ResourceLocation("pull"), (stack, level, entity, seed) -> {
+			if (entity == null)
+				return 0.0F;
+			return entity.getUseItem() != stack ? 0.0F
+					: (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F;
+		});
 	}
 
 	@SubscribeEvent
@@ -210,5 +231,6 @@ public class ClientSetup {
 		event.registerEntityRenderer(Registration.TimeWandEntity.get(), TimeWandEntityRenderer::new);
 		event.registerEntityRenderer(Registration.PortalEntity.get(), PortalEntityRenderer::new);
 		event.registerEntityRenderer(Registration.PortalProjectile.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(Registration.JustDireArrow.get(), JustDireArrowRenderer::new);
 	}
 }
