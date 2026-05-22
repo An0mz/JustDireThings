@@ -11,7 +11,6 @@ import com.direwolf20.justdirethings.setup.Registration;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeManager;
@@ -30,7 +29,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @JeiPlugin
@@ -67,9 +65,6 @@ public class JEIIntegration implements IModPlugin {
 		}
 
 		recipeRegistry.hideRecipes(RecipeTypes.CRAFTING, hiddenRecipes);
-
-		jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK,
-				Collections.singletonList(new ItemStack(Registration.UPGRADE_PHASE.get())));
 	}
 
 	@Override

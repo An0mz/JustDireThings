@@ -74,8 +74,6 @@ public class ModSetup {
 							output.accept(item);
 						});
 						Registration.UPGRADES.getEntries().forEach(e -> {
-							if (e.get() == Registration.UPGRADE_PHASE.get())
-								return;
 							Item item = e.get();
 							output.accept(item);
 						});
