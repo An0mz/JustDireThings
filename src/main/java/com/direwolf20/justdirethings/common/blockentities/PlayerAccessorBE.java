@@ -152,4 +152,21 @@ public class PlayerAccessorBE extends BaseMachineBE {
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
 	}
+
+	@Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        // We check that they are requesting access to items (Forge Capabilities)
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
+            if (side != null) {
+                // Get the PlayerHandler for a specific side of the block
+                PlayerHandler handler = getPlayerHandler(side);
+                if (handler != null) {
+                    // We return it by wrapping it in a LazyOptional (a Forge requirement)
+                    return LazyOptional.of(() -> handler).cast();
+                }
+            }
+        }
+        // If it's another side or another possibility, we pass the processing to the base class
+        return super.getCapability(cap, side);
+    }
 }
