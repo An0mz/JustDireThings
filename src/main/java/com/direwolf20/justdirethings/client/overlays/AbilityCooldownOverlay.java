@@ -31,7 +31,8 @@ public class AbilityCooldownOverlay implements IGuiOverlay {
 		ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
 		if (chestplate.getItem() instanceof ToggleableTool toggleableTool
 				&& toggleableTool.hasAbility(Ability.INVULNERABILITY)) {
-			int activeCooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, true);
+			long gameTick = mc.level.getGameTime();
+			int activeCooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, true, gameTick);
 			if (activeCooldown > -1) {
 				AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.INVULNERABILITY);
 				int activeMax = abilityParams.activeCooldown;
@@ -42,7 +43,7 @@ public class AbilityCooldownOverlay implements IGuiOverlay {
 				guiGraphics.blit(INVULNERABILITY_ICON, xPosition, blitYPosition, 0, textureYOffset, 18, iconHeight, 18,
 						18);
 			}
-			int cooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, false);
+			int cooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, false, gameTick);
 			if (cooldown > -1) {
 				AbilityParams abilityParams = toggleableTool.getAbilityParams(Ability.INVULNERABILITY);
 				int cooldownMax = abilityParams.cooldown;

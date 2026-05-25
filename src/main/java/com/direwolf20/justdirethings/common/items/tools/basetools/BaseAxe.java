@@ -49,21 +49,13 @@ public class BaseAxe extends AxeItem implements ToggleableTool, LeftClickableToo
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-		if (!player.level().isClientSide) {
-			BlockState blockState = player.level().getBlockState(pos);
-			if (itemstack.getItem() instanceof ToggleableTool toggleableTool
-					&& itemstack.isCorrectToolForDrops(blockState)) {
-				toggleableTool.mineBlocksAbility(itemstack, player.level(), pos, player);
-			}
-		}
-		return false;
-	}
-
-	@Override
 	public boolean mineBlock(ItemStack pStack, Level pLevel, BlockState pState, BlockPos pPos,
 			LivingEntity pEntityLiving) {
-		return true; // We handle damage in the BlockEvent.BreakEvent
+		if (!pLevel.isClientSide && pStack.getItem() instanceof ToggleableTool toggleableTool
+				&& pStack.isCorrectToolForDrops(pState)) {
+			toggleableTool.mineBlocksAbility(pStack, pLevel, pPos, pEntityLiving);
+		}
+		return true;
 	}
 
 	@Override

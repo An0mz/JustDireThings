@@ -185,6 +185,8 @@ public interface ToggleableTool extends ToggleableItem {
 			for (BlockPos pos : breakBlockPositions) {
 				BlockState blockState = pLevel.getBlockState(pos);
 				float destroySpeedTarget = blockState.getDestroySpeed(pLevel, pos);
+				if (destroySpeedTarget < 0)
+					continue; // Skip unbreakable blocks (e.g. bedrock)
 				cumulativeDestroy = cumulativeDestroy + destroySpeedTarget;
 			}
 			int rfCostInstaBreak = getInstantRFCost(cumulativeDestroy);
@@ -205,8 +207,10 @@ public interface ToggleableTool extends ToggleableItem {
 		for (BlockPos breakPos : breakBlockPositions) {
 			if (testUseTool(pStack) < 0)
 				break;
-			int exp = pLevel.getBlockState(breakPos).getExpDrop(pLevel, pLevel.random, pPos, fortuneLevel,
-					silkTouchLevel);
+			BlockState breakState = pLevel.getBlockState(breakPos);
+			if (breakState.getDestroySpeed(pLevel, breakPos) < 0)
+				continue; // Skip unbreakable blocks (e.g. bedrock)
+			int exp = breakState.getExpDrop(pLevel, pLevel.random, pPos, fortuneLevel, silkTouchLevel);
 			totalExp = totalExp + exp;
 			Helpers.combineDrops(drops, breakBlocks(pLevel, breakPos, pEntityLiving, pStack, true, instaBreak));
 		}
@@ -291,19 +295,22 @@ public interface ToggleableTool extends ToggleableItem {
 		}
 	}
 
-	static int getAnyCooldown(ItemStack itemStack, Ability ability) {
+	static int getAnyCooldown(ItemStack itemStack, Ability ability, long currentTick) {
 		CompoundTag tag = itemStack.getOrCreateTag();
 		if (!tag.contains("cooldowns"))
 			return -1;
 		ListTag cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
 		for (int i = 0; i < cooldowns.size(); i++) {
-			if (cooldowns.getCompound(i).getString("ability").equals(ability.getName()))
-				return cooldowns.getCompound(i).getInt("cooldown");
+			CompoundTag entry = cooldowns.getCompound(i);
+			if (entry.getString("ability").equals(ability.getName())) {
+				long remaining = entry.getLong("end_tick") - currentTick;
+				return remaining > 0 ? (int) remaining : -1;
+			}
 		}
 		return -1;
 	}
 
-	static int getCooldown(ItemStack itemStack, Ability ability, boolean active) {
+	static int getCooldown(ItemStack itemStack, Ability ability, boolean active, long currentTick) {
 		CompoundTag tag = itemStack.getOrCreateTag();
 		if (!tag.contains("cooldowns"))
 			return -1;
@@ -312,7 +319,8 @@ public interface ToggleableTool extends ToggleableItem {
 			CompoundTag abilityTag = cooldowns.getCompound(i);
 			if (abilityTag.getString("ability").equals(ability.getName())
 					&& abilityTag.getBoolean("active") == active) {
-				return abilityTag.getInt("cooldown");
+				long remaining = abilityTag.getLong("end_tick") - currentTick;
+				return remaining > 0 ? (int) remaining : -1;
 			}
 		}
 		return -1;
@@ -322,27 +330,31 @@ public interface ToggleableTool extends ToggleableItem {
 		CompoundTag tag = itemStack.getOrCreateTag();
 		if (!tag.contains("cooldowns"))
 			return;
+		long currentTick = player.level().getGameTime();
+		boolean changed = false;
 		Set<Integer> cooldownsToRemove = new HashSet<>();
 		ListTag cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
 		for (int i = 0; i < cooldowns.size(); i++) {
 			CompoundTag compoundTag = cooldowns.getCompound(i);
-			int cooldown = compoundTag.getInt("cooldown");
+			long endTick = compoundTag.getLong("end_tick");
 			boolean active = compoundTag.getBoolean("active");
-			cooldown = cooldown - 1;
-			if (cooldown == 0) {
-				if (!active)
+			if (currentTick >= endTick) {
+				if (!active) {
 					cooldownsToRemove.add(i);
-				else {
+					changed = true;
+				} else {
 					Ability ability = Ability.valueOf(compoundTag.getString("ability").toUpperCase(Locale.ROOT));
 					if (itemStack.getItem() instanceof ToggleableTool toggleableTool) {
 						AbilityParams abilityParams = toggleableTool.getAbilityParams(ability);
-						compoundTag.putInt("cooldown", abilityParams.cooldown);
+						compoundTag.putLong("end_tick", currentTick + abilityParams.cooldown);
+						compoundTag.putInt("duration", abilityParams.cooldown);
 						compoundTag.putBoolean("active", false);
+						changed = true;
 						player.playNotifySound(SoundEvents.CONDUIT_DEACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
-			} else
-				compoundTag.putInt("cooldown", cooldown);
+			}
+			// remaining > 0: nothing to write, NBT unchanged this tick
 		}
 		for (Integer value : cooldownsToRemove) {
 			cooldowns.remove(value.intValue());
@@ -350,11 +362,11 @@ public interface ToggleableTool extends ToggleableItem {
 		}
 		if (cooldowns.size() == 0)
 			tag.remove("cooldowns");
-		else
+		else if (changed)
 			tag.put("cooldowns", cooldowns);
 	}
 
-	static void addCooldown(ItemStack itemStack, Ability ability, int cooldown, boolean active) {
+	static void addCooldown(ItemStack itemStack, Ability ability, int cooldown, boolean active, long startTick) {
 		CompoundTag tag = itemStack.getOrCreateTag();
 		ListTag cooldowns;
 		if (tag.contains("cooldowns"))
@@ -363,7 +375,8 @@ public interface ToggleableTool extends ToggleableItem {
 			cooldowns = new ListTag();
 		CompoundTag newTag = new CompoundTag();
 		newTag.putString("ability", ability.getName());
-		newTag.putInt("cooldown", cooldown);
+		newTag.putLong("end_tick", startTick + cooldown);
+		newTag.putInt("duration", cooldown);
 		newTag.putBoolean("active", active);
 		cooldowns.add(newTag);
 		tag.put("cooldowns", cooldowns);

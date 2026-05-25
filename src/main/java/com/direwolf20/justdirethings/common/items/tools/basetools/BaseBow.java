@@ -136,6 +136,11 @@ public class BaseBow extends BowItem implements ToggleableTool, LeftClickableToo
 			Helpers.damageTool(bowStack, player, Ability.PHASE);
 		}
 
+		if (canUseAbilityAndDurability(bowStack, Ability.EPICARROW)) {
+			arrow.setEpicArrow(true);
+			Helpers.damageTool(bowStack, player, Ability.EPICARROW);
+		}
+
 		if (canUseAbilityAndDurability(bowStack, Ability.HOMING)) {
 			arrow.setHoming(true);
 			Helpers.damageTool(bowStack, player, Ability.HOMING);

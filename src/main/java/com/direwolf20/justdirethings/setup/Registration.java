@@ -16,6 +16,7 @@ import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier3;
 import com.direwolf20.justdirethings.common.blocks.soil.GooSoilTier4;
 import com.direwolf20.justdirethings.common.containers.*;
 import com.direwolf20.justdirethings.common.entities.CreatureCatcherEntity;
+import com.direwolf20.justdirethings.common.entities.DecoyEntity;
 import com.direwolf20.justdirethings.common.entities.ParadoxEntity;
 import com.direwolf20.justdirethings.common.entities.JustDireArrow;
 import com.direwolf20.justdirethings.common.entities.TimeWandEntity;
@@ -566,6 +567,10 @@ public class Registration {
 	public static final RegistryObject<EntityType<JustDireArrow>> JustDireArrow = ENTITY_TYPES
 			.register("justdire_arrow", () -> EntityType.Builder.<JustDireArrow>of(JustDireArrow::new, MobCategory.MISC)
 					.sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build("justdire_arrow"));
+
+	public static final RegistryObject<EntityType<DecoyEntity>> DecoyEntity = ENTITY_TYPES.register("decoy_entity",
+			() -> EntityType.Builder.<DecoyEntity>of(DecoyEntity::new, MobCategory.MISC).sized(0.6F, 1.8F)
+					.clientTrackingRange(8).updateInterval(2).build("decoy_entity"));
 
 	// Containers
 	public static final RegistryObject<MenuType<FuelCanisterContainer>> FuelCanister_Container = CONTAINERS

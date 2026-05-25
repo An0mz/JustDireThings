@@ -51,19 +51,11 @@ public class BasePickaxe extends PickaxeItem implements ToggleableTool, LeftClic
 	@Override
 	public boolean mineBlock(ItemStack pStack, Level pLevel, BlockState pState, BlockPos pPos,
 			LivingEntity pEntityLiving) {
-		return true; // We handle damage in the BlockEvent.BreakEvent
-	}
-
-	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-		if (!player.level().isClientSide) {
-			BlockState blockState = player.level().getBlockState(pos);
-			if (itemstack.getItem() instanceof ToggleableTool toggleableTool
-					&& itemstack.isCorrectToolForDrops(blockState)) {
-				toggleableTool.mineBlocksAbility(itemstack, player.level(), pos, player);
-			}
+		if (!pLevel.isClientSide && pStack.getItem() instanceof ToggleableTool toggleableTool
+				&& pStack.isCorrectToolForDrops(pState)) {
+			toggleableTool.mineBlocksAbility(pStack, pLevel, pPos, pEntityLiving);
 		}
-		return false;
+		return true;
 	}
 
 	@Override

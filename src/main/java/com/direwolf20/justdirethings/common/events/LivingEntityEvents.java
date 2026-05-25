@@ -50,7 +50,8 @@ public class LivingEntityEvents {
 		}
 		if (chestplate.getItem() instanceof ToggleableTool toggleableTool
 				&& toggleableTool.hasAbility(Ability.INVULNERABILITY)) {
-			int activeCooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, true);
+			int activeCooldown = ToggleableTool.getCooldown(chestplate, Ability.INVULNERABILITY, true,
+					player.level().getGameTime());
 			if (activeCooldown == -1)
 				return;
 			player.playNotifySound(SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -189,11 +190,13 @@ public class LivingEntityEvents {
 	public static void onPlayerDeath(LivingDeathEvent event) {
 		if (event.getEntity() instanceof ServerPlayer player) {
 			ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
-			int deathProtCooldown = ToggleableTool.getAnyCooldown(chestplate, Ability.DEATHPROTECTION);
+			int deathProtCooldown = ToggleableTool.getAnyCooldown(chestplate, Ability.DEATHPROTECTION,
+					player.level().getGameTime());
 			if (deathProtCooldown == -1 && chestplate.getItem() instanceof ToggleableTool tt
 					&& tt.canUseAbilityAndDurability(chestplate, Ability.DEATHPROTECTION)) {
 				AbilityParams params = tt.getAbilityParams(Ability.DEATHPROTECTION);
-				ToggleableTool.addCooldown(chestplate, Ability.DEATHPROTECTION, params.cooldown, false);
+				ToggleableTool.addCooldown(chestplate, Ability.DEATHPROTECTION, params.cooldown, false,
+						player.level().getGameTime());
 				player.playNotifySound(SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 				Helpers.damageTool(chestplate, player, Ability.DEATHPROTECTION);
 				player.setHealth(10.0F);

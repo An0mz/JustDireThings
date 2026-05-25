@@ -469,6 +469,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings." + Ability.NEGATEFALLDAMAGE.getName() + ".detailtext", "No fall damage");
 		add("justdirethings." + Ability.NIGHTVISION.getName() + ".detailtext", "Automatic Night Vision");
 		add("justdirethings." + Ability.ELYTRA.getName() + ".detailtext", "Built In Elytra");
+		add("justdirethings.decoy", "Decoy");
 		add("justdirethings." + Ability.DECOY.getName() + ".detailtext",
 				"Activate to summon a decoy that mobs will attack");
 		add("justdirethings." + Ability.LINGERING.getName() + ".detailtext", "Lingering effect on potions");
