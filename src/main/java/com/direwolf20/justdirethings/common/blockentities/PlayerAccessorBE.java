@@ -11,7 +11,13 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class PlayerAccessorBE extends BaseMachineBE {
@@ -116,6 +122,20 @@ public class PlayerAccessorBE extends BaseMachineBE {
 			}
 		}
 		return playerHandlers.get(side);
+	}
+
+	@Nonnull
+	@Override
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+		if (cap == ForgeCapabilities.ITEM_HANDLER) {
+			if (side == null)
+				return LazyOptional.empty();
+			PlayerHandler handler = getPlayerHandler(side);
+			if (handler == null)
+				return LazyOptional.empty();
+			return LazyOptional.of(() -> (IItemHandler) handler).cast();
+		}
+		return super.getCapability(cap, side);
 	}
 
 	@Override

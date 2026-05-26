@@ -4,11 +4,10 @@ import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.containers.FuelCanisterContainer;
 import com.direwolf20.justdirethings.common.items.FuelCanister;
 import com.direwolf20.justdirethings.util.MagicHelpers;
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.direwolf20.justdirethings.client.screens.basescreens.BaseScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,7 +22,7 @@ import net.minecraftforge.common.ForgeHooks;
 import java.awt.*;
 import java.util.List;
 
-public class FuelCanisterScreen extends AbstractContainerScreen<FuelCanisterContainer> {
+public class FuelCanisterScreen extends BaseScreen<FuelCanisterContainer> {
 	private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/fuelcanister.png");
 
 	protected final FuelCanisterContainer container;
@@ -106,28 +105,6 @@ public class FuelCanisterScreen extends AbstractContainerScreen<FuelCanisterCont
 		int relX = (this.width - this.imageWidth) / 2;
 		int relY = (this.height - this.imageHeight) / 2;
 		guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-
-	@Override
-	public void onClose() {
-		super.onClose();
-	}
-
-	@Override
-	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		InputConstants.Key mouseKey = InputConstants.getKey(p_keyPressed_1_, p_keyPressed_2_);
-		if (p_keyPressed_1_ == 256 || minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
-			onClose();
-
-			return true;
-		}
-
-		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 	}
 
 	@Override

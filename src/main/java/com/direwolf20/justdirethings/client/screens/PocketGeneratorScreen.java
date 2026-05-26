@@ -8,11 +8,10 @@ import com.direwolf20.justdirethings.common.items.PocketGenerator;
 import com.direwolf20.justdirethings.common.items.resources.Coal_T1;
 import com.direwolf20.justdirethings.util.MagicHelpers;
 import com.direwolf20.justdirethings.util.NBTHelpers;
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.direwolf20.justdirethings.client.screens.basescreens.BaseScreen;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,7 +28,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.util.Arrays;
 import java.util.List;
 
-public class PocketGeneratorScreen extends AbstractContainerScreen<PocketGeneratorContainer> {
+public class PocketGeneratorScreen extends BaseScreen<PocketGeneratorContainer> {
 	private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/pocketgenerator.png");
 
 	protected final PocketGeneratorContainer container;
@@ -138,28 +137,6 @@ public class PocketGeneratorScreen extends AbstractContainerScreen<PocketGenerat
 			int remaining = (energyStorage.getEnergyStored() * height) / maxEnergy;
 			guiGraphics.blit(GUI, leftPos + 8, topPos + 78 - remaining, 176, 84 - remaining, 16, remaining + 1);
 		}
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-
-	@Override
-	public void onClose() {
-		super.onClose();
-	}
-
-	@Override
-	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-		InputConstants.Key mouseKey = InputConstants.getKey(p_keyPressed_1_, p_keyPressed_2_);
-		if (p_keyPressed_1_ == 256 || minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
-			onClose();
-
-			return true;
-		}
-
-		return super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
 	}
 
 	@Override

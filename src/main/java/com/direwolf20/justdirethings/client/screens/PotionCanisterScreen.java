@@ -4,10 +4,9 @@ import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.containers.PotionCanisterContainer;
 import com.direwolf20.justdirethings.common.items.PotionCanister;
 import com.direwolf20.justdirethings.util.MagicHelpers;
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.direwolf20.justdirethings.client.screens.basescreens.BaseScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +18,7 @@ import net.minecraft.world.item.alchemy.Potions;
 
 import java.awt.*;
 
-public class PotionCanisterScreen extends AbstractContainerScreen<PotionCanisterContainer> {
+public class PotionCanisterScreen extends BaseScreen<PotionCanisterContainer> {
 	private static final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID,
 			"textures/gui/fuelcanister.png");
 
@@ -65,21 +64,6 @@ public class PotionCanisterScreen extends AbstractContainerScreen<PotionCanister
 
 	@Override
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-
-	@Override
-	public boolean keyPressed(int key, int scanCode, int modifiers) {
-		InputConstants.Key mouseKey = InputConstants.getKey(key, scanCode);
-		if (key == 256 || minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
-			onClose();
-			return true;
-		}
-		return super.keyPressed(key, scanCode, modifiers);
 	}
 
 	private static MutableComponent getTrans(String key, Object... args) {

@@ -21,7 +21,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.direwolf20.justdirethings.client.screens.basescreens.BaseScreen;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -35,7 +35,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.*;
 
 import com.direwolf20.justdirethings.common.network.PacketHandler;
-public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContainer> {
+public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/settings.png");
 
 	protected final ToolSettingContainer container;
@@ -303,11 +303,6 @@ public class ToolSettingScreen extends AbstractContainerScreen<ToolSettingContai
 		guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 		if (renderablesChanged)
 			updateRenderables();
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
 	}
 
 	@Override
