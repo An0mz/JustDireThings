@@ -13,16 +13,20 @@ import java.util.Map;
 public interface PoweredTool extends PoweredItem {
 	default Multimap<Attribute, AttributeModifier> getPoweredAttributeModifiers(EquipmentSlot slot, ItemStack stack,
 			Multimap<Attribute, AttributeModifier> originalModifiers) {
+		// For non-MAINHAND slots (armor pieces), always return the original modifiers.
+		// Armor defense is a passive property of the material and must not be gated on FE
+		// availability — only active abilities (attacks, special armor powers) consume energy.
+		if (slot != EquipmentSlot.MAINHAND) {
+			return originalModifiers;
+		}
+		// MAINHAND: powered tools need energy to deal full attack damage.
+		if (getAvailableEnergy(stack) >= getBlockBreakFECost()) {
+			return originalModifiers;
+		}
 		Multimap<Attribute, AttributeModifier> modifiers = HashMultimap.create();
-		if (slot == EquipmentSlot.MAINHAND) {
-			if (getAvailableEnergy(stack) >= getBlockBreakFECost()) {
-				return originalModifiers;
-			} else {
-				for (Map.Entry<Attribute, AttributeModifier> entry : originalModifiers.entries()) {
-					if (!entry.getKey().equals(Attributes.ATTACK_DAMAGE))
-						modifiers.put(entry.getKey(), entry.getValue());
-				}
-			}
+		for (Map.Entry<Attribute, AttributeModifier> entry : originalModifiers.entries()) {
+			if (!entry.getKey().equals(Attributes.ATTACK_DAMAGE))
+				modifiers.put(entry.getKey(), entry.getValue());
 		}
 		return modifiers;
 	}
