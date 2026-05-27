@@ -14,8 +14,10 @@ public interface PoweredTool extends PoweredItem {
 	default Multimap<Attribute, AttributeModifier> getPoweredAttributeModifiers(EquipmentSlot slot, ItemStack stack,
 			Multimap<Attribute, AttributeModifier> originalModifiers) {
 		// For non-MAINHAND slots (armor pieces), always return the original modifiers.
-		// Armor defense is a passive property of the material and must not be gated on FE
-		// availability — only active abilities (attacks, special armor powers) consume energy.
+		// Armor defense is a passive property of the material and must not be gated on
+		// FE
+		// availability — only active abilities (attacks, special armor powers) consume
+		// energy.
 		if (slot != EquipmentSlot.MAINHAND) {
 			return originalModifiers;
 		}
