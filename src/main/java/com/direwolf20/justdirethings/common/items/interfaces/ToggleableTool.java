@@ -161,7 +161,9 @@ public interface ToggleableTool extends ToggleableItem {
 			breakBlockPositions.addAll(MiningCollect.collect(pEntityLiving, pPos, getTargetLookDirection(pEntityLiving),
 					pLevel, getToolValue(pStack, Ability.HAMMER.getName()), MiningCollect.SizeMode.AUTO, pStack));
 		}
-		breakBlockPositions.add(pPos);
+		if (pLevel.getBlockEntity(pPos) == null) {
+			breakBlockPositions.add(pPos);
+		}
 		if (canUseAbility(pStack, Ability.SKYSWEEPER) && pStack.isCorrectToolForDrops(pState)) {
 			Set<BlockPos> newPos = new HashSet<>();
 			for (BlockPos blockPos : breakBlockPositions) {
