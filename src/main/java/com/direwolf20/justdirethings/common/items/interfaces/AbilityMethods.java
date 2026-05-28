@@ -429,10 +429,9 @@ public class AbilityMethods {
 	}
 
 	public static boolean swimSpeed(Level level, Player player, ItemStack itemStack) {
-		if (!player.isFallFlying() && player.zza > 0F && player.isInWater()) {
+		if (player.fallDistance <= 0 && !player.isFallFlying() && player.zza > 0F && player.isInWaterOrBubble()) {
 			float speed = (float) ToggleableTool.getToolValue(itemStack, Ability.SWIMSPEED.getName()) / 50;
-			Vec3 lookVec = player.getLookAngle();
-			player.setDeltaMovement(player.getDeltaMovement().add(lookVec.scale(speed)));
+			player.moveRelative(speed, new Vec3(0, 0, 1));
 		}
 		return false;
 	}

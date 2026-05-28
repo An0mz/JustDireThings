@@ -19,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -30,30 +28,6 @@ import java.util.Set;
 import com.direwolf20.justdirethings.common.network.PacketHandler;
 @Mod.EventBusSubscriber(modid = JustDireThings.MODID)
 public class PlayerEvents {
-
-	/**
-	 * Client-side player tick: runs passive-tick armor abilities (e.g. walkSpeed,
-	 * runSpeed, swimSpeed). These abilities call player.moveRelative() which must
-	 * execute on the client to actually affect movement. The server-side
-	 * inventoryTick alone is not sufficient because the Minecraft client is
-	 * authoritative over the player's own movement.
-	 */
-	@SubscribeEvent
-	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.phase != TickEvent.Phase.START)
-			return;
-		Player player = event.player;
-		if (!player.level().isClientSide() || !player.isLocalPlayer())
-			return;
-		for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS,
-				EquipmentSlot.FEET}) {
-			ItemStack stack = player.getItemBySlot(slot);
-			if (stack.getItem() instanceof ToggleableTool toggleableTool
-					&& !toggleableTool.getPassiveTickAbilities(stack).isEmpty()) {
-				toggleableTool.armorTick(player.level(), player, stack);
-			}
-		}
-	}
 
 	private static BlockPos destroyPos = BlockPos.ZERO;
 	private static int gameTicksMining = 0;
