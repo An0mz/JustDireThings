@@ -334,6 +334,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.polymorphset", "Polymorph Target: %s");
 		add("justdirethings.invalidpolymorphentity", "Invalid Entity for Polymorphing");
 		add("justdirethings.polymorphsuccess", "Transformed into: %s");
+		add("justdirethings.polymorphblacklisted", "That entity is blacklisted and cannot be created by the Polymorphic Wand");
 		add("justdirethings.hint.dropinwater", "Drop in water to restore");
 		add("justdirethings.paradox.snapshot_accepted", "Snapshot taken: %d blocks, %d entities");
 

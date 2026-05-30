@@ -82,6 +82,7 @@ public class Config {
 	public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_V2_MAX_FLUID;
 	public static ForgeConfigSpec.IntValue RANDOM_POLYMORPH_COST;
 	public static ForgeConfigSpec.IntValue TARGET_POLYMORPH_COST;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> POLYMORPH_BLACKLIST;
 
 	public static final String CATEGORY_PORTAL_GUN = "portal_gun";
 	public static ForgeConfigSpec.IntValue PORTAL_GUN_MAX_FE;
@@ -337,6 +338,11 @@ public class Config {
 				.defineInRange("random_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
 		TARGET_POLYMORPH_COST = COMMON_BUILDER.comment("mB of polymorphic fluid consumed per targeted polymorph")
 				.defineInRange("target_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
+		POLYMORPH_BLACKLIST = COMMON_BUILDER
+				.comment("Entities or mods that the Polymorphic Wand cannot create.",
+						"Use full entity IDs (e.g. \"somebossmod:big_boss\") for specific entities,",
+						"or just the mod ID (e.g. \"somebossmod\") to block all entities from that mod.")
+				.defineListAllowEmpty(List.of("polymorph_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}
 }

@@ -687,6 +687,19 @@ public class AbilityMethods {
 		itemStack.getOrCreateTag().remove("stupefyTargets");
 	}
 
+	private static boolean isPolymorphBlacklisted(EntityType<?> type) {
+		net.minecraft.resources.ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(type);
+		if (key == null) return false;
+		String fullId = key.toString();
+		String namespace = key.getNamespace();
+		for (Object entry : Config.POLYMORPH_BLACKLIST.get()) {
+			String s = (String) entry;
+			if (s.contains(":") ? fullId.equals(s) : namespace.equals(s))
+				return true;
+		}
+		return false;
+	}
+
 	public static boolean polymorphRandom(Level level, Player player, ItemStack itemStack) {
 		if (level.isClientSide())
 			return false;
@@ -712,6 +725,7 @@ public class AbilityMethods {
 		List<EntityType<?>> mobTypes = ForgeRegistries.ENTITY_TYPES.getValues().stream()
 				.filter(et -> et.getCategory() != MobCategory.MISC)
 				.filter(et -> et != EntityType.WITHER && et != EntityType.ENDER_DRAGON)
+				.filter(et -> !isPolymorphBlacklisted(et))
 				.filter(et -> sourceIsMonster
 						? et.getCategory() == MobCategory.MONSTER
 						: et.getCategory() != MobCategory.MONSTER)
@@ -788,6 +802,11 @@ public class AbilityMethods {
 		EntityType<?> newType = EntityType.byString(stackTag.getString("polymorphTargetType")).orElse(null);
 		if (newType == null)
 			return false;
+		if (isPolymorphBlacklisted(newType)) {
+			player.displayClientMessage(
+					net.minecraft.network.chat.Component.translatable("justdirethings.polymorphblacklisted"), true);
+			return false;
+		}
 
 		int fuelAmt = Config.TARGET_POLYMORPH_COST.get();
 		if (!FluidContainingItem.hasEnoughFluid(itemStack, fuelAmt))

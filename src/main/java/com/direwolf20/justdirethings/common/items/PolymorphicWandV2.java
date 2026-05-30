@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.items;
 import com.direwolf20.justdirethings.common.items.interfaces.*;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.util.MagicHelpers;
+import com.direwolf20.justdirethings.util.MiscTools;
 import com.direwolf20.justdirethings.util.PolymorphicEntitySanitizer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +28,6 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 
 public class PolymorphicWandV2 extends BaseToggleableTool
 		implements
@@ -70,10 +70,11 @@ public class PolymorphicWandV2 extends BaseToggleableTool
 		Level level = player.level();
 		if (level.isClientSide)
 			return true;
-		ItemStack itemStack = player.getMainHandItem();
-		Set<Ability> abilities = LeftClickableTool.getLeftClickList(itemStack);
-		if (itemStack.getItem() instanceof ToggleableTool toggleableTool && !abilities.isEmpty()) {
-			toggleableTool.useAbility(level, player, InteractionHand.MAIN_HAND, false);
+		if (entity instanceof Mob mob) {
+			if (AbilityMethods.polymorphTarget(level, player, stack, mob))
+				return true;
+			if (AbilityMethods.polymorphRandom(level, player, stack, mob))
+				return true;
 		}
 		return true;
 	}
@@ -103,6 +104,22 @@ public class PolymorphicWandV2 extends BaseToggleableTool
 		if (blockhitresult.getType() == HitResult.Type.BLOCK) {
 			if (FluidContainingItem.pickupFluid(level, player, itemStack, blockhitresult))
 				return InteractionResultHolder.fail(itemStack);
+		}
+		// Fallback for when the vanilla entity pick missed the mob's hitbox
+		// (e.g. eye inside a large mob's AABB at close range). interactLivingEntity
+		// is never called in that case, so we detect the target here instead.
+		if (!level.isClientSide) {
+			Entity entity = MiscTools.getEntityLookedAt(player, 5);
+			if (player.isShiftKeyDown() && entity instanceof LivingEntity livingEntity) {
+				savePolymorphTarget(itemStack, player, livingEntity);
+				return InteractionResultHolder.success(itemStack);
+			}
+			if (!player.isShiftKeyDown() && entity instanceof Mob mob) {
+				if (AbilityMethods.polymorphTarget(level, player, itemStack, mob))
+					return InteractionResultHolder.success(itemStack);
+				if (AbilityMethods.polymorphRandom(level, player, itemStack, mob))
+					return InteractionResultHolder.success(itemStack);
+			}
 		}
 		return super.use(level, player, hand);
 	}

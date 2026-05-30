@@ -351,6 +351,7 @@
   "justdirethings.polymorphicfluidamt": "Polymorphic Fluid: %s / %s mB",
   "justdirethings.polymorphset": "Polymorph Target: %s",
   "justdirethings.polymorphsuccess": "Transformed into: %s",
+  "justdirethings.polymorphblacklisted": "That entity is blacklisted and cannot be created by the Polymorphic Wand",
   "justdirethings.portalfluidamt": "Portal Fluid: %s / %s",
   "justdirethings.potionarrow.detailtext": "Insert a Potion Canister to apply effects to enemies",
   "justdirethings.potionarrow.flavortext": "Like Vanilla, without inventory issues...",
