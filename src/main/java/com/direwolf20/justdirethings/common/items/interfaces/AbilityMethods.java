@@ -689,7 +689,8 @@ public class AbilityMethods {
 
 	private static boolean isPolymorphBlacklisted(EntityType<?> type) {
 		net.minecraft.resources.ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(type);
-		if (key == null) return false;
+		if (key == null)
+			return false;
 		String fullId = key.toString();
 		String namespace = key.getNamespace();
 		for (Object entry : Config.POLYMORPH_BLACKLIST.get()) {

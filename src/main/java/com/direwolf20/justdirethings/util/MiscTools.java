@@ -162,7 +162,8 @@ public class MiscTools {
 				}
 			} else if (entityBB.contains(eyePos)) {
 				// Eye is inside the entity's hitbox (very close to a large mob).
-				// AABB.clip requires the ray to start outside, so we check containment directly.
+				// AABB.clip requires the ray to start outside, so we check containment
+				// directly.
 				double dist = eyePos.distanceTo(entity.position());
 				if (dist < closestDist) {
 					closestDist = dist;
