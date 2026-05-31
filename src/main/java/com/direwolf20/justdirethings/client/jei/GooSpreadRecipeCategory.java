@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class GooSpreadRecipeCategory implements IRecipeCategory<GooSpreadRecipe> {
 	public static final RecipeType<GooSpreadRecipe> TYPE = RecipeType.create(JustDireThings.MODID, "goo_spread_recipe",
 			com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe.class);

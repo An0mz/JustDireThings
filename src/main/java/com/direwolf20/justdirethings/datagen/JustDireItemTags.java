@@ -16,6 +16,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("removal")
 public class JustDireItemTags extends ItemTagsProvider {
 	public JustDireItemTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider,
 			BlockTagsProvider blockTags, ExistingFileHelper helper) {

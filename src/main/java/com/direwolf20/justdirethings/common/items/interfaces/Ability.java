@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@SuppressWarnings("removal")
 public enum Ability {
 	// Tier 1
 	MOBSCANNER(SettingType.TOGGLE, 10, 500, UseType.USE, BindingType.LEFT_AND_CUSTOM, AbilityMethods::scanForMobScanner,

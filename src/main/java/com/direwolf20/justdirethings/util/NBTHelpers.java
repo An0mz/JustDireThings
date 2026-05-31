@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+@SuppressWarnings("removal")
 public class NBTHelpers {
 	public record GlobalVec3(ResourceKey<Level> dimension, Vec3 position) {
 		public String toVec3ShortString() {

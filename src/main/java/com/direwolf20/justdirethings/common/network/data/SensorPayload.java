@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record SensorPayload(int senseTarget, boolean strongSignal, int senseCount, int equality) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "sensor_packet");
 

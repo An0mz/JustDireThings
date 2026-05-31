@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.Arrays;
 
 import com.direwolf20.justdirethings.common.network.PacketHandler;
+@SuppressWarnings("removal")
 public class BlockSwapperT1Screen extends BaseMachineScreen<BlockSwapperT1Container> {
 	protected final ResourceLocation ACTIVE = new ResourceLocation(JustDireThings.MODID,
 			"textures/gui/buttons/active.png");

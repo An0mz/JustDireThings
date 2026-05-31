@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
  * action: 0 = snapshot area, 1 = set render/target settings, 2 = set area
  * offset only
  */
+@SuppressWarnings("removal")
 public record ParadoxMachinePayload(int action, boolean renderParadox, int targetType, double xRadius, double yRadius,
 		double zRadius, int xOffset, int yOffset, int zOffset) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "paradox_machine_packet");

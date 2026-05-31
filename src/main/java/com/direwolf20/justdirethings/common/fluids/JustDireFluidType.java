@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.FluidType;
 
 import java.util.function.Consumer;
 
+@SuppressWarnings("removal")
 public class JustDireFluidType extends FluidType {
 	private static final ResourceLocation STILL_TEXTURE = new ResourceLocation("minecraft", "block/water_still");
 	private static final ResourceLocation FLOW_TEXTURE = new ResourceLocation("minecraft", "block/water_flow");

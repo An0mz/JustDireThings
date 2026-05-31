@@ -100,6 +100,7 @@ import java.util.function.Supplier;
 import static com.direwolf20.justdirethings.JustDireThings.MODID;
 import static com.direwolf20.justdirethings.client.particles.ModParticles.PARTICLE_TYPES;
 
+@SuppressWarnings("removal")
 public class Registration {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 	public static final DeferredRegister<Block> SIDEDBLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);

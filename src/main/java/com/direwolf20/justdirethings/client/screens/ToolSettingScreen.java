@@ -35,6 +35,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.*;
 
 import com.direwolf20.justdirethings.common.network.PacketHandler;
+@SuppressWarnings("removal")
 public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/settings.png");
 

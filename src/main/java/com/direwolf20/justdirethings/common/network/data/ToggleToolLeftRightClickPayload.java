@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record ToggleToolLeftRightClickPayload(int slot, String abilityName, int button, int keyCode, boolean isMouse) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID,
 			"tool_left_right_click_settings_packet");

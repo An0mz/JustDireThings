@@ -22,6 +22,7 @@ import net.minecraft.world.phys.AABB;
 
 import static net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect;
 
+@SuppressWarnings("removal")
 public class JustDireItemRenderer extends BlockEntityWithoutLevelRenderer {
 	public JustDireItemRenderer() {
 		super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());

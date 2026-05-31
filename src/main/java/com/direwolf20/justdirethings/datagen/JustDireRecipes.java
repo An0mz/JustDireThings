@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
+@SuppressWarnings("removal")
 public class JustDireRecipes extends RecipeProvider {
 
 	public JustDireRecipes(PackOutput output) {

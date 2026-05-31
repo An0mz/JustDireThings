@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JeiPlugin
+@SuppressWarnings("removal")
 public class JEIIntegration implements IModPlugin {
 
 	@Nonnull

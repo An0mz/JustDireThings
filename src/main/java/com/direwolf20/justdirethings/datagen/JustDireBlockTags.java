@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("removal")
 public class JustDireBlockTags extends BlockTagsProvider {
 
 	public JustDireBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,

@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record ParadoxSyncPayload(BlockPos pos, int timeRunning) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "paradox_sync_packet");
 

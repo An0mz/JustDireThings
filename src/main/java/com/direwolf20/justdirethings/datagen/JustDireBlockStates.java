@@ -20,6 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Objects;
 
+@SuppressWarnings("removal")
 public class JustDireBlockStates extends BlockStateProvider {
 	public JustDireBlockStates(PackOutput output, ExistingFileHelper helper) {
 		super(output, JustDireThings.MODID, helper);

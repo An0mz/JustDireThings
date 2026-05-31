@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Inventory;
 import java.awt.*;
 import java.util.Arrays;
 
+@SuppressWarnings("removal")
 public class ParadoxMachineScreen extends BaseMachineScreen<ParadoxMachineContainer> {
 	protected static final ResourceLocation PARADOXBAR = new ResourceLocation(JustDireThings.MODID,
 			"textures/gui/paradoxbar.png");

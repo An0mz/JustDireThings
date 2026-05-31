@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record BlockStateFilterPayload(int slot, CompoundTag compoundTag) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "block_state_filter_packet");
 

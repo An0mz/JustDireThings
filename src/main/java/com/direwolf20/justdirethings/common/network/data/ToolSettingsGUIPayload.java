@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record ToolSettingsGUIPayload() {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "tool_settings_gui");
 

@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidStack;
 
+@SuppressWarnings("removal")
 public class FluidDropRecipeCategory implements IRecipeCategory<FluidDropRecipe> {
 
 	public static final RecipeType<FluidDropRecipe> TYPE = RecipeType.create(JustDireThings.MODID, "fluid_drop_recipe",

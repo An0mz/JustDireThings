@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends BaseScreen<T> {
 	protected final ResourceLocation JUSTSLOT = new ResourceLocation(JustDireThings.MODID, "textures/gui/justslot.png");
 	protected final ResourceLocation JUSTINV = new ResourceLocation(JustDireThings.MODID, "textures/gui/justinv.png");

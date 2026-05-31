@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+@SuppressWarnings("removal")
 public class GooSpreadRecipe implements CraftingRecipe {
 	private final ResourceLocation id;
 

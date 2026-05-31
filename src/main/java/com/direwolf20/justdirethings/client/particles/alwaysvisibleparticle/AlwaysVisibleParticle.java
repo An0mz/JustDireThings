@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public class AlwaysVisibleParticle extends TextureSheetParticle {
 	static final ParticleRenderType AlwaysOn = new ParticleRenderType() {
 		@Override

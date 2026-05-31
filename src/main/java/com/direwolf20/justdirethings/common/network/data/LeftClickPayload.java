@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record LeftClickPayload(int type, // 0 for empty, 1 for block
 		boolean mainHand, BlockPos blockPos, int direction, int inventorySlot, int keyCode, // -1 for left click
 		boolean isMouse) {

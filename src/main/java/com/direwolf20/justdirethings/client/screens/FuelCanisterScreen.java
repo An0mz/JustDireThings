@@ -22,6 +22,7 @@ import net.minecraftforge.common.ForgeHooks;
 import java.awt.*;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class FuelCanisterScreen extends BaseScreen<FuelCanisterContainer> {
 	private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/fuelcanister.png");
 

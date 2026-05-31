@@ -16,6 +16,7 @@ import org.joml.Matrix4f;
 import java.awt.*;
 import java.util.Random;
 
+@SuppressWarnings("removal")
 public class ParadoxEntityRender extends EntityRenderer<ParadoxEntity> {
 
 	private float savedPulseScale = -1;

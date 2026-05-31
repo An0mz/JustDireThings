@@ -54,6 +54,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.io.IOException;
 
 @Mod.EventBusSubscriber(modid = JustDireThings.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("removal")
 public class ClientSetup {
 	public static void init(final FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.addListener(KeyBindings::onClientInput);

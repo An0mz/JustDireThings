@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record AreaAffectingPayload(double xRadius, double yRadius, double zRadius, int xOffset, int yOffset,
 		int zOffset, boolean renderArea) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "area_affecting_packet");

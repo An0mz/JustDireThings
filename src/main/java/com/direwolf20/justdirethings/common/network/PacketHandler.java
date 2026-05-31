@@ -8,6 +8,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+@SuppressWarnings("removal")
 public class PacketHandler {
 	private static final String PROTOCOL = "1";
 	public static SimpleChannel CHANNEL;

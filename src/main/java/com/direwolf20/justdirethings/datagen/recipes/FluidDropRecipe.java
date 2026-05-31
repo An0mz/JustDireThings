@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@SuppressWarnings("removal")
 public class FluidDropRecipe implements CraftingRecipe {
 	private final ResourceLocation id;
 	protected final BlockState input;

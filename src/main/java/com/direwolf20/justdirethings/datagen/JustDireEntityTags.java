@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("removal")
 public class JustDireEntityTags extends EntityTypeTagsProvider {
 	public JustDireEntityTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> providerCompletableFuture,
 			@Nullable ExistingFileHelper existingFileHelper) {

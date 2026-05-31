@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+@SuppressWarnings("removal")
 public record GhostSlotPayload(int slotNumber, ItemStack stack, int count, int mbAmt) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "ghost_slot");
 

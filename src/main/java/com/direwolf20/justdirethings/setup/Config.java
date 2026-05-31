@@ -6,6 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class Config {
 	public static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 	public static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();

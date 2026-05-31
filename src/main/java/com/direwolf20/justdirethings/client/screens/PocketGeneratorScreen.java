@@ -28,6 +28,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class PocketGeneratorScreen extends BaseScreen<PocketGeneratorContainer> {
 	private final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID, "textures/gui/pocketgenerator.png");
 

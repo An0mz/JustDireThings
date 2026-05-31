@@ -22,6 +22,7 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class PotionCanister extends Item {
 	private static final String POTION_ID_KEY = "StoredPotionId";
 	private static final String POTION_AMT_KEY = "PotionAmt";

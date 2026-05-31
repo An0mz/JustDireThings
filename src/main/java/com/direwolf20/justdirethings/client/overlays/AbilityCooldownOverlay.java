@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
+@SuppressWarnings("removal")
 public class AbilityCooldownOverlay implements IGuiOverlay {
 	public static final AbilityCooldownOverlay INSTANCE = new AbilityCooldownOverlay();
 	private static final EquipmentSlot[] EQUIPMENT_ORDER = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS,

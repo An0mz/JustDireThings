@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record PlayerAccessorPayload(int direction, int type) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID, "player_accessor_packet");
 

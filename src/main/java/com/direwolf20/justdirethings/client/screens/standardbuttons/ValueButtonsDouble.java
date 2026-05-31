@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+@SuppressWarnings("removal")
 public class ValueButtonsDouble {
 	private static final ResourceLocation add = new ResourceLocation(JustDireThings.MODID,
 			"textures/gui/buttons/add.png");

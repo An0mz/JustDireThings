@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("removal")
 public class ToggleButtonFactory {
 	public record TextureLocalization(ResourceLocation texture, MutableComponent localization) {
 	}

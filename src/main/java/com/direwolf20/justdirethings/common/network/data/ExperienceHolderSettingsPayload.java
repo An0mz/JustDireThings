@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("removal")
 public record ExperienceHolderSettingsPayload(int targetExp, boolean ownerOnly, boolean collectExp,
 		boolean showParticles) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID,

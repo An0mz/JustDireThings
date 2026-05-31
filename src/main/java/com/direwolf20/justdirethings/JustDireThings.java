@@ -17,6 +17,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.slf4j.Logger;
 
 @Mod(JustDireThings.MODID)
+@SuppressWarnings("removal")
 public class JustDireThings {
 	public static final String MODID = "justdirethings";
 	private static final Logger LOGGER = LogUtils.getLogger();

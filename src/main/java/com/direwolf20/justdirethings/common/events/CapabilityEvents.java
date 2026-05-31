@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@SuppressWarnings("removal")
 public class CapabilityEvents {
 
 	private static final ResourceLocation ENERGY_CAP_KEY = new ResourceLocation(JustDireThings.MODID, "energy");

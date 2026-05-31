@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+@SuppressWarnings("removal")
 public class InventoryHolderContainer extends BaseMachineContainer {
 	public InventoryHolderBE inventoryHolderBE;
 	public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = new ResourceLocation("item/empty_armor_slot_helmet");

@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
+@SuppressWarnings("removal")
 public class AdvPortalRadialMenu extends Screen {
 	private static final int SEGMENTS = PortalGunV2.MAX_FAVORITES;
 

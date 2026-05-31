@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 public class MiscRenders {
+	@SuppressWarnings("unchecked")
 	public static void renderTransparentPlayer(RenderLevelStageEvent evt, Player player, ItemStack itemStack) {
 		Vec3 renderPosition = AbilityMethods.getShiftPosition(player.level(), player, itemStack);
 		Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();

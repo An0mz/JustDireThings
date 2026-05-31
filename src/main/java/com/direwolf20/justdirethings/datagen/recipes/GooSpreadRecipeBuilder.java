@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+@SuppressWarnings("removal")
 public class GooSpreadRecipeBuilder implements RecipeBuilder {
 	@Nullable
 	private String group;

@@ -18,6 +18,7 @@ import net.minecraft.world.item.alchemy.Potions;
 
 import java.awt.*;
 
+@SuppressWarnings("removal")
 public class PotionCanisterScreen extends BaseScreen<PotionCanisterContainer> {
 	private static final ResourceLocation GUI = new ResourceLocation(JustDireThings.MODID,
 			"textures/gui/fuelcanister.png");
