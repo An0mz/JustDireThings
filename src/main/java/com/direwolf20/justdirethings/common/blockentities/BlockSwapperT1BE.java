@@ -17,7 +17,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -332,7 +331,8 @@ public class BlockSwapperT1BE extends BaseMachineBE implements RedstoneControlle
 
 	private static boolean isEntitySwapperBlacklisted(Entity entity) {
 		ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
-		if (key == null) return false;
+		if (key == null)
+			return false;
 		String fullId = key.toString();
 		String namespace = key.getNamespace();
 		for (Object entry : Config.SWAPPER_ENTITY_BLACKLIST.get()) {
@@ -345,7 +345,8 @@ public class BlockSwapperT1BE extends BaseMachineBE implements RedstoneControlle
 
 	private static boolean isBlockSwapperBlacklisted(ServerLevel serverLevel, BlockPos blockPos) {
 		ResourceLocation key = ForgeRegistries.BLOCKS.getKey(serverLevel.getBlockState(blockPos).getBlock());
-		if (key == null) return false;
+		if (key == null)
+			return false;
 		String fullId = key.toString();
 		String namespace = key.getNamespace();
 		for (Object entry : Config.SWAPPER_BLOCK_BLACKLIST.get()) {
