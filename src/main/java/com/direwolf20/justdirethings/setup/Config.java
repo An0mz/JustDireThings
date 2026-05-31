@@ -96,6 +96,10 @@ public class Config {
 	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_FLUID_COST;
 	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_LIFESPAN;
 
+	public static final String CATEGORY_BLOCK_SWAPPER = "block_swapper";
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> SWAPPER_ENTITY_BLACKLIST;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> SWAPPER_BLOCK_BLACKLIST;
+
 	public static void register() {
 		// registerServerConfigs();
 		registerCommonConfigs();
@@ -122,6 +126,7 @@ public class Config {
 		portalGunConfig();
 		portalGunOriginalConfig();
 		polymorphicWandV2Config();
+		swapperConfig();
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
 	}
@@ -324,6 +329,22 @@ public class Config {
 				.defineInRange("portal_gun_original_fluid_cost", 500, 0, Integer.MAX_VALUE);
 		PORTAL_GUN_ORIGINAL_LIFESPAN = COMMON_BUILDER.comment("How many ticks a portal remains open (-1 for infinite)")
 				.defineInRange("portal_gun_original_lifespan", 3000, -1, Integer.MAX_VALUE);
+		COMMON_BUILDER.pop();
+	}
+
+	private static void swapperConfig() {
+		COMMON_BUILDER.comment("Block Swapper").push(CATEGORY_BLOCK_SWAPPER);
+		SWAPPER_ENTITY_BLACKLIST = COMMON_BUILDER
+				.comment("Entities or mods that the Block Swapper cannot teleport.",
+						"Use full entity IDs (e.g. \"draconicevolution:chaos_guardian\") for specific entities,",
+						"or just the mod ID (e.g. \"draconicevolution\") to block all entities from that mod.")
+				.defineListAllowEmpty(List.of("swapper_entity_blacklist"), () -> List.of(), s -> s instanceof String);
+		SWAPPER_BLOCK_BLACKLIST = COMMON_BUILDER
+				.comment("Blocks or mods that the Block Swapper cannot move.",
+						"Use full block IDs (e.g. \"draconicevolution:chaos_crystal\") for specific blocks,",
+						"or just the mod ID (e.g. \"draconicevolution\") to block all blocks from that mod.",
+						"Note: the swapper_deny block tag also controls this and is checked first.")
+				.defineListAllowEmpty(List.of("swapper_block_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}
 

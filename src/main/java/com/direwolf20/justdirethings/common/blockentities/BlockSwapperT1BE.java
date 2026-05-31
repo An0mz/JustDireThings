@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.blockentities;
 import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
 import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
+import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MiscHelpers;
 import com.direwolf20.justdirethings.util.NBTHelpers;
@@ -11,10 +12,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -29,6 +32,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -326,12 +330,40 @@ public class BlockSwapperT1BE extends BaseMachineBE implements RedstoneControlle
 		return level.equals(getPartnerBE().getLevel());
 	}
 
+	private static boolean isEntitySwapperBlacklisted(Entity entity) {
+		ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+		if (key == null) return false;
+		String fullId = key.toString();
+		String namespace = key.getNamespace();
+		for (Object entry : Config.SWAPPER_ENTITY_BLACKLIST.get()) {
+			String s = (String) entry;
+			if (s.contains(":") ? fullId.equals(s) : namespace.equals(s))
+				return true;
+		}
+		return false;
+	}
+
+	private static boolean isBlockSwapperBlacklisted(ServerLevel serverLevel, BlockPos blockPos) {
+		ResourceLocation key = ForgeRegistries.BLOCKS.getKey(serverLevel.getBlockState(blockPos).getBlock());
+		if (key == null) return false;
+		String fullId = key.toString();
+		String namespace = key.getNamespace();
+		for (Object entry : Config.SWAPPER_BLOCK_BLACKLIST.get()) {
+			String s = (String) entry;
+			if (s.contains(":") ? fullId.equals(s) : namespace.equals(s))
+				return true;
+		}
+		return false;
+	}
+
 	public boolean isValidEntity(Entity entity) {
 		if (entity.isMultipartEntity())
 			return false;
 		if (entity instanceof PartEntity<?>)
 			return false;
 		if (!entity.canChangeDimensions() && !isSameLevel())
+			return false;
+		if (isEntitySwapperBlacklisted(entity))
 			return false;
 		if (swap_entity_type.equals(SWAP_ENTITY_TYPE.HOSTILE) && !(entity instanceof Monster))
 			return false;
@@ -463,6 +495,8 @@ public class BlockSwapperT1BE extends BaseMachineBE implements RedstoneControlle
 	public boolean isBlockPosValid(ServerLevel serverLevel, BlockPos blockPos) {
 		if (serverLevel.getBlockState(blockPos).is(JustDireBlockTags.NO_MOVE)
 				|| serverLevel.getBlockState(blockPos).is(JustDireBlockTags.SWAPPERDENY))
+			return false;
+		if (isBlockSwapperBlacklisted(serverLevel, blockPos))
 			return false;
 		GlobalPos targetGlobalPos = GlobalPos.of(serverLevel.dimension(), blockPos);
 		if (targetGlobalPos.equals(getGlobalPos()) || targetGlobalPos.equals(boundTo))
