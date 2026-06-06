@@ -12,10 +12,11 @@ import com.direwolf20.justdirethings.client.entityrenders.DecoyEntityRender;
 import com.direwolf20.justdirethings.client.entityrenders.ParadoxEntityRender;
 import com.direwolf20.justdirethings.client.entityrenders.TimeWandEntityRenderer;
 import com.direwolf20.justdirethings.client.entityrenders.PortalEntityRenderer;
+import com.direwolf20.justdirethings.client.entitymodels.PortalProjectileModel;
+import com.direwolf20.justdirethings.client.entityrenders.PortalProjectileRenderer;
 import com.direwolf20.justdirethings.client.itemcustomrenders.FluidbarDecorator;
 import com.direwolf20.justdirethings.client.renderers.shader.DireRenderTypes;
 import com.direwolf20.justdirethings.client.entityrenders.JustDireArrowRenderer;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
 import com.direwolf20.justdirethings.client.events.EventKeyInput;
 import com.direwolf20.justdirethings.client.events.PlayerEvents;
@@ -203,6 +204,12 @@ public class ClientSetup {
 	}
 
 	@SubscribeEvent
+	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(PortalProjectileModel.Portal_Projectile_Layer,
+				PortalProjectileModel::createBodyLayer);
+	}
+
+	@SubscribeEvent
 	public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		// Register Block Entity Renders
 		event.registerBlockEntityRenderer(Registration.GooBlockBE_Tier1.get(), GooBlockRender_Tier1::new);
@@ -229,7 +236,7 @@ public class ClientSetup {
 		event.registerEntityRenderer(Registration.CreatureCatcherEntity.get(), CreatureCatcherEntityRender::new);
 		event.registerEntityRenderer(Registration.TimeWandEntity.get(), TimeWandEntityRenderer::new);
 		event.registerEntityRenderer(Registration.PortalEntity.get(), PortalEntityRenderer::new);
-		event.registerEntityRenderer(Registration.PortalProjectile.get(), ThrownItemRenderer::new);
+		event.registerEntityRenderer(Registration.PortalProjectile.get(), PortalProjectileRenderer::new);
 		event.registerEntityRenderer(Registration.JustDireArrow.get(), JustDireArrowRenderer::new);
 		event.registerEntityRenderer(Registration.DecoyEntity.get(), DecoyEntityRender::new);
 	}

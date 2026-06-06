@@ -4,6 +4,9 @@ import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -21,6 +24,9 @@ import java.util.UUID;
 
 public class PortalProjectile extends ThrowableItemProjectile {
 
+	private static final EntityDataAccessor<Boolean> IS_PRIMARY = SynchedEntityData.defineId(PortalProjectile.class,
+			EntityDataSerializers.BOOLEAN);
+
 	private UUID gunUUID = UUID.randomUUID();
 	private boolean isPrimaryType;
 	private boolean isAdvanced;
@@ -31,11 +37,22 @@ public class PortalProjectile extends ThrowableItemProjectile {
 		super(type, level);
 	}
 
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(IS_PRIMARY, true);
+	}
+
+	public boolean isPrimaryType() {
+		return this.entityData.get(IS_PRIMARY);
+	}
+
 	public PortalProjectile(Level level, LivingEntity shooter, UUID gunUUID, boolean isPrimaryType, boolean isAdvanced,
 			NBTHelpers.PortalDestination portalDestination, int lifespanTicks) {
 		super(Registration.PortalProjectile.get(), shooter, level);
 		this.gunUUID = gunUUID;
 		this.isPrimaryType = isPrimaryType;
+		this.entityData.set(IS_PRIMARY, isPrimaryType);
 		this.isAdvanced = isAdvanced;
 		this.portalDestination = portalDestination;
 		this.lifespanTicks = lifespanTicks;
@@ -108,6 +125,7 @@ public class PortalProjectile extends ThrowableItemProjectile {
 			gunUUID = new UUID(compound.getLong("GunUUIDMost"), compound.getLong("GunUUIDLeast"));
 		}
 		isPrimaryType = compound.getBoolean("Primary");
+		this.entityData.set(IS_PRIMARY, isPrimaryType);
 		isAdvanced = compound.getBoolean("Advanced");
 		lifespanTicks = compound.getInt("LifespanTicks");
 		if (compound.contains("PortalDestination")) {

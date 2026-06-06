@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.client;
 
 import com.direwolf20.justdirethings.JustDireThings;
+import com.direwolf20.justdirethings.common.items.PortalGunV2;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -71,7 +72,8 @@ public class KeyBindings {
 		public boolean isActive() {
 			Player player = Minecraft.getInstance().player;
 			return !KeyConflictContext.GUI.isActive() && player != null
-					&& (!ToggleableItem.getToggleableItem(player).isEmpty());
+					&& (!ToggleableItem.getToggleableItem(player).isEmpty()
+							|| !PortalGunV2.getPortalGunv2(player).isEmpty());
 		}
 
 		@Override

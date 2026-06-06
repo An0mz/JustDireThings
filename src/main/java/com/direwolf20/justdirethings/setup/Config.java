@@ -306,7 +306,7 @@ public class Config {
 	}
 
 	private static void portalGunConfig() {
-		COMMON_BUILDER.comment("Portal Gun").push(CATEGORY_PORTAL_GUN);
+		COMMON_BUILDER.comment("Advanced Portal Gun").push(CATEGORY_PORTAL_GUN);
 		PORTAL_GUN_MAX_FE = COMMON_BUILDER.comment("Max FE capacity of the Portal Gun")
 				.defineInRange("portal_gun_max_fe", 1000000, 1, Integer.MAX_VALUE);
 		PORTAL_GUN_FE_COST = COMMON_BUILDER.comment("FE cost per portal shot").defineInRange("portal_gun_fe_cost", 5000,
@@ -316,13 +316,13 @@ public class Config {
 		PORTAL_GUN_FLUID_COST = COMMON_BUILDER.comment("mB of portal fluid consumed per shot")
 				.defineInRange("portal_gun_fluid_cost", 500, 0, Integer.MAX_VALUE);
 		PORTAL_GUN_LIFESPAN = COMMON_BUILDER
-				.comment("How many ticks a portal remains open (6000 = 5 minutes, -1 for infinite)")
-				.defineInRange("portal_gun_lifespan", 6000, -1, Integer.MAX_VALUE);
+				.comment("How many ticks a portal remains open (200 = 10 seconds, -1 for infinite)")
+				.defineInRange("portal_gun_lifespan", 200, -1, Integer.MAX_VALUE);
 		COMMON_BUILDER.pop();
 	}
 
 	private static void portalGunOriginalConfig() {
-		COMMON_BUILDER.comment("Portal Gun (Original)").push(CATEGORY_PORTAL_GUN_ORIGINAL);
+		COMMON_BUILDER.comment("Portal Gun").push(CATEGORY_PORTAL_GUN_ORIGINAL);
 		PORTAL_GUN_ORIGINAL_MAX_FLUID = COMMON_BUILDER
 				.comment("Max mB of unstable portal fluid the original Portal Gun can hold")
 				.defineInRange("portal_gun_original_max_fluid", 4000, 1, Integer.MAX_VALUE);

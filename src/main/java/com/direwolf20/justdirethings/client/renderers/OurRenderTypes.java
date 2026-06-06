@@ -97,6 +97,13 @@ public class OurRenderTypes extends RenderType {
 					.setDepthTestState(LEQUAL_DEPTH_TEST).setCullState(NO_CULL).setWriteMaskState(COLOR_WRITE)
 					.createCompositeState(false));
 
+	public static final RenderType TRIANGLE_STRIP = create("PortalRadialStrip", DefaultVertexFormat.POSITION_COLOR,
+			VertexFormat.Mode.TRIANGLE_STRIP, 1024, false, false,
+			RenderType.CompositeState.builder().setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
+					.setTransparencyState(TRANSLUCENT_TRANSPARENCY).setTextureState(NO_TEXTURE)
+					.setDepthTestState(LEQUAL_DEPTH_TEST).setCullState(NO_CULL).setWriteMaskState(COLOR_WRITE)
+					.createCompositeState(false));
+
 	public static final RenderType BlackSphere = create("BlackSphere", DefaultVertexFormat.POSITION_COLOR,
 			VertexFormat.Mode.QUADS, 256, false, true,
 			RenderType.CompositeState.builder().setShaderState(RenderStateShard.POSITION_COLOR_SHADER)
