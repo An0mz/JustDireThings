@@ -184,6 +184,7 @@
   "justdirethings.ability": "Ability: %s - %s",
   "justdirethings.key.category": "Just Dire Things",
   "justdirethings.key.toggle_tool": "Toggle Tool Abilities",
+  "justdirethings.key.tool_ui": "Open Tool UI",
   "justdirethings.lowenergy": "Insufficient Energy",
   "justdirethings.lowtimefluid": "Insufficient Time Fluid",
   "justdirethings.lowportalfluid": "Insufficient Portal Fluid",

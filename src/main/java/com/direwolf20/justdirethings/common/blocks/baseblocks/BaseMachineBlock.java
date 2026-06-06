@@ -94,10 +94,12 @@ public abstract class BaseMachineBlock extends Block implements EntityBlock {
 		if (newState.getBlock() != this) {
 			BlockEntity blockEntity = worldIn.getBlockEntity(pos);
 			if (blockEntity instanceof BaseMachineBE baseMachineBE) {
-				IItemHandler iItemHandler = baseMachineBE.getMachineHandler();
-				for (int i = 0; i < iItemHandler.getSlots(); ++i) {
-					Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(),
-							iItemHandler.getStackInSlot(i));
+				if (baseMachineBE.isDefaultSettings()) {
+					IItemHandler iItemHandler = baseMachineBE.getMachineHandler();
+					for (int i = 0; i < iItemHandler.getSlots(); ++i) {
+						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(),
+								iItemHandler.getStackInSlot(i));
+					}
 				}
 			}
 		}

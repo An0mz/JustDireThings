@@ -184,6 +184,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		// Keys
 		add("justdirethings.key.category", "Just Dire Things");
 		add("justdirethings.key.toggle_tool", "Toggle Tool Abilities");
+		add("justdirethings.key.tool_ui", "Open Tool UI");
 
 		// Abilities
 		add(Ability.MOBSCANNER.getLocalization(), "Mob Scanner");
