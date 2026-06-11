@@ -104,32 +104,32 @@ public class JustDireBlockStates extends BlockStateProvider {
 	}
 
 	private void sidedNonRotating() {
-		simpleBlock(Registration.BlockBreakerT2.get(),
+		directionalBlock(Registration.BlockBreakerT2.get(),
 				models().cubeBottomTop(Registration.BlockBreakerT2.getId().getPath(),
 						modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_side"),
 						modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_bottom"),
 						modLoc("block/" + Registration.BlockBreakerT2.getId().getPath() + "_top")));
-		simpleBlock(Registration.BlockPlacerT2.get(),
+		directionalBlock(Registration.BlockPlacerT2.get(),
 				models().cubeBottomTop(Registration.BlockPlacerT2.getId().getPath(),
 						modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_side"),
 						modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_bottom"),
 						modLoc("block/" + Registration.BlockPlacerT2.getId().getPath() + "_top")));
-		simpleBlock(Registration.ClickerT2.get(),
+		directionalBlock(Registration.ClickerT2.get(),
 				models().cubeBottomTop(Registration.ClickerT2.getId().getPath(),
 						modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_side"),
 						modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_bottom"),
 						modLoc("block/" + Registration.ClickerT2.getId().getPath() + "_top")));
-		simpleBlock(Registration.SensorT2.get(),
+		directionalBlock(Registration.SensorT2.get(),
 				models().cubeBottomTop(Registration.SensorT2.getId().getPath(),
 						modLoc("block/" + Registration.SensorT2.getId().getPath() + "_side"),
 						modLoc("block/" + Registration.SensorT2.getId().getPath() + "_bottom"),
 						modLoc("block/" + Registration.SensorT2.getId().getPath() + "_top")));
-		simpleBlock(Registration.DropperT2.get(),
+		directionalBlock(Registration.DropperT2.get(),
 				models().cubeBottomTop(Registration.DropperT2.getId().getPath(),
 						modLoc("block/" + Registration.DropperT2.getId().getPath() + "_side"),
 						modLoc("block/" + Registration.DropperT2.getId().getPath() + "_bottom"),
 						modLoc("block/" + Registration.DropperT2.getId().getPath() + "_top")));
-		simpleBlock(Registration.BlockSwapperT2.get(),
+		directionalBlock(Registration.BlockSwapperT2.get(),
 				models().cubeBottomTop(Registration.BlockSwapperT2.getId().getPath(),
 						modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_side"),
 						modLoc("block/" + Registration.BlockSwapperT2.getId().getPath() + "_bottom"),

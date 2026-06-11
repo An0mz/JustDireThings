@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class DropperT2BE extends DropperT1BE implements AreaAffectingBE, Powered
 
 	public DropperT2BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
 		super(pType, pPos, pBlockState);
+		areaAffectingData = new AreaAffectingData(pBlockState.getValue(BlockStateProperties.FACING));
 		MACHINE_SLOTS = 9; // Slot for dropping
 		poweredMachineData = new PoweredMachineContainerData(this);
 		energyStorage = new MachineEnergyStorage(getMaxEnergy());

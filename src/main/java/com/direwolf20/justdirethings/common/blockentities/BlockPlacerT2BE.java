@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -31,6 +32,7 @@ public class BlockPlacerT2BE extends BlockPlacerT1BE implements PoweredMachineBE
 
 	public BlockPlacerT2BE(BlockPos pPos, BlockState pBlockState) {
 		super(Registration.BlockPlacerT2BE.get(), pPos, pBlockState);
+		areaAffectingData = new AreaAffectingData(pBlockState.getValue(BlockStateProperties.FACING));
 		poweredMachineData = new PoweredMachineContainerData(this);
 		energyStorage = new MachineEnergyStorage(getMaxEnergy());
 		filterHandler = new FilterBasicHandler(9);

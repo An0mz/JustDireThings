@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -36,6 +37,7 @@ public class ClickerT2BE extends ClickerT1BE implements PoweredMachineBE, AreaAf
 
 	public ClickerT2BE(BlockPos pPos, BlockState pBlockState) {
 		super(Registration.ClickerT2BE.get(), pPos, pBlockState);
+		areaAffectingData = new AreaAffectingData(pBlockState.getValue(BlockStateProperties.FACING));
 		poweredMachineData = new PoweredMachineContainerData(this);
 		energyStorage = new MachineEnergyStorage(getMaxEnergy());
 		filterHandler = new FilterBasicHandler(9);

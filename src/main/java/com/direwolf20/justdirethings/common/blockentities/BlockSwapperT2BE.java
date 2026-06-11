@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -31,6 +32,7 @@ public class BlockSwapperT2BE extends BlockSwapperT1BE implements PoweredMachine
 
 	public BlockSwapperT2BE(BlockPos pPos, BlockState pBlockState) {
 		super(Registration.BlockSwapperT2BE.get(), pPos, pBlockState);
+		areaAffectingData = new AreaAffectingData(pBlockState.getValue(BlockStateProperties.FACING));
 		poweredMachineData = new PoweredMachineContainerData(this);
 		energyStorage = new MachineEnergyStorage(getMaxEnergy());
 		filterHandler = new FilterBasicHandler(9);

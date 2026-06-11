@@ -37,6 +37,11 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.BlockHitResult;
 
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
 import javax.annotation.Nullable;
 
 public class BlockPlacerT2 extends BaseMachineBlock {
@@ -69,5 +74,16 @@ public class BlockPlacerT2 extends BaseMachineBlock {
 							buf.writeBlockPos(blockPos);
 						}));
 		return InteractionResult.SUCCESS;
+	}
+
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return this.defaultBlockState().setValue(BlockStateProperties.FACING,
+				context.getNearestLookingDirection().getOpposite());
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.FACING);
 	}
 }
