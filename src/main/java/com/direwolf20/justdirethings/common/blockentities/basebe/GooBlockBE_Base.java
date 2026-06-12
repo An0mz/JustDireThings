@@ -16,13 +16,16 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -168,12 +171,34 @@ public class GooBlockBE_Base extends BlockEntity {
 
 		for (GooSpreadRecipe gooSpreadRecipe : recipeManager
 				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get())) {
-			if (gooSpreadRecipe.matches(getLevel(), coords, this, state)) {
+			if (gooSpreadRecipe.matches(getLevel(), coords, this, state) && isDimensionAllowed(gooSpreadRecipe)) {
 				return gooSpreadRecipe;
 			}
 		}
 
 		return null;
+	}
+
+	private boolean isDimensionAllowed(GooSpreadRecipe recipe) {
+		List<? extends Object> restrictions = Config.GOO_DIMENSION_RESTRICTIONS.get();
+		if (restrictions.isEmpty())
+			return true;
+
+		ResourceLocation inputKey = ForgeRegistries.BLOCKS.getKey(recipe.getInput().getBlock());
+		if (inputKey == null)
+			return true;
+		String inputBlockId = inputKey.toString();
+		String currentDimension = level.dimension().location().toString();
+
+		for (Object entry : restrictions) {
+			if (!(entry instanceof List<?> pair) || pair.size() < 2)
+				continue;
+			if (pair.get(0) instanceof String blockId && pair.get(1) instanceof String dimId) {
+				if (blockId.equals(inputBlockId))
+					return dimId.equals(currentDimension);
+			}
+		}
+		return true;
 	}
 
 	@Override

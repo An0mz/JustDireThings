@@ -54,6 +54,7 @@ public class Config {
 	public static final String CATEGORY_GOO = "goo";
 	public static ForgeConfigSpec.BooleanValue GOO_CAN_DIE;
 	public static ForgeConfigSpec.DoubleValue GOO_DEATH_CHANCE;
+	public static ForgeConfigSpec.ConfigValue<List<? extends Object>> GOO_DIMENSION_RESTRICTIONS;
 
 	public static final String CATEGORY_PARADOX = "paradox_machine";
 	public static ForgeConfigSpec.IntValue PARADOX_TOTAL_RF_CAPACITY;
@@ -153,6 +154,15 @@ public class Config {
 		GOO_DEATH_CHANCE = COMMON_BUILDER.comment(
 				"The chance (0.0 to 1.0) that a goo block deactivates after each block conversion. Default is 0.1 (10%)")
 				.defineInRange("goo_death_chance", 0.1, 0.0, 1.0);
+		GOO_DIMENSION_RESTRICTIONS = COMMON_BUILDER
+				.comment(
+						"Restricts goo spreading for specific input blocks to only work in certain dimensions.",
+						"Each entry is a pair [\"block_id\", \"dimension_id\"].",
+						"A block listed here will ONLY be converted by goo while the goo is in the specified dimension.",
+						"Blocks not listed here are unrestricted and spread in any dimension.")
+				.defineListAllowEmpty(List.of("gooSpreadingSpecificDimensions"), List::of,
+						e -> e instanceof List<?> lst && lst.size() == 2
+								&& lst.get(0) instanceof String && lst.get(1) instanceof String);
 		COMMON_BUILDER.pop();
 	}
 
