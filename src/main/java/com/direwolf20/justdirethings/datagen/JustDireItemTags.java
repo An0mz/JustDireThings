@@ -25,6 +25,18 @@ public class JustDireItemTags extends ItemTagsProvider {
 
 	public static final TagKey<Item> WRENCHES = forgeTag("wrenches");
 	public static final TagKey<Item> TOOLS_WRENCH = forgeTag("tools/wrench");
+	public static final TagKey<Item> BUCKETS = forgeTag("buckets");
+	public static final TagKey<Item> BUCKETS_REFINED_T2_FUEL = forgeTag("buckets/refined_t2_fuel");
+	public static final TagKey<Item> BUCKETS_REFINED_T3_FUEL = forgeTag("buckets/refined_t3_fuel");
+	public static final TagKey<Item> BUCKETS_REFINED_T4_FUEL = forgeTag("buckets/refined_t4_fuel");
+	public static final TagKey<Item> BUCKETS_UNREFINED_T2_FUEL = forgeTag("buckets/unrefined_t2_fuel");
+	public static final TagKey<Item> BUCKETS_UNREFINED_T3_FUEL = forgeTag("buckets/unrefined_t3_fuel");
+	public static final TagKey<Item> BUCKETS_UNREFINED_T4_FUEL = forgeTag("buckets/unrefined_t4_fuel");
+	public static final TagKey<Item> BUCKETS_PORTAL_FLUID = forgeTag("buckets/portal_fluid");
+	public static final TagKey<Item> BUCKETS_UNSTABLE_PORTAL_FLUID = forgeTag("buckets/unstable_portal_fluid");
+	public static final TagKey<Item> BUCKETS_TIME_FLUID = forgeTag("buckets/time_fluid");
+	public static final TagKey<Item> BUCKETS_XP_FLUID = forgeTag("buckets/xp_fluid");
+	public static final TagKey<Item> BUCKETS_POLYMORPHIC_FLUID = forgeTag("buckets/polymorphic_fluid");
 
 	private static TagKey<Item> forgeTag(String name) {
 		return ItemTags.create(new ResourceLocation("forge", name));
@@ -77,6 +89,21 @@ public class JustDireItemTags extends ItemTagsProvider {
 		tag(Tags.Items.GEMS).add(Registration.Celestigem.get());
 		tag(WRENCHES).add(Registration.FerricoreWrench.get());
 		tag(TOOLS_WRENCH).add(Registration.FerricoreWrench.get());
+		tag(BUCKETS_REFINED_T2_FUEL).add(Registration.REFINED_T2_FLUID_BUCKET.get());
+		tag(BUCKETS_REFINED_T3_FUEL).add(Registration.REFINED_T3_FLUID_BUCKET.get());
+		tag(BUCKETS_REFINED_T4_FUEL).add(Registration.REFINED_T4_FLUID_BUCKET.get());
+		tag(BUCKETS_UNREFINED_T2_FUEL).add(Registration.UNREFINED_T2_FLUID_BUCKET.get());
+		tag(BUCKETS_UNREFINED_T3_FUEL).add(Registration.UNREFINED_T3_FLUID_BUCKET.get());
+		tag(BUCKETS_UNREFINED_T4_FUEL).add(Registration.UNREFINED_T4_FLUID_BUCKET.get());
+		tag(BUCKETS_PORTAL_FLUID).add(Registration.PORTAL_FLUID_BUCKET.get());
+		tag(BUCKETS_UNSTABLE_PORTAL_FLUID).add(Registration.UNSTABLE_PORTAL_FLUID_BUCKET.get());
+		tag(BUCKETS_TIME_FLUID).add(Registration.TIME_FLUID_BUCKET.get());
+		tag(BUCKETS_XP_FLUID).add(Registration.XP_FLUID_BUCKET.get());
+		tag(BUCKETS_POLYMORPHIC_FLUID).add(Registration.POLYMORPHIC_FLUID_BUCKET.get());
+		tag(BUCKETS).addTag(BUCKETS_REFINED_T2_FUEL).addTag(BUCKETS_REFINED_T3_FUEL).addTag(BUCKETS_REFINED_T4_FUEL)
+				.addTag(BUCKETS_UNREFINED_T2_FUEL).addTag(BUCKETS_UNREFINED_T3_FUEL).addTag(BUCKETS_UNREFINED_T4_FUEL)
+				.addTag(BUCKETS_PORTAL_FLUID).addTag(BUCKETS_UNSTABLE_PORTAL_FLUID).addTag(BUCKETS_TIME_FLUID)
+				.addTag(BUCKETS_XP_FLUID).addTag(BUCKETS_POLYMORPHIC_FLUID);
 		tag(Tags.Items.ARMORS_BOOTS).add(Registration.FerricoreBoots.get());
 		tag(Tags.Items.ARMORS_LEGGINGS).add(Registration.FerricoreLeggings.get());
 		tag(Tags.Items.ARMORS_CHESTPLATES).add(Registration.FerricoreChestplate.get());

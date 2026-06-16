@@ -33,6 +33,8 @@ public class DataGenerators {
 		JustDireEntityTags entityTags = new JustDireEntityTags(packOutput, lookupProvider,
 				event.getExistingFileHelper());
 		generator.addProvider(event.includeServer(), entityTags);
+		JustDireFluidTags fluidTags = new JustDireFluidTags(packOutput, lookupProvider, event.getExistingFileHelper());
+		generator.addProvider(event.includeServer(), fluidTags);
 
 		generator.addProvider(event.includeClient(),
 				new JustDireBlockStates(packOutput, event.getExistingFileHelper()));

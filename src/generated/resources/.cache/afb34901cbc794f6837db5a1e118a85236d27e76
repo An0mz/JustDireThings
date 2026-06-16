@@ -1,0 +1,12 @@
+// 1.20.1	2026-06-16T02:15:18.356251	JustDireThings Fluid Tags
+1575e8ce929a86428b8301219e6cf920daae9235 data/forge/tags/fluids/fluids/polymorphic_fluid.json
+94c97f34e7f1fc90202d68a3bdc222b578deb330 data/forge/tags/fluids/fluids/portal_fluid.json
+acfe2a67a3cc60d3d0ff007eef0df91baf3b685e data/forge/tags/fluids/fluids/refined_t2_fuel.json
+aef9fe5d198074c73401482bc5844d7c0b09f156 data/forge/tags/fluids/fluids/refined_t3_fuel.json
+7f551e31e58420721e705d03f4fb6e1c513df956 data/forge/tags/fluids/fluids/refined_t4_fuel.json
+c15f74817572ea0a0017951feb68aa263083b534 data/forge/tags/fluids/fluids/time_fluid.json
+c99e8556d4eba05ad7d0dc312d7cf2c453274aa2 data/forge/tags/fluids/fluids/unrefined_t2_fuel.json
+6dd4f48fb23d69e92974e301b0cd3e31737f24c6 data/forge/tags/fluids/fluids/unrefined_t3_fuel.json
+6cf77c7f6a6f80b5a2e5c1ba5e4f19f9d1fecacc data/forge/tags/fluids/fluids/unrefined_t4_fuel.json
+6fac27587180abf1028f4cb49b257cf184886a26 data/forge/tags/fluids/fluids/unstable_portal_fluid.json
+4b9b3a6ecd1d1f8f2126de0205ba8a8f546694b5 data/forge/tags/fluids/fluids/xp_fluid.json

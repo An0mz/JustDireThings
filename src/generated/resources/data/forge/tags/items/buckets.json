@@ -1,0 +1,15 @@
+{
+  "values": [
+    "#forge:buckets/refined_t2_fuel",
+    "#forge:buckets/refined_t3_fuel",
+    "#forge:buckets/refined_t4_fuel",
+    "#forge:buckets/unrefined_t2_fuel",
+    "#forge:buckets/unrefined_t3_fuel",
+    "#forge:buckets/unrefined_t4_fuel",
+    "#forge:buckets/portal_fluid",
+    "#forge:buckets/unstable_portal_fluid",
+    "#forge:buckets/time_fluid",
+    "#forge:buckets/xp_fluid",
+    "#forge:buckets/polymorphic_fluid"
+  ]
+}

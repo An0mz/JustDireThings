@@ -2,7 +2,10 @@ package com.direwolf20.justdirethings.common.blockentities;
 
 import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
+import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.setup.Registration;
+import com.direwolf20.justdirethings.util.MiningCollect;
 import com.direwolf20.justdirethings.util.MiscHelpers;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
@@ -141,9 +144,26 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 
 	public List<BlockPos> findBlocksToMine(FakePlayer fakePlayer) {
 		List<BlockPos> returnList = new ArrayList<>();
-		BlockPos blockPos = getBlockPos().relative(getBlockState().getValue(BlockStateProperties.FACING));
-		if (isBlockValid(fakePlayer, blockPos))
-			returnList.add(blockPos);
+		BlockPos targetPos = getBlockPos().relative(getBlockState().getValue(BlockStateProperties.FACING));
+		if (!isBlockValid(fakePlayer, targetPos))
+			return returnList;
+
+		ItemStack tool = getTool();
+		if (tool.getItem() instanceof ToggleableTool toggleableTool
+				&& toggleableTool.canUseAbility(tool, Ability.HAMMER)) {
+			int hammerSize = ToggleableTool.getToolValue(tool, Ability.HAMMER.getName());
+			Direction facing = getFacing();
+			setFakePlayerData(tool, fakePlayer, targetPos, facing);
+			MiningCollect
+					.collect(fakePlayer, targetPos, facing.getOpposite(), level, hammerSize,
+							MiningCollect.SizeMode.NORMAL, tool)
+					.stream().filter(pos -> isBlockValid(fakePlayer, pos)).map(BlockPos::immutable)
+					.forEach(returnList::add);
+			if (returnList.isEmpty())
+				returnList.add(targetPos);
+		} else {
+			returnList.add(targetPos);
+		}
 		return returnList;
 	}
 

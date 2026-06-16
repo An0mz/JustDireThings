@@ -1,8 +1,20 @@
-// 1.20.1	2026-05-18T22:40:19.4512273	JustDireThings Item Tags
+// 1.20.1	2026-06-16T02:15:18.3527407	JustDireThings Item Tags
 9fe82440f26f7e59a365714fd11ee981a11262e6 data/forge/tags/items/armors/boots.json
 350112b77f94c2e8d536974bea9b257a579f98a6 data/forge/tags/items/armors/chestplates.json
 c107d94f65b5298e856eba5c50f99533edf539e2 data/forge/tags/items/armors/helmets.json
 e14d698c7f531253b35e435a3728305e9ec371a0 data/forge/tags/items/armors/leggings.json
+e2981aee4c4aa7fdffa42123bdf44b7e95bf37e8 data/forge/tags/items/buckets.json
+184b90659c5f96c73aaf371ea40c3e280c9f7890 data/forge/tags/items/buckets/polymorphic_fluid.json
+d02bf29fa8a53104ff3c183d5b74c8079de2c924 data/forge/tags/items/buckets/portal_fluid.json
+78c961ff9f816457fb642932b659ceaed0ac26f8 data/forge/tags/items/buckets/refined_t2_fuel.json
+f04518974d8c5755f2afc2ce57c581e8053c655f data/forge/tags/items/buckets/refined_t3_fuel.json
+01fc9d56caac7ef38f2d02be120800a91cdd49bc data/forge/tags/items/buckets/refined_t4_fuel.json
+c9c1d64a6f109a53b9e164959939c036921bb426 data/forge/tags/items/buckets/time_fluid.json
+f5ba2e4c396e34ff44f4dd50592350092f12a83f data/forge/tags/items/buckets/unrefined_t2_fuel.json
+607faa093434c82ad284c72f45e4bd545a4a18c5 data/forge/tags/items/buckets/unrefined_t3_fuel.json
+3c3a28311c2ff9e710e421124f3d88245d7ff39c data/forge/tags/items/buckets/unrefined_t4_fuel.json
+bc871cb68ab1ee5c3916b91fffab606870e06ed4 data/forge/tags/items/buckets/unstable_portal_fluid.json
+ac932dd2db2032266e7a0c74d05a59bdb19cfa43 data/forge/tags/items/buckets/xp_fluid.json
 c144a5adcf337b1e974a62a8dc0d8f29311210b4 data/forge/tags/items/gems.json
 55719b9c6f0430ad38bf081d697aa5406cc27cfb data/forge/tags/items/ingots.json
 9171911801c408201b64d8d6b0f5818f194267e9 data/forge/tags/items/raw_materials.json
