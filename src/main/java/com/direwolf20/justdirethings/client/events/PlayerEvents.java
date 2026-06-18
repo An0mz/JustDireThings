@@ -25,7 +25,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import net.minecraft.world.item.Item;
 
-import java.util.Collections;
 import java.util.Set;
 
 import com.direwolf20.justdirethings.common.network.PacketHandler;

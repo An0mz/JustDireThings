@@ -298,8 +298,8 @@ public interface ToggleableTool extends ToggleableItem {
 	}
 
 	static int getAnyCooldown(ItemStack itemStack, Ability ability, long currentTick) {
-		CompoundTag tag = itemStack.getOrCreateTag();
-		if (!tag.contains("cooldowns"))
+		CompoundTag tag = itemStack.getTag();
+		if (tag == null || !tag.contains("cooldowns"))
 			return -1;
 		ListTag cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
 		for (int i = 0; i < cooldowns.size(); i++) {
@@ -313,8 +313,8 @@ public interface ToggleableTool extends ToggleableItem {
 	}
 
 	static int getCooldown(ItemStack itemStack, Ability ability, boolean active, long currentTick) {
-		CompoundTag tag = itemStack.getOrCreateTag();
-		if (!tag.contains("cooldowns"))
+		CompoundTag tag = itemStack.getTag();
+		if (tag == null || !tag.contains("cooldowns"))
 			return -1;
 		ListTag cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
 		for (int i = 0; i < cooldowns.size(); i++) {
@@ -329,8 +329,8 @@ public interface ToggleableTool extends ToggleableItem {
 	}
 
 	static void tickCooldowns(ItemStack itemStack, Player player) {
-		CompoundTag tag = itemStack.getOrCreateTag();
-		if (!tag.contains("cooldowns"))
+		CompoundTag tag = itemStack.getTag();
+		if (tag == null || !tag.contains("cooldowns"))
 			return;
 		long currentTick = player.level().getGameTime();
 		boolean changed = false;
@@ -437,9 +437,12 @@ public interface ToggleableTool extends ToggleableItem {
 
 	default boolean armorTick(Level level, Player player, ItemStack itemStack) {
 		boolean anyRan = false;
-		for (Ability ability : getPassiveTickAbilities(itemStack)) {
-			if (ability.action.execute(level, player, itemStack))
-				anyRan = true;
+		for (Ability ability : getAbilities()) {
+			if ((ability.useType == Ability.UseType.PASSIVE_TICK || ability.useType == Ability.UseType.PASSIVE_TICK_COOLDOWN)
+					&& ability.action != null && canUseAbility(itemStack, ability)) {
+				if (ability.action.execute(level, player, itemStack))
+					anyRan = true;
+			}
 		}
 		tickCooldowns(itemStack, player);
 		return anyRan;
@@ -644,8 +647,8 @@ public interface ToggleableTool extends ToggleableItem {
 	}
 
 	static boolean getSetting(ItemStack stack, String setting) {
-		CompoundTag tagCompound = stack.getOrCreateTag();
-		return !tagCompound.contains(setting) || tagCompound.getBoolean(setting); // Enabled by default
+		CompoundTag tagCompound = stack.getTag();
+		return tagCompound == null || !tagCompound.contains(setting) || tagCompound.getBoolean(setting);
 	}
 
 	@Override
