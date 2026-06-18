@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:smithing_transform",
+  "type": "justdirethings:tier_upgrade",
   "template": { "item": "justdirethings:template_blazegold" },
   "base": { "item": "justdirethings:ferricore_leggings" },
   "addition": { "item": "justdirethings:blazegold_ingot" },

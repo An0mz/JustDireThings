@@ -445,6 +445,17 @@ public class AbilityMethods {
 		return false;
 	}
 
+	public static boolean nightVision(Level level, Player player, ItemStack itemStack) {
+		if (level.isClientSide)
+			return false;
+		MobEffectInstance current = player.getEffect(MobEffects.NIGHT_VISION);
+		if (current == null || current.getDuration() < 220) {
+			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, false, false));
+			Helpers.damageTool(itemStack, player, Ability.NIGHTVISION);
+		}
+		return false;
+	}
+
 	public static boolean extinguish(Level level, Player player, ItemStack itemStack) {
 		if (level.isClientSide)
 			return false;

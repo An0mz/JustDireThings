@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,9 +19,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.client.event.RenderHighlightEvent;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class RenderHighlight {
+	private static BlockPos lastTargetPos = null;
+	private static Item lastToolItem = null;
+	private static long lastComputeTick = -1;
+	private static Set<BlockPos> cachedBreakPositions = Collections.emptySet();
+
 	@SubscribeEvent
 	static void renderBlockHighlight(RenderHighlightEvent.Block evt) {
 		Minecraft mc = Minecraft.getInstance();
@@ -32,8 +39,16 @@ public class RenderHighlight {
 			return;
 		Level level = player.level();
 		BlockPos targetPos = evt.getTarget().getBlockPos();
-		Set<BlockPos> breakBlockPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, targetPos,
-				player, level.getBlockState(targetPos));
+		long currentTick = level.getGameTime();
+		Item currentItem = toggleableToolStack.getItem();
+		if (!targetPos.equals(lastTargetPos) || currentItem != lastToolItem || currentTick - lastComputeTick >= 10) {
+			lastTargetPos = targetPos;
+			lastToolItem = currentItem;
+			lastComputeTick = currentTick;
+			cachedBreakPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, targetPos,
+					player, level.getBlockState(targetPos));
+		}
+		Set<BlockPos> breakBlockPositions = cachedBreakPositions;
 		Vec3 vec3 = evt.getCamera().getPosition();
 		double d0 = vec3.x();
 		double d1 = vec3.y();

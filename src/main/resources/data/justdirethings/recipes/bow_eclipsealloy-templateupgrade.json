@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:smithing_transform",
+  "type": "justdirethings:tier_upgrade",
   "template": { "item": "justdirethings:template_eclipsealloy" },
   "base": { "item": "justdirethings:bow_celestigem" },
   "addition": { "item": "justdirethings:eclipsealloy_ingot" },

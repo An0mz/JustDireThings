@@ -18,6 +18,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashSet;
@@ -67,7 +68,7 @@ public class PlayerEvents {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void BreakSpeed(PlayerEvent.BreakSpeed event) {
 		Player player = event.getEntity();
 		ItemStack stack = player.getMainHandItem(); // Assuming the tool is in the main hand
@@ -83,7 +84,7 @@ public class PlayerEvents {
 			BlockPos originalPos = event.getPosition().get();
 			BlockState originalState = level.getBlockState(event.getPosition().get());
 			float originalDestroySpeed = originalState.getDestroySpeed(level, originalPos);
-			float targetSpeed = event.getOriginalSpeed();
+			float targetSpeed = event.getNewSpeed();
 			float cumulativeDestroy = 0;
 			if (originalDestroySpeed <= 0)
 				return;
@@ -104,14 +105,14 @@ public class PlayerEvents {
 						: ((float) breakBlockPositions.size() / radius);
 				cumulativeDestroy = (cumulativeDestroy / breakBlockPositions.size()) * modifier; // Up to 3 times slower
 				float relative = originalDestroySpeed / cumulativeDestroy;
-				targetSpeed = event.getOriginalSpeed() * relative;
+				targetSpeed = event.getNewSpeed() * relative;
 			}
 			if (toggleableTool.canUseAbility(stack, Ability.INSTABREAK)
 					&& stack.getItem() instanceof PoweredTool poweredTool
 					&& poweredTool.getAvailableEnergy(stack) >= rfCost) {
 				targetSpeed = 10000f;
 			}
-			if (targetSpeed != event.getOriginalSpeed())
+			if (targetSpeed != event.getNewSpeed())
 				event.setNewSpeed(targetSpeed);
 		}
 	}

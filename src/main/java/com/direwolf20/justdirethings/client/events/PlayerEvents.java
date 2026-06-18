@@ -23,6 +23,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+import net.minecraft.world.item.Item;
+
+import java.util.Collections;
 import java.util.Set;
 
 import com.direwolf20.justdirethings.common.network.PacketHandler;
@@ -31,6 +34,8 @@ public class PlayerEvents {
 
 	private static BlockPos destroyPos = BlockPos.ZERO;
 	private static int gameTicksMining = 0;
+	private static Item cachedItem = null;
+	private static Set<BlockPos> cachedBreakPositions = null;
 
 	@SubscribeEvent
 	public static void LeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
@@ -92,6 +97,7 @@ public class PlayerEvents {
 			} else {
 				gameTicksMining = 0;
 				destroyPos = blockPos;
+				cachedBreakPositions = null;
 			}
 			incrementDestroyProgress(level, blockState, blockPos, player, toggleableTool, itemStack);
 		}
@@ -99,8 +105,12 @@ public class PlayerEvents {
 
 	private static float incrementDestroyProgress(Level level, BlockState pState, BlockPos pPos, Player player,
 			ToggleableTool toggleableTool, ItemStack toggleableToolStack) {
-		Set<BlockPos> breakBlockPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos,
-				player, pState);
+		Item currentItem = toggleableToolStack.getItem();
+		if (cachedBreakPositions == null || cachedItem != currentItem) {
+			cachedItem = currentItem;
+			cachedBreakPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos, player, pState);
+		}
+		Set<BlockPos> breakBlockPositions = cachedBreakPositions;
 		int i = gameTicksMining;
 		float f = pState.getDestroyProgress(player, player.level(), pPos) * (float) (i + 1);
 		int j = (int) (f * 10.0F);
@@ -118,8 +128,8 @@ public class PlayerEvents {
 
 	private static void cancelBreaks(Level level, BlockState pState, BlockPos pPos, Player player,
 			ToggleableTool toggleableTool, ItemStack toggleableToolStack) {
-		Set<BlockPos> breakBlockPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos,
-				player, pState);
+		Set<BlockPos> breakBlockPositions = cachedBreakPositions != null ? cachedBreakPositions
+				: toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos, player, pState);
 		for (BlockPos blockPos : breakBlockPositions) {
 			if (blockPos.equals(pPos))
 				continue; // Let the vanilla mechanics handle the block we're hitting

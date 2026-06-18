@@ -65,6 +65,7 @@ import com.direwolf20.justdirethings.common.items.abilityupgrades.Upgrade;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeBlank;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeTemplate;
 import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.TierUpgradeRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import net.minecraft.core.registries.Registries;
@@ -987,4 +988,6 @@ public class Registration {
 
 	public static final Supplier<AbilityRecipe.Serializer> ABILITY_RECIPE_SERIALIZER = RECIPE_SERIALIZERS
 			.register("ability", AbilityRecipe.Serializer::new);
+	public static final Supplier<TierUpgradeRecipe.Serializer> TIER_UPGRADE_RECIPE_SERIALIZER = RECIPE_SERIALIZERS
+			.register("tier_upgrade", TierUpgradeRecipe.Serializer::new);
 }
