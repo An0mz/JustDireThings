@@ -45,8 +45,8 @@ public class RenderHighlight {
 			lastTargetPos = targetPos;
 			lastToolItem = currentItem;
 			lastComputeTick = currentTick;
-			cachedBreakPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, targetPos,
-					player, level.getBlockState(targetPos));
+			cachedBreakPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, targetPos, player,
+					level.getBlockState(targetPos));
 		}
 		Set<BlockPos> breakBlockPositions = cachedBreakPositions;
 		Vec3 vec3 = evt.getCamera().getPosition();

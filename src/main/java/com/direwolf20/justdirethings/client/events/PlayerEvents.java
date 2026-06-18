@@ -82,6 +82,7 @@ public class PlayerEvents {
 		BlockState blockState = level.getBlockState(blockPos);
 		if (event.getAction() == PlayerInteractEvent.LeftClickBlock.Action.START) { // Client and Server
 			if (level.isClientSide) {
+				clearBreakAnimations(player, level);
 				gameTicksMining = 0;
 				destroyPos = blockPos;
 			}
@@ -94,6 +95,7 @@ public class PlayerEvents {
 			if (blockPos.equals(destroyPos)) {
 				gameTicksMining++;
 			} else {
+				clearBreakAnimations(player, level);
 				gameTicksMining = 0;
 				destroyPos = blockPos;
 				cachedBreakPositions = null;
@@ -107,7 +109,8 @@ public class PlayerEvents {
 		Item currentItem = toggleableToolStack.getItem();
 		if (cachedBreakPositions == null || cachedItem != currentItem) {
 			cachedItem = currentItem;
-			cachedBreakPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos, player, pState);
+			cachedBreakPositions = toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos, player,
+					pState);
 		}
 		Set<BlockPos> breakBlockPositions = cachedBreakPositions;
 		int i = gameTicksMining;
@@ -127,12 +130,26 @@ public class PlayerEvents {
 
 	private static void cancelBreaks(Level level, BlockState pState, BlockPos pPos, Player player,
 			ToggleableTool toggleableTool, ItemStack toggleableToolStack) {
-		Set<BlockPos> breakBlockPositions = cachedBreakPositions != null ? cachedBreakPositions
+		Set<BlockPos> breakBlockPositions = cachedBreakPositions != null
+				? cachedBreakPositions
 				: toggleableTool.getBreakBlockPositions(toggleableToolStack, level, pPos, player, pState);
 		for (BlockPos blockPos : breakBlockPositions) {
 			if (blockPos.equals(pPos))
-				continue; // Let the vanilla mechanics handle the block we're hitting
-			player.level().destroyBlockProgress(player.getId() + generatePosHash(blockPos), blockPos, -1);
+				continue;
+			int breakerId = player.getId() + generatePosHash(blockPos);
+			if (player instanceof ServerPlayer serverPlayer)
+				sendDestroyBlockProgress(breakerId, blockPos, -1, serverPlayer);
+			else
+				player.level().destroyBlockProgress(breakerId, blockPos, -1);
+		}
+	}
+
+	private static void clearBreakAnimations(Player player, Level level) {
+		if (cachedBreakPositions != null) {
+			for (BlockPos pos : cachedBreakPositions) {
+				level.destroyBlockProgress(player.getId() + generatePosHash(pos), pos, -1);
+			}
+			cachedBreakPositions = null;
 		}
 	}
 

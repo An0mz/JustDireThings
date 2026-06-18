@@ -15,7 +15,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -216,9 +218,22 @@ public interface ToggleableTool extends ToggleableItem {
 			totalExp = totalExp + exp;
 			Helpers.combineDrops(drops, breakBlocks(pLevel, breakPos, pEntityLiving, pStack, true, instaBreak));
 		}
-		if (!pLevel.isClientSide)
+		if (!pLevel.isClientSide) {
 			handleDrops(pStack, (ServerLevel) pLevel, pPos, pEntityLiving, breakBlockPositions, drops, pState,
 					totalExp);
+			// ServerLevel.destroyBlockProgress(-1) only broadcasts when the server tracked
+			// the ID, which it never does for our custom IDs (animations are set purely
+			// client-side). Send the reset packet directly to bypass that check.
+			if (pEntityLiving instanceof ServerPlayer serverPlayer) {
+				for (BlockPos breakPos : breakBlockPositions) {
+					if (!breakPos.equals(pPos)) {
+						int breakerId = serverPlayer.getId() + (31 * 31 * breakPos.getX()) + (31 * breakPos.getY())
+								+ breakPos.getZ();
+						serverPlayer.connection.send(new ClientboundBlockDestructionPacket(breakerId, breakPos, -1));
+					}
+				}
+			}
+		}
 	}
 
 	static int getInstantRFCost(float cumulativeDestroy) {
@@ -438,8 +453,9 @@ public interface ToggleableTool extends ToggleableItem {
 	default boolean armorTick(Level level, Player player, ItemStack itemStack) {
 		boolean anyRan = false;
 		for (Ability ability : getAbilities()) {
-			if ((ability.useType == Ability.UseType.PASSIVE_TICK || ability.useType == Ability.UseType.PASSIVE_TICK_COOLDOWN)
-					&& ability.action != null && canUseAbility(itemStack, ability)) {
+			if ((ability.useType == Ability.UseType.PASSIVE_TICK
+					|| ability.useType == Ability.UseType.PASSIVE_TICK_COOLDOWN) && ability.action != null
+					&& canUseAbility(itemStack, ability)) {
 				if (ability.action.execute(level, player, itemStack))
 					anyRan = true;
 			}
