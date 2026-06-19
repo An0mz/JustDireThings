@@ -88,10 +88,23 @@ public abstract class BaseMachineContainer extends BaseContainer {
 	}
 
 	@Override
-	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-		if (baseMachineBE instanceof FilterableBE && slotId >= MACHINE_SLOTS && slotId < FILTER_SLOTS) {
+	public void broadcastChanges() {
+		// If the block entity at our position was replaced (e.g. by AE2 annihilation +
+		// formation planes), close this stale container before any slot interaction can
+		// duplicate items by draining the old BE while the new BE still holds the NBT.
+		if (baseMachineBE != null && player.level().getBlockEntity(pos) != baseMachineBE) {
+			player.closeContainer();
 			return;
 		}
+		super.broadcastChanges();
+	}
+
+	@Override
+	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+		if (baseMachineBE != null && player.level().getBlockEntity(pos) != baseMachineBE)
+			return;
+		if (baseMachineBE instanceof FilterableBE && slotId >= MACHINE_SLOTS && slotId < FILTER_SLOTS)
+			return;
 		super.clicked(slotId, dragType, clickTypeIn, player);
 	}
 
