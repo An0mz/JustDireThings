@@ -1,6 +1,8 @@
 package com.direwolf20.justdirethings.client.blockentityrenders.baseber;
 
+import com.direwolf20.justdirethings.client.ShaderMods;
 import com.direwolf20.justdirethings.client.renderers.DireModelBlockRenderer;
+import com.direwolf20.justdirethings.client.renderers.DireUVRemapVertexConsumer;
 import com.direwolf20.justdirethings.client.renderers.DireVertexConsumer;
 import com.direwolf20.justdirethings.client.renderers.OurRenderTypes;
 import com.direwolf20.justdirethings.common.blockentities.basebe.GooBlockBE_Base;
@@ -20,6 +22,7 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
@@ -207,41 +210,96 @@ public class GooBlockRender_Base<T extends GooBlockBE_Base> implements BlockEnti
 		matrixStackIn.mulPose(direction.getRotation());
 		matrixStackIn.translate(-0.5, -0.5, -0.5);
 
-		// Pattern Block - Renders to the depth buffer ONLY, to set the pattern that we
-		// draw
-		VertexConsumer builder = bufferIn.getBuffer(OurRenderTypes.GooPattern);
-		DireVertexConsumer chunksConsumer = new DireVertexConsumer(builder, 1f);
-		BakedModel ibakedmodel = blockrendererdispatcher.getBlockModel(pattern);
+		boolean shadersActive = ShaderMods.usingShaders();
+		BakedModel patternModel = blockrendererdispatcher.getBlockModel(pattern);
 
-		randomSource.setSeed(pattern.getSeed(renderAtPos));
-
-		List<BakedQuad> list;
-		for (Direction renderSide : Direction.values()) {
-			list = ibakedmodel.getQuads(pattern, renderSide, randomSource, ModelData.EMPTY, null);
-			if (!list.isEmpty()) {
-				blockpos$mutableblockpos.setWithOffset(renderAtPos, renderSide);
-				modelBlockRenderer.renderModelFaceAO(level, pattern, renderAtPos, matrixStackIn, chunksConsumer, list,
-						afloat, bitset, modelblockrenderer$ambientocclusionface, combinedOverlayIn);
+		if (shadersActive) {
+			// Shader-compatible two-pass depth trick.
+			// Both passes use RENDERTYPE_CUTOUT_SHADER so Iris routes them to the same
+			// GBuffer program (gbuffers_terrain) with identical vertex transforms.
+			// That makes the GL_EQUAL test in Pass 2 reliably match the depths written
+			// by Pass 1, something that fails when the two passes use different shaders
+			// (e.g. entity_alpha vs translucent) because Iris applies different transforms.
+			//
+			// Pass 1 (GooPatternShader): cutout alpha test discards transparent pattern
+			// pixels so only opaque blob pixels write depth. VIEW_OFFSET_Z_LAYERING
+			// shifts that depth slightly in front of terrain so non-blob positions (whose
+			// depth buffer value is unmodified terrain depth) never satisfy GL_EQUAL.
+			//
+			// Pass 2 (GooShaderBackface): renders the same pattern geometry (same depth
+			// with same offset) but with UVs remapped to the goo block's sprite so the
+			// goo block's texture appears rather than the gray pattern texture. GL_EQUAL
+			// passes only at blob-pixel depths, giving the correct spreading shape.
+			VertexConsumer pass1Builder = bufferIn.getBuffer(OurRenderTypes.GooPatternShader);
+			DireVertexConsumer pass1Consumer = new DireVertexConsumer(pass1Builder, 1f);
+			randomSource.setSeed(pattern.getSeed(renderAtPos));
+			List<BakedQuad> list;
+			for (Direction renderSide : Direction.values()) {
+				list = patternModel.getQuads(pattern, renderSide, randomSource, ModelData.EMPTY, null);
+				if (!list.isEmpty()) {
+					blockpos$mutableblockpos.setWithOffset(renderAtPos, renderSide);
+					modelBlockRenderer.renderModelFaceAO(level, pattern, renderAtPos, matrixStackIn, pass1Consumer,
+							list, afloat, bitset, modelblockrenderer$ambientocclusionface, combinedOverlayIn);
+				}
 			}
-		}
 
-		// Now draw the REAL block overtop, but with BlendFunction set to EQUALS --
-		// Meaning it'll only draw where theres already a pixel exiting from the pattern
-		// above
-		VertexConsumer builder2 = bufferIn.getBuffer(OurRenderTypes.RenderBlockBackface);
-		DireVertexConsumer chunksConsumer2 = new DireVertexConsumer(builder2, transparency);
-		BakedModel ibakedmodel2 = blockrendererdispatcher.getBlockModel(renderState);
-
-		List<BakedQuad> list2;
-		for (Direction renderSide : Direction.values()) {
-			Direction newDirection = getDirection(direction, renderSide); // Because we've rotated it, we need to draw
-																			// the correct ambient occlusion side
-			modelBlockRenderer.setDirection(newDirection); // Overrode BlockModelRenderer to allow this
-			list2 = ibakedmodel2.getQuads(renderState, renderSide, randomSource, ModelData.EMPTY, null);
-			if (!list2.isEmpty()) {
+			BakedModel gooModel2 = blockrendererdispatcher.getBlockModel(renderState);
+			VertexConsumer pass2Builder = bufferIn.getBuffer(OurRenderTypes.GooShaderBackface);
+			DireVertexConsumer pass2Alpha = new DireVertexConsumer(pass2Builder, transparency);
+			RandomSource gooRandom = RandomSource.create();
+			gooRandom.setSeed(renderState.getSeed(renderAtPos));
+			randomSource.setSeed(pattern.getSeed(renderAtPos));
+			for (Direction renderSide : Direction.values()) {
+				List<BakedQuad> patternQuads = patternModel.getQuads(pattern, renderSide, randomSource, ModelData.EMPTY,
+						null);
+				if (patternQuads.isEmpty())
+					continue;
+				List<BakedQuad> gooQuads = gooModel2.getQuads(renderState, renderSide, gooRandom, ModelData.EMPTY,
+						null);
+				if (gooQuads.isEmpty())
+					continue;
+				TextureAtlasSprite patternSprite = patternQuads.get(0).getSprite();
+				TextureAtlasSprite gooSprite = gooQuads.get(0).getSprite();
+				DireUVRemapVertexConsumer uvConsumer = new DireUVRemapVertexConsumer(pass2Alpha, patternSprite,
+						gooSprite);
+				Direction newDirection = getDirection(direction, renderSide);
+				modelBlockRenderer.setDirection(newDirection);
 				blockpos$mutableblockpos.setWithOffset(renderAtPos, renderSide);
-				modelBlockRenderer.renderModelFaceAO(level, renderState, renderAtPos, matrixStackIn, chunksConsumer2,
-						list2, afloat, bitset, modelblockrenderer$ambientocclusionface, combinedOverlayIn);
+				modelBlockRenderer.renderModelFaceAO(level, renderState, renderAtPos, matrixStackIn, uvConsumer,
+						patternQuads, afloat, bitset, modelblockrenderer$ambientocclusionface, combinedOverlayIn);
+			}
+		} else {
+			// Pass 1: write the pattern shape into the depth buffer only.
+			// Pass 2 uses GL_EQUAL to mask the goo block to that shape.
+			BakedModel gooModel = blockrendererdispatcher.getBlockModel(renderState);
+			VertexConsumer builder = bufferIn.getBuffer(OurRenderTypes.GooPattern);
+			DireVertexConsumer chunksConsumer = new DireVertexConsumer(builder, 1f);
+			randomSource.setSeed(pattern.getSeed(renderAtPos));
+			List<BakedQuad> list;
+			for (Direction renderSide : Direction.values()) {
+				list = patternModel.getQuads(pattern, renderSide, randomSource, ModelData.EMPTY, null);
+				if (!list.isEmpty()) {
+					blockpos$mutableblockpos.setWithOffset(renderAtPos, renderSide);
+					modelBlockRenderer.renderModelFaceAO(level, pattern, renderAtPos, matrixStackIn, chunksConsumer,
+							list, afloat, bitset, modelblockrenderer$ambientocclusionface, combinedOverlayIn);
+				}
+			}
+
+			// Pass 2: draw the goo block masked by the depth pattern above.
+			VertexConsumer builder2 = bufferIn.getBuffer(OurRenderTypes.RenderBlockBackface);
+			DireVertexConsumer chunksConsumer2 = new DireVertexConsumer(builder2, transparency);
+			randomSource.setSeed(renderState.getSeed(renderAtPos));
+			List<BakedQuad> list2;
+			for (Direction renderSide : Direction.values()) {
+				Direction newDirection = getDirection(direction, renderSide);
+				modelBlockRenderer.setDirection(newDirection);
+				list2 = gooModel.getQuads(renderState, renderSide, randomSource, ModelData.EMPTY, null);
+				if (!list2.isEmpty()) {
+					blockpos$mutableblockpos.setWithOffset(renderAtPos, renderSide);
+					modelBlockRenderer.renderModelFaceAO(level, renderState, renderAtPos, matrixStackIn,
+							chunksConsumer2, list2, afloat, bitset, modelblockrenderer$ambientocclusionface,
+							combinedOverlayIn);
+				}
 			}
 		}
 

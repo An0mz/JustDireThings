@@ -82,6 +82,37 @@ public class OurRenderTypes extends RenderType {
 	 * GooPattern.apply(pId); }
 	 */
 
+	// Shader-compatible goo spread, Pass 1: depth-only write using the cutout
+	// alpha test so only opaque blob pixels set depth.
+	// VIEW_OFFSET_Z_LAYERING shifts the depth slightly in front of terrain so
+	// non-blob terrain depth != blob pattern depth, making GL_EQUAL selective.
+	public static final RenderType GooPatternShader = create("GooPatternShader", DefaultVertexFormat.BLOCK,
+			VertexFormat.Mode.QUADS, 256, false, false,
+			RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_CUTOUT_SHADER)
+					.setLightmapState(LIGHTMAP).setTextureState(BLOCK_SHEET).setCullState(NO_CULL)
+					.setLayeringState(VIEW_OFFSET_Z_LAYERING).setWriteMaskState(RenderStateShard.DEPTH_WRITE)
+					.createCompositeState(true));
+
+	// Shader-compatible goo spread, Pass 2: uses the same shader and polygon
+	// offset as GooPatternShader so Iris applies an identical vertex transform to
+	// both passes — guaranteeing that GL_EQUAL matches exactly the blob-pixel
+	// depths written by Pass 1 and not the unchanged terrain depth elsewhere.
+	public static final RenderType GooShaderBackface = create("GooShaderBackface", DefaultVertexFormat.BLOCK,
+			VertexFormat.Mode.QUADS, 256, false, false,
+			RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_CUTOUT_SHADER)
+					.setLightmapState(LIGHTMAP).setTextureState(BLOCK_SHEET).setLayeringState(VIEW_OFFSET_Z_LAYERING)
+					.setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(EQUAL_DEPTH_TEST)
+					.setCullState(NO_CULL).setOverlayState(RenderStateShard.OVERLAY).createCompositeState(false));
+
+	// Kept for the non-shader path — unused in shader mode (GooPatternShader /
+	// GooShaderBackface are used instead).
+	public static final RenderType GooBlockFallback = create("GooBlockFallback", DefaultVertexFormat.BLOCK,
+			VertexFormat.Mode.QUADS, 256, false, false,
+			RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_TRANSLUCENT_SHADER)
+					.setLightmapState(LIGHTMAP).setTextureState(BLOCK_SHEET).setLayeringState(VIEW_OFFSET_Z_LAYERING)
+					.setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST)
+					.setCullState(NO_CULL).setOverlayState(RenderStateShard.OVERLAY).createCompositeState(false));
+
 	public static final RenderType RenderBlockFade = create("RenderBlockFade", DefaultVertexFormat.BLOCK,
 			VertexFormat.Mode.QUADS, 256, false, false,
 			RenderType.CompositeState.builder().setShaderState(RenderStateShard.RENDERTYPE_SOLID_SHADER)
