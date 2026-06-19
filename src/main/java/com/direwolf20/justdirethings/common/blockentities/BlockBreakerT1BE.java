@@ -3,7 +3,9 @@ package com.direwolf20.justdirethings.common.blockentities;
 import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.Helpers;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
+import net.minecraftforge.items.IItemHandler;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MiningCollect;
 import com.direwolf20.justdirethings.util.MiscHelpers;
@@ -267,9 +269,26 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 
 	public void breakBlock(FakePlayer player, BlockPos breakPos, ItemStack itemStack, BlockState state) {
 		itemStack.onBlockStartBreak(breakPos, player);
+		BlockEntity blockEntity = level.getBlockEntity(breakPos);
 		boolean success = level.destroyBlock(breakPos, false, player);
 		if (success) {
-			Block.dropResources(state, level, breakPos, level.getBlockEntity(breakPos), player, itemStack);
+			if (level instanceof ServerLevel serverLevel && itemStack.getItem() instanceof ToggleableTool toggleableTool
+					&& toggleableTool.canUseAbility(itemStack, Ability.DROPTELEPORT)
+					&& itemStack.isCorrectToolForDrops(state)) {
+				IItemHandler handler = ToggleableTool.getBoundHandler(serverLevel, itemStack);
+				if (handler != null) {
+					List<ItemStack> drops = Block.getDrops(state, serverLevel, breakPos, blockEntity, player,
+							itemStack);
+					Helpers.teleportDrops(drops, handler, itemStack, player);
+					for (ItemStack drop : drops)
+						Block.popResource(level, breakPos, drop);
+					state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
+				} else {
+					Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
+				}
+			} else {
+				Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
+			}
 			if (state.getDestroySpeed(level, breakPos) != 0.0F)
 				itemStack.hurtAndBreak(1, player, pOnBroken -> {
 				});

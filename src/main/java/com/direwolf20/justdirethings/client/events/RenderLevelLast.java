@@ -7,11 +7,13 @@ import com.direwolf20.justdirethings.client.renderers.RenderHelpers;
 import com.direwolf20.justdirethings.common.blockentities.basebe.AreaAffectingBE;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
+import com.direwolf20.justdirethings.util.NBTHelpers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -44,15 +46,49 @@ public class RenderLevelLast {
 			if (toggleableTool.canUseAbilityAndDurability(heldItemMain, Ability.VOIDSHIFT)
 					&& ToggleableTool.getSetting(heldItemMain, Ability.VOIDSHIFT.getName() + "_render"))
 				MiscRenders.renderTransparentPlayer(evt, player, heldItemMain);
+			if (toggleableTool.canUseAbility(heldItemMain, Ability.DROPTELEPORT)) {
+				NBTHelpers.BoundInventory boundInventory = ToggleableTool.getBoundInventory(heldItemMain);
+				if (boundInventory != null && player.level().dimension().equals(boundInventory.globalPos().dimension()))
+					renderSelectedBlock(evt, boundInventory.globalPos().pos(), boundInventory.direction());
+			}
 		}
 		if (heldItemOff.getItem() instanceof ToggleableTool toggleableTool) {
 			ThingFinder.render(evt, player, heldItemOff);
 			if (toggleableTool.canUseAbilityAndDurability(heldItemOff, Ability.VOIDSHIFT)
 					&& ToggleableTool.getSetting(heldItemOff, Ability.VOIDSHIFT.getName() + "_render"))
 				MiscRenders.renderTransparentPlayer(evt, player, heldItemOff);
+			if (toggleableTool.canUseAbility(heldItemOff, Ability.DROPTELEPORT)) {
+				NBTHelpers.BoundInventory boundInventory = ToggleableTool.getBoundInventory(heldItemOff);
+				if (boundInventory != null && player.level().dimension().equals(boundInventory.globalPos().dimension()))
+					renderSelectedBlock(evt, boundInventory.globalPos().pos(), boundInventory.direction());
+			}
 		}
 
 		renderAreaPreviews(evt, player);
+	}
+
+	private static void renderSelectedBlock(RenderLevelStageEvent evt, BlockPos pos, Direction direction) {
+		Minecraft mc = Minecraft.getInstance();
+		MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
+		Vec3 view = mc.gameRenderer.getMainCamera().getPosition();
+
+		PoseStack matrix = evt.getPoseStack();
+		matrix.pushPose();
+		matrix.translate(-view.x(), -view.y(), -view.z());
+		matrix.pushPose();
+		matrix.translate(pos.getX(), pos.getY(), pos.getZ());
+		matrix.translate(-0.005f, -0.005f, -0.005f);
+		matrix.scale(1.01f, 1.01f, 1.01f);
+
+		Matrix4f positionMatrix = matrix.last().pose();
+		RenderHelpers.renderBoxSolid(positionMatrix, buffer, BlockPos.ZERO, 0, 1, 0, 0.25f);
+		RenderHelpers.renderFaceSolid(positionMatrix, buffer, BlockPos.ZERO, direction, 0, 0, 1, 0.25f);
+		RenderHelpers.renderLines(matrix, BlockPos.ZERO, BlockPos.ZERO, Color.WHITE, buffer);
+		matrix.popPose();
+		matrix.popPose();
+
+		buffer.endBatch(OurRenderTypes.SolidBoxArea);
+		buffer.endBatch(OurRenderTypes.lines());
 	}
 
 	private static void renderAreaPreviews(RenderLevelStageEvent evt, Player player) {

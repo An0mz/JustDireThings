@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -172,6 +173,56 @@ public class RenderHelpers {
 				vc.vertex(m4, x2, y2, z2).color(r, g, b, a).endVertex();
 				vc.vertex(m4, x3, y3, z3).color(r, g, b, a).endVertex();
 				vc.vertex(m4, x4, y4, z4).color(r, g, b, a).endVertex();
+			}
+		}
+	}
+
+	public static void renderFaceSolid(Matrix4f matrix, MultiBufferSource buffer, BlockPos pos, Direction direction,
+			float r, float g, float b, float alpha) {
+		float sx = (float) (pos.getX() - 0.001);
+		float sy = (float) (pos.getY() - 0.001);
+		float sz = (float) (pos.getZ() - 0.001);
+		float ex = (float) (pos.getX() + 1.0015);
+		float ey = (float) (pos.getY() + 1.0015);
+		float ez = (float) (pos.getZ() + 1.0015);
+
+		VertexConsumer builder = buffer.getBuffer(OurRenderTypes.SolidBoxArea);
+		switch (direction) {
+			case DOWN -> {
+				builder.vertex(matrix, sx, sy, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, sy, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, sy, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, sy, ez).color(r, g, b, alpha).endVertex();
+			}
+			case UP -> {
+				builder.vertex(matrix, sx, ey, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, ey, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, ey, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, ey, sz).color(r, g, b, alpha).endVertex();
+			}
+			case NORTH -> {
+				builder.vertex(matrix, sx, sy, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, ey, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, ey, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, sy, sz).color(r, g, b, alpha).endVertex();
+			}
+			case SOUTH -> {
+				builder.vertex(matrix, sx, sy, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, sy, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, ey, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, ey, ez).color(r, g, b, alpha).endVertex();
+			}
+			case WEST -> {
+				builder.vertex(matrix, sx, sy, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, sy, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, ey, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, sx, ey, sz).color(r, g, b, alpha).endVertex();
+			}
+			case EAST -> {
+				builder.vertex(matrix, ex, sy, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, ey, sz).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, ey, ez).color(r, g, b, alpha).endVertex();
+				builder.vertex(matrix, ex, sy, ez).color(r, g, b, alpha).endVertex();
 			}
 		}
 	}
