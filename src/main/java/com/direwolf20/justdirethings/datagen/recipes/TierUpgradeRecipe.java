@@ -94,6 +94,18 @@ public class TierUpgradeRecipe implements SmithingRecipe {
 		return Registration.TIER_UPGRADE_RECIPE_SERIALIZER.get();
 	}
 
+	public Ingredient getTemplate() {
+		return template;
+	}
+
+	public Ingredient getBase() {
+		return base;
+	}
+
+	public Ingredient getAddition() {
+		return addition;
+	}
+
 	public static class Serializer implements RecipeSerializer<TierUpgradeRecipe> {
 		@Override
 		public TierUpgradeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

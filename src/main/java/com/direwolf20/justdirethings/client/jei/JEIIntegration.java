@@ -5,6 +5,7 @@ import com.direwolf20.justdirethings.client.jei.ghostfilters.GhostFilterBasic;
 import com.direwolf20.justdirethings.client.screens.basescreens.BaseScreen;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.TierUpgradeRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
 import com.direwolf20.justdirethings.setup.Registration;
@@ -101,6 +102,7 @@ public class JEIIntegration implements IModPlugin {
 	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
 		IExtendableSmithingRecipeCategory smithingCategory = registration.getSmithingCategory();
 		smithingCategory.addExtension(AbilityRecipe.class, new AbilityRecipeCategory());
+		smithingCategory.addExtension(TierUpgradeRecipe.class, new TierUpgradeRecipeCategory());
 	}
 
 	@Override
