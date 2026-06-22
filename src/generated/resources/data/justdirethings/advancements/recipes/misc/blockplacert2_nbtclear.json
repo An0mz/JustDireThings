@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_blockplacert2": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:blockplacert2"
+            "items": ["justdirethings:blockplacert2"]
           }
         ]
       },

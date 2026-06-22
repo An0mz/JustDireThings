@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_eclipsealloy_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:eclipsealloy_ingot"
+            "items": ["justdirethings:eclipsealloy_ingot"]
           }
         ]
       },

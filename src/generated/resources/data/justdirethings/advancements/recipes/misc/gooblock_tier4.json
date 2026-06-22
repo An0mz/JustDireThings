@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_goo_block3": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:gooblock_tier3"
+            "items": ["justdirethings:gooblock_tier3"]
           }
         ]
       },

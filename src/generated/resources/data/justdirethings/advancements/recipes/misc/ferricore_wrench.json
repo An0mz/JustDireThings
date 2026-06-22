@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_ferricore_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:ferricore_ingot"
+            "items": ["justdirethings:ferricore_ingot"]
           }
         ]
       },

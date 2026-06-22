@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_blazegold_block": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:blazegold_block"
+            "items": ["justdirethings:blazegold_block"]
           }
         ]
       },

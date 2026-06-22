@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_generatorfluidt1": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:generatorfluidt1"
+            "items": ["justdirethings:generatorfluidt1"]
           }
         ]
       },

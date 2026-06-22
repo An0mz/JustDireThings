@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_celestigem": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:celestigem"
+            "items": ["justdirethings:celestigem"]
           }
         ]
       },

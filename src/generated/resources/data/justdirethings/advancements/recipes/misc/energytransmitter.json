@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_blazegold_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:blazegold_ingot"
+            "items": ["justdirethings:blazegold_ingot"]
           }
         ]
       },

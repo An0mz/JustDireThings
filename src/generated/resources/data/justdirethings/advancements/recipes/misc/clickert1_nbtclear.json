@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_clickert1": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:clickert1"
+            "items": ["justdirethings:clickert1"]
           }
         ]
       },

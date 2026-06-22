@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_eclipsealloy_raw": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:raw_eclipsealloy"
+            "items": ["justdirethings:raw_eclipsealloy"]
           }
         ]
       },

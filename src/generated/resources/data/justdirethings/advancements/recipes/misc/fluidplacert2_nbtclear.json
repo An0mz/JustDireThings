@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_fluidplacert2": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:fluidplacert2"
+            "items": ["justdirethings:fluidplacert2"]
           }
         ]
       },

@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_playeraccessor": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:playeraccessor"
+            "items": ["justdirethings:playeraccessor"]
           }
         ]
       },

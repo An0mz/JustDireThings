@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_coal_t2": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:coal_t2"
+            "items": ["justdirethings:coal_t2"]
           }
         ]
       },

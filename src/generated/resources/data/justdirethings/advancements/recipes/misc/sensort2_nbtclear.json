@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_sensort2": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:sensort2"
+            "items": ["justdirethings:sensort2"]
           }
         ]
       },

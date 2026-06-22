@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_energytransmitter": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:energytransmitter"
+            "items": ["justdirethings:energytransmitter"]
           }
         ]
       },

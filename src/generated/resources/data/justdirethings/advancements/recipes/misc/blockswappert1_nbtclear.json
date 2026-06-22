@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_blockswappert1": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:blockswappert1"
+            "items": ["justdirethings:blockswappert1"]
           }
         ]
       },

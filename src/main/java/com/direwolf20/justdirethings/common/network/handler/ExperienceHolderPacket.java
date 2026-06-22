@@ -19,9 +19,9 @@ public class ExperienceHolderPacket {
 			if (container instanceof ExperienceHolderContainer experienceHolderContainer
 					&& experienceHolderContainer.baseMachineBE instanceof ExperienceHolderBE be) {
 				if (payload.add())
-					be.storeExp(sender, payload.levels());
+					be.storeExpButton(sender, payload.levels());
 				else
-					be.extractExp(sender, payload.levels());
+					be.extractExpButton(sender, payload.levels());
 			}
 		});
 		ctx.get().setPacketHandled(true);

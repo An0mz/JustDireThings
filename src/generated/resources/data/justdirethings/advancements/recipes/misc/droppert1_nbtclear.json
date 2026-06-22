@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_droppert1": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:droppert1"
+            "items": ["justdirethings:droppert1"]
           }
         ]
       },

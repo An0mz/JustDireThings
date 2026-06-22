@@ -1,11 +1,11 @@
-{
+﻿{
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_experienceholder": {
       "conditions": {
         "items": [
           {
-            "items": "justdirethings:experienceholder"
+            "items": ["justdirethings:experienceholder"]
           }
         ]
       },

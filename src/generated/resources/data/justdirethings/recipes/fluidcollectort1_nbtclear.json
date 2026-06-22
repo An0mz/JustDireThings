@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "group": "justdirethings",
@@ -8,7 +8,6 @@
     }
   ],
   "result": {
-    "count": 1,
-    "id": "justdirethings:fluidcollectort1"
+    "item": "justdirethings:fluidcollectort1"
   }
 }
