@@ -94,12 +94,10 @@ public abstract class BaseMachineBlock extends Block implements EntityBlock {
 		if (newState.getBlock() != this) {
 			BlockEntity blockEntity = worldIn.getBlockEntity(pos);
 			if (blockEntity instanceof BaseMachineBE baseMachineBE) {
-				if (baseMachineBE.isDefaultSettings()) {
-					IItemHandler iItemHandler = baseMachineBE.getMachineHandler();
-					for (int i = 0; i < iItemHandler.getSlots(); ++i) {
-						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(),
-								iItemHandler.getStackInSlot(i));
-					}
+				IItemHandler iItemHandler = baseMachineBE.getMachineHandler();
+				for (int i = 0; i < iItemHandler.getSlots(); ++i) {
+					Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(),
+							iItemHandler.getStackInSlot(i));
 				}
 			}
 		}
@@ -115,6 +113,7 @@ public abstract class BaseMachineBlock extends Block implements EntityBlock {
 			ItemStack itemStack = new ItemStack(Item.byBlock(this));
 			CompoundTag compoundTag = new CompoundTag();
 			((BaseMachineBE) blockEntity).saveAdditional(compoundTag);
+			compoundTag.remove("machineHandler"); // machine handler items are always dropped in onRemove
 			if (!compoundTag.isEmpty()) {
 				itemStack.getOrCreateTag().put("JustDiresBEData", compoundTag);
 			}
