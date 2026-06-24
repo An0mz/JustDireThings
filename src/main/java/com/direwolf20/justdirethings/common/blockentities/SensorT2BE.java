@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,10 +77,7 @@ public class SensorT2BE extends SensorT1BE implements AreaAffectingBE, PoweredMa
 	}
 
 	public List<Entity> findEntities(AABB aabb) {
-		List<Entity> returnList = new ArrayList<>(
-				level.getEntitiesOfClass(Entity.class, getAABB(getBlockPos()), this::isValidEntity));
-
-		return returnList;
+		return level.getEntitiesOfClass(Entity.class, getAABB(getBlockPos()), this::isValidEntity);
 	}
 
 	public AABB getAABB() {

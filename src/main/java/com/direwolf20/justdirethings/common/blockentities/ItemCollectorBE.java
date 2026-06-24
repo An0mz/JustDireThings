@@ -91,8 +91,7 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
 		assert level != null;
 		AABB searchArea = getAABB(getBlockPos());
 
-		List<ItemEntity> entityList = level.getEntitiesOfClass(ItemEntity.class, searchArea, entity -> true).stream()
-				.toList();
+		List<ItemEntity> entityList = level.getEntitiesOfClass(ItemEntity.class, searchArea);
 
 		if (entityList.isEmpty())
 			return;

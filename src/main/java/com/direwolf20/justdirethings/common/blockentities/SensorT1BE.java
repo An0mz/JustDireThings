@@ -231,9 +231,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 	}
 
 	public List<Entity> findEntities(AABB aabb) {
-		List<Entity> returnList = new ArrayList<>(level.getEntitiesOfClass(Entity.class, aabb, this::isValidEntity));
-
-		return returnList;
+		return level.getEntitiesOfClass(Entity.class, aabb, this::isValidEntity);
 	}
 
 	public boolean isValidEntity(Entity entity) {

@@ -292,8 +292,7 @@ public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE
 			return;
 		assert level != null;
 		AABB searchArea = getAABB(getBlockPos());
-		List<ExperienceOrb> entityList = level.getEntitiesOfClass(ExperienceOrb.class, searchArea, entity -> true)
-				.stream().toList();
+		List<ExperienceOrb> entityList = level.getEntitiesOfClass(ExperienceOrb.class, searchArea);
 		if (entityList.isEmpty())
 			return;
 		for (ExperienceOrb experienceOrb : entityList) {
@@ -307,7 +306,7 @@ public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE
 	private void findTargetPlayer() {
 		assert level != null;
 		AABB searchArea = getAABB(getBlockPos());
-		List<Player> entityList = level.getEntitiesOfClass(Player.class, searchArea, entity -> true).stream().toList();
+		List<Player> entityList = level.getEntitiesOfClass(Player.class, searchArea);
 		if (entityList.isEmpty())
 			return;
 		for (Player player : entityList) {

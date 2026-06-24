@@ -64,7 +64,7 @@ public class AbilityMethods {
 		// Define the search area
 		AABB searchArea = new AABB(playerPos).inflate(radius, radius, radius);
 
-		List<Mob> entityList = level.getEntitiesOfClass(Mob.class, searchArea, entity -> true).stream().toList();
+		List<Mob> entityList = level.getEntitiesOfClass(Mob.class, searchArea);
 
 		for (Mob entity : entityList) {
 			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0)); // 200 ticks = 10 seconds

@@ -129,11 +129,15 @@ public class ParadoxEntity extends Entity {
 	private void handleBlockAbsorption(int currentRadius) {
 		if (currentRadius <= 0)
 			return;
-		BlockPos center = getOnPos();
-		for (BlockPos pos : BlockPos.betweenClosed(center.offset(-currentRadius, -currentRadius, -currentRadius),
-				center.offset(currentRadius, currentRadius, currentRadius))) {
-			if (random.nextFloat() < 0.0125f && isBlockValid(pos)) {
-				blocksToAbsorb.put(new BlockPos(pos), 40 + random.nextInt(41));
+		// Scan for new blocks every 10 ticks only; scale probability to maintain the
+		// same average absorption rate.
+		if (tickCount % 10 == 0) {
+			BlockPos center = getOnPos();
+			for (BlockPos pos : BlockPos.betweenClosed(center.offset(-currentRadius, -currentRadius, -currentRadius),
+					center.offset(currentRadius, currentRadius, currentRadius))) {
+				if (random.nextFloat() < 0.125f && isBlockValid(pos)) {
+					blocksToAbsorb.put(new BlockPos(pos), 40 + random.nextInt(41));
+				}
 			}
 		}
 
