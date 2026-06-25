@@ -173,8 +173,7 @@ public class SensorT2Screen extends BaseMachineScreen<SensorT2Container> impleme
 		super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
 		validateItemStackCache();
 		if (showBlockStates) {
-			guiGraphics.fillGradient(topSectionLeft - 100, topSectionTop, topSectionLeft,
-					topSectionTop + topSectionHeight, 0xC0101010, 0xD0101010);
+			blitNineSlice(guiGraphics, topSectionLeft - 100, topSectionTop, 100, topSectionHeight);
 			if (blockStateSlot != -1
 					&& !container.filterHandler.getStackInSlot(blockStateSlot).equals(scrollPanel.getStateStack()))
 				refreshStateWindow();
@@ -266,6 +265,13 @@ public class SensorT2Screen extends BaseMachineScreen<SensorT2Container> impleme
 					this.scrollPanel.refreshList();
 					return true;
 				}
+			}
+		}
+		if (showBlockStates) {
+			int scrollLeft = topSectionLeft - 95;
+			int scrollBottom = topSectionTop + topSectionHeight - 10;
+			if (x >= scrollLeft && x < scrollLeft + 90 && y >= topSectionTop + 5 && y < scrollBottom) {
+				return scrollPanel.mouseClicked(x, y, btn);
 			}
 		}
 		return super.mouseClicked(x, y, btn);
