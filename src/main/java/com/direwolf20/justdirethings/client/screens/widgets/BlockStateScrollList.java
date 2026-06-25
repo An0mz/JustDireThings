@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.fluids.FluidUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
 		this.parent = parent;
 		this.listWidth = listWidth;
 		this.setRenderBackground(false);
+		this.setRenderTopAndBottom(false);
 		this.refreshList();
 		setLeftPos(left);
 	}
@@ -58,8 +60,15 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
 
 	public void refreshList() {
 		this.clearEntries();
+		Block block = null;
 		if (stateStack.getItem() instanceof BlockItem blockItem) {
-			Block block = blockItem.getBlock();
+			block = blockItem.getBlock();
+		} else {
+			var fluid = FluidUtil.getFluidContained(stateStack);
+			if (fluid.isPresent())
+				block = fluid.get().getFluid().defaultFluidState().createLegacyBlock().getBlock();
+		}
+		if (block != null) {
 			BlockState defaultState = block.defaultBlockState();
 			for (Property<?> property : defaultState.getProperties()) {
 				List<Comparable<?>> values = new ArrayList<>(property.getPossibleValues());
@@ -76,13 +85,21 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
 	}
 
 	@Override
-	public void render(GuiGraphics p_282708_, int p_283242_, int p_282891_, float p_283683_) {
-		renderContentBackground(p_282708_);
-		super.render(p_282708_, p_283242_, p_282891_, p_283683_);
+	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+		// Draw our opaque dark background BEFORE super so entries render on top of it.
+		// (renderBackground() override is never reached when
+		// setRenderBackground(false))
+		renderContentBackground(pGuiGraphics);
+		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		// In 1.20.1, AbstractSelectionList draws dirt-texture gradient overlays at the
+		// top/bottom unconditionally. Cover them with clean dark gradients.
+		pGuiGraphics.fillGradient(this.x0, this.y0, this.x0 + listWidth, this.y0 + 4, 0xFF101010, 0x00101010);
+		pGuiGraphics.fillGradient(this.x0, this.y0 + this.height - 4, this.x0 + listWidth, this.y0 + this.height,
+				0x00101010, 0xFF101010);
 	}
 
 	protected void renderContentBackground(GuiGraphics guiGraphics) {
-		guiGraphics.fillGradient(this.x0, this.y0, this.x0 + listWidth, this.y0 + this.height, 0xC0101010, 0xD0101010);
+		guiGraphics.fill(this.x0, this.y0, this.x0 + listWidth, this.y0 + this.height, 0xFF101010);
 	}
 
 	public class BlockStateEntry extends ObjectSelectionList.Entry<BlockStateEntry> {
@@ -140,7 +157,7 @@ public class BlockStateScrollList extends ObjectSelectionList<BlockStateScrollLi
 			currentValue = possibleValues.get(nextIndex);
 			parent.setPropertyValue(property, currentValue, isAny);
 
-			return false;
+			return true;
 		}
 	}
 }

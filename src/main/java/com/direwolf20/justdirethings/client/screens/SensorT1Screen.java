@@ -154,8 +154,7 @@ public class SensorT1Screen extends BaseMachineScreen<SensorT1Container> impleme
 		super.renderBg(guiGraphics, partialTicks, mouseX, mouseY);
 		validateItemStackCache();
 		if (showBlockStates) {
-			guiGraphics.fillGradient(topSectionLeft - 100, topSectionTop, topSectionLeft,
-					topSectionTop + topSectionHeight, 0xC0101010, 0xD0101010);
+			blitNineSlice(guiGraphics, topSectionLeft - 100, topSectionTop, 100, topSectionHeight);
 			if (blockStateSlot != -1
 					&& !container.filterHandler.getStackInSlot(blockStateSlot).equals(scrollPanel.getStateStack()))
 				refreshStateWindow();
@@ -211,6 +210,15 @@ public class SensorT1Screen extends BaseMachineScreen<SensorT1Container> impleme
 					this.scrollPanel.refreshList();
 					return true;
 				}
+			}
+		}
+		// Route clicks inside the scroll panel directly to it, bypassing
+		// BaseMachineScreen which would intercept any click with hoveredSlot set.
+		if (showBlockStates) {
+			int scrollLeft = topSectionLeft - 95;
+			int scrollBottom = topSectionTop + topSectionHeight - 10;
+			if (x >= scrollLeft && x < scrollLeft + 90 && y >= topSectionTop + 5 && y < scrollBottom) {
+				return scrollPanel.mouseClicked(x, y, btn);
 			}
 		}
 		return super.mouseClicked(x, y, btn);

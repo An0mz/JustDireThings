@@ -19,12 +19,14 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
 import java.util.*;
@@ -107,11 +109,18 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 
 	public static Map<Property<?>, Comparable<?>> loadBlockStateProperty(ListTag listTag, ItemStack stateStack) {
 		Map<Property<?>, Comparable<?>> propertiesMap = new HashMap<>();
+		Block block = null;
 		if (stateStack.getItem() instanceof BlockItem blockItem) {
-			Block block = blockItem.getBlock();
+			block = blockItem.getBlock();
+		} else {
+			var fluid = FluidUtil.getFluidContained(stateStack);
+			if (fluid.isPresent())
+				block = fluid.get().getFluid().defaultFluidState().createLegacyBlock().getBlock();
+		}
+		if (block != null) {
 			for (int i = 0; i < listTag.size(); i++) {
 				CompoundTag propertiesTag = listTag.getCompound(i);
-				propertiesTag.getAllKeys().forEach(propertyName -> {
+				for (String propertyName : propertiesTag.getAllKeys()) {
 					Property<?> property = block.getStateDefinition().getProperty(propertyName);
 					if (property != null) {
 						String valueStr = propertiesTag.getString(propertyName);
@@ -119,8 +128,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 						if (value != null)
 							propertiesMap.put(property, value);
 					}
-				});
-
+				}
 			}
 		}
 		return propertiesMap;
@@ -273,6 +281,11 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 
 	public boolean handleBlockStates(BlockPos blockPos, BlockState blockState) {
 		ItemStack blockItemStack = blockState.getBlock().getCloneItemStack(level, blockPos, blockState);
+		if (blockItemStack.isEmpty()) {
+			FluidState fluidState = blockState.getFluidState();
+			if (!fluidState.isEmpty())
+				blockItemStack = new ItemStack(fluidState.getType().getBucket());
+		}
 		boolean allowList = filterData.allowlist;
 		if (blockStateFilterCache.containsKey(blockState))
 			return blockStateFilterCache.get(blockState);

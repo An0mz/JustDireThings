@@ -272,20 +272,25 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 		BlockEntity blockEntity = level.getBlockEntity(breakPos);
 		boolean success = level.destroyBlock(breakPos, false, player);
 		if (success) {
-			if (level instanceof ServerLevel serverLevel && itemStack.getItem() instanceof ToggleableTool toggleableTool
-					&& toggleableTool.canUseAbility(itemStack, Ability.DROPTELEPORT)
-					&& itemStack.isCorrectToolForDrops(state)) {
-				IItemHandler handler = ToggleableTool.getBoundHandler(serverLevel, itemStack);
-				if (handler != null) {
-					List<ItemStack> drops = Block.getDrops(state, serverLevel, breakPos, blockEntity, player,
-							itemStack);
-					Helpers.teleportDrops(drops, handler, itemStack, player);
-					for (ItemStack drop : drops)
-						Block.popResource(level, breakPos, drop);
-					state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
-				} else {
-					Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
+			if (level instanceof ServerLevel serverLevel
+					&& itemStack.getItem() instanceof ToggleableTool toggleableTool) {
+				List<ItemStack> drops = Block.getDrops(state, serverLevel, breakPos, blockEntity, player, itemStack);
+				if (toggleableTool.canUseAbility(itemStack, Ability.SMELTER)
+						&& itemStack.getDamageValue() < itemStack.getMaxDamage()) {
+					boolean[] smeltedFlag = new boolean[1];
+					drops = Helpers.smeltDrops(serverLevel, drops, itemStack, player, smeltedFlag);
+					if (smeltedFlag[0])
+						ToggleableTool.smelterParticles(serverLevel, Set.of(breakPos));
 				}
+				if (!drops.isEmpty() && toggleableTool.canUseAbility(itemStack, Ability.DROPTELEPORT)
+						&& itemStack.isCorrectToolForDrops(state)) {
+					IItemHandler handler = ToggleableTool.getBoundHandler(serverLevel, itemStack);
+					if (handler != null) {
+						Helpers.teleportDrops(drops, handler, itemStack, player);
+						state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
+					}
+				}
+				Helpers.dropDrops(drops, serverLevel, breakPos);
 			} else {
 				Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
 			}
