@@ -189,8 +189,10 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 		super.tickServer();
 		if (newlyLoaded && level != null) {
 			for (Direction direction : Direction.values()) {
-				level.neighborChanged(getBlockPos().relative(direction), this.getBlockState().getBlock(), getBlockPos());
-				level.updateNeighborsAtExceptFromFacing(getBlockPos().relative(direction), this.getBlockState().getBlock(), direction.getOpposite());
+				level.neighborChanged(getBlockPos().relative(direction), this.getBlockState().getBlock(),
+						getBlockPos());
+				level.updateNeighborsAtExceptFromFacing(getBlockPos().relative(direction),
+						this.getBlockState().getBlock(), direction.getOpposite());
 			}
 			newlyLoaded = false;
 		}
