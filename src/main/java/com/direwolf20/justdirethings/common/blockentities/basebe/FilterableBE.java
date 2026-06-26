@@ -12,11 +12,6 @@ public interface FilterableBE {
 
 	FilterData getFilterData();
 
-	default void setFilterData(FilterData filterData) {
-		FilterData existingData = getFilterData();
-		existingData = filterData;
-	}
-
 	BlockEntity getBlockEntity();
 
 	default void saveFilterSettings(CompoundTag tag) {
@@ -28,13 +23,17 @@ public interface FilterableBE {
 	default void loadFilterSettings(CompoundTag tag) {
 		getFilterData().allowlist = tag.getBoolean("allowlist");
 		getFilterData().compareNBT = tag.getBoolean("compareNBT");
-		getFilterData().blockItemFilter = tag.getInt("blockitemfilter");
+		int blockItemFilter = tag.getInt("blockitemfilter");
+		if (blockItemFilter != -1 && getFilterData().blockItemFilter != -1)
+			getFilterData().blockItemFilter = blockItemFilter;
+		getFilterData().filterCache.clear();
 	}
 
 	default void setFilterSettings(FilterData filterData) {
 		getFilterData().allowlist = filterData.allowlist;
 		getFilterData().compareNBT = filterData.compareNBT;
 		getFilterData().blockItemFilter = filterData.blockItemFilter;
+		getFilterData().filterCache.clear();
 		if (getBlockEntity() instanceof BaseMachineBE baseMachineBE)
 			baseMachineBE.markDirtyClient();
 	}

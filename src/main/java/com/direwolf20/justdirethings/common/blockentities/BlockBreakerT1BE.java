@@ -285,12 +285,11 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 				if (!drops.isEmpty() && toggleableTool.canUseAbility(itemStack, Ability.DROPTELEPORT)
 						&& itemStack.isCorrectToolForDrops(state)) {
 					IItemHandler handler = ToggleableTool.getBoundHandler(serverLevel, itemStack);
-					if (handler != null) {
+					if (handler != null)
 						Helpers.teleportDrops(drops, handler, itemStack, player);
-						state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
-					}
 				}
 				Helpers.dropDrops(drops, serverLevel, breakPos);
+				state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
 			} else {
 				Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
 			}

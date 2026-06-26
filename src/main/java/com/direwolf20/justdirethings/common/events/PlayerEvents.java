@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.events;
 
+import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.items.MachineSettingsCopier;
 import com.direwolf20.justdirethings.common.items.PolymorphicWand;
 import com.direwolf20.justdirethings.common.items.PolymorphicWandV2;
@@ -121,7 +122,8 @@ public class PlayerEvents {
 
 	@SubscribeEvent
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-		if (event.getItemStack().getItem() instanceof MachineSettingsCopier)
+		if (event.getItemStack().getItem() instanceof MachineSettingsCopier
+				&& event.getLevel().getBlockEntity(event.getPos()) instanceof BaseMachineBE)
 			event.setUseBlock(Event.Result.DENY);
 	}
 

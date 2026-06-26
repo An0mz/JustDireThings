@@ -38,6 +38,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 	public SENSE_TARGET sense_target = SENSE_TARGET.BLOCK;
 	public boolean emitRedstone = false;
 	public boolean strongSignal = false;
+	public boolean newlyLoaded = true;
 	public Map<Integer, Map<Property<?>, Comparable<?>>> blockStateProperties = new HashMap<>();
 	public final Map<BlockState, Boolean> blockStateFilterCache = new Object2BooleanOpenHashMap<>();
 	public int senseAmount = 0;
@@ -149,6 +150,12 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 	}
 
 	@Override
+	public void setFilterSettings(FilterData filterData) {
+		FilterableBE.super.setFilterSettings(filterData);
+		blockStateFilterCache.clear();
+	}
+
+	@Override
 	public FilterBasicHandler getFilterHandler() {
 		return filterHandler;
 	}
@@ -180,6 +187,13 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 	@Override
 	public void tickServer() {
 		super.tickServer();
+		if (newlyLoaded && level != null) {
+			for (Direction direction : Direction.values()) {
+				level.neighborChanged(getBlockPos().relative(direction), this.getBlockState().getBlock(), getBlockPos());
+				level.updateNeighborsAtExceptFromFacing(getBlockPos().relative(direction), this.getBlockState().getBlock(), direction.getOpposite());
+			}
+			newlyLoaded = false;
+		}
 		sense();
 	}
 
@@ -280,6 +294,8 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 	}
 
 	public boolean handleBlockStates(BlockPos blockPos, BlockState blockState) {
+		if (blockStateFilterCache.containsKey(blockState))
+			return blockStateFilterCache.get(blockState);
 		ItemStack blockItemStack = blockState.getBlock().getCloneItemStack(level, blockPos, blockState);
 		if (blockItemStack.isEmpty()) {
 			FluidState fluidState = blockState.getFluidState();
@@ -287,8 +303,6 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 				blockItemStack = new ItemStack(fluidState.getType().getBucket());
 		}
 		boolean allowList = filterData.allowlist;
-		if (blockStateFilterCache.containsKey(blockState))
-			return blockStateFilterCache.get(blockState);
 		boolean returnValue = isStackValidFilter(blockItemStack);
 		outerLoop : for (Map.Entry<Integer, Map<Property<?>, Comparable<?>>> propertyValues : blockStateProperties
 				.entrySet()) {
@@ -309,7 +323,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 		}
 
 		blockStateFilterCache.put(blockState, returnValue);
-		return blockStateFilterCache.get(blockState);
+		return returnValue;
 	}
 
 	public boolean isBlockPosValid(BlockPos blockPos) {
