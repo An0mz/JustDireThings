@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.client.screens;
 
+import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.client.screens.standardbuttons.ToggleButtonFactory;
 import com.direwolf20.justdirethings.client.screens.widgets.BaseButton;
 import com.direwolf20.justdirethings.client.screens.widgets.GrayscaleButton;
@@ -11,9 +12,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class MachineSettingsCopierScreen extends Screen {
+	private static final ResourceLocation BACKGROUND_SPRITE = new ResourceLocation(JustDireThings.MODID,
+			"textures/gui/sprites/background.png");
 	private final ItemStack copyMachineSettingsItemstack;
 	boolean area, offset, filter, redstone;
 	int topSectionWidth, topSectionHeight, topSectionLeft, topSectionTop;
@@ -78,14 +82,26 @@ public class MachineSettingsCopierScreen extends Screen {
 	@Override
 	public void renderBackground(GuiGraphics guiGraphics) {
 		super.renderBackground(guiGraphics);
-		guiGraphics.fill(topSectionLeft, topSectionTop - 20, topSectionLeft + topSectionWidth, topSectionTop,
-				0xC0000000);
-		guiGraphics.fill(topSectionLeft, topSectionTop, topSectionLeft + topSectionWidth,
-				topSectionTop + topSectionHeight, 0xC0000000);
+		blitNineSlice(guiGraphics, topSectionLeft, topSectionTop, topSectionWidth, topSectionHeight);
+		blitNineSlice(guiGraphics, topSectionLeft, topSectionTop - 20, topSectionWidth, 20);
 
 		Component title = copyMachineSettingsItemstack.getItem().getName(copyMachineSettingsItemstack);
-		int titleX = topSectionLeft + 20 + ((topSectionWidth - 40) / 2) - this.font.width(title) / 2;
+		int titleX = topSectionLeft + topSectionWidth / 2 - this.font.width(title) / 2;
 		guiGraphics.drawString(this.font, title, titleX, topSectionTop - 14, 4210752, false);
+	}
+
+	private void blitNineSlice(GuiGraphics guiGraphics, int x, int y, int w, int h) {
+		final int texW = 236, texH = 34, b = 8;
+		final int innerW = texW - 2 * b, innerH = texH - 2 * b;
+		guiGraphics.blit(BACKGROUND_SPRITE, x, y, b, b, 0f, 0f, b, b, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x + w - b, y, b, b, texW - b, 0f, b, b, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x, y + h - b, b, b, 0f, texH - b, b, b, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x + w - b, y + h - b, b, b, texW - b, texH - b, b, b, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x + b, y, w - 2 * b, b, b, 0f, innerW, b, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x + b, y + h - b, w - 2 * b, b, b, texH - b, innerW, b, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x, y + b, b, h - 2 * b, 0f, b, b, innerH, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x + w - b, y + b, b, h - 2 * b, texW - b, b, b, innerH, texW, texH);
+		guiGraphics.blit(BACKGROUND_SPRITE, x + b, y + b, w - 2 * b, h - 2 * b, b, b, innerW, innerH, texW, texH);
 	}
 
 	@Override

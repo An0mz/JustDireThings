@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.events;
 
+import com.direwolf20.justdirethings.common.items.MachineSettingsCopier;
 import com.direwolf20.justdirethings.common.items.PolymorphicWand;
 import com.direwolf20.justdirethings.common.items.PolymorphicWandV2;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -115,6 +117,12 @@ public class PlayerEvents {
 			if (targetSpeed != event.getNewSpeed())
 				event.setNewSpeed(targetSpeed);
 		}
+	}
+
+	@SubscribeEvent
+	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+		if (event.getItemStack().getItem() instanceof MachineSettingsCopier)
+			event.setUseBlock(Event.Result.DENY);
 	}
 
 	@SubscribeEvent
