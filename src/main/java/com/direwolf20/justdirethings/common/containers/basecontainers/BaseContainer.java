@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.containers.basecontainers;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -47,14 +48,17 @@ public abstract class BaseContainer extends AbstractContainerMenu {
 	}
 
 	protected ItemStack quickMoveBasicFilter(ItemStack currentStack, int startSlot, int SLOTS) {
-		for (int i = startSlot; i < startSlot + SLOTS; i++) { // Prevents the same item from going in there more than
-																// once.
-			if (ItemStack.isSameItemSameTags(this.slots.get(i).getItem(), currentStack)) // Don't limit tags
+		for (int i = startSlot; i < startSlot + SLOTS; i++) {
+			if (ItemStack.isSameItemSameTags(this.slots.get(i).getItem(), currentStack))
 				return ItemStack.EMPTY;
 		}
-		if (!this.moveItemStackTo(currentStack, startSlot, startSlot + SLOTS, false)) {
-			return ItemStack.EMPTY;
+		for (int i = startSlot; i < startSlot + SLOTS; i++) {
+			Slot slot = this.slots.get(i);
+			if (slot.getItem().isEmpty()) {
+				slot.set(currentStack.copy());
+				return currentStack;
+			}
 		}
-		return currentStack;
+		return ItemStack.EMPTY;
 	}
 }

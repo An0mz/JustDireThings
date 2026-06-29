@@ -55,8 +55,6 @@ public class JustDireArrow extends AbstractArrow {
 			EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> IS_PHASE = SynchedEntityData.defineId(JustDireArrow.class,
 			EntityDataSerializers.BOOLEAN);
-	private static final EntityDataAccessor<Boolean> IS_TARGET_ANGRY = SynchedEntityData.defineId(JustDireArrow.class,
-			EntityDataSerializers.BOOLEAN);
 
 	private enum ArrowState {
 		NORMAL, SLOWING_DOWN, STOPPED_AND_ROTATING, RESUMING_FLIGHT
@@ -122,10 +120,6 @@ public class JustDireArrow extends AbstractArrow {
 		this.entityData.set(IS_PHASE, phase);
 	}
 
-	public void setTargetAngry(boolean angry) {
-		this.entityData.set(IS_TARGET_ANGRY, angry);
-	}
-
 	public boolean isPhase() {
 		return this.entityData.get(IS_PHASE);
 	}
@@ -151,10 +145,6 @@ public class JustDireArrow extends AbstractArrow {
 		return this.entityData.get(HOSTILE_ONLY);
 	}
 
-	public boolean getTargetAngry() {
-		return this.entityData.get(IS_TARGET_ANGRY);
-	}
-
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
@@ -169,19 +159,11 @@ public class JustDireArrow extends AbstractArrow {
 		this.entityData.define(IS_EPIC_ARROW, false);
 		this.entityData.define(IS_PHASE, false);
 		this.entityData.define(HOSTILE_ONLY, true);
-		this.entityData.define(IS_TARGET_ANGRY, false);
 	}
 
 	public boolean isHostileEntity(LivingEntity entity) {
-		if (getTargetAngry())
-			return true;
-		if (entity instanceof NeutralMob neutralMob) {
-			if (neutralMob.isAngry()) {
-				setTargetAngry(true);
-				return true;
-			}
-			return false;
-		}
+		if (entity instanceof NeutralMob neutralMob)
+			return neutralMob.isAngry();
 		return entity instanceof Enemy;
 	}
 

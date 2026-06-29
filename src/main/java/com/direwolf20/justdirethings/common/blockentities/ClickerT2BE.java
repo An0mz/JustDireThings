@@ -88,8 +88,8 @@ public class ClickerT2BE extends ClickerT1BE implements PoweredMachineBE, AreaAf
 
 	@Override
 	public void tickServer() {
-		super.tickServer();
 		chargeItemStack(getClickStack());
+		super.tickServer();
 	}
 
 	@Override

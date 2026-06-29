@@ -95,8 +95,9 @@ public class BlockPlacerT2BE extends BlockPlacerT1BE implements PoweredMachineBE
 	public boolean isBlockPosValid(FakePlayer fakePlayer, BlockPos blockPos) {
 		if (!super.isBlockPosValid(fakePlayer, blockPos))
 			return false; // Do the same checks as normal, then check the filters
-		ItemStack blockItemStack = level.getBlockState(blockPos.relative(getDirectionValue())).getCloneItemStack(
-				new BlockHitResult(Vec3.ZERO, getDirectionValue(), blockPos, false), level, blockPos, fakePlayer);
+		BlockPos adjacentPos = blockPos.relative(getDirectionValue());
+		ItemStack blockItemStack = level.getBlockState(adjacentPos).getCloneItemStack(
+				new BlockHitResult(Vec3.ZERO, getDirectionValue(), adjacentPos, false), level, adjacentPos, fakePlayer);
 		return isStackValidFilter(blockItemStack);
 	}
 

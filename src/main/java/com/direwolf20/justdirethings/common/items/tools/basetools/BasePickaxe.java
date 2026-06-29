@@ -53,7 +53,7 @@ public class BasePickaxe extends PickaxeItem implements ToggleableTool, LeftClic
 			LivingEntity pEntityLiving) {
 		if (!pLevel.isClientSide && pStack.getItem() instanceof ToggleableTool toggleableTool
 				&& pStack.isCorrectToolForDrops(pState)) {
-			toggleableTool.mineBlocksAbility(pStack, pLevel, pPos, pEntityLiving);
+			toggleableTool.mineBlocksAbility(pStack, pLevel, pPos, pEntityLiving, pState);
 		}
 		return true;
 	}

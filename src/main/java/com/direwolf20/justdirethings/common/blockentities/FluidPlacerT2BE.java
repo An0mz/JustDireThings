@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
 
 public class FluidPlacerT2BE extends FluidPlacerT1BE implements PoweredMachineBE, AreaAffectingBE, FilterableBE {
 	public FilterData filterData = new FilterData();
-	public AreaAffectingData areaAffectingData = new AreaAffectingData(
-			getBlockState().getValue(BlockStateProperties.FACING));
+	public AreaAffectingData areaAffectingData = new AreaAffectingData();
 	public final PoweredMachineContainerData poweredMachineData;
 	private final MachineEnergyStorage energyStorage;
 	private final FilterBasicHandler filterHandler;
 
 	public FluidPlacerT2BE(BlockPos pPos, BlockState pBlockState) {
 		super(Registration.FluidPlacerT2BE.get(), pPos, pBlockState);
+		areaAffectingData = new AreaAffectingData(pBlockState.getValue(BlockStateProperties.FACING));
 		fluidTank.setCapacity(getMaxMB());
 		energyStorage = new MachineEnergyStorage(getMaxEnergy());
 		filterHandler = new FilterBasicHandler(9);
@@ -107,9 +107,10 @@ public class FluidPlacerT2BE extends FluidPlacerT1BE implements PoweredMachineBE
 	public boolean isBlockPosValid(BlockPos blockPos, FakePlayer fakePlayer) {
 		if (!super.isBlockPosValid(blockPos, fakePlayer))
 			return false;
-		ItemStack blockItemStack = level.getBlockState(blockPos.relative(getDirectionValue()))
+		BlockPos adjacentPos = blockPos.relative(getDirectionValue());
+		ItemStack blockItemStack = level.getBlockState(adjacentPos)
 				.getCloneItemStack(new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.ZERO,
-						getDirectionValue(), blockPos, false), level, blockPos, null);
+						getDirectionValue(), adjacentPos, false), level, adjacentPos, null);
 		return isStackValidFilter(blockItemStack);
 	}
 

@@ -27,6 +27,9 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.items.ItemStackHandler;
+
+import javax.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,24 @@ public class FluidCollectorT1BE extends BaseMachineBE implements RedstoneControl
 
 	public FluidCollectorT1BE(BlockPos pPos, BlockState pBlockState) {
 		this(Registration.FluidCollectorT1BE.get(), pPos, pBlockState);
+	}
+
+	@Override
+	public ItemStackHandler getMachineHandler() {
+		if (machineHandler == null) {
+			machineHandler = new ItemStackHandler(MACHINE_SLOTS) {
+				@Override
+				protected void onContentsChanged(int slot) {
+					setChanged();
+				}
+
+				@Override
+				public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+					return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
+				}
+			};
+		}
+		return machineHandler;
 	}
 
 	@Override

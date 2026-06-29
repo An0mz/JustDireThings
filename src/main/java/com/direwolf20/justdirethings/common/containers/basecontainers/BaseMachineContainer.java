@@ -103,7 +103,7 @@ public abstract class BaseMachineContainer extends BaseContainer {
 	public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
 		if (baseMachineBE != null && player.level().getBlockEntity(pos) != baseMachineBE)
 			return;
-		if (baseMachineBE instanceof FilterableBE && slotId >= MACHINE_SLOTS && slotId < FILTER_SLOTS)
+		if (baseMachineBE instanceof FilterableBE && slotId >= MACHINE_SLOTS && slotId < MACHINE_SLOTS + FILTER_SLOTS)
 			return;
 		super.clicked(slotId, dragType, clickTypeIn, player);
 	}
@@ -146,7 +146,10 @@ public abstract class BaseMachineContainer extends BaseContainer {
 				if (index >= MACHINE_SLOTS + FILTER_SLOTS) { // Only do this if we click from the players inventory
 					ItemStack currentStack = slot.getItem().copy();
 					currentStack.setCount(1);
-					return quickMoveBasicFilter(currentStack, MACHINE_SLOTS, FILTER_SLOTS);
+					ItemStack result = quickMoveBasicFilter(currentStack, MACHINE_SLOTS, FILTER_SLOTS);
+					if (!result.isEmpty())
+						baseMachineBE.setChanged(); // clears filterCache and marks chunk dirty
+					return result;
 				}
 			}
 		}

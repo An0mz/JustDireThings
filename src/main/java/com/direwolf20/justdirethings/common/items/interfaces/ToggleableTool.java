@@ -29,10 +29,12 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -200,15 +202,31 @@ public interface ToggleableTool extends ToggleableItem {
 		return instaBreak;
 	}
 
-	default void mineBlocksAbility(ItemStack pStack, Level pLevel, BlockPos pPos, LivingEntity pEntityLiving) {
-		BlockState pState = pLevel.getBlockState(pPos);
+	default void mineBlocksAbility(ItemStack pStack, Level pLevel, BlockPos pPos, LivingEntity pEntityLiving,
+			BlockState originalPrimaryState) {
 		List<ItemStack> drops = new ArrayList<>();
 		int totalExp = 0;
 		int fortuneLevel = pEntityLiving.getMainHandItem().getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
 		int silkTouchLevel = pEntityLiving.getMainHandItem().getEnchantmentLevel(Enchantments.SILK_TOUCH);
-		Set<BlockPos> breakBlockPositions = getBreakBlockPositions(pStack, pLevel, pPos, pEntityLiving, pState);
+		Set<BlockPos> breakBlockPositions = getBreakBlockPositions(pStack, pLevel, pPos, pEntityLiving,
+				originalPrimaryState);
 		boolean instaBreak = canInstaBreak(pStack, pLevel, breakBlockPositions);
 		for (BlockPos breakPos : breakBlockPositions) {
+			if (breakPos.equals(pPos)) {
+				// The primary block is already destroyed before mineBlock() is called.
+				// FakePlayers (machines) get no drops from vanilla — collect them here so
+				// SMELTER and DROPTELEPORT can process them. Only collect when a relevant
+				// ability is actually active to avoid scattering unwanted item entities.
+				if (pEntityLiving instanceof FakePlayer && pLevel instanceof ServerLevel sl
+						&& originalPrimaryState.getDestroySpeed(pLevel, pPos) >= 0
+						&& (canUseAbility(pStack, Ability.SMELTER) || canUseAbility(pStack, Ability.DROPTELEPORT))) {
+					totalExp += originalPrimaryState.getExpDrop(pLevel, pLevel.random, pPos, fortuneLevel,
+							silkTouchLevel);
+					Helpers.combineDrops(drops,
+							Block.getDrops(originalPrimaryState, sl, pPos, null, pEntityLiving, pStack));
+				}
+				continue;
+			}
 			if (testUseTool(pStack) < 0)
 				break;
 			BlockState breakState = pLevel.getBlockState(breakPos);
@@ -219,8 +237,8 @@ public interface ToggleableTool extends ToggleableItem {
 			Helpers.combineDrops(drops, breakBlocks(pLevel, breakPos, pEntityLiving, pStack, true, instaBreak));
 		}
 		if (!pLevel.isClientSide) {
-			handleDrops(pStack, (ServerLevel) pLevel, pPos, pEntityLiving, breakBlockPositions, drops, pState,
-					totalExp);
+			handleDrops(pStack, (ServerLevel) pLevel, pPos, pEntityLiving, breakBlockPositions, drops,
+					originalPrimaryState, totalExp);
 			// ServerLevel.destroyBlockProgress(-1) only broadcasts when the server tracked
 			// the ID, which it never does for our custom IDs (animations are set purely
 			// client-side). Send the reset packet directly to bypass that check.

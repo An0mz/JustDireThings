@@ -12,13 +12,11 @@ import com.direwolf20.justdirethings.util.interfacehelpers.FilterData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Comparator;
 import java.util.List;
@@ -26,14 +24,14 @@ import java.util.stream.Collectors;
 
 public class FluidCollectorT2BE extends FluidCollectorT1BE implements PoweredMachineBE, AreaAffectingBE, FilterableBE {
 	public FilterData filterData = new FilterData();
-	public AreaAffectingData areaAffectingData = new AreaAffectingData(
-			getBlockState().getValue(BlockStateProperties.FACING));
+	public AreaAffectingData areaAffectingData = new AreaAffectingData();
 	public final PoweredMachineContainerData poweredMachineData;
 	private final MachineEnergyStorage energyStorage;
 	private final FilterBasicHandler filterHandler;
 
 	public FluidCollectorT2BE(BlockPos pPos, BlockState pBlockState) {
 		super(Registration.FluidCollectorT2BE.get(), pPos, pBlockState);
+		areaAffectingData = new AreaAffectingData(pBlockState.getValue(BlockStateProperties.FACING));
 		fluidTank.setCapacity(getMaxMB());
 		energyStorage = new MachineEnergyStorage(getMaxEnergy());
 		filterHandler = new FilterBasicHandler(9);
@@ -107,11 +105,8 @@ public class FluidCollectorT2BE extends FluidCollectorT1BE implements PoweredMac
 	public boolean isBlockPosValid(BlockPos blockPos, FakePlayer fakePlayer) {
 		if (!super.isBlockPosValid(blockPos, fakePlayer))
 			return false;
-		if (!(level.getBlockState(blockPos).getBlock() instanceof LiquidBlock liquidBlock))
-			return false;
-		FluidStack testFluid = new FluidStack(level.getFluidState(blockPos).getType(), 1000);
 		return isStackValidFilter(
-				new net.minecraft.world.item.ItemStack(level.getBlockState(blockPos).getBlock().asItem()));
+				new net.minecraft.world.item.ItemStack(level.getFluidState(blockPos).getType().getBucket()));
 	}
 
 	@Override

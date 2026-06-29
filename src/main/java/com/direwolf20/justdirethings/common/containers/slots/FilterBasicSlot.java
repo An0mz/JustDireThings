@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.containers.slots;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -16,6 +17,11 @@ public class FilterBasicSlot extends SlotItemHandler {
 
 	@Override
 	public boolean mayPickup(Player player) {
+		return false;
+	}
+
+	@Override
+	public boolean mayPlace(ItemStack stack) {
 		return false;
 	}
 
