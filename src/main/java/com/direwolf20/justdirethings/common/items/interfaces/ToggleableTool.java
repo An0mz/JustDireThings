@@ -708,4 +708,15 @@ public interface ToggleableTool extends ToggleableItem {
 			return Math.max(min, Math.min(max, stack.getOrCreateTag().getInt(valueName + "_value")));
 		return abilityParams.defaultValue;
 	}
+
+	static int getCustomSetting(ItemStack stack, String setting) {
+		String key = setting + "_custom";
+		if (stack.getOrCreateTag().contains(key))
+			return stack.getOrCreateTag().getInt(key);
+		return 0;
+	}
+
+	static void setCustomSetting(ItemStack stack, String setting, int value) {
+		stack.getOrCreateTag().putInt(setting + "_custom", value);
+	}
 }

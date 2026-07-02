@@ -1,3 +1,8 @@
 {
-  "values": []
+  "values": [
+    "#minecraft:portals",
+    "justdirethings:time_crystal_budding_block",
+    "justdirethings:generatort1",
+    "justdirethings:generatorfluidt1"
+  ]
 }

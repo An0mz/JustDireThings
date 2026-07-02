@@ -1,6 +1,8 @@
 package com.direwolf20.justdirethings.common.containers;
 
 import com.direwolf20.justdirethings.common.containers.basecontainers.BaseContainer;
+import com.direwolf20.justdirethings.common.items.PotionCanister;
+import com.direwolf20.justdirethings.common.items.tools.basetools.BaseBow;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,10 +14,19 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("removal")
 public class ToolSettingContainer extends BaseContainer {
 	public Player playerEntity;
+	public final List<Slot> dynamicSlots = new ArrayList<>();
+	public ItemStackHandler currentCanisterHandler;
+
 	public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = new ResourceLocation("item/empty_armor_slot_helmet");
 	public static final ResourceLocation EMPTY_ARMOR_SLOT_CHESTPLATE = new ResourceLocation(
 			"item/empty_armor_slot_chestplate");
@@ -84,10 +95,83 @@ public class ToolSettingContainer extends BaseContainer {
 		});
 
 		addPlayerSlots(playerInventory, 8, 84);
+
+		refreshSlots(player.getMainHandItem());
+	}
+
+	private void addSelectedItemSlots() {
+		for (int i = 0; i < currentCanisterHandler.getSlots(); i++) {
+			int x = 134 + (i % 2) * 18;
+			int y = 66 - (i / 2) * 18;
+			Slot slot = new SlotItemHandler(currentCanisterHandler, i, x, y) {
+				@Override
+				public boolean mayPlace(ItemStack stack) {
+					return stack.getItem() instanceof PotionCanister;
+				}
+			};
+			this.addSlot(slot);
+			dynamicSlots.add(slot);
+		}
+	}
+
+	public void refreshSlots(ItemStack selectedStack) {
+		// In 1.20.1 Forge, slot removal after construction is not safely supported
+		// (remoteSlots is private and there is no NeoForge sync API).
+		// Dynamic slots are populated once at construction; this is a no-op after that.
+		if (!dynamicSlots.isEmpty() || currentCanisterHandler != null)
+			return;
+		currentCanisterHandler = getItemHandler(selectedStack);
+		if (currentCanisterHandler != null)
+			addSelectedItemSlots();
+	}
+
+	public ItemStackHandler getItemHandler(ItemStack itemStack) {
+		if (!(itemStack.getItem() instanceof BaseBow))
+			return null;
+		final ItemStack liveBow = itemStack;
+		ItemStackHandler handler = new ItemStackHandler(BaseBow.CANISTER_SLOTS) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				BaseBow.setPotionCanister(liveBow, getStackInSlot(slot), slot);
+			}
+
+			@Override
+			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+				return stack.isEmpty() || stack.getItem() instanceof PotionCanister;
+			}
+		};
+		for (int i = 0; i < BaseBow.CANISTER_SLOTS; i++) {
+			ItemStack existing = BaseBow.getPotionCanister(itemStack, i);
+			if (!existing.isEmpty())
+				handler.setStackInSlot(i, existing);
+		}
+		return handler;
 	}
 
 	@Override
-	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
+		if (dynamicSlots.isEmpty())
+			return ItemStack.EMPTY;
+		int playerInvStart = 5; // armor(4) + offhand(1) = 5 fixed slots
+		int playerInvEnd = playerInvStart + Inventory.INVENTORY_SIZE; // 5-40
+		int dynamicStart = playerInvEnd; // 41+
+		int dynamicEnd = dynamicStart + dynamicSlots.size();
+		Slot slot = this.slots.get(index);
+		if (slot.hasItem()) {
+			ItemStack currentStack = slot.getItem();
+			if (index >= dynamicStart && index < dynamicEnd) { // Dynamic → player inventory
+				if (!this.moveItemStackTo(currentStack, playerInvStart, playerInvEnd, true))
+					return ItemStack.EMPTY;
+			} else if (index >= playerInvStart && index < playerInvEnd) { // Player inventory → dynamic
+				if (!this.moveItemStackTo(currentStack, dynamicStart, dynamicEnd, false))
+					return ItemStack.EMPTY;
+			}
+			if (currentStack.isEmpty())
+				slot.set(ItemStack.EMPTY);
+			else
+				slot.setChanged();
+			slot.onTake(playerIn, currentStack);
+		}
 		return ItemStack.EMPTY;
 	}
 

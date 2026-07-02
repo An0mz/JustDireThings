@@ -1,19 +1,27 @@
 package com.direwolf20.justdirethings.common.items.tools.basetools;
 
 import com.direwolf20.justdirethings.common.entities.JustDireArrow;
+import com.direwolf20.justdirethings.common.items.PotionCanister;
 import com.direwolf20.justdirethings.common.items.interfaces.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
@@ -23,6 +31,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
@@ -37,12 +47,40 @@ public class BaseBow extends BowItem implements ToggleableTool, LeftClickableToo
 	protected final EnumSet<Ability> abilities = EnumSet.noneOf(Ability.class);
 	protected final Map<Ability, AbilityParams> abilityParams = new EnumMap<>(Ability.class);
 
+	private static final String POTION_CANISTER_NBT_PREFIX = "BowPotionCanister";
+	private static final TagKey<Item> FORGE_ARROWS = ItemTags.create(new ResourceLocation("forge:arrows"));
+	public static final int CANISTER_SLOTS = 2;
+
+	public static ItemStack getPotionCanister(ItemStack bowStack, int slot) {
+		String key = POTION_CANISTER_NBT_PREFIX + slot;
+		CompoundTag tag = bowStack.getTag();
+		if (tag == null || !tag.contains(key))
+			return ItemStack.EMPTY;
+		return ItemStack.of(tag.getCompound(key));
+	}
+
+	public static void setPotionCanister(ItemStack bowStack, ItemStack canister, int slot) {
+		String key = POTION_CANISTER_NBT_PREFIX + slot;
+		if (canister.isEmpty()) {
+			CompoundTag tag = bowStack.getTag();
+			if (tag != null)
+				tag.remove(key);
+		} else {
+			bowStack.getOrCreateTag().put(key, canister.save(new CompoundTag()));
+		}
+	}
+
 	public BaseBow(Properties properties) {
 		super(properties);
 	}
 
 	public float getMaxDraw() {
 		return 20;
+	}
+
+	@Override
+	public Predicate<ItemStack> getAllSupportedProjectiles() {
+		return stack -> stack.is(ItemTags.ARROWS) || stack.is(FORGE_ARROWS);
 	}
 
 	@Override
@@ -144,12 +182,61 @@ public class BaseBow extends BowItem implements ToggleableTool, LeftClickableToo
 		if (canUseAbilityAndDurability(bowStack, Ability.HOMING)) {
 			arrow.setHoming(true);
 			Helpers.damageTool(bowStack, player, Ability.HOMING);
-			boolean hostileOnly = ToggleableTool.getToolValue(bowStack, Ability.HOMING.getName()) == 0;
+			boolean hostileOnly = ToggleableTool.getCustomSetting(bowStack, Ability.HOMING.getName()) == 0;
 			LivingEntity target = findAimedAtEntity(player, hostileOnly, arrow);
 			if (target != null)
 				arrow.setTargetEntity(target);
 			arrow.setHostileOnly(hostileOnly);
 		}
+
+		if (!noPotionAbilitiesActive(bowStack)) {
+			int neededAmt = 0;
+			if (canUseAbilityAndDurability(bowStack, Ability.POTIONARROW))
+				neededAmt += 25;
+			if (canUseAbilityAndDurability(bowStack, Ability.SPLASH))
+				neededAmt += 25;
+			if (canUseAbilityAndDurability(bowStack, Ability.LINGERING))
+				neededAmt += 50;
+			boolean anyEffectApplied = false;
+			for (int i = 0; i < CANISTER_SLOTS; i++) {
+				ItemStack canister = getPotionCanister(bowStack, i);
+				if (canister.isEmpty() || !(canister.getItem() instanceof PotionCanister))
+					continue;
+				Potion potion = PotionCanister.getStoredPotion(canister);
+				int potionAmt = PotionCanister.getPotionAmount(canister);
+				if (potion == Potions.EMPTY || potionAmt < neededAmt)
+					continue;
+				for (MobEffectInstance effect : potion.getEffects())
+					arrow.addEffect(new MobEffectInstance(effect));
+				PotionCanister.reducePotionAmount(canister, neededAmt);
+				setPotionCanister(bowStack, canister, i);
+				anyEffectApplied = true;
+			}
+			if (anyEffectApplied) {
+				if (canUseAbilityAndDurability(bowStack, Ability.POTIONARROW)) {
+					arrow.setPotionArrow(true);
+					Helpers.damageTool(bowStack, player, Ability.POTIONARROW);
+				}
+				if (canUseAbilityAndDurability(bowStack, Ability.SPLASH)) {
+					arrow.setSplash(true);
+					Helpers.damageTool(bowStack, player, Ability.SPLASH);
+				}
+				if (canUseAbilityAndDurability(bowStack, Ability.LINGERING)) {
+					arrow.setLingering(true);
+					Helpers.damageTool(bowStack, player, Ability.LINGERING);
+				}
+			}
+		}
+	}
+
+	public boolean noPotionAbilitiesActive(ItemStack bowStack) {
+		if (canUseAbilityAndDurability(bowStack, Ability.POTIONARROW))
+			return false;
+		if (canUseAbilityAndDurability(bowStack, Ability.SPLASH))
+			return false;
+		if (canUseAbilityAndDurability(bowStack, Ability.LINGERING))
+			return false;
+		return true;
 	}
 
 	@Nullable

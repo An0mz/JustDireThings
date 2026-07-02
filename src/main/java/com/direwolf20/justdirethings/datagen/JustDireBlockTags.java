@@ -88,7 +88,8 @@ public class JustDireBlockTags extends BlockTagsProvider {
 				.add(Blocks.END_PORTAL_FRAME).add(Blocks.CANDLE_CAKE).addTag(BlockTags.BEDS).addTag(BlockTags.PORTALS)
 				.addTag(BlockTags.DOORS);
 		tag(ECLISEGATEDENY).addTag(BlockTags.PORTALS);
-		tag(TICK_SPEED_DENY).addTag(BlockTags.PORTALS);
+		tag(TICK_SPEED_DENY).addTag(BlockTags.PORTALS).add(Registration.TimeCrystalBuddingBlock.get())
+				.add(Registration.GeneratorT1.get()).add(Registration.GeneratorFluidT1.get());
 		tag(PHASEDENY).add(Blocks.BEDROCK);
 	}
 

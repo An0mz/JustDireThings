@@ -302,6 +302,11 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 		int relX = (this.width - this.imageWidth) / 2;
 		int relY = (this.height - this.imageHeight) / 2;
 		guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+		for (net.minecraft.world.inventory.Slot slot : container.dynamicSlots) {
+			// Blit from settings.png at the UV of the first pre-drawn armor slot (44,66)
+			// so the dynamic slot matches the texture's existing slot appearance exactly.
+			guiGraphics.blit(GUI, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 43, 65, 18, 18);
+		}
 		if (renderablesChanged)
 			updateRenderables();
 	}

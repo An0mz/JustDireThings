@@ -114,6 +114,10 @@ public abstract class BaseMachineBlock extends Block implements EntityBlock {
 			CompoundTag compoundTag = new CompoundTag();
 			((BaseMachineBE) blockEntity).saveAdditional(compoundTag);
 			compoundTag.remove("machineHandler"); // machine handler items are always dropped in onRemove
+			compoundTag.remove("filteredItems"); // InventoryHolder filter templates store item copies — strip to
+													// prevent dupe
+			compoundTag.remove("filterHandler"); // FilterableBE ghost-filter templates store item copies — strip to
+													// prevent dupe
 			if (!compoundTag.isEmpty()) {
 				itemStack.getOrCreateTag().put("JustDiresBEData", compoundTag);
 			}

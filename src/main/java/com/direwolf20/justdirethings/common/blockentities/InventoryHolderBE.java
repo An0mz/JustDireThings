@@ -148,17 +148,6 @@ public class InventoryHolderBE extends BaseMachineBE {
 		return true;
 	}
 
-	public void saveInventory(CompoundTag tag) {
-		tag.put("storedItems", getMachineHandler().serializeNBT());
-	}
-
-	public void loadInventory(CompoundTag tag) {
-		if (tag.contains("storedItems")) {
-			getMachineHandler().deserializeNBT(tag.getCompound("storedItems"));
-			rebuildFilterCache();
-		}
-	}
-
 	@Override
 	public void saveAdditional(CompoundTag tag) {
 		super.saveAdditional(tag);

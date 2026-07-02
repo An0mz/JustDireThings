@@ -151,21 +151,44 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 			return returnList;
 
 		ItemStack tool = getTool();
-		if (tool.getItem() instanceof ToggleableTool toggleableTool
-				&& toggleableTool.canUseAbility(tool, Ability.HAMMER)) {
-			int hammerSize = ToggleableTool.getToolValue(tool, Ability.HAMMER.getName());
-			Direction facing = getFacing();
-			setFakePlayerData(tool, fakePlayer, targetPos, facing);
-			MiningCollect
-					.collect(fakePlayer, targetPos, facing.getOpposite(), level, hammerSize,
-							MiningCollect.SizeMode.NORMAL, tool)
-					.stream().filter(pos -> isBlockValid(fakePlayer, pos)).map(BlockPos::immutable)
-					.forEach(returnList::add);
-			if (returnList.isEmpty())
-				returnList.add(targetPos);
-		} else {
+		if (!(tool.getItem() instanceof ToggleableTool toggleableTool)) {
 			returnList.add(targetPos);
+			return returnList;
 		}
+
+		Direction facing = getFacing();
+		setFakePlayerData(tool, fakePlayer, targetPos, facing);
+		BlockState targetState = level.getBlockState(targetPos);
+		Set<BlockPos> extraPositions = new HashSet<>();
+
+		if (toggleableTool.canUseAbility(tool, Ability.HAMMER)) {
+			int hammerSize = ToggleableTool.getToolValue(tool, Ability.HAMMER.getName());
+			extraPositions.addAll(MiningCollect.collect(fakePlayer, targetPos, facing.getOpposite(), level, hammerSize,
+					MiningCollect.SizeMode.NORMAL, tool));
+		}
+		if (toggleableTool.canUseAbility(tool, Ability.OREMINER) && Helpers.oreCondition.test(targetState)
+				&& tool.isCorrectToolForDrops(targetState)) {
+			extraPositions.addAll(Helpers.findLikeBlocks(level, targetState, targetPos, null, 64, 2));
+		}
+		if (toggleableTool.canUseAbility(tool, Ability.TREEFELLER) && Helpers.logCondition.test(targetState)
+				&& tool.isCorrectToolForDrops(targetState)) {
+			extraPositions.addAll(Helpers.findLikeBlocks(level, targetState, targetPos, null, 64, 2));
+		}
+		if (toggleableTool.canUseAbility(tool, Ability.SKYSWEEPER) && tool.isCorrectToolForDrops(targetState)) {
+			Set<BlockPos> basePositions = new HashSet<>(extraPositions);
+			basePositions.add(targetPos);
+			for (BlockPos pos : basePositions) {
+				BlockPos abovePos = pos.above();
+				BlockState aboveState = level.getBlockState(abovePos);
+				if (Helpers.fallingBlockCondition.test(aboveState))
+					extraPositions.addAll(Helpers.findLikeBlocks(level, aboveState, abovePos, Direction.UP, 64, 2));
+			}
+		}
+
+		extraPositions.stream().filter(pos -> isBlockValid(fakePlayer, pos)).map(BlockPos::immutable)
+				.forEach(returnList::add);
+		if (returnList.isEmpty())
+			returnList.add(targetPos);
 		return returnList;
 	}
 
@@ -229,11 +252,15 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 		float hardness = blockState.getDestroySpeed(level, blockPos);
 		if (hardness == -1.0F) {
 			return -1.0F;
-		} else {
-			float modifier = tool.isCorrectToolForDrops(blockState) ? 30 : 100;
-			return getDestroySpeed(blockPos, tool, player, blockState) / hardness / modifier; // Always the correct tool
-																								// for drop!
 		}
+		if (tool.getItem() instanceof ToggleableTool toggleableTool
+				&& toggleableTool.canUseAbility(tool, Ability.INSTABREAK)) {
+			int rfCost = ToggleableTool.getInstantRFCost(hardness);
+			if (Helpers.testUseTool(tool, rfCost) > 0)
+				return 1.0f;
+		}
+		float modifier = tool.isCorrectToolForDrops(blockState) ? 30 : 100;
+		return getDestroySpeed(blockPos, tool, player, blockState) / hardness / modifier;
 	}
 
 	public float getDestroySpeed(BlockPos blockPos, ItemStack tool, FakePlayer player, BlockState blockState) {
@@ -293,9 +320,14 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 			} else {
 				Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
 			}
-			if (state.getDestroySpeed(level, breakPos) != 0.0F)
+			if (state.getDestroySpeed(level, breakPos) != 0.0F) {
 				itemStack.hurtAndBreak(1, player, pOnBroken -> {
 				});
+				if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+						&& toggleableTool.canUseAbility(itemStack, Ability.INSTABREAK))
+					Helpers.damageTool(itemStack, player,
+							ToggleableTool.getInstantRFCost(state.getDestroySpeed(level, breakPos)));
+			}
 		}
 	}
 

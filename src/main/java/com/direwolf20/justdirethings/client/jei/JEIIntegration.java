@@ -73,8 +73,8 @@ public class JEIIntegration implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		IJeiHelpers jeiHelpers = registration.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper),
-				new FluidDropRecipeCategory(guiHelper));
+		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper), new FluidDropRecipeCategory(guiHelper),
+				new OreToResourceRecipeCategory(guiHelper));
 	}
 
 	@Override
@@ -88,6 +88,20 @@ public class JEIIntegration implements IModPlugin {
 		List<FluidDropRecipe> fluidDropRecipes = recipeManager
 				.getAllRecipesFor(Registration.FLUID_DROP_RECIPE_TYPE.get());
 		registration.addRecipes(FluidDropRecipeCategory.TYPE, fluidDropRecipes);
+
+		registration.addRecipes(OreToResourceRecipeCategory.TYPE, List.of(
+				new OreToResourceRecipe(Registration.RawFerricoreOre.get(),
+						new ItemStack(Registration.RawFerricore.get())),
+				new OreToResourceRecipe(Registration.RawBlazegoldOre.get(),
+						new ItemStack(Registration.RawBlazegold.get())),
+				new OreToResourceRecipe(Registration.RawCelestigemOre.get(),
+						new ItemStack(Registration.Celestigem.get())),
+				new OreToResourceRecipe(Registration.RawEclipseAlloyOre.get(),
+						new ItemStack(Registration.RawEclipseAlloy.get())),
+				new OreToResourceRecipe(Registration.RawCoal_T1.get(), new ItemStack(Registration.Coal_T1.get())),
+				new OreToResourceRecipe(Registration.RawCoal_T2.get(), new ItemStack(Registration.Coal_T2.get())),
+				new OreToResourceRecipe(Registration.RawCoal_T3.get(), new ItemStack(Registration.Coal_T3.get())),
+				new OreToResourceRecipe(Registration.RawCoal_T4.get(), new ItemStack(Registration.Coal_T4.get()))));
 	}
 
 	@Override

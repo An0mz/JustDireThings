@@ -416,6 +416,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		// Recipes
 		add("justdirethings.goospreadrecipe.title", "Goo Spreading Recipes");
 		add("justdirethings.fluiddroprecipe.title", "Drop in Fluid Recipes");
+		add("justdirethings.oretoresource.title", "Ores to Resources");
 
 		// Time Crystal tooltips
 		add("justdirethings.timecrystaltooltip",
