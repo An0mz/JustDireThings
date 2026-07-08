@@ -12,6 +12,7 @@ import com.direwolf20.justdirethings.datagen.JustDireEntityTags;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MiscHelpers;
+import com.direwolf20.justdirethings.util.MiscTools;
 import com.direwolf20.justdirethings.util.NBTHelpers;
 import com.direwolf20.justdirethings.util.UsefulFakePlayer;
 import com.direwolf20.justdirethings.util.interfacehelpers.AreaAffectingData;
@@ -31,6 +32,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
@@ -38,6 +40,7 @@ import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -427,11 +430,20 @@ public class ParadoxMachineBE extends BaseMachineBE
 				getAreaAffectingData().zOffset);
 	}
 
+	private static boolean isParadoxBlockBlacklisted(BlockState blockState) {
+		ResourceLocation key = ForgeRegistries.BLOCKS.getKey(blockState.getBlock());
+		if (key == null)
+			return false;
+		return MiscTools.matchesRegexBlacklist(Config.PARADOX_BLOCK_BLACKLIST.get(), key.toString());
+	}
+
 	public boolean isBlockPosValid(ServerLevel serverLevel, BlockPos blockPos) {
 		BlockState blockState = serverLevel.getBlockState(blockPos);
 		if (blockState.isAir())
 			return false;
 		if (blockState.is(JustDireBlockTags.PARADOX_DENY))
+			return false;
+		if (isParadoxBlockBlacklisted(blockState))
 			return false;
 		return true;
 	}

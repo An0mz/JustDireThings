@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.util;
 
 import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
+import com.direwolf20.justdirethings.setup.Config;
 import com.mojang.math.Axis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -29,7 +32,10 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 public class MiscTools {
 	// Thanks Soaryn!
@@ -119,7 +125,27 @@ public class MiscTools {
 			return false;
 		if (state.is(JustDireBlockTags.TICK_SPEED_DENY))
 			return false;
+		if (isTimeWandBlacklisted(state))
+			return false;
 		return true;
+	}
+
+	private static boolean isTimeWandBlacklisted(BlockState state) {
+		ResourceLocation key = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+		if (key == null)
+			return false;
+		return matchesRegexBlacklist(Config.TIME_WAND_BLOCK_BLACKLIST.get(), key.toString());
+	}
+
+	private static final Map<String, Pattern> BLACKLIST_PATTERN_CACHE = new ConcurrentHashMap<>();
+
+	public static boolean matchesRegexBlacklist(List<? extends String> blacklist, String fullId) {
+		for (String regex : blacklist) {
+			Pattern pattern = BLACKLIST_PATTERN_CACHE.computeIfAbsent(regex, Pattern::compile);
+			if (pattern.matcher(fullId).find())
+				return true;
+		}
+		return false;
 	}
 
 	public static void doExtraTicks(ServerLevel level, BlockPos pos, int extraTicks) {

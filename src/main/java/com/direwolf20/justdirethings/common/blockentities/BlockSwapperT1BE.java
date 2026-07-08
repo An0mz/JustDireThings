@@ -6,6 +6,7 @@ import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MiscHelpers;
+import com.direwolf20.justdirethings.util.MiscTools;
 import com.direwolf20.justdirethings.util.NBTHelpers;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
@@ -333,28 +334,14 @@ public class BlockSwapperT1BE extends BaseMachineBE implements RedstoneControlle
 		ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
 		if (key == null)
 			return false;
-		String fullId = key.toString();
-		String namespace = key.getNamespace();
-		for (Object entry : Config.SWAPPER_ENTITY_BLACKLIST.get()) {
-			String s = (String) entry;
-			if (s.contains(":") ? fullId.equals(s) : namespace.equals(s))
-				return true;
-		}
-		return false;
+		return MiscTools.matchesRegexBlacklist(Config.SWAPPER_ENTITY_BLACKLIST.get(), key.toString());
 	}
 
 	private static boolean isBlockSwapperBlacklisted(ServerLevel serverLevel, BlockPos blockPos) {
 		ResourceLocation key = ForgeRegistries.BLOCKS.getKey(serverLevel.getBlockState(blockPos).getBlock());
 		if (key == null)
 			return false;
-		String fullId = key.toString();
-		String namespace = key.getNamespace();
-		for (Object entry : Config.SWAPPER_BLOCK_BLACKLIST.get()) {
-			String s = (String) entry;
-			if (s.contains(":") ? fullId.equals(s) : namespace.equals(s))
-				return true;
-		}
-		return false;
+		return MiscTools.matchesRegexBlacklist(Config.SWAPPER_BLOCK_BLACKLIST.get(), key.toString());
 	}
 
 	public boolean isValidEntity(Entity entity) {

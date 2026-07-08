@@ -702,14 +702,7 @@ public class AbilityMethods {
 		net.minecraft.resources.ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(type);
 		if (key == null)
 			return false;
-		String fullId = key.toString();
-		String namespace = key.getNamespace();
-		for (Object entry : Config.POLYMORPH_BLACKLIST.get()) {
-			String s = (String) entry;
-			if (s.contains(":") ? fullId.equals(s) : namespace.equals(s))
-				return true;
-		}
-		return false;
+		return MiscTools.matchesRegexBlacklist(Config.POLYMORPH_BLACKLIST.get(), key.toString());
 	}
 
 	public static boolean polymorphRandom(Level level, Player player, ItemStack itemStack) {

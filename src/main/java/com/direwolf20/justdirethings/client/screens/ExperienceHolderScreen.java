@@ -87,12 +87,6 @@ public class ExperienceHolderScreen extends BaseMachineScreen<ExperienceHolderCo
 	}
 
 	@Override
-	public void setTopSection() {
-		extraWidth = 0;
-		extraHeight = 0;
-	}
-
-	@Override
 	public void addRedstoneButtons() {
 		addRenderableWidget(ToggleButtonFactory.REDSTONEBUTTON(topSectionLeft + (topSectionWidth / 2) - 15,
 				topSectionTop + 42, redstoneMode.ordinal(), b -> {
@@ -110,20 +104,14 @@ public class ExperienceHolderScreen extends BaseMachineScreen<ExperienceHolderCo
 	}
 
 	private void renderXPBar(GuiGraphics guiGraphics) {
-		float scale = 0.80f;
-		int scaledBarWidth = Math.round(182 * scale);
-		int barX = topSectionLeft + (topSectionWidth / 2) - scaledBarWidth / 2;
+		int barX = topSectionLeft + (topSectionWidth / 2) - (182 / 2);
 		int barY = topSectionTop + topSectionHeight - 15;
 
-		guiGraphics.pose().pushPose();
-		guiGraphics.pose().translate(barX, barY, 0);
-		guiGraphics.pose().scale(scale, scale, 1.0f);
-		guiGraphics.blit(ICONS, 0, 0, 0, 64, 182, 5);
+		guiGraphics.blit(ICONS, barX, barY, 0, 64, 182, 5);
 		int partialAmount = (int) (ExperienceUtils.getProgressToNextLevel(experienceHolderBE.exp) * 183.0F);
 		if (partialAmount > 0) {
-			guiGraphics.blit(ICONS, 0, 0, 0, 69, partialAmount, 5);
+			guiGraphics.blit(ICONS, barX, barY, 0, 69, partialAmount, 5);
 		}
-		guiGraphics.pose().popPose();
 
 		String levelStr = String.valueOf(ExperienceUtils.getLevelFromTotalExperience(experienceHolderBE.exp));
 		int centerX = topSectionLeft + (topSectionWidth / 2);

@@ -67,6 +67,7 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_PER_ENTITY;
 	public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_MAX;
 	public static ForgeConfigSpec.BooleanValue PARADOX_RESTRICTED_MOBS;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> PARADOX_BLOCK_BLACKLIST;
 
 	public static final String CATEGORY_POLYMORPHIC_WAND = "polymorphic_wand";
 	public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_MAX_FLUID;
@@ -78,6 +79,7 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue TIME_WAND_FLUID_COST;
 	public static ForgeConfigSpec.IntValue TIME_WAND_MAX_MULTIPLIER;
 	public static ForgeConfigSpec.BooleanValue TIME_WAND_FAKE_PLAYER_ALLOWED;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> TIME_WAND_BLOCK_BLACKLIST;
 
 	public static final String CATEGORY_POLYMORPHIC_WAND_V2 = "polymorphic_wand_v2";
 	public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_V2_MAX_FE;
@@ -282,6 +284,13 @@ public class Config {
 				.defineInRange("paradox_energy_max", 100.0, 1, Double.MAX_VALUE);
 		PARADOX_RESTRICTED_MOBS = COMMON_BUILDER.comment("If true, only safe mob data fields are restored")
 				.define("paradox_restricted_mobs", true);
+		PARADOX_BLOCK_BLACKLIST = COMMON_BUILDER.comment(
+				"Blocks the Paradox Machine cannot save/restore, matched by regex against the full block ID.",
+				"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
+				"Example: \".*reative.*\" blocks all blocks with \"reative\" in their ID (e.g. all Creative blocks),",
+				"or \"seeds\" blocks any block whose ID contains \"seeds\".",
+				"Note: the paradox_deny block tag also controls this and is checked first.")
+				.defineListAllowEmpty(List.of("paradox_block_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 
 		COMMON_BUILDER.comment("Polymorphic Wand").push(CATEGORY_POLYMORPHIC_WAND);
@@ -306,6 +315,13 @@ public class Config {
 				.defineInRange("time_wand_max_multiplier", 256, 2, Integer.MAX_VALUE);
 		TIME_WAND_FAKE_PLAYER_ALLOWED = COMMON_BUILDER.comment("Can fake players (e.g. Clickers) use the Time Wand?")
 				.define("time_wand_fake_player_allowed", true);
+		TIME_WAND_BLOCK_BLACKLIST = COMMON_BUILDER
+				.comment("Blocks the Time Wand cannot accelerate, matched by regex against the full block ID.",
+						"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
+						"Example: \"draconicevolution:chaos_crystal\" blocks that exact block,",
+						"or \"^draconicevolution:\" blocks all blocks from that mod.",
+						"Note: the tick_speed_deny block tag also controls this and is checked first.")
+				.defineListAllowEmpty(List.of("time_wand_block_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}
 
@@ -344,14 +360,16 @@ public class Config {
 	private static void swapperConfig() {
 		COMMON_BUILDER.comment("Block Swapper").push(CATEGORY_BLOCK_SWAPPER);
 		SWAPPER_ENTITY_BLACKLIST = COMMON_BUILDER
-				.comment("Entities or mods that the Block Swapper cannot teleport.",
-						"Use full entity IDs (e.g. \"draconicevolution:chaos_guardian\") for specific entities,",
-						"or just the mod ID (e.g. \"draconicevolution\") to block all entities from that mod.")
+				.comment("Entities the Block Swapper cannot teleport, matched by regex against the full entity ID.",
+						"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
+						"Example: \"draconicevolution:chaos_guardian\" blocks that exact entity,",
+						"or \"^draconicevolution:\" blocks all entities from that mod.")
 				.defineListAllowEmpty(List.of("swapper_entity_blacklist"), () -> List.of(), s -> s instanceof String);
 		SWAPPER_BLOCK_BLACKLIST = COMMON_BUILDER
-				.comment("Blocks or mods that the Block Swapper cannot move.",
-						"Use full block IDs (e.g. \"draconicevolution:chaos_crystal\") for specific blocks,",
-						"or just the mod ID (e.g. \"draconicevolution\") to block all blocks from that mod.",
+				.comment("Blocks the Block Swapper cannot move, matched by regex against the full block ID.",
+						"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
+						"Example: \"draconicevolution:chaos_crystal\" blocks that exact block,",
+						"or \"^draconicevolution:\" blocks all blocks from that mod.",
 						"Note: the swapper_deny block tag also controls this and is checked first.")
 				.defineListAllowEmpty(List.of("swapper_block_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
@@ -369,9 +387,10 @@ public class Config {
 		TARGET_POLYMORPH_COST = COMMON_BUILDER.comment("mB of polymorphic fluid consumed per targeted polymorph")
 				.defineInRange("target_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
 		POLYMORPH_BLACKLIST = COMMON_BUILDER
-				.comment("Entities or mods that the Polymorphic Wand cannot create.",
-						"Use full entity IDs (e.g. \"somebossmod:big_boss\") for specific entities,",
-						"or just the mod ID (e.g. \"somebossmod\") to block all entities from that mod.")
+				.comment("Entities the Polymorphic Wand cannot create, matched by regex against the full entity ID.",
+						"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
+						"Example: \"somebossmod:big_boss\" blocks that exact entity,",
+						"or \"^somebossmod:\" blocks all entities from that mod.")
 				.defineListAllowEmpty(List.of("polymorph_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}

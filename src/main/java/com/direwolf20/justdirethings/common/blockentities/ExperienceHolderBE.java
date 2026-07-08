@@ -170,52 +170,6 @@ public class ExperienceHolderBE extends BaseMachineBE implements AreaAffectingBE
 		markDirtyClient();
 	}
 
-	public void storeExpButton(Player player, int levelChange) {
-		if (ownerOnly && !player.getUUID().equals(placedByUUID))
-			return;
-		if (levelChange == -1) {
-			// Store all: take all player XP (unchanged)
-			int totalExp = ExperienceUtils.getPlayerTotalExperience(player);
-			int remaining = addExp(totalExp);
-			player.giveExperiencePoints(-totalExp);
-			player.giveExperienceLevels(-1);
-			if (remaining > 0)
-				player.giveExperiencePoints(remaining);
-		} else if (levelChange > 0) {
-			// Take exactly the XP needed to advance the holder by levelChange levels.
-			// This ensures the holder display always goes up by exactly levelChange,
-			// and the player only loses a small amount (based on the holder's level, not
-			// theirs).
-			int holderLevel = ExperienceUtils.getLevelFromTotalExperience(this.exp);
-			int xpNeeded = ExperienceUtils.getTotalExperienceForLevel(holderLevel + levelChange) - this.exp;
-			int xpTaken = ExperienceUtils.removePoints(player, xpNeeded);
-			addExp(xpTaken);
-		}
-		markDirtyClient();
-	}
-
-	public void extractExpButton(Player player, int levelChange) {
-		if (exp == 0)
-			return;
-		if (ownerOnly && !player.getUUID().equals(placedByUUID))
-			return;
-		if (levelChange == -1) {
-			// Extract all: give all holder XP to player (unchanged)
-			player.giveExperiencePoints(exp);
-			this.exp = 0;
-		} else if (levelChange > 0) {
-			// Give the player the XP that corresponds to levelChange holder levels.
-			// Holder display drops by exactly levelChange.
-			int holderLevel = ExperienceUtils.getLevelFromTotalExperience(this.exp);
-			int targetLevel = Math.max(0, holderLevel - levelChange);
-			int xpToGive = this.exp - ExperienceUtils.getTotalExperienceForLevel(targetLevel);
-			xpToGive = Math.min(xpToGive, this.exp);
-			player.giveExperiencePoints(xpToGive);
-			this.exp -= xpToGive;
-		}
-		markDirtyClient();
-	}
-
 	public boolean roundUpToNextLevel(Player player) {
 		if (this.exp <= 0)
 			return false;
