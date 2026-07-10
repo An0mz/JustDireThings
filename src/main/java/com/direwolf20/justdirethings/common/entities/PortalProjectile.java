@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -73,29 +74,44 @@ public class PortalProjectile extends ThrowableItemProjectile {
 			return;
 
 		Direction facing = hitResult.getDirection();
-		if (facing == Direction.UP || facing == Direction.DOWN) {
-			this.discard();
-			return;
-		}
 
 		Vec3 hitLoc = hitResult.getLocation();
 		double px;
-		double py = hitResult.getBlockPos().getY();
+		double py;
 		double pz;
+		Direction.Axis alignment = Direction.Axis.Z;
 
-		if (facing.getAxis() == Direction.Axis.Z) {
+		if (facing.getAxis() == Direction.Axis.Y) {
+			Vec3 velocity = getDeltaMovement();
+			alignment = Math.abs(velocity.x) > Math.abs(velocity.z) ? Direction.Axis.X : Direction.Axis.Z;
+			// Shift the center by half a block, in the direction of travel, so the
+			// 2-block-long portal spans the hit block plus its neighbor in that
+			// direction, grid-aligned, rather than straddling the hit block alone.
+			if (alignment == Direction.Axis.X) {
+				double dirSign = velocity.x >= 0 ? 0.5 : -0.5;
+				px = hitResult.getBlockPos().getX() + 0.5 + dirSign;
+				pz = hitResult.getBlockPos().getZ() + 0.5;
+			} else {
+				double dirSign = velocity.z >= 0 ? 0.5 : -0.5;
+				px = hitResult.getBlockPos().getX() + 0.5;
+				pz = hitResult.getBlockPos().getZ() + 0.5 + dirSign;
+			}
+			py = hitLoc.y;
+		} else if (facing.getAxis() == Direction.Axis.Z) {
 			px = hitResult.getBlockPos().getX() + 0.5;
+			py = hitResult.getBlockPos().getY();
 			pz = hitLoc.z;
 		} else {
 			px = hitLoc.x;
+			py = hitResult.getBlockPos().getY();
 			pz = hitResult.getBlockPos().getZ() + 0.5;
 		}
 
 		Vec3 portalPos = new Vec3(px, py, pz);
 		if (isAdvanced && portalDestination != null) {
-			spawnAdvancedPortals(portalPos, facing);
+			spawnAdvancedPortals(portalPos, facing, alignment);
 		} else {
-			spawnPortal((ServerLevel) level(), portalPos, facing, isPrimaryType);
+			spawnPortal((ServerLevel) level(), portalPos, facing, alignment, isPrimaryType);
 			this.discard();
 		}
 	}
@@ -133,7 +149,7 @@ public class PortalProjectile extends ThrowableItemProjectile {
 		}
 	}
 
-	private void spawnAdvancedPortals(Vec3 sourcePos, Direction sourceFacing) {
+	private void spawnAdvancedPortals(Vec3 sourcePos, Direction sourceFacing, Direction.Axis sourceAlignment) {
 		if (!(level() instanceof ServerLevel sourceLevel)) {
 			this.discard();
 			return;
@@ -145,21 +161,55 @@ public class PortalProjectile extends ThrowableItemProjectile {
 			return;
 		}
 
-		clearMyPortals(server);
-
-		PortalEntity sourcePortal = new PortalEntity(sourceLevel, sourcePos, sourceFacing, gunUUID, isPrimaryType,
-				lifespanTicks);
+		PortalEntity sourcePortal = new PortalEntity(sourceLevel, sourcePos, sourceFacing, sourceAlignment, gunUUID,
+				isPrimaryType, lifespanTicks);
 		PortalEntity destinationPortal = new PortalEntity(destinationLevel, portalDestination.position(),
 				portalDestination.facing(), gunUUID, !isPrimaryType, lifespanTicks);
+
+		if (overlapsOtherPortal(sourceLevel, sourcePortal, true)
+				|| overlapsOtherPortal(destinationLevel, destinationPortal, true)) {
+			this.discard();
+			return;
+		}
+
+		clearMyPortals(server);
 		sourceLevel.addFreshEntity(sourcePortal);
 		destinationLevel.addFreshEntity(destinationPortal);
 		this.discard();
 	}
 
-	private void spawnPortal(ServerLevel serverLevel, Vec3 portalPos, Direction facing, boolean primaryType) {
+	private void spawnPortal(ServerLevel serverLevel, Vec3 portalPos, Direction facing, Direction.Axis alignment,
+			boolean primaryType) {
+		PortalEntity portal = new PortalEntity(serverLevel, portalPos, facing, alignment, gunUUID, primaryType,
+				lifespanTicks);
+
+		if (overlapsOtherPortal(serverLevel, portal, false))
+			return;
+
 		clearMatchingPortal(serverLevel.getServer(), primaryType);
-		PortalEntity portal = new PortalEntity(serverLevel, portalPos, facing, gunUUID, primaryType, lifespanTicks);
 		serverLevel.addFreshEntity(portal);
+	}
+
+	// Blocks placement on top of another existing portal. When excludeAllOwnPortals
+	// is true (the advanced/linked pair path, which clears both ends of this gun's
+	// portals via clearMyPortals before placing), any portal sharing this gunUUID is
+	// excluded. Otherwise (the basic gun path, which only clears the matching
+	// primary/secondary slot via clearMatchingPortal) only that same slot is
+	// excluded, so the gun's other, still-standing portal is still checked.
+	private static boolean overlapsOtherPortal(ServerLevel level, PortalEntity candidate,
+			boolean excludeAllOwnPortals) {
+		AABB candidateBox = candidate.getPortalAABB().inflate(-0.1);
+		List<? extends PortalEntity> existing = level.getEntities(Registration.PortalEntity.get(), portal -> {
+			boolean sameGun = portal.getGunUUID().equals(candidate.getGunUUID());
+			if (!sameGun)
+				return true;
+			return excludeAllOwnPortals ? false : portal.isPrimaryType() != candidate.isPrimaryType();
+		});
+		for (PortalEntity existingPortal : existing) {
+			if (existingPortal.getPortalAABB().intersects(candidateBox))
+				return true;
+		}
+		return false;
 	}
 
 	private void clearMatchingPortal(MinecraftServer server, boolean primaryType) {

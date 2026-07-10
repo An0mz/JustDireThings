@@ -96,8 +96,8 @@ public class Config {
 	public static ForgeConfigSpec.IntValue PORTAL_GUN_LIFESPAN;
 
 	public static final String CATEGORY_PORTAL_GUN_ORIGINAL = "portal_gun_original";
-	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_MAX_FLUID;
-	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_FLUID_COST;
+	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_MAX_FE;
+	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_FE_COST;
 	public static ForgeConfigSpec.IntValue PORTAL_GUN_ORIGINAL_LIFESPAN;
 
 	public static final String CATEGORY_BLOCK_SWAPPER = "block_swapper";
@@ -347,11 +347,10 @@ public class Config {
 
 	private static void portalGunOriginalConfig() {
 		COMMON_BUILDER.comment("Portal Gun").push(CATEGORY_PORTAL_GUN_ORIGINAL);
-		PORTAL_GUN_ORIGINAL_MAX_FLUID = COMMON_BUILDER
-				.comment("Max mB of unstable portal fluid the original Portal Gun can hold")
-				.defineInRange("portal_gun_original_max_fluid", 4000, 1, Integer.MAX_VALUE);
-		PORTAL_GUN_ORIGINAL_FLUID_COST = COMMON_BUILDER.comment("mB of unstable portal fluid consumed per shot")
-				.defineInRange("portal_gun_original_fluid_cost", 500, 0, Integer.MAX_VALUE);
+		PORTAL_GUN_ORIGINAL_MAX_FE = COMMON_BUILDER.comment("Max FE capacity of the original Portal Gun")
+				.defineInRange("portal_gun_original_max_fe", 100000, 1, Integer.MAX_VALUE);
+		PORTAL_GUN_ORIGINAL_FE_COST = COMMON_BUILDER.comment("FE cost per portal shot")
+				.defineInRange("portal_gun_original_fe_cost", 1000, 0, Integer.MAX_VALUE);
 		PORTAL_GUN_ORIGINAL_LIFESPAN = COMMON_BUILDER.comment("How many ticks a portal remains open (-1 for infinite)")
 				.defineInRange("portal_gun_original_lifespan", 3000, -1, Integer.MAX_VALUE);
 		COMMON_BUILDER.pop();

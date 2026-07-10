@@ -38,6 +38,13 @@ public class PortalEntityRenderer extends EntityRenderer<PortalEntity> {
 		poseStack.translate(facing.getStepX() * SURFACE_OFFSET, facing.getStepY() * SURFACE_OFFSET,
 				facing.getStepZ() * SURFACE_OFFSET);
 
+		if (facing.getAxis() == Direction.Axis.Y) {
+			renderHorizontal(entity, poseStack, buffer, r, g, b, packedLight);
+			poseStack.popPose();
+			super.render(entity, yaw, partialTick, poseStack, buffer, packedLight);
+			return;
+		}
+
 		float x0, x1, z0, z1;
 		if (facing.getAxis() == Direction.Axis.Z) {
 			x0 = (float) -HALF_WIDTH;
@@ -90,6 +97,57 @@ public class PortalEntityRenderer extends EntityRenderer<PortalEntity> {
 
 		poseStack.popPose();
 		super.render(entity, yaw, partialTick, poseStack, buffer, packedLight);
+	}
+
+	private void renderHorizontal(PortalEntity entity, PoseStack poseStack, MultiBufferSource buffer, float r,
+			float g, float b, int packedLight) {
+		double halfLength = HEIGHT / 2;
+		float x0, x1, z0, z1;
+		if (entity.getAlignment() == Direction.Axis.X) {
+			x0 = (float) -halfLength;
+			x1 = (float) halfLength;
+			z0 = (float) -HALF_WIDTH;
+			z1 = (float) HALF_WIDTH;
+		} else {
+			x0 = (float) -HALF_WIDTH;
+			x1 = (float) HALF_WIDTH;
+			z0 = (float) -halfLength;
+			z1 = (float) halfLength;
+		}
+
+		PoseStack.Pose pose = poseStack.last();
+		VertexConsumer surfaceVc = buffer.getBuffer(DireRenderTypes.portalEntity(PORTAL_SHADER_TEXTURE));
+		addTexturedQuadHorizontal(surfaceVc, pose, x0 + BORDER_SIZE, z0 + BORDER_SIZE, x1 - BORDER_SIZE,
+				z1 - BORDER_SIZE, 0f);
+
+		VertexConsumer borderVc = buffer.getBuffer(OurRenderTypes.PortalEntity);
+		addTintQuadHorizontal(borderVc, pose, x0, z0, x0 + BORDER_SIZE, z1, 0f, r, g, b, 0.95f, packedLight);
+		addTintQuadHorizontal(borderVc, pose, x1 - BORDER_SIZE, z0, x1, z1, 0f, r, g, b, 0.95f, packedLight);
+		addTintQuadHorizontal(borderVc, pose, x0 + BORDER_SIZE, z0, x1 - BORDER_SIZE, z0 + BORDER_SIZE, 0f, r, g, b,
+				0.95f, packedLight);
+		addTintQuadHorizontal(borderVc, pose, x0 + BORDER_SIZE, z1 - BORDER_SIZE, x1 - BORDER_SIZE, z1, 0f, r, g, b,
+				0.95f, packedLight);
+	}
+
+	private void addTexturedQuadHorizontal(VertexConsumer vc, PoseStack.Pose pose, float x0, float z0, float x1,
+			float z1, float y) {
+		float u0 = 0.0f;
+		float u1 = 1.0f;
+		float v0 = 0.0f;
+		float v1 = 1.0f;
+		Matrix4f mat = pose.pose();
+		vc.vertex(mat, x0, y, z0).uv(u0, v1).endVertex();
+		vc.vertex(mat, x0, y, z1).uv(u0, v0).endVertex();
+		vc.vertex(mat, x1, y, z1).uv(u1, v0).endVertex();
+		vc.vertex(mat, x1, y, z0).uv(u1, v1).endVertex();
+	}
+
+	private void addTintQuadHorizontal(VertexConsumer vc, PoseStack.Pose pose, float x0, float z0, float x1,
+			float z1, float y, float r, float g, float b, float a, int light) {
+		vc.vertex(pose.pose(), x0, y, z0).color(r, g, b, a).endVertex();
+		vc.vertex(pose.pose(), x0, y, z1).color(r, g, b, a).endVertex();
+		vc.vertex(pose.pose(), x1, y, z1).color(r, g, b, a).endVertex();
+		vc.vertex(pose.pose(), x1, y, z0).color(r, g, b, a).endVertex();
 	}
 
 	private void addTexturedQuad(VertexConsumer vc, PoseStack.Pose pose, float x0, float y0, float z0, float x1,
