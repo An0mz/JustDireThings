@@ -192,7 +192,8 @@ public class PortalProjectile extends ThrowableItemProjectile {
 
 	// Blocks placement on top of another existing portal. When excludeAllOwnPortals
 	// is true (the advanced/linked pair path, which clears both ends of this gun's
-	// portals via clearMyPortals before placing), any portal sharing this gunUUID is
+	// portals via clearMyPortals before placing), any portal sharing this gunUUID
+	// is
 	// excluded. Otherwise (the basic gun path, which only clears the matching
 	// primary/secondary slot via clearMatchingPortal) only that same slot is
 	// excluded, so the gun's other, still-standing portal is still checked.

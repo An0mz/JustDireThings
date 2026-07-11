@@ -3,6 +3,8 @@ package com.direwolf20.justdirethings.common.blocks;
 import com.direwolf20.justdirethings.common.blockentities.ExperienceHolderBE;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.common.containers.ExperienceHolderContainer;
+import com.direwolf20.justdirethings.common.items.FerricoreWrench;
+import com.direwolf20.justdirethings.common.items.MachineSettingsCopier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -84,10 +86,12 @@ public class ExperienceHolder extends BaseMachineBlock {
 			InteractionHand hand, BlockHitResult hit) {
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
+		ItemStack itemStack = player.getItemInHand(hand);
+		if (itemStack.getItem() instanceof FerricoreWrench || itemStack.getItem() instanceof MachineSettingsCopier)
+			return InteractionResult.PASS;
 		BlockEntity te = level.getBlockEntity(blockPos);
 		if (!(te instanceof ExperienceHolderBE experienceHolderBE))
 			return InteractionResult.FAIL;
-		ItemStack itemStack = player.getItemInHand(hand);
 		IFluidHandlerItem fluidHandlerItem = itemStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
 		if (fluidHandlerItem != null) {
 			IFluidHandler cap = experienceHolderBE.getCapability(ForgeCapabilities.FLUID_HANDLER, hit.getDirection())

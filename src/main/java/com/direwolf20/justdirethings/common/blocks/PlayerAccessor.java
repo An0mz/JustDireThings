@@ -3,6 +3,9 @@ package com.direwolf20.justdirethings.common.blocks;
 import com.direwolf20.justdirethings.common.blockentities.PlayerAccessorBE;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.common.containers.PlayerAccessorContainer;
+import com.direwolf20.justdirethings.common.items.FerricoreWrench;
+import com.direwolf20.justdirethings.common.items.MachineSettingsCopier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
@@ -55,6 +58,11 @@ public class PlayerAccessor extends BaseMachineBlock {
 			InteractionHand hand, BlockHitResult hit) {
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
+
+		ItemStack playerHolding = player.getItemInHand(hand);
+		if (playerHolding.getItem() instanceof FerricoreWrench
+				|| playerHolding.getItem() instanceof MachineSettingsCopier)
+			return InteractionResult.PASS;
 
 		BlockEntity te = level.getBlockEntity(blockPos);
 		if (!(te instanceof PlayerAccessorBE))

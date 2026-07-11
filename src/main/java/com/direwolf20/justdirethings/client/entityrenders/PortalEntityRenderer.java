@@ -99,8 +99,8 @@ public class PortalEntityRenderer extends EntityRenderer<PortalEntity> {
 		super.render(entity, yaw, partialTick, poseStack, buffer, packedLight);
 	}
 
-	private void renderHorizontal(PortalEntity entity, PoseStack poseStack, MultiBufferSource buffer, float r,
-			float g, float b, int packedLight) {
+	private void renderHorizontal(PortalEntity entity, PoseStack poseStack, MultiBufferSource buffer, float r, float g,
+			float b, int packedLight) {
 		double halfLength = HEIGHT / 2;
 		float x0, x1, z0, z1;
 		if (entity.getAlignment() == Direction.Axis.X) {
@@ -142,8 +142,8 @@ public class PortalEntityRenderer extends EntityRenderer<PortalEntity> {
 		vc.vertex(mat, x1, y, z0).uv(u1, v1).endVertex();
 	}
 
-	private void addTintQuadHorizontal(VertexConsumer vc, PoseStack.Pose pose, float x0, float z0, float x1,
-			float z1, float y, float r, float g, float b, float a, int light) {
+	private void addTintQuadHorizontal(VertexConsumer vc, PoseStack.Pose pose, float x0, float z0, float x1, float z1,
+			float y, float r, float g, float b, float a, int light) {
 		vc.vertex(pose.pose(), x0, y, z0).color(r, g, b, a).endVertex();
 		vc.vertex(pose.pose(), x0, y, z1).color(r, g, b, a).endVertex();
 		vc.vertex(pose.pose(), x1, y, z1).color(r, g, b, a).endVertex();

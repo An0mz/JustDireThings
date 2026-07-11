@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.common.blockentities.BlockSwapperT1BE;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.common.containers.BlockSwapperT1Container;
 import com.direwolf20.justdirethings.common.items.FerricoreWrench;
+import com.direwolf20.justdirethings.common.items.MachineSettingsCopier;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
@@ -73,7 +74,8 @@ public class BlockSwapperT1 extends BaseMachineBlock {
 			return InteractionResult.SUCCESS;
 
 		ItemStack playerHolding = player.getItemInHand(hand);
-		if (playerHolding.getItem() instanceof FerricoreWrench)
+		if (playerHolding.getItem() instanceof FerricoreWrench
+				|| playerHolding.getItem() instanceof MachineSettingsCopier)
 			return InteractionResult.PASS;
 
 		BlockEntity te = level.getBlockEntity(blockPos);

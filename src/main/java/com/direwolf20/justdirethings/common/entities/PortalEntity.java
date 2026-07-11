@@ -156,8 +156,7 @@ public class PortalEntity extends Entity {
 
 	private AABB getVelocityBoundingBox() {
 		Direction facing = getFacing();
-		return getPortalAABB().expandTowards(facing.getStepX() * 2.5, facing.getStepY() * 2.5,
-				facing.getStepZ() * 2.5);
+		return getPortalAABB().expandTowards(facing.getStepX() * 2.5, facing.getStepY() * 2.5, facing.getStepZ() * 2.5);
 	}
 
 	private void checkForEntities() {
@@ -283,8 +282,8 @@ public class PortalEntity extends Entity {
 				lastVelocity = lastPos.subtract(lastLastPos);
 			}
 			Vec3 velocity = lastVelocity.equals(Vec3.ZERO) ? thisVelocity : lastVelocity;
-			if (Math.abs(velocity.x) > threshold || Math.abs(velocity.y) > threshold
-					|| Math.abs(velocity.z) > threshold || velocity.y > 0) {
+			if (Math.abs(velocity.x) > threshold || Math.abs(velocity.y) > threshold || Math.abs(velocity.z) > threshold
+					|| velocity.y > 0) {
 				newMotion = transformMotion(velocity, getFacing(), partner.getFacing().getOpposite());
 			}
 			entityLastPosition.remove(entityUUID);

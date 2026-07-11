@@ -315,12 +315,12 @@ public class Config {
 				.defineInRange("time_wand_max_multiplier", 256, 2, Integer.MAX_VALUE);
 		TIME_WAND_FAKE_PLAYER_ALLOWED = COMMON_BUILDER.comment("Can fake players (e.g. Clickers) use the Time Wand?")
 				.define("time_wand_fake_player_allowed", true);
-		TIME_WAND_BLOCK_BLACKLIST = COMMON_BUILDER
-				.comment("Blocks the Time Wand cannot accelerate, matched by regex against the full block ID.",
-						"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
-						"Example: \"draconicevolution:chaos_crystal\" blocks that exact block,",
-						"or \"^draconicevolution:\" blocks all blocks from that mod.",
-						"Note: the tick_speed_deny block tag also controls this and is checked first.")
+		TIME_WAND_BLOCK_BLACKLIST = COMMON_BUILDER.comment(
+				"Blocks the Time Wand cannot accelerate, matched by regex against the full block ID.",
+				"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
+				"Example: \"draconicevolution:chaos_crystal\" blocks that exact block,",
+				"or \"^draconicevolution:\" blocks all blocks from that mod.",
+				"Note: the tick_speed_deny block tag also controls this and is checked first.")
 				.defineListAllowEmpty(List.of("time_wand_block_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}
@@ -358,18 +358,18 @@ public class Config {
 
 	private static void swapperConfig() {
 		COMMON_BUILDER.comment("Block Swapper").push(CATEGORY_BLOCK_SWAPPER);
-		SWAPPER_ENTITY_BLACKLIST = COMMON_BUILDER
-				.comment("Entities the Block Swapper cannot teleport, matched by regex against the full entity ID.",
-						"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
-						"Example: \"draconicevolution:chaos_guardian\" blocks that exact entity,",
-						"or \"^draconicevolution:\" blocks all entities from that mod.")
+		SWAPPER_ENTITY_BLACKLIST = COMMON_BUILDER.comment(
+				"Entities the Block Swapper cannot teleport, matched by regex against the full entity ID.",
+				"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
+				"Example: \"draconicevolution:chaos_guardian\" blocks that exact entity,",
+				"or \"^draconicevolution:\" blocks all entities from that mod.")
 				.defineListAllowEmpty(List.of("swapper_entity_blacklist"), () -> List.of(), s -> s instanceof String);
-		SWAPPER_BLOCK_BLACKLIST = COMMON_BUILDER
-				.comment("Blocks the Block Swapper cannot move, matched by regex against the full block ID.",
-						"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
-						"Example: \"draconicevolution:chaos_crystal\" blocks that exact block,",
-						"or \"^draconicevolution:\" blocks all blocks from that mod.",
-						"Note: the swapper_deny block tag also controls this and is checked first.")
+		SWAPPER_BLOCK_BLACKLIST = COMMON_BUILDER.comment(
+				"Blocks the Block Swapper cannot move, matched by regex against the full block ID.",
+				"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
+				"Example: \"draconicevolution:chaos_crystal\" blocks that exact block,",
+				"or \"^draconicevolution:\" blocks all blocks from that mod.",
+				"Note: the swapper_deny block tag also controls this and is checked first.")
 				.defineListAllowEmpty(List.of("swapper_block_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}
@@ -385,11 +385,11 @@ public class Config {
 				.defineInRange("random_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
 		TARGET_POLYMORPH_COST = COMMON_BUILDER.comment("mB of polymorphic fluid consumed per targeted polymorph")
 				.defineInRange("target_polymorph_cost", 1000, 0, Integer.MAX_VALUE);
-		POLYMORPH_BLACKLIST = COMMON_BUILDER
-				.comment("Entities the Polymorphic Wand cannot create, matched by regex against the full entity ID.",
-						"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
-						"Example: \"somebossmod:big_boss\" blocks that exact entity,",
-						"or \"^somebossmod:\" blocks all entities from that mod.")
+		POLYMORPH_BLACKLIST = COMMON_BUILDER.comment(
+				"Entities the Polymorphic Wand cannot create, matched by regex against the full entity ID.",
+				"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
+				"Example: \"somebossmod:big_boss\" blocks that exact entity,",
+				"or \"^somebossmod:\" blocks all entities from that mod.")
 				.defineListAllowEmpty(List.of("polymorph_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}

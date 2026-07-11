@@ -3,6 +3,9 @@ package com.direwolf20.justdirethings.common.blocks;
 import com.direwolf20.justdirethings.common.blockentities.BlockPlacerT2BE;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.common.containers.BlockPlacerT2Container;
+import com.direwolf20.justdirethings.common.items.FerricoreWrench;
+import com.direwolf20.justdirethings.common.items.MachineSettingsCopier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
@@ -60,6 +63,11 @@ public class BlockPlacerT2 extends BaseMachineBlock {
 			InteractionHand hand, BlockHitResult hit) {
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
+
+		ItemStack playerHolding = player.getItemInHand(hand);
+		if (playerHolding.getItem() instanceof FerricoreWrench
+				|| playerHolding.getItem() instanceof MachineSettingsCopier)
+			return InteractionResult.PASS;
 
 		BlockEntity te = level.getBlockEntity(blockPos);
 		if (!(te instanceof BlockPlacerT2BE))
