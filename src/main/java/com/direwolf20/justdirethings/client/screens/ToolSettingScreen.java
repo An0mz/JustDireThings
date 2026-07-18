@@ -191,7 +191,9 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 				bindingMap.put(toggleButton, LeftClickableTool.getAbilityBinding(tool, toolAbility));
 				this.bindingButtons.put(button, bindingButton);
 
-				requireEquipped = bindingMap.get(toggleButton) == null ? true : bindingMap.get(toggleButton).requireEquipped();
+				requireEquipped = bindingMap.get(toggleButton) == null
+						? true
+						: bindingMap.get(toggleButton).requireEquipped();
 				ToggleButton finalToggleButton = toggleButton;
 				ToggleButton requireEquippedButton = ToggleButtonFactory.REQUIRE_EQUIPPED_BUTTON(buttonsStartX + 125,
 						buttonsStartY, requireEquipped ? 0 : 1, (clicked2) -> {
@@ -219,9 +221,8 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	}
 
 	protected void sendBinding(String abilityName, int buttonType, int keyCode, boolean isMouse) {
-		PacketHandler.CHANNEL.sendToServer(
-				new ToggleToolLeftRightClickPayload(toolSlot, abilityName, buttonType, keyCode, isMouse,
-						requireEquipped));
+		PacketHandler.CHANNEL.sendToServer(new ToggleToolLeftRightClickPayload(toolSlot, abilityName, buttonType,
+				keyCode, isMouse, requireEquipped));
 	}
 
 	protected void collectButtonsToRemove() {
@@ -346,9 +347,8 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 				this.bindingEnabled = false;
 				return true;
 			} else {
-				bindingMap.put(leftRightClickButtons.get(shownAbilityButton),
-						new LeftClickableTool.AbilityBinding(buttonToAbilityMap.get(shownAbilityButton).getName(),
-								pKeyCode, false, requireEquipped));
+				bindingMap.put(leftRightClickButtons.get(shownAbilityButton), new LeftClickableTool.AbilityBinding(
+						buttonToAbilityMap.get(shownAbilityButton).getName(), pKeyCode, false, requireEquipped));
 				leftRightClickButtons.get(shownAbilityButton).onPress(); // This fires the packet to the server
 				bindingButtons.get(shownAbilityButton).toggleActive();
 				this.bindingEnabled = false;
@@ -369,9 +369,8 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	public boolean mouseClicked(double x, double y, int btn) {
 		if (btn != 0 && btn != 1 && shownAbilityButton != null && leftRightClickButtons.get(shownAbilityButton) != null
 				&& bindingButtons.get(shownAbilityButton) != null && this.bindingEnabled) {
-			bindingMap.put(leftRightClickButtons.get(shownAbilityButton),
-					new LeftClickableTool.AbilityBinding(buttonToAbilityMap.get(shownAbilityButton).getName(), btn,
-							true, requireEquipped));
+			bindingMap.put(leftRightClickButtons.get(shownAbilityButton), new LeftClickableTool.AbilityBinding(
+					buttonToAbilityMap.get(shownAbilityButton).getName(), btn, true, requireEquipped));
 			leftRightClickButtons.get(shownAbilityButton).onPress();
 			bindingButtons.get(shownAbilityButton).toggleActive();
 			this.bindingEnabled = false;
@@ -407,7 +406,8 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 					}
 					if (requireEquippedButtons.containsKey(shownAbilityButton) && showCustomBinding()) {
 						widgetsToAdd.add(requireEquippedButtons.get(shownAbilityButton));
-						requireEquipped = bindingMap.get(leftRightClickButtons.get(shownAbilityButton)) == null ? true
+						requireEquipped = bindingMap.get(leftRightClickButtons.get(shownAbilityButton)) == null
+								? true
 								: bindingMap.get(leftRightClickButtons.get(shownAbilityButton)).requireEquipped();
 					}
 					if (hideRenderButtons.containsKey(shownAbilityButton)) {

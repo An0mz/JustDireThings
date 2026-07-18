@@ -444,8 +444,7 @@ public interface ToggleableTool extends ToggleableItem {
 		if (itemStack.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseLeggings)
 			return ItemStack.isSameItemSameTags(itemStack,
 					player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS));
-		if (itemStack
-				.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseChestplate)
+		if (itemStack.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseChestplate)
 			return ItemStack.isSameItemSameTags(itemStack,
 					player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST));
 		if (itemStack.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseHelmet)
@@ -459,8 +458,7 @@ public interface ToggleableTool extends ToggleableItem {
 		boolean anyRan = false;
 		Set<Ability> customBindAbilities = new HashSet<>();
 		if (itemStack.getItem() instanceof LeftClickableTool)
-			customBindAbilities
-					.addAll(LeftClickableTool.getCustomBindingListFor(itemStack, keyCode, isMouse, player));
+			customBindAbilities.addAll(LeftClickableTool.getCustomBindingListFor(itemStack, keyCode, isMouse, player));
 		for (Ability ability : getActiveAbilities(itemStack)) {
 			if (customBindAbilities.contains(ability)) {
 				if (ability.action != null) {
@@ -526,8 +524,8 @@ public interface ToggleableTool extends ToggleableItem {
 		boolean anyRan = false;
 		Set<Ability> customBindAbilities = new HashSet<>();
 		if (itemStack.getItem() instanceof LeftClickableTool)
-			customBindAbilities.addAll(LeftClickableTool.getCustomBindingListFor(itemStack, keyCode, isMouse,
-					pContext.getPlayer()));
+			customBindAbilities.addAll(
+					LeftClickableTool.getCustomBindingListFor(itemStack, keyCode, isMouse, pContext.getPlayer()));
 		for (Ability ability : getUseOnAbilities(itemStack)) {
 			if (customBindAbilities.contains(ability)) {
 				if (ability.useOnAction != null) {

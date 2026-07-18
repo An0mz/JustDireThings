@@ -16,8 +16,8 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 @SuppressWarnings("removal")
 public class AbilityCooldownOverlay implements IGuiOverlay {
 	public static final AbilityCooldownOverlay INSTANCE = new AbilityCooldownOverlay();
-	private static final EquipmentSlot[] EQUIPMENT_ORDER = {EquipmentSlot.HEAD, EquipmentSlot.CHEST,
-			EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND};
+	private static final EquipmentSlot[] EQUIPMENT_ORDER = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS,
+			EquipmentSlot.FEET, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND};
 
 	@Override
 	public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {

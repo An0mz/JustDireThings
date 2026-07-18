@@ -78,8 +78,7 @@ public interface LeftClickableTool {
 
 	static LeftClickableTool.AbilityBinding getAbilityBinding(ItemStack stack, Ability ability) {
 		return getCustomBindingList(stack).stream()
-				.filter(binding -> binding.abilityName().equalsIgnoreCase(ability.getName())).findFirst()
-				.orElse(null);
+				.filter(binding -> binding.abilityName().equalsIgnoreCase(ability.getName())).findFirst().orElse(null);
 	}
 
 	static void removeFromCustomBindingList(ItemStack stack, Ability ability) {

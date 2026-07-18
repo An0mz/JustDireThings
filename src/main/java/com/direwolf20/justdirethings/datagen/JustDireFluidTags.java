@@ -51,7 +51,8 @@ public class JustDireFluidTags extends FluidTagsProvider {
 		tag(forgeFluidTag("time_fluid")).add(Registration.TIME_FLUID_SOURCE.get())
 				.add(Registration.TIME_FLUID_FLOWING.get());
 		tag(forgeFluidTag("xp_fluid")).add(Registration.XP_FLUID_SOURCE.get()).add(Registration.XP_FLUID_FLOWING.get());
-		// Interop tags so other mods' XP-fluid handling (pipes, tanks, machines) recognizes this fluid
+		// Interop tags so other mods' XP-fluid handling (pipes, tanks, machines)
+		// recognizes this fluid
 		tag(fluidTag("forge", "experience")).add(Registration.XP_FLUID_SOURCE.get())
 				.add(Registration.XP_FLUID_FLOWING.get());
 		tag(fluidTag("forge", "xpjuice")).add(Registration.XP_FLUID_SOURCE.get())
