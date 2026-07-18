@@ -294,6 +294,22 @@ public class JustDireRecipes extends RecipeProvider {
 						InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier4_ITEM.get()))
 				.save(consumer, new ResourceLocation(JustDireThings.MODID, "refined_t4_fluid_block-goospread"));
 		GooSpreadRecipeBuilder
+				.shapeless(new ResourceLocation(JustDireThings.MODID, "budding_time_amethyst"),
+						Blocks.BUDDING_AMETHYST.defaultBlockState(),
+						Registration.TimeCrystalBuddingBlock.get().defaultBlockState(), 4, 4800)
+				.group("justdirethings")
+				.unlockedBy("has_goo_block_t4",
+						InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier4_ITEM.get()))
+				.save(consumer, new ResourceLocation(JustDireThings.MODID, "budding_time_amethyst-goospread"));
+		GooSpreadRecipeBuilder
+				.shapeless(new ResourceLocation(JustDireThings.MODID, "budding_time_timeblock"),
+						Registration.TimeCrystalBlock.get().defaultBlockState(),
+						Registration.TimeCrystalBuddingBlock.get().defaultBlockState(), 4, 4800)
+				.group("justdirethings")
+				.unlockedBy("has_goo_block_t4",
+						InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier4_ITEM.get()))
+				.save(consumer, new ResourceLocation(JustDireThings.MODID, "budding_time_timeblock-goospread"));
+		GooSpreadRecipeBuilder
 				.shapeless(new ResourceLocation(JustDireThings.MODID, "portal_fluid"),
 						Registration.UNSTABLE_PORTAL_FLUID_BLOCK.get().defaultBlockState(),
 						Registration.PORTAL_FLUID_BLOCK.get().defaultBlockState(), 3, 2400)

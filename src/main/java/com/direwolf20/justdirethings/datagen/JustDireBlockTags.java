@@ -44,6 +44,10 @@ public class JustDireBlockTags extends BlockTagsProvider {
 			.create(new ResourceLocation(JustDireThings.MODID, "tick_speed_deny"));
 	public static final TagKey<Block> PHASEDENY = BlockTags
 			.create(new ResourceLocation(JustDireThings.MODID, "phase_deny"));
+	public static final TagKey<Block> BUDDING_BLOCKS = BlockTags
+			.create(new ResourceLocation("forge", "budding_blocks"));
+	public static final TagKey<Block> BUDS = BlockTags.create(new ResourceLocation("forge", "buds"));
+	public static final TagKey<Block> CLUSTERS = BlockTags.create(new ResourceLocation("forge", "clusters"));
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
@@ -91,6 +95,10 @@ public class JustDireBlockTags extends BlockTagsProvider {
 		tag(TICK_SPEED_DENY).addTag(BlockTags.PORTALS).add(Registration.TimeCrystalBuddingBlock.get())
 				.add(Registration.GeneratorT1.get()).add(Registration.GeneratorFluidT1.get());
 		tag(PHASEDENY).add(Blocks.BEDROCK);
+		tag(BUDDING_BLOCKS).add(Registration.TimeCrystalBuddingBlock.get());
+		tag(BUDS).add(Registration.TimeCrystalCluster_Small.get()).add(Registration.TimeCrystalCluster_Medium.get())
+				.add(Registration.TimeCrystalCluster_Large.get());
+		tag(CLUSTERS).add(Registration.TimeCrystalCluster.get());
 	}
 
 	@Override

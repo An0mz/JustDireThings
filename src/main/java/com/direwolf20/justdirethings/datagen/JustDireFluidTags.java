@@ -26,6 +26,10 @@ public class JustDireFluidTags extends FluidTagsProvider {
 		return FluidTags.create(new ResourceLocation("forge", "fluids/" + name));
 	}
 
+	private static TagKey<Fluid> fluidTag(String namespace, String name) {
+		return FluidTags.create(new ResourceLocation(namespace, name));
+	}
+
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		tag(forgeFluidTag("refined_t2_fuel")).add(Registration.REFINED_T2_FLUID_SOURCE.get())
@@ -47,6 +51,13 @@ public class JustDireFluidTags extends FluidTagsProvider {
 		tag(forgeFluidTag("time_fluid")).add(Registration.TIME_FLUID_SOURCE.get())
 				.add(Registration.TIME_FLUID_FLOWING.get());
 		tag(forgeFluidTag("xp_fluid")).add(Registration.XP_FLUID_SOURCE.get()).add(Registration.XP_FLUID_FLOWING.get());
+		// Interop tags so other mods' XP-fluid handling (pipes, tanks, machines) recognizes this fluid
+		tag(fluidTag("forge", "experience")).add(Registration.XP_FLUID_SOURCE.get())
+				.add(Registration.XP_FLUID_FLOWING.get());
+		tag(fluidTag("forge", "xpjuice")).add(Registration.XP_FLUID_SOURCE.get())
+				.add(Registration.XP_FLUID_FLOWING.get());
+		tag(fluidTag("industrialforegoing", "essence")).add(Registration.XP_FLUID_SOURCE.get())
+				.add(Registration.XP_FLUID_FLOWING.get());
 		tag(forgeFluidTag("polymorphic_fluid")).add(Registration.POLYMORPHIC_FLUID_SOURCE.get())
 				.add(Registration.POLYMORPHIC_FLUID_FLOWING.get());
 	}

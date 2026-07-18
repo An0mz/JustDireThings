@@ -1,4 +1,4 @@
-// 1.20.1	2026-05-12T14:32:40.9285944	Recipes
+// 1.20.1	2026-07-17T21:21:56.2874914	Recipes
 c6ff5e88cd81a298d446a8bac214c342aa04312f data/justdirethings/advancements/recipes/building_blocks/blazegold_ingot_9x9.json
 1884e5d7def6742e25d4883edb9682acdfb7ceec data/justdirethings/advancements/recipes/building_blocks/celestigem_9x9.json
 a7ae9c1243e565a8fb4ac362e1dcea5d5236751a data/justdirethings/advancements/recipes/building_blocks/coal_t1_9x9.json
@@ -117,6 +117,8 @@ d4d705f54ead1c07531cd66b2c18bd0e9b77115f data/justdirethings/recipes/blockswappe
 32d1f9e0fc6dc20677f3f3a595fe660781599102 data/justdirethings/recipes/blockswappert1_nbtclear.json
 5e3d58a7a22f8c6053460ff568b8ba821a0e7768 data/justdirethings/recipes/blockswappert2.json
 b12211757eab3f87731da6186abe794162ab1dc8 data/justdirethings/recipes/blockswappert2_nbtclear.json
+ad43bd418ccf27e335ea4118bc30e3b4af159ab7 data/justdirethings/recipes/budding_time_amethyst-goospread.json
+e5256cab2e7871f731e6f0f34b24fd6a3ec5dfda data/justdirethings/recipes/budding_time_timeblock-goospread.json
 ecb0ff971d15eec2066e6e5cf44966e4631bb762 data/justdirethings/recipes/celestigem_9x9.json
 c73f284b605a10a3bba9306370ce73c2733caecd data/justdirethings/recipes/celestigem_axe.json
 fe4fb2ba1820d85791d72f86b13dab3eb8916b91 data/justdirethings/recipes/celestigem_block_9x9.json
