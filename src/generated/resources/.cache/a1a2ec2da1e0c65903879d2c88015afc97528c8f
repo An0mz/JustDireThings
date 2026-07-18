@@ -1,4 +1,4 @@
-// 1.20.1	2026-06-10T15:18:35.9964693	Block States: justdirethings
+// 1.20.1	2026-07-18T14:14:42.0946972	Block States: justdirethings
 e5976480ed9485e0bae43d4edde0c8aecaabe8a5 assets/justdirethings/blockstates/blazegold_block.json
 6580258682ab076313135ecb0c16dc2595a1a0df assets/justdirethings/blockstates/blockbreakert1.json
 0db1a53fd80ee5aed746843da439bd30b131ac55 assets/justdirethings/blockstates/blockbreakert2.json
@@ -34,7 +34,7 @@ f221904a483d33a577cfa1060d4b8f9063e2812e assets/justdirethings/blockstates/gooso
 d550876437faefc69e5ad8ef174f472d7f89369c assets/justdirethings/blockstates/goosoil_tier3.json
 9c77898649f8529c0343218f178d522014585e89 assets/justdirethings/blockstates/goosoil_tier4.json
 b3431a119dca650d42bd7f3258b34c05a6159711 assets/justdirethings/blockstates/inventoryholder.json
-776cbf63079ced6a682192918089bb8516869c76 assets/justdirethings/blockstates/paradoxmachine.json
+656ee182206c56461dc90f6d13082d6dfbab1298 assets/justdirethings/blockstates/paradoxmachine.json
 420242c724ce8c4dcadd2e61d8cef10cdaf261f6 assets/justdirethings/blockstates/playeraccessor.json
 1d373d4f9b794922306aeb4c1d1b2ca7c957c9ff assets/justdirethings/blockstates/sensort1.json
 aaf82b3cdc58d82441567cd000083ca3462078e7 assets/justdirethings/blockstates/sensort2.json
@@ -99,7 +99,7 @@ c90ce24d043ec38a46ebf2a3e90e37ae5672a837 assets/justdirethings/models/block/goos
 dea2d948b32322a5aeb424c534c2a5ec2e952975 assets/justdirethings/models/block/goosoil_tier4.json
 543cb7bee8f16de42651f69263a2799b4ce54c15 assets/justdirethings/models/block/goosoil_tier4_moist.json
 aeae2fff448b79edebfc6be420af80c1536ca07f assets/justdirethings/models/block/inventoryholder.json
-ebeb0c2ed498482c5b03921ca6056c8b15a0d353 assets/justdirethings/models/block/paradoxmachine.json
+2903e942696ee1ec912f4d23944c7f60671fe8dd assets/justdirethings/models/block/paradoxmachine.json
 afb260733f29a4754b2282eb26b78af1a2940bcd assets/justdirethings/models/block/playeraccessor.json
 c036acaa7ebbc9c620fe9e4e74c99c59526b053e assets/justdirethings/models/block/sensort1.json
 45ae055949f929510cbf995d4c64e3682eb8ddf6 assets/justdirethings/models/block/sensort2.json

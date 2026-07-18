@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -34,12 +35,11 @@ public class JustDireEntityTags extends EntityTypeTagsProvider {
 
 	@Override
 	public void addTags(HolderLookup.Provider lookupProvider) {
-		tag(PARADOX_DENY).add(Registration.ParadoxEntity.get());
+		tag(PARADOX_DENY).add(Registration.ParadoxEntity.get()).add(Registration.TimeWandEntity.get());
 		tag(CREATURE_CATCHER_DENY).add(EntityType.ENDER_DRAGON);
-		// Keep these tags present even if empty so ability deny-list checks are
-		// data-pack extensible.
-		tag(NO_AI_DENY);
-		tag(NO_EARTHQUAKE);
-		tag(PARADOX_ABSORB_DENY);
+		tag(NO_AI_DENY).add(EntityType.ENDER_DRAGON).add(EntityType.WITHER).add(EntityType.WARDEN);
+		tag(NO_EARTHQUAKE).add(EntityType.ENDER_DRAGON).add(EntityType.WITHER).add(EntityType.WARDEN);
+		tag(PARADOX_ABSORB_DENY).add(Registration.ParadoxEntity.get()).add(Registration.TimeWandEntity.get());
+		tag(EntityTypeTags.ARROWS).add(Registration.JustDireArrow.get());
 	}
 }

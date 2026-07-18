@@ -1,6 +1,7 @@
-// 1.20.1	2026-05-18T22:40:19.4524832	Tags for minecraft:entity_type mod id justdirethings
+// 1.20.1	2026-07-18T13:44:53.5331723	Tags for minecraft:entity_type mod id justdirethings
 e00f2931577049b9a4400a87ed9c249373be376c data/justdirethings/tags/entity_types/creature_catcher_deny.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/entity_types/no_ai_deny.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/entity_types/no_earthquake.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/entity_types/paradox_absorb_deny.json
-5c6ca8be1631a40b77a3d6a19baa54862bce6d44 data/justdirethings/tags/entity_types/paradox_deny.json
+669025814936e708d42d9d0a5b88c11e62cf12ef data/justdirethings/tags/entity_types/no_ai_deny.json
+669025814936e708d42d9d0a5b88c11e62cf12ef data/justdirethings/tags/entity_types/no_earthquake.json
+2b960a3ef382e66eedc67838db29f5c33fb70e5b data/justdirethings/tags/entity_types/paradox_absorb_deny.json
+2b960a3ef382e66eedc67838db29f5c33fb70e5b data/justdirethings/tags/entity_types/paradox_deny.json
+186c346120ed3cdb3bd03c9a1a4b92bb5904bd31 data/minecraft/tags/entity_types/arrows.json

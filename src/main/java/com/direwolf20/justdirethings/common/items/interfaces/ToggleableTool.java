@@ -387,7 +387,9 @@ public interface ToggleableTool extends ToggleableItem {
 			return;
 		long currentTick = player.level().getGameTime();
 		boolean changed = false;
-		Set<Integer> cooldownsToRemove = new HashSet<>();
+		// Descending order so removing by index below doesn't shift not-yet-removed
+		// indices out from under us.
+		Set<Integer> cooldownsToRemove = new TreeSet<>(Comparator.reverseOrder());
 		ListTag cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
 		for (int i = 0; i < cooldowns.size(); i++) {
 			CompoundTag compoundTag = cooldowns.getCompound(i);
@@ -428,6 +430,16 @@ public interface ToggleableTool extends ToggleableItem {
 			cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
 		else
 			cooldowns = new ListTag();
+		// Each ability may only have one live cooldown entry - replace any existing
+		// one instead of appending, otherwise stale/duplicate entries can mask a
+		// fresh cooldown in getAnyCooldown's first-match lookup and let the ability
+		// be spammed.
+		for (int i = 0; i < cooldowns.size(); i++) {
+			if (cooldowns.getCompound(i).getString("ability").equals(ability.getName())) {
+				cooldowns.remove(i);
+				break;
+			}
+		}
 		CompoundTag newTag = new CompoundTag();
 		newTag.putString("ability", ability.getName());
 		newTag.putLong("end_tick", startTick + cooldown);

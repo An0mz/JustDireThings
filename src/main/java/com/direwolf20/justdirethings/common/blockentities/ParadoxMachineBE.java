@@ -445,13 +445,9 @@ public class ParadoxMachineBE extends BaseMachineBE
 
 	public boolean isBlockPosValid(ServerLevel serverLevel, BlockPos blockPos) {
 		BlockState blockState = serverLevel.getBlockState(blockPos);
-		if (blockState.isAir())
+		if (!blockState.is(JustDireBlockTags.PARADOX_ALLOW))
 			return false;
-		if (blockState.is(JustDireBlockTags.PARADOX_DENY))
-			return false;
-		if (isParadoxBlockBlacklisted(blockState))
-			return false;
-		return true;
+		return !isParadoxBlockBlacklisted(blockState);
 	}
 
 	public Map<BlockPos, BlockState> getBlocksFromNBT() {
@@ -631,7 +627,14 @@ public class ParadoxMachineBE extends BaseMachineBE
 			return false;
 		if (entity instanceof Player)
 			return false;
-		return true;
+		return !isParadoxEntityBlacklisted(entity);
+	}
+
+	private static boolean isParadoxEntityBlacklisted(Entity entity) {
+		ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+		if (key == null)
+			return false;
+		return MiscTools.matchesRegexBlacklist(Config.PARADOX_ENTITY_BLACKLIST.get(), key.toString());
 	}
 
 	@Override

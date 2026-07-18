@@ -145,10 +145,6 @@ public class JustDireBlockStates extends BlockStateProvider {
 				models().cubeBottomTop(Registration.GeneratorFluidT1.getId().getPath(),
 						modLoc("block/generatorfluidt1_side"), modLoc("block/generatorfluidt1_bottom"),
 						modLoc("block/generatorfluidt1_top")));
-		simpleBlock(Registration.ParadoxMachine.get(),
-				models().cubeBottomTop(Registration.ParadoxMachine.getId().getPath(),
-						modLoc("block/paradoxmachine_side"), modLoc("block/paradoxmachine_bottom"),
-						modLoc("block/paradoxmachine_top")));
 	}
 
 	private void sidedBlocks() {

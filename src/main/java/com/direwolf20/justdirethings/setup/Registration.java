@@ -60,6 +60,7 @@ import com.direwolf20.justdirethings.common.fluids.unrefinedt2fuel.UnrefinedT2Fu
 import com.direwolf20.justdirethings.common.fluids.unrefinedt3fuel.UnrefinedT3Fuel;
 import com.direwolf20.justdirethings.common.fluids.unrefinedt4fuel.UnrefinedT4Fuel;
 import com.direwolf20.justdirethings.common.fluids.unstableportalfluid.UnstablePortalFluid;
+import com.direwolf20.justdirethings.common.fluids.unstableportalfluid.UnstablePortalFluidType;
 import com.direwolf20.justdirethings.common.fluids.xpfluid.XPFluid;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.Upgrade;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.UpgradeBlank;
@@ -690,7 +691,7 @@ public class Registration {
 	public static final RegistryObject<MenuType<InventoryHolderContainer>> InventoryHolder_Container = CONTAINERS
 			.register("inventoryholder_container", () -> IForgeMenuType.create(InventoryHolderContainer::new));
 
-	public static final RegistryObject<ParadoxMachine> ParadoxMachine = BLOCKS.register("paradoxmachine",
+	public static final RegistryObject<ParadoxMachine> ParadoxMachine = SIDEDBLOCKS.register("paradoxmachine",
 			ParadoxMachine::new);
 	public static final RegistryObject<BlockItem> ParadoxMachine_ITEM = ITEMS.register("paradoxmachine",
 			() -> new BlockItem(ParadoxMachine.get(), new Item.Properties()));
@@ -810,7 +811,7 @@ public class Registration {
 	// Unstable Portal Fluid
 	public static final RegistryObject<FluidType> UNSTABLE_PORTAL_FLUID_TYPE = FLUID_TYPES.register(
 			"unstable_portal_fluid_type",
-			() -> new JustDireFluidType(0xFF9400D3, FluidType.Properties.create().density(400).viscosity(800)));
+			() -> new UnstablePortalFluidType(0xFF9400D3, FluidType.Properties.create().density(400).viscosity(800)));
 	public static final RegistryObject<ForgeFlowingFluid> UNSTABLE_PORTAL_FLUID_SOURCE = FLUIDS
 			.register("unstable_portal_fluid", UnstablePortalFluid.Source::new);
 	public static final RegistryObject<ForgeFlowingFluid> UNSTABLE_PORTAL_FLUID_FLOWING = FLUIDS
@@ -874,6 +875,8 @@ public class Registration {
 			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "portal_gun_open")));
 	public static final RegistryObject<SoundEvent> PARADOX_AMBIENT = SOUNDS.register("paradox_ambient",
 			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "paradox_ambient")));
+	public static final RegistryObject<SoundEvent> BEEP = SOUNDS.register("beep",
+			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "beep")));
 
 	public static final RegistryObject<TimeWand> TimeWand = ITEMS.register("time_wand", TimeWand::new);
 	public static final RegistryObject<PortalGun> PortalGun = ITEMS.register("portal_gun", PortalGun::new);

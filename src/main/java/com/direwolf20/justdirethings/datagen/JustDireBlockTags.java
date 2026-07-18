@@ -83,7 +83,7 @@ public class JustDireBlockTags extends BlockTagsProvider {
 				.add(Registration.RawCelestigemOre.get()).add(Registration.RawEclipseAlloyOre.get());
 		tag(BlockTags.BAMBOO_PLANTABLE_ON).add(Registration.GooSoil_Tier1.get()).add(Registration.GooSoil_Tier2.get())
 				.add(Registration.GooSoil_Tier3.get()).add(Registration.GooSoil_Tier4.get());
-		tag(PARADOX_ALLOW);
+		tag(PARADOX_ALLOW).addTag(Tags.Blocks.ORES);
 		tag(PARADOX_ABSORB_DENY).add(Blocks.BEDROCK).add(Blocks.END_PORTAL_FRAME).add(Blocks.END_PORTAL)
 				.add(Blocks.NETHER_PORTAL).addTag(BlockTags.PORTALS);
 		tag(PARADOX_DENY).add(Blocks.BEDROCK).add(Blocks.END_PORTAL_FRAME).add(Blocks.END_PORTAL)
@@ -95,7 +95,8 @@ public class JustDireBlockTags extends BlockTagsProvider {
 		tag(ECLISEGATEDENY).addTag(BlockTags.PORTALS);
 		tag(TICK_SPEED_DENY).addTag(BlockTags.PORTALS).add(Registration.TimeCrystalBuddingBlock.get())
 				.add(Registration.GeneratorT1.get()).add(Registration.GeneratorFluidT1.get());
-		tag(PHASEDENY).add(Blocks.BEDROCK);
+		tag(PHASEDENY).addTag(BlockTags.PORTALS).add(Blocks.BARRIER).add(Blocks.BEDROCK).add(Blocks.END_PORTAL)
+				.add(Blocks.END_PORTAL_FRAME).add(Blocks.END_GATEWAY).add(Blocks.STRUCTURE_BLOCK).add(Blocks.JIGSAW);
 		tag(BUDDING_BLOCKS).add(Registration.TimeCrystalBuddingBlock.get());
 		tag(BUDS).add(Registration.TimeCrystalCluster_Small.get()).add(Registration.TimeCrystalCluster_Medium.get())
 				.add(Registration.TimeCrystalCluster_Large.get());

@@ -35,6 +35,8 @@ public class DataGenerators {
 		generator.addProvider(event.includeServer(), entityTags);
 		JustDireFluidTags fluidTags = new JustDireFluidTags(packOutput, lookupProvider, event.getExistingFileHelper());
 		generator.addProvider(event.includeServer(), fluidTags);
+		JustDireBiomeTags biomeTags = new JustDireBiomeTags(packOutput, lookupProvider, event.getExistingFileHelper());
+		generator.addProvider(event.includeServer(), biomeTags);
 
 		generator.addProvider(event.includeClient(),
 				new JustDireBlockStates(packOutput, event.getExistingFileHelper()));

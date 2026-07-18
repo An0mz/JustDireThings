@@ -156,6 +156,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Registration.PolymorphicWand.get(), "Polymorphic Wand");
 
 		// Misc
+		add("sound.justdirethings.beep", "Beep");
 		add("justdirethings.missingupgrade", " (Missing)");
 		add("justdirethings.shiftmoreinfo", "Hold Shift for details");
 		add("justdirethings.presshotkey", "<Press %s>");
@@ -325,6 +326,12 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.screen.inv-armor", "Armor Slots");
 		add("justdirethings.screen.inv-offhand", "Offhand Slots");
 		add("justdirethings.screen.rightclicksettings", "Right Click for Settings");
+		add("justdirethings.screen.add_favorite", "Add Favorite");
+		add("justdirethings.screen.remove_favorite", "Remove Favorite");
+		add("justdirethings.screen.edit_favorite", "Edit Favorite");
+		add("justdirethings.screen.stay_open", "Stay Open");
+		add("justdirethings.screen.save_close", "Save and Close");
+		add("justdirethings.screen.cancel", "Cancel");
 		add("justdirethings.fillmode.none", "Fill Mode: Off");
 		add("justdirethings.fillmode.jdtonly", "Fill Mode: JDT Only");
 		add("justdirethings.fillmode.all", "Fill Mode: All");

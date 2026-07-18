@@ -37,6 +37,11 @@ public class JustDireItemTags extends ItemTagsProvider {
 	public static final TagKey<Item> BUCKETS_TIME_FLUID = forgeTag("buckets/time_fluid");
 	public static final TagKey<Item> BUCKETS_XP_FLUID = forgeTag("buckets/xp_fluid");
 	public static final TagKey<Item> BUCKETS_POLYMORPHIC_FLUID = forgeTag("buckets/polymorphic_fluid");
+	public static final TagKey<Item> RANGED_WEAPON = forgeTag("tools/ranged_weapon");
+	public static final TagKey<Item> MELEE_WEAPON = forgeTag("tools/melee_weapon");
+	public static final TagKey<Item> MINING_TOOL = forgeTag("tools/mining_tool");
+	public static final TagKey<Item> PAXEL = forgeTag("tools/paxel");
+	public static final TagKey<Item> STORAGE_BLOCKS_CHARCOAL = forgeTag("storage_blocks/charcoal");
 
 	private static TagKey<Item> forgeTag(String name) {
 		return ItemTags.create(new ResourceLocation("forge", name));
@@ -62,7 +67,7 @@ public class JustDireItemTags extends ItemTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		tag(AUTO_SMELT_DENY);
-		tag(PARADOX_DENY);
+		tag(PARADOX_DENY).add(Items.BEDROCK);
 		tag(AUTO_SMOKE_DENY);
 		tag(FUEL_CANISTER_DENY).add(Items.LAVA_BUCKET);
 		tag(GOO_REVIVE_TIER_1).add(Items.SUGAR).add(Items.ROTTEN_FLESH);
@@ -104,10 +109,35 @@ public class JustDireItemTags extends ItemTagsProvider {
 				.addTag(BUCKETS_UNREFINED_T2_FUEL).addTag(BUCKETS_UNREFINED_T3_FUEL).addTag(BUCKETS_UNREFINED_T4_FUEL)
 				.addTag(BUCKETS_PORTAL_FLUID).addTag(BUCKETS_UNSTABLE_PORTAL_FLUID).addTag(BUCKETS_TIME_FLUID)
 				.addTag(BUCKETS_XP_FLUID).addTag(BUCKETS_POLYMORPHIC_FLUID);
-		tag(Tags.Items.ARMORS_BOOTS).add(Registration.FerricoreBoots.get());
-		tag(Tags.Items.ARMORS_LEGGINGS).add(Registration.FerricoreLeggings.get());
-		tag(Tags.Items.ARMORS_CHESTPLATES).add(Registration.FerricoreChestplate.get());
-		tag(Tags.Items.ARMORS_HELMETS).add(Registration.FerricoreHelmet.get());
+		tag(Tags.Items.ARMORS_BOOTS).add(Registration.FerricoreBoots.get()).add(Registration.BlazegoldBoots.get())
+				.add(Registration.CelestigemBoots.get()).add(Registration.EclipseAlloyBoots.get());
+		tag(Tags.Items.ARMORS_LEGGINGS).add(Registration.FerricoreLeggings.get())
+				.add(Registration.BlazegoldLeggings.get()).add(Registration.CelestigemLeggings.get())
+				.add(Registration.EclipseAlloyLeggings.get());
+		tag(Tags.Items.ARMORS_CHESTPLATES).add(Registration.FerricoreChestplate.get())
+				.add(Registration.BlazegoldChestplate.get()).add(Registration.CelestigemChestplate.get())
+				.add(Registration.EclipseAlloyChestplate.get());
+		tag(Tags.Items.ARMORS_HELMETS).add(Registration.FerricoreHelmet.get()).add(Registration.BlazegoldHelmet.get())
+				.add(Registration.CelestigemHelmet.get()).add(Registration.EclipseAlloyHelmet.get());
+		tag(Tags.Items.STORAGE_BLOCKS).add(Registration.FerricoreBlock_ITEM.get())
+				.add(Registration.BlazeGoldBlock_ITEM.get()).add(Registration.CelestigemBlock_ITEM.get())
+				.add(Registration.EclipseAlloyBlock_ITEM.get()).add(Registration.CharcoalBlock_ITEM.get());
+		tag(STORAGE_BLOCKS_CHARCOAL).add(Registration.CharcoalBlock_ITEM.get());
+		tag(Tags.Items.TOOLS_BOWS).add(Registration.FerricoreBow.get()).add(Registration.BlazegoldBow.get())
+				.add(Registration.CelestigemBow.get()).add(Registration.EclipseAlloyBow.get());
+		tag(RANGED_WEAPON).add(Registration.FerricoreBow.get()).add(Registration.BlazegoldBow.get())
+				.add(Registration.CelestigemBow.get()).add(Registration.EclipseAlloyBow.get());
+		tag(MELEE_WEAPON).add(Registration.FerricoreSword.get()).add(Registration.FerricoreAxe.get())
+				.add(Registration.BlazegoldSword.get()).add(Registration.BlazegoldAxe.get())
+				.add(Registration.CelestigemSword.get()).add(Registration.CelestigemAxe.get())
+				.add(Registration.EclipseAlloySword.get()).add(Registration.EclipseAlloyAxe.get())
+				.add(Registration.CelestigemPaxel.get()).add(Registration.EclipseAlloyPaxel.get());
+		tag(MINING_TOOL).add(Registration.CelestigemPaxel.get()).add(Registration.EclipseAlloyPaxel.get());
+		tag(PAXEL).add(Registration.CelestigemPaxel.get()).add(Registration.EclipseAlloyPaxel.get());
+		tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(Registration.FerricorePickaxe.get())
+				.add(Registration.BlazegoldPickaxe.get()).add(Registration.CelestigemPickaxe.get())
+				.add(Registration.EclipseAlloyPickaxe.get()).add(Registration.CelestigemPaxel.get())
+				.add(Registration.EclipseAlloyPaxel.get());
 	}
 
 	@Override

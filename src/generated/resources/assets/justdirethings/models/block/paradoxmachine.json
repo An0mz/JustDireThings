@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/orientable_with_bottom",
+  "render_type": "minecraft:solid",
   "textures": {
     "bottom": "justdirethings:block/paradoxmachine_bottom",
+    "front": "justdirethings:block/paradoxmachine_side",
     "side": "justdirethings:block/paradoxmachine_side",
     "top": "justdirethings:block/paradoxmachine_top"
   }

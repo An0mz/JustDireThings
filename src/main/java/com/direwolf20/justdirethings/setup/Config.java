@@ -68,6 +68,7 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue PARADOX_ENERGY_MAX;
 	public static ForgeConfigSpec.BooleanValue PARADOX_RESTRICTED_MOBS;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> PARADOX_BLOCK_BLACKLIST;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> PARADOX_ENTITY_BLACKLIST;
 
 	public static final String CATEGORY_POLYMORPHIC_WAND = "polymorphic_wand";
 	public static ForgeConfigSpec.IntValue POLYMORPHIC_WAND_MAX_FLUID;
@@ -267,7 +268,7 @@ public class Config {
 		PARADOX_TOTAL_RF_CAPACITY = COMMON_BUILDER.comment("Max RF capacity of the Paradox Machine")
 				.defineInRange("paradox_total_rf_capacity", 10000000, 1, Integer.MAX_VALUE);
 		PARADOX_TOTAL_FLUID_CAPACITY = COMMON_BUILDER.comment("Max fluid capacity (mB) of the Paradox Machine")
-				.defineInRange("paradox_total_fluid_capacity", 64000, 1, Integer.MAX_VALUE);
+				.defineInRange("paradox_total_fluid_capacity", 16000, 1, Integer.MAX_VALUE);
 		PARADOX_RF_PER_BLOCK = COMMON_BUILDER.comment("RF cost per block restored")
 				.defineInRange("paradox_rf_per_block", 1000, 0, Integer.MAX_VALUE);
 		PARADOX_RF_PER_ENTITY = COMMON_BUILDER.comment("RF cost per entity restored")
@@ -285,12 +286,19 @@ public class Config {
 		PARADOX_RESTRICTED_MOBS = COMMON_BUILDER.comment("If true, only safe mob data fields are restored")
 				.define("paradox_restricted_mobs", true);
 		PARADOX_BLOCK_BLACKLIST = COMMON_BUILDER.comment(
-				"Blocks the Paradox Machine cannot save/restore, matched by regex against the full block ID.",
+				"Additional blocks the Paradox Machine cannot save/restore, matched by regex against the full block ID.",
 				"Each entry is a regex searched (not fully matched) against the block ID, so partial matches work.",
+				"Only blocks the Paradox Machine would otherwise be allowed to touch (the paradox_allow block tag,",
+				"ores by default) are affected - this list can only narrow that, not widen it.",
 				"Example: \".*reative.*\" blocks all blocks with \"reative\" in their ID (e.g. all Creative blocks),",
-				"or \"seeds\" blocks any block whose ID contains \"seeds\".",
-				"Note: the paradox_deny block tag also controls this and is checked first.")
+				"or \"seeds\" blocks any block whose ID contains \"seeds\".")
 				.defineListAllowEmpty(List.of("paradox_block_blacklist"), () -> List.of(), s -> s instanceof String);
+		PARADOX_ENTITY_BLACKLIST = COMMON_BUILDER.comment(
+				"Additional entities the Paradox Machine cannot save/restore, matched by regex against the full entity ID.",
+				"Each entry is a regex searched (not fully matched) against the entity ID, so partial matches work.",
+				"Example: \"draconicevolution:chaos_guardian\" blocks that exact entity,",
+				"or \"^draconicevolution:\" blocks all entities from that mod.")
+				.defineListAllowEmpty(List.of("paradox_entity_blacklist"), () -> List.of(), s -> s instanceof String);
 		COMMON_BUILDER.pop();
 
 		COMMON_BUILDER.comment("Polymorphic Wand").push(CATEGORY_POLYMORPHIC_WAND);

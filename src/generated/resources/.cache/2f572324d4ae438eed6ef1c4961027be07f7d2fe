@@ -1,4 +1,4 @@
-// 1.20.1	2026-07-17T23:58:38.9630001	JustDireThings Tags
+// 1.20.1	2026-07-18T13:50:17.3076478	JustDireThings Tags
 3f1af1854f73f0ca55ec9d76439efe025d53baaf data/forge/tags/blocks/budding_blocks.json
 f9398184c0216b0a1898a13ab326b459417ec790 data/forge/tags/blocks/buds.json
 691444261459e5b538067e8cd03db2fbe1b3371d data/forge/tags/blocks/clusters.json
@@ -7,9 +7,9 @@ f9398184c0216b0a1898a13ab326b459417ec790 data/forge/tags/blocks/buds.json
 31c8bfc0be2cf25004f962a2e7bb03b8fe7da206 data/justdirethings/tags/blocks/lawnmowerable.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/blocks/noautoclick.json
 f26d3813832f7b1b87e5c5fe8f22d0e73249e302 data/justdirethings/tags/blocks/paradox_absorb_deny.json
-35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/justdirethings/tags/blocks/paradox_allow.json
+cb28339548a9f5c43f81c4715df14c62d24020ad data/justdirethings/tags/blocks/paradox_allow.json
 f26d3813832f7b1b87e5c5fe8f22d0e73249e302 data/justdirethings/tags/blocks/paradox_deny.json
-cfab2ab481bf476a645d326b87627918009b9e50 data/justdirethings/tags/blocks/phase_deny.json
+fd8f34ea7c3f46b4031a8323009cfaffab88474e data/justdirethings/tags/blocks/phase_deny.json
 b73bf681aa4023a1ac69623485bbec13846a282a data/justdirethings/tags/blocks/swapper_deny.json
 a176ea9d2a989d495b337defebc96e250004257f data/justdirethings/tags/blocks/tick_speed_deny.json
 704d4386b02b3ad86131bd6cf1e36461baa4169f data/minecraft/tags/blocks/bamboo_plantable_on.json

@@ -16,5 +16,11 @@
       "justdirethings:paradox_running"
     ],
     "subtitle": "sound.justdirethings.paradox_ambient"
+  },
+  "beep": {
+    "sounds": [
+      "justdirethings:beep"
+    ],
+    "subtitle": "sound.justdirethings.beep"
   }
 }
