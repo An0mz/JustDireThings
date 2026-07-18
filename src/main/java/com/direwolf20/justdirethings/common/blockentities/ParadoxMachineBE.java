@@ -173,11 +173,17 @@ public class ParadoxMachineBE extends BaseMachineBE
 		if (paradoxExists())
 			return;
 		if (!isRunning) {
+			if (isEmptyScanOnCooldown())
+				return;
 			UsefulFakePlayer fakePlayer = getUsefulFakePlayer((ServerLevel) level);
 			restoringBlocks = testRestoreBlocks(fakePlayer);
 			restoringEntites = new ArrayList<>(getEntitiesFromNBT().keySet());
-			if (restoringBlocks.isEmpty() && restoringEntites.isEmpty())
+			if (restoringBlocks.isEmpty() && restoringEntites.isEmpty()) {
+				// Nothing restorable right now (blocked target area, entity UUID
+				// conflicts, etc.) - back off instead of retrying every tick.
+				setEmptyScanCooldown(20);
 				return;
+			}
 			isRunning = true;
 			fePerTick = getEnergyCostPerTick(getEnergyCost(restoringBlocks.size(), restoringEntites.size()));
 			fluidPerTick = getFluidCostPerTick(getFluidCost(restoringBlocks.size(), restoringEntites.size()));

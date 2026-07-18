@@ -39,6 +39,9 @@
     "justdirethings:fluidplacert2",
     "justdirethings:generatorfluidt1",
     "justdirethings:inventoryholder",
-    "justdirethings:paradoxmachine"
+    "justdirethings:paradoxmachine",
+    "justdirethings:time_crystal_cluster",
+    "justdirethings:time_crystal_block",
+    "justdirethings:charcoal"
   ]
 }

@@ -14,6 +14,27 @@ public interface AreaAffectingBE {
 
 	AreaAffectingData getAreaAffectingData();
 
+	/**
+	 * Ticks down and reports whether the last full-area scan is still on cooldown.
+	 * Call before doing an expensive rescan; if this returns true, skip the scan
+	 * this tick.
+	 */
+	default boolean isEmptyScanOnCooldown() {
+		if (getAreaAffectingData().emptyScanCooldown > 0) {
+			getAreaAffectingData().emptyScanCooldown--;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Call after a full-area scan comes back with nothing to do, so the next scan
+	 * is delayed instead of re-running every tick while idle.
+	 */
+	default void setEmptyScanCooldown(int ticks) {
+		getAreaAffectingData().emptyScanCooldown = ticks;
+	}
+
 	default AABB getAABBOffsetOnly(BlockPos relativePos) {
 		double xOffset = getAreaAffectingData().xOffset;
 		double yOffset = getAreaAffectingData().yOffset;

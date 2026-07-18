@@ -341,6 +341,10 @@ public class Helpers {
 			return findBlocks(pLevel, pState, pPos, maxBreak, direction, maxBreak);
 	}
 
+	// Hard backstop on how many BFS nodes a vein search can expand to, independent
+	// of maxBreak/radius, so a large config value can't spike the tick.
+	private static final int MAX_VEIN_SEARCH_NODES = 200;
+
 	/**
 	 * Basically a veinminer
 	 */
@@ -352,7 +356,7 @@ public class Helpers {
 		foundBlocks.add(pPos); // Obviously the block we broke is included in the return!
 		blocksToCheck.add(pPos); // Start scanning around the block we broke
 
-		while (!blocksToCheck.isEmpty()) {
+		while (!blocksToCheck.isEmpty() && checkedBlocks.size() < MAX_VEIN_SEARCH_NODES) {
 			BlockPos posToCheck = blocksToCheck.poll(); // Get the next blockPos to scan around
 
 			if (!checkedBlocks.add(posToCheck))
@@ -361,6 +365,8 @@ public class Helpers {
 			Set<BlockPos> matchingBlocks = BlockPos
 					.betweenClosedStream(posToCheck.offset(-radius, -radius, -radius),
 							posToCheck.offset(radius, radius, radius))
+					.filter(blockPos -> !checkedBlocks.contains(blockPos)) // skip cells a neighboring node already
+																			// scanned
 					.filter(blockPos -> pLevel.getBlockState(blockPos).is(pState.getBlock())).map(BlockPos::immutable)
 					.collect(Collectors.toSet());
 
@@ -410,7 +416,7 @@ public class Helpers {
 
 		blocksToCheck.add(pPos); // Start scanning around the block we broke
 
-		while (!blocksToCheck.isEmpty()) {
+		while (!blocksToCheck.isEmpty() && checkedBlocks.size() < MAX_VEIN_SEARCH_NODES) {
 			BlockPos posToCheck = blocksToCheck.poll(); // Get the next blockPos to scan around
 
 			if (!checkedBlocks.add(posToCheck))
@@ -419,6 +425,8 @@ public class Helpers {
 			Set<BlockPos> matchingBlocks = BlockPos
 					.betweenClosedStream(posToCheck.offset(-radius, -radius, -radius),
 							posToCheck.offset(radius, radius, radius))
+					.filter(blockPos -> !checkedBlocks.contains(blockPos)) // skip cells a neighboring node already
+																			// scanned
 					.filter(blockPos -> tags.stream().anyMatch(pLevel.getBlockState(blockPos)::is))
 					.map(BlockPos::immutable).collect(Collectors.toSet());
 
@@ -450,7 +458,10 @@ public class Helpers {
 		foundBlocks.add(pPos); // Obviously the block we broke is included in the return!
 		blocksToCheck.add(pPos); // Start scanning around the block we broke
 
-		while (!blocksToCheck.isEmpty() || !secondaryBlocksToCheck.isEmpty()) {
+		while ((!blocksToCheck.isEmpty() || !secondaryBlocksToCheck.isEmpty())
+				&& checkedBlocks.size() < MAX_VEIN_SEARCH_NODES) {
+			if (foundBlocks.size() >= maxBreak)
+				break; // Already hit the cap, stop scanning entirely instead of wasting cube scans
 			boolean isPrimaryPhase = !blocksToCheck.isEmpty(); // Primary first!
 			BlockPos posToCheck = isPrimaryPhase ? blocksToCheck.poll() : secondaryBlocksToCheck.poll(); // Get the next
 																											// blockPos
@@ -460,28 +471,30 @@ public class Helpers {
 			if (!checkedBlocks.add(posToCheck))
 				continue; // Don't check blockPos we've checked before
 
-			BlockPos.betweenClosedStream(posToCheck.offset(-radius, -radius, -radius),
-					posToCheck.offset(radius, radius, radius)).forEach(blockPos -> {
-						if (foundBlocks.size() >= maxBreak) {
-							return; // Exit if we've reached the maxBreak limit
-						}
-						BlockState foundState = pLevel.getBlockState(blockPos);
-						boolean isPrimaryBlock = foundState.is(pState.getBlock());
-						boolean isSecondaryBlock = extraTags.stream().anyMatch(foundState::is);
+			for (BlockPos blockPos : BlockPos.betweenClosed(posToCheck.offset(-radius, -radius, -radius),
+					posToCheck.offset(radius, radius, radius))) {
+				if (foundBlocks.size() >= maxBreak)
+					break; // Reached the cap - stop scanning the rest of this cube too
+				if (checkedBlocks.contains(blockPos))
+					continue; // Skip cells a neighboring node already scanned
+				BlockState foundState = pLevel.getBlockState(blockPos);
+				boolean isPrimaryBlock = foundState.is(pState.getBlock());
+				boolean isSecondaryBlock = extraTags.stream().anyMatch(foundState::is);
 
-						if (isPrimaryBlock || isSecondaryBlock) {
-							foundBlocks.add(blockPos.immutable());
+				if (isPrimaryBlock || isSecondaryBlock) {
+					BlockPos immutable = blockPos.immutable();
+					foundBlocks.add(immutable);
 
-							if (!checkedBlocks.contains(blockPos.immutable())) {
-								// Decide which queue to add the found block to
-								if (isPrimaryBlock) {
-									blocksToCheck.add(blockPos.immutable());
-								} else {
-									secondaryBlocksToCheck.add(blockPos.immutable());
-								}
-							}
+					if (!checkedBlocks.contains(immutable)) {
+						// Decide which queue to add the found block to
+						if (isPrimaryBlock) {
+							blocksToCheck.add(immutable);
+						} else {
+							secondaryBlocksToCheck.add(immutable);
 						}
-					});
+					}
+				}
+			}
 		}
 		return foundBlocks;
 	}

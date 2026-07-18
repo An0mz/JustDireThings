@@ -10,6 +10,10 @@ public class AreaAffectingData {
 	public int xOffset = 0, yOffset = 1, zOffset = 0;
 	public boolean renderArea = false;
 	public AABB area;
+	// Not persisted, not part of equals/hashCode: throttles re-scanning the area
+	// when the last scan found nothing to do, so idle machines don't rescan every
+	// tick.
+	public transient int emptyScanCooldown = 0;
 
 	public AreaAffectingData() {
 	}

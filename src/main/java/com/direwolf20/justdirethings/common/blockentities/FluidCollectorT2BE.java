@@ -93,12 +93,17 @@ public class FluidCollectorT2BE extends FluidCollectorT1BE implements PoweredMac
 
 	@Override
 	public List<BlockPos> findSpotsToCollect(FakePlayer fakePlayer) {
+		if (isEmptyScanOnCooldown())
+			return List.of();
 		AABB area = getAABB(getBlockPos());
-		return BlockPos
+		List<BlockPos> result = BlockPos
 				.betweenClosedStream((int) area.minX, (int) area.minY, (int) area.minZ, (int) area.maxX - 1,
 						(int) area.maxY - 1, (int) area.maxZ - 1)
 				.filter(blockPos -> isBlockPosValid(blockPos, fakePlayer)).map(BlockPos::immutable)
 				.sorted(Comparator.comparingDouble(x -> x.distSqr(getBlockPos()))).collect(Collectors.toList());
+		if (result.isEmpty())
+			setEmptyScanCooldown(20);
+		return result;
 	}
 
 	@Override
