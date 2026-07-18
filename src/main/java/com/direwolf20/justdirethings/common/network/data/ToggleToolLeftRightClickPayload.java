@@ -5,12 +5,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 @SuppressWarnings("removal")
-public record ToggleToolLeftRightClickPayload(int slot, String abilityName, int button, int keyCode, boolean isMouse) {
+public record ToggleToolLeftRightClickPayload(int slot, String abilityName, int button, int keyCode, boolean isMouse,
+		boolean requireEquipped) {
 	public static final ResourceLocation ID = new ResourceLocation(JustDireThings.MODID,
 			"tool_left_right_click_settings_packet");
 
 	public ToggleToolLeftRightClickPayload(final FriendlyByteBuf buffer) {
-		this(buffer.readInt(), buffer.readUtf(), buffer.readInt(), buffer.readInt(), buffer.readBoolean());
+		this(buffer.readInt(), buffer.readUtf(), buffer.readInt(), buffer.readInt(), buffer.readBoolean(),
+				buffer.readBoolean());
 	}
 
 	public void write(FriendlyByteBuf buffer) {
@@ -19,6 +21,7 @@ public record ToggleToolLeftRightClickPayload(int slot, String abilityName, int 
 		buffer.writeInt(button);
 		buffer.writeInt(keyCode);
 		buffer.writeBoolean(isMouse);
+		buffer.writeBoolean(requireEquipped);
 	}
 
 }

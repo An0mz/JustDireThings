@@ -424,6 +424,20 @@ public class ToggleButtonFactory {
 				onPress);
 	}
 
+	/** Require Equipped button **/
+	private static final List<TextureLocalization> REQUIRE_EQUIPPED_TEXTURES = List.of(
+			new TextureLocalization(
+					new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/requireequipped.png"),
+					Component.translatable("justdirethings.screen.requireequipped")),
+			new TextureLocalization(
+					new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/notreequireequipped.png"),
+					Component.translatable("justdirethings.screen.notrequireequipped")));
+
+	public static ToggleButton REQUIRE_EQUIPPED_BUTTON(int x, int y, int startingValue, Button.OnPress onPress) {
+		return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, REQUIRE_EQUIPPED_TEXTURES, startingValue,
+				onPress);
+	}
+
 	/** Bind Hotkey button **/
 	private static final ResourceLocation BIND_BUTTON = new ResourceLocation(JustDireThings.MODID,
 			"textures/gui/buttons/click-hold.png");

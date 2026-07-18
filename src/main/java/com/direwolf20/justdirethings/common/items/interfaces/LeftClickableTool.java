@@ -6,28 +6,28 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 public interface LeftClickableTool {
 
-	static Set<Ability> getCustomBindingAbilities(ItemStack stack) {
-		Set<Ability> returnSet = new HashSet<>();
-		CompoundTag compoundTag = stack.getOrCreateTag();
-		// Iterate over all keys in the CompoundTag
-		for (String key : compoundTag.getAllKeys()) {
-			// Check if the key starts with the desired prefix
-			if (key.startsWith("bindingMode_")) {
-				if (compoundTag.getInt(key) == 2) { // Custom Binding
-					String[] keyParts = key.split("_");
-					String abilityName = keyParts[1];
-					Ability ability = Ability.valueOf(abilityName.toUpperCase(Locale.ROOT));
-					returnSet.add(ability);
-				}
-			}
+	record AbilityBinding(String abilityName, int key, boolean isMouse, boolean requireEquipped) {
+		CompoundTag toTag() {
+			CompoundTag tag = new CompoundTag();
+			tag.putString("abilityName", abilityName);
+			tag.putInt("key", key);
+			tag.putBoolean("isMouse", isMouse);
+			tag.putBoolean("requireEquipped", requireEquipped);
+			return tag;
 		}
-		return returnSet;
+
+		static AbilityBinding fromTag(CompoundTag tag) {
+			return new AbilityBinding(tag.getString("abilityName"), tag.getInt("key"), tag.getBoolean("isMouse"),
+					!tag.contains("requireEquipped") || tag.getBoolean("requireEquipped"));
+		}
 	}
 
 	static void setBindingMode(ItemStack stack, Ability ability, int mode) {
@@ -76,92 +76,60 @@ public interface LeftClickableTool {
 		return abilities;
 	}
 
-	static Binding getAbilityBinding(ItemStack stack, Ability ability) {
-		CompoundTag compoundTag = stack.getOrCreateTag();
-
-		// Iterate over all keys in the CompoundTag
-		for (String key : compoundTag.getAllKeys()) {
-			if (key.startsWith("customBindingAbilities_")) {
-				ListTag listTag = compoundTag.getList(key, Tag.TAG_COMPOUND);
-
-				// Check each ability in the list
-				for (int i = 0; i < listTag.size(); i++) {
-					CompoundTag abilityTag = listTag.getCompound(i);
-					if (abilityTag.getString("abilityName").equalsIgnoreCase(ability.getName())) {
-						// Extract the key code and the mouse flag from the key name
-						String[] keyParts = key.split("_");
-						int keyCode = Integer.parseInt(keyParts[1]);
-						boolean isMouse = Boolean.parseBoolean(keyParts[2]);
-
-						return new Binding(keyCode, isMouse);
-					}
-				}
-			}
-		}
-		return null; // Return null if no binding is found
+	static LeftClickableTool.AbilityBinding getAbilityBinding(ItemStack stack, Ability ability) {
+		return getCustomBindingList(stack).stream()
+				.filter(binding -> binding.abilityName().equalsIgnoreCase(ability.getName())).findFirst()
+				.orElse(null);
 	}
 
 	static void removeFromCustomBindingList(ItemStack stack, Ability ability) {
+		List<LeftClickableTool.AbilityBinding> bindings = new ArrayList<>(getCustomBindingList(stack));
+		bindings.removeIf(binding -> binding.abilityName().equalsIgnoreCase(ability.getName()));
+		setCustomBindingList(stack, bindings);
+	}
+
+	static void addToCustomBindingList(ItemStack stack, LeftClickableTool.AbilityBinding binding) {
+		removeFromCustomBindingList(stack, Ability.valueOf(binding.abilityName().toUpperCase(Locale.ROOT)));
+		List<LeftClickableTool.AbilityBinding> bindings = getCustomBindingList(stack);
+		bindings.add(binding);
+		setCustomBindingList(stack, bindings);
+	}
+
+	static void setCustomBindingList(ItemStack stack, List<LeftClickableTool.AbilityBinding> bindings) {
 		CompoundTag compoundTag = stack.getOrCreateTag();
-		// Iterate over all keys in the CompoundTag
-		for (String key : compoundTag.getAllKeys()) {
-			// Check if the key starts with the desired prefix
-			if (key.startsWith("customBindingAbilities_")) {
-				ListTag listTag = compoundTag.getList(key, Tag.TAG_COMPOUND);
-				ListTag updatedListTag = new ListTag();
-				boolean modified = false;
-
-				// Iterate through all abilities in the list
-				for (int i = 0; i < listTag.size(); i++) {
-					CompoundTag abilityTag = listTag.getCompound(i);
-					if (!abilityTag.getString("abilityName").equalsIgnoreCase(ability.getName())) {
-						updatedListTag.add(abilityTag);
-					} else {
-						modified = true; // Mark as modified if the ability is removed
-					}
-				}
-
-				// Only update the tag if there was a modification
-				if (modified) {
-					compoundTag.put(key, updatedListTag);
-				}
-			}
+		ListTag listTag = new ListTag();
+		for (LeftClickableTool.AbilityBinding binding : bindings) {
+			listTag.add(binding.toTag());
 		}
+		compoundTag.put("customBindingAbilities", listTag);
 	}
 
-	static void addToCustomBindingList(ItemStack stack, Ability ability, Binding binding) {
-		removeFromCustomBindingList(stack, ability);
-		Set<Ability> abilityList = getCustomBindingList(stack, binding);
-		abilityList.add(ability);
-		setCustomBindingList(stack, abilityList, binding);
-	}
-
-	static void setCustomBindingList(ItemStack stack, Set<Ability> abilityList, Binding binding) {
+	static List<LeftClickableTool.AbilityBinding> getCustomBindingList(ItemStack stack) {
+		List<LeftClickableTool.AbilityBinding> bindings = new ArrayList<>();
 		CompoundTag compoundTag = stack.getOrCreateTag();
-		ListTag abilityListTag = new ListTag();
-		for (Ability ability : abilityList) {
-			CompoundTag comp = new CompoundTag();
-			comp.putString("abilityName", ability.getName());
-			abilityListTag.add(comp);
-		}
-		compoundTag.put("customBindingAbilities_" + binding.keyCode + "_" + binding.isMouse, abilityListTag);
-	}
-
-	static Set<Ability> getCustomBindingList(ItemStack stack, Binding binding) {
-		Set<Ability> abilities = new HashSet<>();
-		Set<Ability> customBoundAbilities = getCustomBindingAbilities(stack);
-		CompoundTag compoundTag = stack.getOrCreateTag();
-		if (compoundTag.contains("customBindingAbilities_" + binding.keyCode + "_" + binding.isMouse)) {
-			ListTag listTag = compoundTag.getList("customBindingAbilities_" + binding.keyCode + "_" + binding.isMouse,
-					Tag.TAG_COMPOUND);
+		if (compoundTag.contains("customBindingAbilities")) {
+			ListTag listTag = compoundTag.getList("customBindingAbilities", Tag.TAG_COMPOUND);
 			for (int i = 0; i < listTag.size(); i++) {
-				Ability ability = Ability
-						.valueOf(listTag.getCompound(i).getString("abilityName").toUpperCase(Locale.ROOT));
-				if (customBoundAbilities.contains(ability))
-					abilities.add(ability);
+				bindings.add(LeftClickableTool.AbilityBinding.fromTag(listTag.getCompound(i)));
 			}
 		}
-		return abilities;
+		return bindings;
+	}
+
+	static List<Ability> getCustomBindingListFor(ItemStack stack, int key, boolean isMouse, Player player) {
+		List<Ability> returnList = new ArrayList<>();
+		boolean isEquipped = ToggleableTool.isItemEquipped(stack, player);
+		for (LeftClickableTool.AbilityBinding binding : getCustomBindingList(stack)) {
+			if (binding.isMouse() != isMouse || binding.key() != key)
+				continue;
+			Ability ability = Ability.valueOf(binding.abilityName().toUpperCase(Locale.ROOT));
+			if (getBindingMode(stack, ability) != 2)
+				continue;
+			if (binding.requireEquipped() && !isEquipped)
+				continue;
+			returnList.add(ability);
+		}
+		return returnList;
 	}
 
 	static ItemStack getLeftClickableItem(Player player) {
@@ -172,15 +140,5 @@ public interface LeftClickableTool {
 		if (offHand.getItem() instanceof LeftClickableTool)
 			return offHand;
 		return ItemStack.EMPTY;
-	}
-
-	public static class Binding {
-		public final int keyCode;
-		public final boolean isMouse;
-
-		public Binding(int keyCode, boolean isMouse) {
-			this.keyCode = keyCode;
-			this.isMouse = isMouse;
-		}
 	}
 }

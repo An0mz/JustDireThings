@@ -235,7 +235,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Ability.DEATHPROTECTION.getLocalization(), "Death Protection");
 		add(Ability.DEBUFFREMOVER.getLocalization(), "Debuff Remover");
 		add(Ability.EARTHQUAKE.getLocalization(), "Earthquake");
-		add(Ability.NOAI.getLocalization(), "No AI");
+		add(Ability.NOAI.getLocalization(), "Mental Obliteration");
 		add(Ability.FLIGHT.getLocalization(), "Flight");
 		add(Ability.LAVAIMMUNITY.getLocalization(), "Lava Immunity");
 		add(Ability.PHASE.getLocalization(), "Phase");
@@ -288,6 +288,8 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.screen.click-left", "Left Click");
 		add("justdirethings.screen.click-custom", "Custom Binding");
 		add("justdirethings.screen.setbinding", "Set Binding");
+		add("justdirethings.screen.requireequipped", "Activate if Equipped");
+		add("justdirethings.screen.notrequireequipped", "Activate from Inventory");
 		add("justdirethings.screen.target-block", "Target Blocks");
 		add("justdirethings.screen.target-noblock", "Ignore Blocks");
 		add("justdirethings.screen.target-air", "Target Air");
@@ -407,7 +409,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Registration.UPGRADE_DEATHPROTECTION.get(), "Death Protection Upgrade");
 		add(Registration.UPGRADE_DEBUFFREMOVER.get(), "Debuff Remover Upgrade");
 		add(Registration.UPGRADE_EARTHQUAKE.get(), "Earthquake Upgrade");
-		add(Registration.UPGRADE_NOAI.get(), "No AI Upgrade");
+		add(Registration.UPGRADE_NOAI.get(), "Upgrade: Mental Obliteration");
 		add(Registration.UPGRADE_FLIGHT.get(), "Flight Upgrade");
 		add(Registration.UPGRADE_LAVAIMMUNITY.get(), "Lava Immunity Upgrade");
 		add(Registration.UPGRADE_PHASE.get(), "Phase Upgrade");

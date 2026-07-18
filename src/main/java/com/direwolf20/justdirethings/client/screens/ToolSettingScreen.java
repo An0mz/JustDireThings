@@ -50,10 +50,12 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	protected final Map<Button, ForgeSlider> sliders = new HashMap<>();
 	protected final Map<Button, ToggleButton> leftRightClickButtons = new HashMap<>();
 	protected final Map<Button, GrayscaleButton> bindingButtons = new HashMap<>();
+	protected final Map<Button, ToggleButton> requireEquippedButtons = new HashMap<>();
 	protected final Map<Button, GrayscaleButton> hideRenderButtons = new HashMap<>();
 	protected final Map<Button, Ability> buttonToAbilityMap = new HashMap<>();
-	protected Map<ToggleButton, LeftClickableTool.Binding> bindingMap = new HashMap<>();
+	protected Map<ToggleButton, LeftClickableTool.AbilityBinding> bindingMap = new HashMap<>();
 	protected boolean bindingEnabled = false;
+	protected boolean requireEquipped = true;
 	protected Set<AbstractWidget> widgetsToRemove = new HashSet<>();
 	protected Set<AbstractWidget> widgetsToAdd = new HashSet<>();
 	protected boolean renderablesChanged = false;
@@ -75,6 +77,7 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 		sliders.clear();
 		leftRightClickButtons.clear();
 		bindingButtons.clear();
+		requireEquippedButtons.clear();
 		hideRenderButtons.clear();
 		buttonToAbilityMap.clear();
 		bindingMap.clear();
@@ -147,13 +150,13 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 				if (toolAbility.getBindingType() == Ability.BindingType.LEFT_AND_CUSTOM) {
 					toggleButton = ToggleButtonFactory.LEFTRIGHTCUSTOMCLICKBUTTON(buttonsStartX + 125,
 							buttonsStartY - 18, currentValue, (clicked) -> {
-								LeftClickableTool.Binding binding = bindingMap.get(((ToggleButton) clicked));
+								LeftClickableTool.AbilityBinding binding = bindingMap.get(((ToggleButton) clicked));
 								if (binding == null)
 									sendBinding(toolAbility.getName(), ((ToggleButton) clicked).getTexturePosition(),
 											-1, false);
 								else
 									sendBinding(toolAbility.getName(), ((ToggleButton) clicked).getTexturePosition(),
-											binding.keyCode, binding.isMouse);
+											binding.key(), binding.isMouse());
 								if (((ToggleButton) clicked).getTexturePosition() == 2) {
 									if (!renderables.contains(bindingButtons.get(shownAbilityButton)))
 										widgetsToAdd.add(bindingButtons.get(shownAbilityButton));
@@ -166,12 +169,12 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 				} else {
 					toggleButton = ToggleButtonFactory.CUSTOMCLICKBUTTON(buttonsStartX + 125, buttonsStartY - 18, 0,
 							(clicked) -> {
-								LeftClickableTool.Binding binding = bindingMap.get(((ToggleButton) clicked));
+								LeftClickableTool.AbilityBinding binding = bindingMap.get(((ToggleButton) clicked));
 								if (binding == null)
 									sendBinding(toolAbility.getName(), 2, -1, false); // Button Type 2 hardcoded to
 																						// custom
 								else
-									sendBinding(toolAbility.getName(), 2, binding.keyCode, binding.isMouse);
+									sendBinding(toolAbility.getName(), 2, binding.key(), binding.isMouse());
 								if (!renderables.contains(bindingButtons.get(shownAbilityButton)))
 									widgetsToAdd.add(bindingButtons.get(shownAbilityButton));
 
@@ -187,6 +190,19 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 						});
 				bindingMap.put(toggleButton, LeftClickableTool.getAbilityBinding(tool, toolAbility));
 				this.bindingButtons.put(button, bindingButton);
+
+				requireEquipped = bindingMap.get(toggleButton) == null ? true : bindingMap.get(toggleButton).requireEquipped();
+				ToggleButton finalToggleButton = toggleButton;
+				ToggleButton requireEquippedButton = ToggleButtonFactory.REQUIRE_EQUIPPED_BUTTON(buttonsStartX + 125,
+						buttonsStartY, requireEquipped ? 0 : 1, (clicked2) -> {
+							requireEquipped = !requireEquipped;
+							LeftClickableTool.AbilityBinding binding = bindingMap.get(finalToggleButton);
+							if (binding == null)
+								sendBinding(toolAbility.getName(), 2, -1, false);
+							else
+								sendBinding(toolAbility.getName(), 2, binding.key(), binding.isMouse());
+						});
+				this.requireEquippedButtons.put(button, requireEquippedButton);
 			}
 			if (button != null && toolAbility.hasRenderButton()) {
 				boolean renderActive = true;
@@ -203,14 +219,16 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	}
 
 	protected void sendBinding(String abilityName, int buttonType, int keyCode, boolean isMouse) {
-		PacketHandler.CHANNEL
-				.sendToServer(new ToggleToolLeftRightClickPayload(toolSlot, abilityName, buttonType, keyCode, isMouse));
+		PacketHandler.CHANNEL.sendToServer(
+				new ToggleToolLeftRightClickPayload(toolSlot, abilityName, buttonType, keyCode, isMouse,
+						requireEquipped));
 	}
 
 	protected void collectButtonsToRemove() {
 		widgetsToRemove.addAll(sliders.values());
 		widgetsToRemove.addAll(leftRightClickButtons.values());
 		widgetsToRemove.addAll(bindingButtons.values());
+		widgetsToRemove.addAll(requireEquippedButtons.values());
 		widgetsToRemove.addAll(hideRenderButtons.values());
 	}
 
@@ -246,21 +264,22 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 		super.renderTooltip(pGuiGraphics, pX, pY);
 		for (Renderable renderable : this.renderables) {
 			if (renderable instanceof ToggleButton button && showCustomBinding()
+					&& !requireEquippedButtons.containsValue(button)
 					&& !button.getLocalization(pX, pY).equals(Component.empty())) { // 2 is custom
 				if (bindingMap.get(button) == null) {
 					pGuiGraphics.renderTooltip(font, Language.getInstance().getVisualOrder(Arrays
 							.asList(button.getLocalization(), Component.translatable("justdirethings.unbound-screen"))),
 							pX, pY);
 				} else {
-					LeftClickableTool.Binding binding = bindingMap.get(button);
-					if (binding.isMouse) {
+					LeftClickableTool.AbilityBinding binding = bindingMap.get(button);
+					if (binding.isMouse()) {
 						pGuiGraphics.renderTooltip(font,
 								Language.getInstance()
 										.getVisualOrder(Arrays.asList(button.getLocalization(),
-												Component.translatable("justdirethings.bound-mouse", binding.keyCode))),
+												Component.translatable("justdirethings.bound-mouse", binding.key()))),
 								pX, pY);
 					} else {
-						String bindingName = InputConstants.getKey(binding.keyCode, 0).getDisplayName().getString();
+						String bindingName = InputConstants.getKey(binding.key(), 0).getDisplayName().getString();
 						pGuiGraphics.renderTooltip(font,
 								Language.getInstance()
 										.getVisualOrder(Arrays.asList(button.getLocalization(),
@@ -328,7 +347,8 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 				return true;
 			} else {
 				bindingMap.put(leftRightClickButtons.get(shownAbilityButton),
-						new LeftClickableTool.Binding(pKeyCode, false));
+						new LeftClickableTool.AbilityBinding(buttonToAbilityMap.get(shownAbilityButton).getName(),
+								pKeyCode, false, requireEquipped));
 				leftRightClickButtons.get(shownAbilityButton).onPress(); // This fires the packet to the server
 				bindingButtons.get(shownAbilityButton).toggleActive();
 				this.bindingEnabled = false;
@@ -349,7 +369,9 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	public boolean mouseClicked(double x, double y, int btn) {
 		if (btn != 0 && btn != 1 && shownAbilityButton != null && leftRightClickButtons.get(shownAbilityButton) != null
 				&& bindingButtons.get(shownAbilityButton) != null && this.bindingEnabled) {
-			bindingMap.put(leftRightClickButtons.get(shownAbilityButton), new LeftClickableTool.Binding(btn, true));
+			bindingMap.put(leftRightClickButtons.get(shownAbilityButton),
+					new LeftClickableTool.AbilityBinding(buttonToAbilityMap.get(shownAbilityButton).getName(), btn,
+							true, requireEquipped));
 			leftRightClickButtons.get(shownAbilityButton).onPress();
 			bindingButtons.get(shownAbilityButton).toggleActive();
 			this.bindingEnabled = false;
@@ -382,6 +404,11 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 					}
 					if (bindingButtons.containsKey(shownAbilityButton) && showCustomBinding()) {
 						widgetsToAdd.add(bindingButtons.get(shownAbilityButton));
+					}
+					if (requireEquippedButtons.containsKey(shownAbilityButton) && showCustomBinding()) {
+						widgetsToAdd.add(requireEquippedButtons.get(shownAbilityButton));
+						requireEquipped = bindingMap.get(leftRightClickButtons.get(shownAbilityButton)) == null ? true
+								: bindingMap.get(leftRightClickButtons.get(shownAbilityButton)).requireEquipped();
 					}
 					if (hideRenderButtons.containsKey(shownAbilityButton)) {
 						widgetsToAdd.add(hideRenderButtons.get(shownAbilityButton));

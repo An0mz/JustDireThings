@@ -1,7 +1,6 @@
 package com.direwolf20.justdirethings.common.network.handler;
 
 import com.direwolf20.justdirethings.common.containers.ToolSettingContainer;
-import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.common.network.data.ToolSettingsGUIPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,10 +15,6 @@ public class ToolSettingsGUIPacket {
 		context.enqueueWork(() -> {
 			ServerPlayer sender = context.getSender();
 			if (sender == null)
-				return;
-			boolean hasToggleableTool = sender.getMainHandItem().getItem() instanceof ToggleableTool
-					|| sender.getOffhandItem().getItem() instanceof ToggleableTool;
-			if (!hasToggleableTool)
 				return;
 			sender.openMenu(new SimpleMenuProvider(
 					(windowId, playerInventory, player) -> new ToolSettingContainer(windowId, playerInventory, player),

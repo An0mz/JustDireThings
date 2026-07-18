@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 
-import java.util.Set;
+import java.util.List;
 
 import static com.direwolf20.justdirethings.util.MiscTools.getHitResult;
 
@@ -113,12 +113,28 @@ public class EventKeyInput {
 				activateAbilities(itemStack, event.getButton(), toggleableTool, player, i, true);
 			}
 		}
+		for (int i = mc.player.getInventory().items.size(); i < mc.player.getInventory().items.size()
+				+ mc.player.getInventory().armor.size(); i++) {
+			ItemStack itemStack = mc.player.getInventory().getItem(i);
+			if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+					&& itemStack.getItem() instanceof LeftClickableTool) {
+				activateAbilities(itemStack, event.getButton(), toggleableTool, player, i, true);
+			}
+		}
+		for (int i = mc.player.getInventory().items.size()
+				+ mc.player.getInventory().armor.size(); i < mc.player.getInventory().items.size()
+						+ mc.player.getInventory().armor.size() + mc.player.getInventory().offhand.size(); i++) {
+			ItemStack itemStack = mc.player.getInventory().getItem(i);
+			if (itemStack.getItem() instanceof ToggleableTool toggleableTool
+					&& itemStack.getItem() instanceof LeftClickableTool) {
+				activateAbilities(itemStack, event.getButton(), toggleableTool, player, i, true);
+			}
+		}
 	}
 
 	private static void activateAbilities(ItemStack itemStack, int key, ToggleableTool toggleableTool, Player player,
 			int invSlot, boolean isMouse) {
-		Set<Ability> abilities = LeftClickableTool.getCustomBindingList(itemStack,
-				new LeftClickableTool.Binding(key, isMouse));
+		List<Ability> abilities = LeftClickableTool.getCustomBindingListFor(itemStack, key, isMouse, player);
 		if (!abilities.isEmpty()) {
 			// Do them client side and Server side, since some abilities (like ore scanner)
 			// are client side activated.

@@ -330,6 +330,26 @@ public interface ToggleableTool extends ToggleableItem {
 		}
 	}
 
+	record CooldownEntry(Ability ability, int remaining, boolean active) {
+	}
+
+	static List<CooldownEntry> getAllCooldowns(ItemStack itemStack, long currentTick) {
+		List<CooldownEntry> result = new ArrayList<>();
+		CompoundTag tag = itemStack.getTag();
+		if (tag == null || !tag.contains("cooldowns"))
+			return result;
+		ListTag cooldowns = tag.getList("cooldowns", Tag.TAG_COMPOUND);
+		for (int i = 0; i < cooldowns.size(); i++) {
+			CompoundTag entry = cooldowns.getCompound(i);
+			long remaining = entry.getLong("end_tick") - currentTick;
+			if (remaining <= 0)
+				continue;
+			Ability ability = Ability.valueOf(entry.getString("ability").toUpperCase(Locale.ROOT));
+			result.add(new CooldownEntry(ability, (int) remaining, entry.getBoolean("active")));
+		}
+		return result;
+	}
+
 	static int getAnyCooldown(ItemStack itemStack, Ability ability, long currentTick) {
 		CompoundTag tag = itemStack.getTag();
 		if (tag == null || !tag.contains("cooldowns"))
@@ -417,12 +437,30 @@ public interface ToggleableTool extends ToggleableItem {
 		tag.put("cooldowns", cooldowns);
 	}
 
+	static boolean isItemEquipped(ItemStack itemStack, Player player) {
+		if (itemStack.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseBoots)
+			return ItemStack.isSameItemSameTags(itemStack,
+					player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET));
+		if (itemStack.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseLeggings)
+			return ItemStack.isSameItemSameTags(itemStack,
+					player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS));
+		if (itemStack
+				.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseChestplate)
+			return ItemStack.isSameItemSameTags(itemStack,
+					player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST));
+		if (itemStack.getItem() instanceof com.direwolf20.justdirethings.common.items.armors.basearmors.BaseHelmet)
+			return ItemStack.isSameItemSameTags(itemStack,
+					player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD));
+		return ItemStack.isSameItemSameTags(itemStack, player.getItemInHand(InteractionHand.MAIN_HAND))
+				|| ItemStack.isSameItemSameTags(itemStack, player.getItemInHand(InteractionHand.OFF_HAND));
+	}
+
 	default boolean useAbility(Level level, Player player, ItemStack itemStack, int keyCode, boolean isMouse) {
 		boolean anyRan = false;
 		Set<Ability> customBindAbilities = new HashSet<>();
 		if (itemStack.getItem() instanceof LeftClickableTool)
-			customBindAbilities.addAll(
-					LeftClickableTool.getCustomBindingList(itemStack, new LeftClickableTool.Binding(keyCode, isMouse)));
+			customBindAbilities
+					.addAll(LeftClickableTool.getCustomBindingListFor(itemStack, keyCode, isMouse, player));
 		for (Ability ability : getActiveAbilities(itemStack)) {
 			if (customBindAbilities.contains(ability)) {
 				if (ability.action != null) {
@@ -488,8 +526,8 @@ public interface ToggleableTool extends ToggleableItem {
 		boolean anyRan = false;
 		Set<Ability> customBindAbilities = new HashSet<>();
 		if (itemStack.getItem() instanceof LeftClickableTool)
-			customBindAbilities.addAll(
-					LeftClickableTool.getCustomBindingList(itemStack, new LeftClickableTool.Binding(keyCode, isMouse)));
+			customBindAbilities.addAll(LeftClickableTool.getCustomBindingListFor(itemStack, keyCode, isMouse,
+					pContext.getPlayer()));
 		for (Ability ability : getUseOnAbilities(itemStack)) {
 			if (customBindAbilities.contains(ability)) {
 				if (ability.useOnAction != null) {
