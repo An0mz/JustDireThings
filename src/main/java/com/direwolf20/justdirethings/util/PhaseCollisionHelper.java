@@ -13,9 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Shared wall-vs-floor collision logic for the Phase ability mixins. Must NOT
  * live in the mixin package: classes there can't be referenced from
@@ -29,15 +26,20 @@ public final class PhaseCollisionHelper {
 		return player.getAttributeValue(Registration.PHASE.get()) > 0;
 	}
 
-	public static Iterable<VoxelShape> filterBlockCollisions(BlockGetter level, Entity entity,
-			Iterable<VoxelShape> original) {
+	/**
+	 * Local-shape variant used by BlockStateBaseMixin: getCollisionShape returns
+	 * block-local coordinates, so the top surface is pos.getY() + shape max. Same
+	 * keep rules as isVerticalCollision.
+	 */
+	public static boolean isPhaseSolid(BlockGetter level, BlockPos pos, BlockState blockState, VoxelShape localShape,
+			Entity entity) {
+		double topY = pos.getY() + localShape.max(Direction.Axis.Y);
 		double feetY = entity.getBoundingBox().minY;
-		List<VoxelShape> filtered = new ArrayList<>();
-		for (VoxelShape shape : original) {
-			if (isVerticalCollision(level, shape, entity, feetY))
-				filtered.add(shape);
-		}
-		return filtered;
+		if (topY <= feetY + 0.01)
+			return true;
+		if (entity.onGround() && topY - feetY < 0.75)
+			return true;
+		return blockState.getDestroySpeed(level, pos) < 0 || blockState.is(JustDireBlockTags.PHASEDENY);
 	}
 
 	public static boolean isVerticalCollision(BlockGetter level, VoxelShape shape, Entity entity, double feetY) {

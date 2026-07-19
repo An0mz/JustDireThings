@@ -5,7 +5,7 @@
   "refmap": "mixins.justdirethings.refmap.json",
   "mixins": [
     "EntityMixin",
-    "CollisionMixin",
+    "BlockStateBaseMixin",
     "PlayerMovementMixin"
   ],
   "client": [

@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+    }
+}
+
 plugins {
     id 'java-library'
     id 'eclipse'
@@ -5,6 +15,16 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
     id 'com.diffplug.spotless' version '6.25.0'
+}
+
+// Generates mixins.justdirethings.refmap.json at build time and bundles it in
+// the jar. Without it the mixins only work in dev (mapped names); in
+// production they fail with "No refMap loaded".
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    add sourceSets.main, 'mixins.justdirethings.refmap.json'
+    config 'mixins.justdirethings.json'
 }
 
 version = mod_version
@@ -109,6 +129,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     // Specify the version of Minecraft to use.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
