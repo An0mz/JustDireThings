@@ -4,8 +4,12 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.justdirethings.refmap.json",
   "mixins": [
-    "EntityMixin"
+    "EntityMixin",
+    "CollisionMixin",
+    "PlayerMovementMixin"
   ],
-  "client": [],
+  "client": [
+    "LocalPlayerMixin"
+  ],
   "minVersion": "0.8"
 }

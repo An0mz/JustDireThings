@@ -5,9 +5,7 @@ import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControl
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.Helpers;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
-import net.minecraftforge.items.IItemHandler;
 import com.direwolf20.justdirethings.setup.Registration;
-import com.direwolf20.justdirethings.util.MiningCollect;
 import com.direwolf20.justdirethings.util.MiscHelpers;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
@@ -145,49 +143,14 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 	}
 
 	public List<BlockPos> findBlocksToMine(FakePlayer fakePlayer) {
+		// Matches 1.21.1: only the faced block gets tracked and shows mining
+		// progress. Ability-driven extras (hammer AOE, ore veins, tree feller,
+		// skysweeper) are collected and broken all at once by the tool's own
+		// mineBlocksAbility when the target completes - see breakBlock. Queuing
+		// them here instead made the machine grind through them one at a time.
 		List<BlockPos> returnList = new ArrayList<>();
 		BlockPos targetPos = getBlockPos().relative(getBlockState().getValue(BlockStateProperties.FACING));
-		if (!isBlockValid(fakePlayer, targetPos))
-			return returnList;
-
-		ItemStack tool = getTool();
-		if (!(tool.getItem() instanceof ToggleableTool toggleableTool)) {
-			returnList.add(targetPos);
-			return returnList;
-		}
-
-		Direction facing = getFacing();
-		setFakePlayerData(tool, fakePlayer, targetPos, facing);
-		BlockState targetState = level.getBlockState(targetPos);
-		Set<BlockPos> extraPositions = new HashSet<>();
-
-		if (toggleableTool.canUseAbility(tool, Ability.HAMMER)) {
-			int hammerSize = ToggleableTool.getToolValue(tool, Ability.HAMMER.getName());
-			extraPositions.addAll(MiningCollect.collect(fakePlayer, targetPos, facing.getOpposite(), level, hammerSize,
-					MiningCollect.SizeMode.NORMAL, tool));
-		}
-		if (toggleableTool.canUseAbility(tool, Ability.OREMINER) && Helpers.oreCondition.test(targetState)
-				&& tool.isCorrectToolForDrops(targetState)) {
-			extraPositions.addAll(Helpers.findLikeBlocks(level, targetState, targetPos, null, 64, 2));
-		}
-		if (toggleableTool.canUseAbility(tool, Ability.TREEFELLER) && Helpers.logCondition.test(targetState)
-				&& tool.isCorrectToolForDrops(targetState)) {
-			extraPositions.addAll(Helpers.findLikeBlocks(level, targetState, targetPos, null, 64, 2));
-		}
-		if (toggleableTool.canUseAbility(tool, Ability.SKYSWEEPER) && tool.isCorrectToolForDrops(targetState)) {
-			Set<BlockPos> basePositions = new HashSet<>(extraPositions);
-			basePositions.add(targetPos);
-			for (BlockPos pos : basePositions) {
-				BlockPos abovePos = pos.above();
-				BlockState aboveState = level.getBlockState(abovePos);
-				if (Helpers.fallingBlockCondition.test(aboveState))
-					extraPositions.addAll(Helpers.findLikeBlocks(level, aboveState, abovePos, Direction.UP, 64, 2));
-			}
-		}
-
-		extraPositions.stream().filter(pos -> isBlockValid(fakePlayer, pos)).map(BlockPos::immutable)
-				.forEach(returnList::add);
-		if (returnList.isEmpty())
+		if (isBlockValid(fakePlayer, targetPos))
 			returnList.add(targetPos);
 		return returnList;
 	}
@@ -296,37 +259,39 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 
 	public void breakBlock(FakePlayer player, BlockPos breakPos, ItemStack itemStack, BlockState state) {
 		itemStack.onBlockStartBreak(breakPos, player);
-		BlockEntity blockEntity = level.getBlockEntity(breakPos);
-		boolean success = level.destroyBlock(breakPos, false, player);
-		if (success) {
-			if (level instanceof ServerLevel serverLevel
-					&& itemStack.getItem() instanceof ToggleableTool toggleableTool) {
-				List<ItemStack> drops = Block.getDrops(state, serverLevel, breakPos, blockEntity, player, itemStack);
-				if (toggleableTool.canUseAbility(itemStack, Ability.SMELTER)
-						&& itemStack.getDamageValue() < itemStack.getMaxDamage()) {
-					boolean[] smeltedFlag = new boolean[1];
-					drops = Helpers.smeltDrops(serverLevel, drops, itemStack, player, smeltedFlag);
-					if (smeltedFlag[0])
-						ToggleableTool.smelterParticles(serverLevel, Set.of(breakPos));
+		if (level instanceof ServerLevel serverLevel && itemStack.getItem() instanceof ToggleableTool toggleableTool) {
+			// Matches 1.21.1: when the target block's progress completes, run the
+			// tool's own mining pipeline, which breaks the target plus any
+			// ability-collected blocks (hammer AOE, ore veins, tree feller,
+			// skysweeper) all at once, routes every drop through the shared
+			// smelter/drop-teleport handling, and charges the tool per block
+			// (including the instabreak surcharge).
+			toggleableTool.mineBlocksAbility(itemStack, serverLevel, breakPos, player, state);
+			state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
+			// mineBlocksAbility skips blocks it can't route through the tool
+			// pipeline (block entities, tool out of power) - clean those up the
+			// vanilla way so the machine never stalls on a block it considers
+			// already handled.
+			if (!serverLevel.getBlockState(breakPos).isAir()) {
+				BlockEntity blockEntity = level.getBlockEntity(breakPos);
+				if (level.destroyBlock(breakPos, false, player)) {
+					Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
+					if (state.getDestroySpeed(level, breakPos) != 0.0F) {
+						itemStack.hurtAndBreak(1, player, pOnBroken -> {
+						});
+						if (toggleableTool.canUseAbility(itemStack, Ability.INSTABREAK))
+							Helpers.damageTool(itemStack, player,
+									ToggleableTool.getInstantRFCost(state.getDestroySpeed(level, breakPos)));
+					}
 				}
-				if (!drops.isEmpty() && toggleableTool.canUseAbility(itemStack, Ability.DROPTELEPORT)
-						&& itemStack.isCorrectToolForDrops(state)) {
-					IItemHandler handler = ToggleableTool.getBoundHandler(serverLevel, itemStack);
-					if (handler != null)
-						Helpers.teleportDrops(drops, handler, itemStack, player);
-				}
-				Helpers.dropDrops(drops, serverLevel, breakPos);
-				state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
-			} else {
-				Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
 			}
-			if (state.getDestroySpeed(level, breakPos) != 0.0F) {
-				itemStack.hurtAndBreak(1, player, pOnBroken -> {
-				});
-				if (itemStack.getItem() instanceof ToggleableTool toggleableTool
-						&& toggleableTool.canUseAbility(itemStack, Ability.INSTABREAK))
-					Helpers.damageTool(itemStack, player,
-							ToggleableTool.getInstantRFCost(state.getDestroySpeed(level, breakPos)));
+		} else {
+			BlockEntity blockEntity = level.getBlockEntity(breakPos);
+			if (level.destroyBlock(breakPos, false, player)) {
+				Block.dropResources(state, level, breakPos, blockEntity, player, itemStack);
+				if (state.getDestroySpeed(level, breakPos) != 0.0F)
+					itemStack.hurtAndBreak(1, player, pOnBroken -> {
+					});
 			}
 		}
 	}
