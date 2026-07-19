@@ -105,6 +105,21 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> SWAPPER_ENTITY_BLACKLIST;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> SWAPPER_BLOCK_BLACKLIST;
 
+	public static final String CATEGORY_OVERLAY_POSITION = "overlay_position";
+	public static ForgeConfigSpec.IntValue OVERLAY_X;
+	public static ForgeConfigSpec.IntValue OVERLAY_Y;
+
+	public static final String CATEGORY_TOOLS = "tools";
+	public static ForgeConfigSpec.IntValue TOOL_MAX_BREAK_FERRICORE;
+	public static ForgeConfigSpec.IntValue TOOL_MAX_BREAK_BLAZEGOLD;
+	public static ForgeConfigSpec.IntValue TOOL_MAX_BREAK_CELESTIGEM;
+	public static ForgeConfigSpec.IntValue TOOL_MAX_BREAK_ECLIPSEALLOY;
+
+	public static final String CATEGORY_PLAYER_ACCESSOR = "player_accessor";
+	public static ForgeConfigSpec.BooleanValue PLAYER_ACCESSOR_DIMENSIONAL_BLACKLISTING;
+	public static ForgeConfigSpec.IntValue PLAYER_ACCESSOR_VALIDATION_TIME;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> PLAYER_ACCESSOR_BLACKLISTED_DIMENSIONS;
+
 	public static void register() {
 		// registerServerConfigs();
 		registerCommonConfigs();
@@ -132,6 +147,9 @@ public class Config {
 		portalGunOriginalConfig();
 		polymorphicWandV2Config();
 		swapperConfig();
+		overlayConfig();
+		toolLimitsConfig();
+		playerAccessorConfig();
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
 	}
@@ -379,6 +397,49 @@ public class Config {
 				"or \"^draconicevolution:\" blocks all blocks from that mod.",
 				"Note: the swapper_deny block tag also controls this and is checked first.")
 				.defineListAllowEmpty(List.of("swapper_block_blacklist"), () -> List.of(), s -> s instanceof String);
+		COMMON_BUILDER.pop();
+	}
+
+	private static void overlayConfig() {
+		COMMON_BUILDER.comment("Cooldown Overlay Position").push(CATEGORY_OVERLAY_POSITION);
+		OVERLAY_X = COMMON_BUILDER
+				.comment("The X position of the cooldown overlay - this is pixels left from the center of the screen")
+				.defineInRange("overlay_x_position", 91, -500, 500);
+		OVERLAY_Y = COMMON_BUILDER
+				.comment("The Y position of the cooldown overlay - this is pixels up from the bottom of the screen")
+				.defineInRange("overlay_y_position", 70, 0, 500);
+		COMMON_BUILDER.pop();
+	}
+
+	private static void toolLimitsConfig() {
+		COMMON_BUILDER.comment("Tool Limits").push(CATEGORY_TOOLS);
+		TOOL_MAX_BREAK_FERRICORE = COMMON_BUILDER.comment(
+				"The maximum number of blocks that a Ferricore tool can break as a result of abilities, such as ore miner or tree feller.")
+				.defineInRange("tool_max_break_ferricore", 64, 1, 2048);
+		TOOL_MAX_BREAK_BLAZEGOLD = COMMON_BUILDER.comment(
+				"The maximum number of blocks that a Blazegold tool can break as a result of abilities, such as ore miner or tree feller.")
+				.defineInRange("tool_max_break_blazegold", 128, 1, 2048);
+		TOOL_MAX_BREAK_CELESTIGEM = COMMON_BUILDER.comment(
+				"The maximum number of blocks that a Celestigem tool can break as a result of abilities, such as ore miner or tree feller.")
+				.defineInRange("tool_max_break_celestigem", 192, 1, 2048);
+		TOOL_MAX_BREAK_ECLIPSEALLOY = COMMON_BUILDER.comment(
+				"The maximum number of blocks that a Eclipse Alloy tool can break as a result of abilities, such as ore miner or tree feller.")
+				.defineInRange("tool_max_break_eclipsealloy", 256, 1, 2048);
+		COMMON_BUILDER.pop();
+	}
+
+	private static void playerAccessorConfig() {
+		COMMON_BUILDER.comment("Player Accessor").push(CATEGORY_PLAYER_ACCESSOR);
+		PLAYER_ACCESSOR_DIMENSIONAL_BLACKLISTING = COMMON_BUILDER.comment(
+				"Will you be blacklisting dimensions? If set to false, the Blacklist Dimensions list will not function.")
+				.define("player_accessor_dimensional_blacklisting", false);
+		PLAYER_ACCESSOR_VALIDATION_TIME = COMMON_BUILDER.comment(
+				"The frequency with which the player accessor validates the player - the longer this is set to, the longer the player can be accessed in a blacklisted dimension.")
+				.defineInRange("player_accessor_validation_time", 100, 0, 5000);
+		PLAYER_ACCESSOR_BLACKLISTED_DIMENSIONS = COMMON_BUILDER
+				.comment("A list of dimension names to blacklist for the Player Accessor feature.")
+				.defineListAllowEmpty(List.of("player_accessor_blacklisted_dimensions"), () -> List.of(),
+						s -> s instanceof String);
 		COMMON_BUILDER.pop();
 	}
 

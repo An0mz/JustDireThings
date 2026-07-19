@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.client.overlays;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
+import com.direwolf20.justdirethings.setup.Config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -40,8 +41,8 @@ public class AbilityCooldownOverlay implements IGuiOverlay {
 					continue;
 				ResourceLocation icon = ability.getCooldownIcon();
 				AbilityParams abilityParams = toggleableTool.getAbilityParams(ability);
-				int xPosition = screenWidth / 2 - 91 + ((renderedIcons % 7) * 11);
-				int yPosition = screenHeight - gui.leftHeight - 30 - ((renderedIcons / 7) * 11);
+				int xPosition = screenWidth / 2 - Config.OVERLAY_X.get() + ((renderedIcons % 7) * 11);
+				int yPosition = screenHeight - Config.OVERLAY_Y.get() - ((renderedIcons / 7) * 11);
 				if (entry.active()) {
 					int activeMax = abilityParams.activeCooldown;
 					int iconHeight = activeMax > 0 ? ((entry.remaining() * 8) / activeMax) + 1 : 9;

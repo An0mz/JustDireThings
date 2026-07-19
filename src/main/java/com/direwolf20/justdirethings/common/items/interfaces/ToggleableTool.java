@@ -3,6 +3,8 @@ package com.direwolf20.justdirethings.common.items.interfaces;
 import com.direwolf20.justdirethings.common.blockentities.GooSoilBE;
 import com.direwolf20.justdirethings.common.blocks.soil.GooSoilBase;
 import com.direwolf20.justdirethings.common.containers.ToolSettingContainer;
+import com.direwolf20.justdirethings.common.items.tools.utils.GooTier;
+import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.util.MiningCollect;
 import com.direwolf20.justdirethings.util.MiscHelpers;
 import com.direwolf20.justdirethings.util.NBTHelpers;
@@ -153,13 +155,22 @@ public interface ToggleableTool extends ToggleableItem {
 	default Set<BlockPos> getBreakBlockPositions(ItemStack pStack, Level pLevel, BlockPos pPos,
 			LivingEntity pEntityLiving, BlockState pState) {
 		Set<BlockPos> breakBlockPositions = new HashSet<>();
+		int maxBreak = Config.TOOL_MAX_BREAK_FERRICORE.get();
+		if (pStack.getItem() instanceof net.minecraft.world.item.TieredItem tieredItem) {
+			if (tieredItem.getTier().equals(GooTier.BLAZEGOLD))
+				maxBreak = Config.TOOL_MAX_BREAK_BLAZEGOLD.get();
+			else if (tieredItem.getTier().equals(GooTier.CELESTIGEM))
+				maxBreak = Config.TOOL_MAX_BREAK_CELESTIGEM.get();
+			else if (tieredItem.getTier().equals(GooTier.ECLIPSEALLOY))
+				maxBreak = Config.TOOL_MAX_BREAK_ECLIPSEALLOY.get();
+		}
 		if (canUseAbility(pStack, Ability.OREMINER) && oreCondition.test(pState)
 				&& pStack.isCorrectToolForDrops(pState)) {
-			breakBlockPositions.addAll(findLikeBlocks(pLevel, pState, pPos, null, 64, 2)); // Todo: Balance and Config?
+			breakBlockPositions.addAll(findLikeBlocks(pLevel, pState, pPos, null, maxBreak, 2));
 		}
 		if (canUseAbility(pStack, Ability.TREEFELLER) && logCondition.test(pState)
 				&& pStack.isCorrectToolForDrops(pState)) {
-			breakBlockPositions.addAll(findLikeBlocks(pLevel, pState, pPos, null, 64, 2)); // Todo: Balance and Config?
+			breakBlockPositions.addAll(findLikeBlocks(pLevel, pState, pPos, null, maxBreak, 2));
 		}
 		if (canUseAbility(pStack, Ability.HAMMER)) {
 			breakBlockPositions.addAll(MiningCollect.collect(pEntityLiving, pPos, getTargetLookDirection(pEntityLiving),
@@ -174,10 +185,7 @@ public interface ToggleableTool extends ToggleableItem {
 				BlockPos abovePos = blockPos.above();
 				BlockState blockStateAbove = pLevel.getBlockState(abovePos);
 				if (fallingBlockCondition.test(blockStateAbove))
-					newPos.addAll(findLikeBlocks(pLevel, blockStateAbove, abovePos, Direction.UP, 64, 2)); // Todo:
-																											// Balance
-																											// and
-																											// Config?
+					newPos.addAll(findLikeBlocks(pLevel, blockStateAbove, abovePos, Direction.UP, maxBreak, 2));
 			}
 			breakBlockPositions.addAll(newPos);
 		}
