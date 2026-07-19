@@ -52,7 +52,7 @@ public final class PhaseCollisionHelper {
 		BlockState blockState = level.getBlockState(blockPos);
 		return blockState.getDestroySpeed(level, blockPos) < 0 || blockState.is(JustDireBlockTags.PHASEDENY);
 	}
-	
+
 	public static boolean filteredNoCollision(Level level, Entity entity, AABB box) {
 		if (!(entity instanceof Player player) || !shouldPassThroughWalls(player))
 			return level.noCollision(entity, box);
