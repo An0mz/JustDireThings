@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 /**
  * Filters wall shapes out of movement collision for phasing players. Targets
  * the call site inside Entity.collideBoundingBox because Mixin 0.8.5 cannot
- * inject into CollisionGetter's default methods. Server move validation and
- * the client's push-out-of-blocks logic need their own hooks - see
+ * inject into CollisionGetter's default methods. Server move validation and the
+ * client's push-out-of-blocks logic need their own hooks - see
  * PlayerMovementMixin and LocalPlayerMixin.
  */
 @Mixin(Entity.class)

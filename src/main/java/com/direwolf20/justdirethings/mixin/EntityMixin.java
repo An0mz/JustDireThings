@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * While phasing the player's box genuinely overlaps solid blocks, so
- * suppress isInWall (suffocation damage) and filter the pose-fit check.
+ * While phasing the player's box genuinely overlaps solid blocks, so suppress
+ * isInWall (suffocation damage) and filter the pose-fit check.
  */
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -26,9 +26,9 @@ public abstract class EntityMixin {
 	}
 
 	/**
-	 * Pose selection and the client's crouching flag both gate on this fit
-	 * check; unfiltered, it would silently drop crouch (and its slowdown)
-	 * the moment a phasing player enters a wall.
+	 * Pose selection and the client's crouching flag both gate on this fit check;
+	 * unfiltered, it would silently drop crouch (and its slowdown) the moment a
+	 * phasing player enters a wall.
 	 */
 	@Redirect(method = "canEnterPose", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;noCollision(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Z"))
 	private boolean onCanEnterPoseNoCollision(Level level, Entity entity, AABB box) {

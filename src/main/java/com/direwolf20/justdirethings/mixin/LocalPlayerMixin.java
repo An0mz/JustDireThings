@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * aiStep force-pushes the player out of any solid block they overlap
  * (moveTowardsClosestSpace sets velocity away from the block, overriding
- * input), which would slowly eject a phasing player from walls. Cancelling
- * it here is 1.20.1's stand-in for 1.21.1's collidesWithSuffocatingBlock
- * override, which has no injectable bytecode on Mixin 0.8.5.
+ * input), which would slowly eject a phasing player from walls. Cancelling it
+ * here is 1.20.1's stand-in for 1.21.1's collidesWithSuffocatingBlock override,
+ * which has no injectable bytecode on Mixin 0.8.5.
  */
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
