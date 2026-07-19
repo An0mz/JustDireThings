@@ -27,6 +27,8 @@ public class PacketHandler {
 				AreaAffectingPayload::new, AreaAffectingPacket::handle);
 		CHANNEL.registerMessage(nextId(), BlockStateFilterPayload.class, BlockStateFilterPayload::write,
 				BlockStateFilterPayload::new, BlockStateFilterPacket::handle);
+		CHANNEL.registerMessage(nextId(), BreakerPayload.class, BreakerPayload::write, BreakerPayload::new,
+				BreakerPacket::handle);
 		CHANNEL.registerMessage(nextId(), ClickerPayload.class, ClickerPayload::write, ClickerPayload::new,
 				ClickerPacket::handle);
 		CHANNEL.registerMessage(nextId(), DirectionSettingPayload.class, DirectionSettingPayload::write,

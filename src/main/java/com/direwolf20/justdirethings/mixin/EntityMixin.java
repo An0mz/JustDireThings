@@ -12,10 +12,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Matches 1.21.1's EntityMixin: while phasing, a player's bounding box
- * genuinely overlaps solid block shapes (that's the point), so isInWall must
- * be suppressed or vanilla's suffocation logic would damage them for
- * standing inside a wall.
+ * While phasing the player's box genuinely overlaps solid blocks, so
+ * suppress isInWall (suffocation damage) and filter the pose-fit check.
  */
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -28,14 +26,9 @@ public abstract class EntityMixin {
 	}
 
 	/**
-	 * canEnterPose asks "does this pose's bounding box fit here" via an
-	 * unfiltered Level.noCollision - inside a wall every pose box overlaps
-	 * wall shapes, so it reports the pose doesn't fit. Player.updatePlayerPose
-	 * and LocalPlayer's crouching flag both gate on it, so a phasing player
-	 * who crouch-walks into a wall silently loses the crouch state (and its
-	 * slowdown) the moment they enter. Filtering the query keeps crouching
-	 * (and any other pose) working inside walls; non-phasing entities fall
-	 * through to the vanilla check inside filteredNoCollision.
+	 * Pose selection and the client's crouching flag both gate on this fit
+	 * check; unfiltered, it would silently drop crouch (and its slowdown)
+	 * the moment a phasing player enters a wall.
 	 */
 	@Redirect(method = "canEnterPose", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;noCollision(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Z"))
 	private boolean onCanEnterPoseNoCollision(Level level, Entity entity, AABB box) {

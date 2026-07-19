@@ -13,23 +13,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
- * In 1.21.1 the CollisionGetter interface mixin filters every collision
- * query at once, so the server's move-packet validation automatically agrees
- * with movement resolution. Our 1.20.1 CollisionMixin only covers the
- * Entity.collideBoundingBox call site, so handleMovePlayer/handleMoveVehicle
- * would still validate against unfiltered collisions and rubber-band a
- * phasing player. Two paths need covering:
- * <p>
- * 1. ServerLevel.noCollision(entity, box) - consulted when the "moved
- * wrongly" heuristic flags a move as suspicious.
- * <p>
- * 2. isPlayerCollidingWithAnythingNew(...), which gates ordinary movement.
- * Its internal old-vs-new shape comparison (Shapes.joinIsNotEmpty) sees a
- * wall the player is stepping into as a "new" collision and rejects the
- * move, so filtering its inputs isn't enough - the whole call is replaced
- * with a direct "would the new position collide with anything that isn't a
- * wall" check for phasing players. Non-phasing players still go through the
- * original vanilla method via the @Shadow below.
+ * The server validates move packets against unfiltered collisions, which
+ * would rubber-band a phasing player. Covers both validation paths:
+ * ServerLevel.noCollision (suspicious moves) and
+ * isPlayerCollidingWithAnythingNew (ordinary moves) - the latter is replaced
+ * wholesale while phasing because its old-vs-new shape comparison rejects
+ * any wall being stepped into even when the inputs are filtered.
  */
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class PlayerMovementMixin {

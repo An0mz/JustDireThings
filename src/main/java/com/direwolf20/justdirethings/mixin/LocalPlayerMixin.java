@@ -9,18 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * This is 1.20.1's stand-in for the collidesWithSuffocatingBlock override in
- * 1.21.1's CollisionMixin. LocalPlayer.aiStep() calls
- * moveTowardsClosestSpace(...) for each corner of the player's bounding box
- * every tick; when suffocatesAt(pos) (backed by collidesWithSuffocatingBlock)
- * reports the corner is inside a solid block, it force-sets the player's
- * horizontal deltaMovement to 0.1 toward the nearest open side - overriding
- * WASD input entirely. For a phasing player deliberately standing inside a
- * wall, that shows up as being slowly and irresistibly walked back out of
- * the block, no matter what the server-side collision handling allows.
- * Since collidesWithSuffocatingBlock is only a CollisionGetter default
- * method (no bytecode to inject into on Mixin 0.8.5), cancel the push at its
- * only consumer instead.
+ * aiStep force-pushes the player out of any solid block they overlap
+ * (moveTowardsClosestSpace sets velocity away from the block, overriding
+ * input), which would slowly eject a phasing player from walls. Cancelling
+ * it here is 1.20.1's stand-in for 1.21.1's collidesWithSuffocatingBlock
+ * override, which has no injectable bytecode on Mixin 0.8.5.
  */
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {

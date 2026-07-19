@@ -10,6 +10,7 @@ import com.direwolf20.justdirethings.util.MiscHelpers;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,6 +42,7 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 	LinkedHashMap<BlockPos, BlockBreakingProgress> blockBreakingTracker = new LinkedHashMap<>();
 	public RedstoneControlData redstoneControlData = new RedstoneControlData();
 	Map.Entry<BlockPos, BlockBreakingProgress> currentBlock;
+	public boolean sneaking = false;
 
 	public BlockBreakerT1BE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
 		super(pType, pPos, pBlockState);
@@ -49,6 +51,11 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 
 	public BlockBreakerT1BE(BlockPos pPos, BlockState pBlockState) {
 		this(Registration.BlockBreakerT1BE.get(), pPos, pBlockState);
+	}
+
+	public void setBreakerSettings(boolean sneaking) {
+		this.sneaking = sneaking;
+		markDirtyClient();
 	}
 
 	@Override
@@ -97,7 +104,12 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 	@Override
 	public void tickServer() {
 		super.tickServer();
+		// FakePlayerFactory caches per profile; reset sneak after so it can't
+		// leak to other machines sharing the profile.
+		FakePlayer fakePlayer = getFakePlayer((ServerLevel) level);
+		fakePlayer.setShiftKeyDown(sneaking);
 		doBlockBreak();
+		fakePlayer.setShiftKeyDown(false);
 	}
 
 	public boolean canMine() {
@@ -143,11 +155,9 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 	}
 
 	public List<BlockPos> findBlocksToMine(FakePlayer fakePlayer) {
-		// Matches 1.21.1: only the faced block gets tracked and shows mining
-		// progress. Ability-driven extras (hammer AOE, ore veins, tree feller,
-		// skysweeper) are collected and broken all at once by the tool's own
-		// mineBlocksAbility when the target completes - see breakBlock. Queuing
-		// them here instead made the machine grind through them one at a time.
+		// Only the faced block is tracked for mining progress; ability extras
+		// (hammer AOE, ore veins, etc.) break all at once when it completes -
+		// see breakBlock.
 		List<BlockPos> returnList = new ArrayList<>();
 		BlockPos targetPos = getBlockPos().relative(getBlockState().getValue(BlockStateProperties.FACING));
 		if (isBlockValid(fakePlayer, targetPos))
@@ -260,18 +270,12 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 	public void breakBlock(FakePlayer player, BlockPos breakPos, ItemStack itemStack, BlockState state) {
 		itemStack.onBlockStartBreak(breakPos, player);
 		if (level instanceof ServerLevel serverLevel && itemStack.getItem() instanceof ToggleableTool toggleableTool) {
-			// Matches 1.21.1: when the target block's progress completes, run the
-			// tool's own mining pipeline, which breaks the target plus any
-			// ability-collected blocks (hammer AOE, ore veins, tree feller,
-			// skysweeper) all at once, routes every drop through the shared
-			// smelter/drop-teleport handling, and charges the tool per block
-			// (including the instabreak surcharge).
+			// The tool's own pipeline breaks the target plus ability extras all
+			// at once and routes drops through smelter/drop-teleport handling.
 			toggleableTool.mineBlocksAbility(itemStack, serverLevel, breakPos, player, state);
 			state.spawnAfterBreak(serverLevel, breakPos, itemStack, true);
-			// mineBlocksAbility skips blocks it can't route through the tool
-			// pipeline (block entities, tool out of power) - clean those up the
-			// vanilla way so the machine never stalls on a block it considers
-			// already handled.
+			// The pipeline skips block entities and out-of-power tools - break
+			// those the vanilla way so the machine never stalls.
 			if (!serverLevel.getBlockState(breakPos).isAir()) {
 				BlockEntity blockEntity = level.getBlockEntity(breakPos);
 				if (level.destroyBlock(breakPos, false, player)) {
@@ -317,6 +321,20 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 			return false;
 		if (!getRedstoneControlData().equals(getDefaultRedstoneData()))
 			return false;
+		if (sneaking)
+			return false;
 		return true;
+	}
+
+	@Override
+	public void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putBoolean("sneaking", sneaking);
+	}
+
+	@Override
+	public void load(CompoundTag tag) {
+		this.sneaking = tag.getBoolean("sneaking");
+		super.load(tag);
 	}
 }

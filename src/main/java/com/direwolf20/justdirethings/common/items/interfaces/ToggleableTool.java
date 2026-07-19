@@ -211,15 +211,10 @@ public interface ToggleableTool extends ToggleableItem {
 		Set<BlockPos> breakBlockPositions = getBreakBlockPositions(pStack, pLevel, pPos, pEntityLiving,
 				originalPrimaryState);
 		boolean instaBreak = canInstaBreak(pStack, pLevel, breakBlockPositions);
-		// The primary block goes through the same break-and-collect path as the
-		// ability-collected extras, for players and machine FakePlayers alike:
-		// every caller invokes this while the primary still exists (vanilla
-		// calls mineBlock() BEFORE removing the block - verified against
-		// ServerPlayerGameMode.destroyBlock - and the Block Breaker calls it
-		// before its own destroy fallback). Breaking it here routes its drops
-		// through handleDrops (drop teleport/smelter); vanilla's subsequent
-		// removeBlock then finds air and skips playerDestroy, so nothing drops
-		// or awards exp twice.
+		// The primary block is broken here too: every caller invokes this while
+		// it still exists (mineBlock fires before vanilla's removeBlock), so its
+		// drops route through handleDrops and vanilla's own removal finds air
+		// and skips playerDestroy - nothing drops or awards exp twice.
 		for (BlockPos breakPos : breakBlockPositions) {
 			if (testUseTool(pStack) < 0)
 				break;
@@ -236,9 +231,7 @@ public interface ToggleableTool extends ToggleableItem {
 			// ServerLevel.destroyBlockProgress(-1) only broadcasts when the server tracked
 			// the ID, which it never does for our custom IDs (animations are set purely
 			// client-side). Send the reset packet directly to bypass that check.
-			// FakePlayers pass the ServerPlayer check but may have no network
-			// connection on Forge 1.20.1 - and there is no real client to reset
-			// animations for anyway.
+			// FakePlayers may have a null connection on Forge 1.20.1.
 			if (pEntityLiving instanceof ServerPlayer serverPlayer && !(pEntityLiving instanceof FakePlayer)) {
 				for (BlockPos breakPos : breakBlockPositions) {
 					if (!breakPos.equals(pPos)) {

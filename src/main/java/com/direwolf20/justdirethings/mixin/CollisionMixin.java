@@ -11,21 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
- * Entity.collideBoundingBox(Entity, Vec3, AABB, Level, List) is a real,
- * concrete static method declared on Entity itself (verified via javap) that
- * calls Level.getBlockCollisions(entity, box) to gather the shapes movement
- * gets swept against. Redirecting that call site avoids two dead ends:
- * mixing into the CollisionGetter interface directly throws
- * InvalidInterfaceMixinException for any cancellable @Inject on Mixin 0.8.5,
- * and @Inject-ing into Level.getBlockCollisions silently no-ops because
- * Level's own class file has no bytecode for that method - it's only ever
- * present as a CollisionGetter default, and Mixin 0.8.5 does not synthesize
- * an override to attach the injection to.
- * <p>
- * This covers both client and server movement resolution. The server's
- * packet-validation checks re-query collisions through paths this redirect
- * can't reach - see PlayerMovementMixin. The client's "push the player out
- * of solid blocks" behavior is likewise separate - see LocalPlayerMixin.
+ * Filters wall shapes out of movement collision for phasing players. Targets
+ * the call site inside Entity.collideBoundingBox because Mixin 0.8.5 cannot
+ * inject into CollisionGetter's default methods. Server move validation and
+ * the client's push-out-of-blocks logic need their own hooks - see
+ * PlayerMovementMixin and LocalPlayerMixin.
  */
 @Mixin(Entity.class)
 public abstract class CollisionMixin {
