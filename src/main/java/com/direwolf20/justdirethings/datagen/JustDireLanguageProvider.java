@@ -313,6 +313,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.screen.equals", "Equals");
 		add("justdirethings.screen.dropcount", "Drop Amount");
 		add("justdirethings.screen.showparticles", "Show Particles");
+		add("justdirethings.screen.respectpickupdelay", "Respect Item Pickup Delay");
 		add("justdirethings.screen.storeexp", "Store EXP");
 		add("justdirethings.screen.retrieveexp", "Retrieve EXP");
 		add("justdirethings.screen.owneronly", "Owner Only");

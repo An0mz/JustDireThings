@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.common.capabilities;
 
 import com.direwolf20.justdirethings.common.blockentities.ExperienceHolderBE;
 import com.direwolf20.justdirethings.common.fluids.xpfluid.XPFluid;
+import com.direwolf20.justdirethings.datagen.JustDireFluidTags;
 import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -11,7 +12,12 @@ public class ExperienceHolderFluidTank extends FluidTank {
 	private final ExperienceHolderBE be;
 
 	public ExperienceHolderFluidTank(ExperienceHolderBE be) {
-		super(Integer.MAX_VALUE, fs -> fs.getFluid() instanceof XPFluid);
+		// Accept our own XP fluid plus other mods' XP fluids via the shared interop
+		// tags, so the tank isn't strictly limited to justdirethings:xpfluid.
+		super(Integer.MAX_VALUE,
+				fs -> fs.getFluid() instanceof XPFluid || fs.getFluid().is(JustDireFluidTags.FORGE_EXPERIENCE)
+						|| fs.getFluid().is(JustDireFluidTags.FORGE_XPJUICE)
+						|| fs.getFluid().is(JustDireFluidTags.INDUSTRIALFOREGOING_ESSENCE));
 		this.be = be;
 	}
 

@@ -37,6 +37,8 @@ public class PacketHandler {
 				DropperSettingPayload::new, DropperSettingPacket::handle);
 		CHANNEL.registerMessage(nextId(), EnergyTransmitterSettingPayload.class, EnergyTransmitterSettingPayload::write,
 				EnergyTransmitterSettingPayload::new, EnergyTransmitterPacket::handle);
+		CHANNEL.registerMessage(nextId(), ItemCollectorSettingsPayload.class, ItemCollectorSettingsPayload::write,
+				ItemCollectorSettingsPayload::new, ItemCollectorSettingsPacket::handle);
 		CHANNEL.registerMessage(nextId(), FilterSettingPayload.class, FilterSettingPayload::write,
 				FilterSettingPayload::new, FilterSettingPacket::handle);
 		CHANNEL.registerMessage(nextId(), GhostSlotPayload.class, GhostSlotPayload::write, GhostSlotPayload::new,

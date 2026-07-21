@@ -12,6 +12,7 @@ import com.direwolf20.justdirethings.util.interfacehelpers.FilterData;
 import com.direwolf20.justdirethings.util.interfacehelpers.RedstoneControlData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +34,8 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
 	public AreaAffectingData areaAffectingData = new AreaAffectingData();
 	public RedstoneControlData redstoneControlData = new RedstoneControlData();
 	private final FilterBasicHandler filterHandler = new FilterBasicHandler(9);
+	public boolean respectPickupDelay = false;
+	public boolean showParticles = true;
 
 	public ItemCollectorBE(BlockPos pPos, BlockState pBlockState) {
 		super(Registration.ItemCollectorBE.get(), pPos, pBlockState);
@@ -72,7 +75,15 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
 		return filterHandler;
 	}
 
+	public void setSettings(boolean respectPickupDelay, boolean showParticles) {
+		this.respectPickupDelay = respectPickupDelay;
+		this.showParticles = showParticles;
+		markDirtyClient();
+	}
+
 	public void doParticles(ItemStack itemStack, Vec3 sourcePos) {
+		if (!showParticles)
+			return;
 		Direction direction = getBlockState().getValue(BlockStateProperties.FACING);
 		BlockPos blockPos = getBlockPos();
 		ItemFlowParticleData data = new ItemFlowParticleData(itemStack,
@@ -102,6 +113,8 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
 			return;
 
 		for (ItemEntity itemEntity : entityList) {
+			if (respectPickupDelay && itemEntity.hasPickUpDelay())
+				continue;
 			ItemStack stack = itemEntity.getItem();
 			if (!isStackValidFilter(stack))
 				continue;
@@ -126,5 +139,21 @@ public class ItemCollectorBE extends BaseMachineBE implements FilterableBE, Area
 		if (be == null)
 			return null;
 		return be.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
+	}
+
+	@Override
+	public void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		tag.putBoolean("respectPickupDelay", respectPickupDelay);
+		tag.putBoolean("showParticles", showParticles);
+	}
+
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		if (tag.contains("respectPickupDelay"))
+			respectPickupDelay = tag.getBoolean("respectPickupDelay");
+		if (tag.contains("showParticles"))
+			showParticles = tag.getBoolean("showParticles");
 	}
 }

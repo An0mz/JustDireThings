@@ -107,6 +107,7 @@ public class Registration {
 	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 	public static final DeferredRegister<Block> SIDEDBLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+	public static final DeferredRegister<Item> BUCKET_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 	public static final DeferredRegister<Item> TOOLS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 	public static final DeferredRegister<Item> BOWS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 	public static final DeferredRegister<Item> ARMORS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
@@ -152,6 +153,7 @@ public class Registration {
 		BLOCKS.register(eventBus);
 		SIDEDBLOCKS.register(eventBus);
 		ITEMS.register(eventBus);
+		BUCKET_ITEMS.register(eventBus);
 		TOOLS.register(eventBus);
 		BOWS.register(eventBus);
 		SOUNDS.register(eventBus);
@@ -717,7 +719,7 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> REFINED_T2_FLUID_BLOCK = BLOCKS.register("refined_t2_fluid_block",
 			() -> new LiquidBlock(() -> REFINED_T2_FLUID_SOURCE.get(), Block.Properties.of().noCollission()
 					.strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> REFINED_T2_FLUID_BUCKET = ITEMS.register("refined_t2_fluid_bucket",
+	public static final RegistryObject<Item> REFINED_T2_FLUID_BUCKET = BUCKET_ITEMS.register("refined_t2_fluid_bucket",
 			() -> new BucketItem(() -> REFINED_T2_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -731,7 +733,7 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> REFINED_T3_FLUID_BLOCK = BLOCKS.register("refined_t3_fluid_block",
 			() -> new LiquidBlock(() -> REFINED_T3_FLUID_SOURCE.get(), Block.Properties.of().noCollission()
 					.strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> REFINED_T3_FLUID_BUCKET = ITEMS.register("refined_t3_fluid_bucket",
+	public static final RegistryObject<Item> REFINED_T3_FLUID_BUCKET = BUCKET_ITEMS.register("refined_t3_fluid_bucket",
 			() -> new BucketItem(() -> REFINED_T3_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -745,7 +747,7 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> REFINED_T4_FLUID_BLOCK = BLOCKS.register("refined_t4_fluid_block",
 			() -> new LiquidBlock(() -> REFINED_T4_FLUID_SOURCE.get(), Block.Properties.of().noCollission()
 					.strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> REFINED_T4_FLUID_BUCKET = ITEMS.register("refined_t4_fluid_bucket",
+	public static final RegistryObject<Item> REFINED_T4_FLUID_BUCKET = BUCKET_ITEMS.register("refined_t4_fluid_bucket",
 			() -> new BucketItem(() -> REFINED_T4_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -760,8 +762,8 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> UNREFINED_T2_FLUID_BLOCK = BLOCKS.register(
 			"unrefined_t2_fluid_block", () -> new LiquidBlock(() -> UNREFINED_T2_FLUID_SOURCE.get(), Block.Properties
 					.of().noCollission().strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> UNREFINED_T2_FLUID_BUCKET = ITEMS.register("unrefined_t2_fluid_bucket",
-			() -> new BucketItem(() -> UNREFINED_T2_FLUID_SOURCE.get(),
+	public static final RegistryObject<Item> UNREFINED_T2_FLUID_BUCKET = BUCKET_ITEMS
+			.register("unrefined_t2_fluid_bucket", () -> new BucketItem(() -> UNREFINED_T2_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 	// Unrefined Voidflame Fuel (T3)
@@ -775,8 +777,8 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> UNREFINED_T3_FLUID_BLOCK = BLOCKS.register(
 			"unrefined_t3_fluid_block", () -> new LiquidBlock(() -> UNREFINED_T3_FLUID_SOURCE.get(), Block.Properties
 					.of().noCollission().strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> UNREFINED_T3_FLUID_BUCKET = ITEMS.register("unrefined_t3_fluid_bucket",
-			() -> new BucketItem(() -> UNREFINED_T3_FLUID_SOURCE.get(),
+	public static final RegistryObject<Item> UNREFINED_T3_FLUID_BUCKET = BUCKET_ITEMS
+			.register("unrefined_t3_fluid_bucket", () -> new BucketItem(() -> UNREFINED_T3_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 	// Unrefined Eclipse Ember Fuel (T4)
@@ -790,8 +792,8 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> UNREFINED_T4_FLUID_BLOCK = BLOCKS.register(
 			"unrefined_t4_fluid_block", () -> new LiquidBlock(() -> UNREFINED_T4_FLUID_SOURCE.get(), Block.Properties
 					.of().noCollission().strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> UNREFINED_T4_FLUID_BUCKET = ITEMS.register("unrefined_t4_fluid_bucket",
-			() -> new BucketItem(() -> UNREFINED_T4_FLUID_SOURCE.get(),
+	public static final RegistryObject<Item> UNREFINED_T4_FLUID_BUCKET = BUCKET_ITEMS
+			.register("unrefined_t4_fluid_bucket", () -> new BucketItem(() -> UNREFINED_T4_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 	// Portal Fluid
@@ -804,7 +806,7 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> PORTAL_FLUID_BLOCK = BLOCKS.register("portal_fluid_block",
 			() -> new LiquidBlock(() -> PORTAL_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F)
 					.noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> PORTAL_FLUID_BUCKET = ITEMS.register("portal_fluid_bucket",
+	public static final RegistryObject<Item> PORTAL_FLUID_BUCKET = BUCKET_ITEMS.register("portal_fluid_bucket",
 			() -> new BucketItem(() -> PORTAL_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -820,7 +822,7 @@ public class Registration {
 			"unstable_portal_fluid_block",
 			() -> new LiquidBlock(() -> UNSTABLE_PORTAL_FLUID_SOURCE.get(), Block.Properties.of().noCollission()
 					.strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> UNSTABLE_PORTAL_FLUID_BUCKET = ITEMS
+	public static final RegistryObject<Item> UNSTABLE_PORTAL_FLUID_BUCKET = BUCKET_ITEMS
 			.register("unstable_portal_fluid_bucket", () -> new BucketItem(() -> UNSTABLE_PORTAL_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -834,7 +836,7 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> TIME_FLUID_BLOCK = BLOCKS.register("time_fluid_block",
 			() -> new LiquidBlock(() -> TIME_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F)
 					.noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> TIME_FLUID_BUCKET = ITEMS.register("time_fluid_bucket",
+	public static final RegistryObject<Item> TIME_FLUID_BUCKET = BUCKET_ITEMS.register("time_fluid_bucket",
 			() -> new BucketItem(() -> TIME_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -848,7 +850,7 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> XP_FLUID_BLOCK = BLOCKS.register("xp_fluid_block",
 			() -> new LiquidBlock(() -> XP_FLUID_SOURCE.get(), Block.Properties.of().noCollission().strength(100.0F)
 					.noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> XP_FLUID_BUCKET = ITEMS.register("xp_fluid_bucket",
+	public static final RegistryObject<Item> XP_FLUID_BUCKET = BUCKET_ITEMS.register("xp_fluid_bucket",
 			() -> new BucketItem(() -> XP_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
@@ -863,8 +865,8 @@ public class Registration {
 	public static final RegistryObject<LiquidBlock> POLYMORPHIC_FLUID_BLOCK = BLOCKS.register("polymorphic_fluid_block",
 			() -> new LiquidBlock(() -> POLYMORPHIC_FLUID_SOURCE.get(), Block.Properties.of().noCollission()
 					.strength(100.0F).noLootTable().replaceable().sound(FLUID_BLOCK_SOUND_TYPE)));
-	public static final RegistryObject<Item> POLYMORPHIC_FLUID_BUCKET = ITEMS.register("polymorphic_fluid_bucket",
-			() -> new BucketItem(() -> POLYMORPHIC_FLUID_SOURCE.get(),
+	public static final RegistryObject<Item> POLYMORPHIC_FLUID_BUCKET = BUCKET_ITEMS
+			.register("polymorphic_fluid_bucket", () -> new BucketItem(() -> POLYMORPHIC_FLUID_SOURCE.get(),
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 	// ── Portal Gun V2 & Time Wand ─────────────────────────────────────────────

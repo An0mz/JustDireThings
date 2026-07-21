@@ -345,6 +345,17 @@ public class ToggleButtonFactory {
 				SHOW_PARTICLES_LOCALIZATION, startingValue, onPress);
 	}
 
+	/** Respect Pickup Delay button **/
+	private static final ResourceLocation RESPECTPICKUP_BUTTON = new ResourceLocation(JustDireThings.MODID,
+			"textures/gui/buttons/jumpboost.png");
+	private static final Component RESPECTPICKUP_BUTTON_LOCALIZATION = Component
+			.translatable("justdirethings.screen.respectpickupdelay");
+
+	public static GrayscaleButton RESPECTPICKUPDELAY(int x, int y, boolean startingValue, Button.OnPress onPress) {
+		return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, RESPECTPICKUP_BUTTON,
+				RESPECTPICKUP_BUTTON_LOCALIZATION, startingValue, onPress);
+	}
+
 	/** Swapper Target Button **/
 	private static final List<TextureLocalization> SWAPPER_ENTITY_TEXTURES = List.of(
 			new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/entity-none.png"),
