@@ -9,6 +9,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -34,5 +36,10 @@ public class UnstablePortalFluidType extends JustDireFluidType {
 		for (int l = 0; l < 8; ++l)
 			level.addAlwaysVisibleParticle(ParticleTypes.DRAGON_BREATH, (double) pos.getX() + Math.random(),
 					(double) pos.getY() + Math.random(), (double) pos.getZ() + Math.random(), 0.0D, 0.0D, 0.0D);
+	}
+
+	@Override
+	public boolean canConvertToSource(FluidState state, LevelReader reader, BlockPos pos) {
+		return false;
 	}
 }
