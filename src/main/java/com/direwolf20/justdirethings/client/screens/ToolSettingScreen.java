@@ -51,7 +51,7 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 	protected final Map<Button, ToggleButton> leftRightClickButtons = new HashMap<>();
 	protected final Map<Button, GrayscaleButton> bindingButtons = new HashMap<>();
 	protected final Map<Button, ToggleButton> requireEquippedButtons = new HashMap<>();
-	protected final Map<Button, GrayscaleButton> hideRenderButtons = new HashMap<>();
+	protected final Map<Button, ToggleButton> hideRenderButtons = new HashMap<>();
 	protected final Map<Button, Ability> buttonToAbilityMap = new HashMap<>();
 	protected Map<ToggleButton, LeftClickableTool.AbilityBinding> bindingMap = new HashMap<>();
 	protected boolean bindingEnabled = false;
@@ -207,12 +207,10 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 				this.requireEquippedButtons.put(button, requireEquippedButton);
 			}
 			if (button != null && toolAbility.hasRenderButton()) {
-				boolean renderActive = true;
-				GrayscaleButton hideRenderButton = ToggleButtonFactory.HIDE_RENDER_ABILITY_BUTTON(buttonsStartX + 143,
-						buttonsStartY, renderActive, (clicked) -> {
-							toggleSetting(toolAbility.getName() + "_render");
-							((GrayscaleButton) clicked).toggleActive();
-						});
+				boolean renderActive = ToggleableTool.getSetting(tool, toolAbility.getName() + "_render");
+				ToggleButton hideRenderButton = ToggleButtonFactory.HIDE_RENDER_ABILITY_BUTTON(buttonsStartX + 143,
+						buttonsStartY, renderActive ? 1 : 0,
+						(clicked) -> toggleSetting(toolAbility.getName() + "_render"));
 				this.hideRenderButtons.put(button, hideRenderButton);
 			}
 			if (button != null)

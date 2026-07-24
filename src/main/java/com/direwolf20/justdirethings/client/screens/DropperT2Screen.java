@@ -19,11 +19,13 @@ import net.minecraft.world.entity.player.Inventory;
 import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class DropperT2Screen extends BaseMachineScreen<DropperT2Container> {
 	protected int dropCount;
+	protected int pickupDelay;
 
 	public DropperT2Screen(DropperT2Container container, Inventory inv, Component name) {
 		super(container, inv, name);
 		if (baseMachineBE instanceof DropperT2BE dropper) {
 			this.dropCount = dropper.dropCount;
+			this.pickupDelay = dropper.pickupDelay;
 		}
 	}
 
@@ -79,6 +81,13 @@ public class DropperT2Screen extends BaseMachineScreen<DropperT2Container> {
 					dropCount = ((NumberButton) b).getValue(); // The value is updated in the mouseClicked method below
 					saveSettings();
 				}));
+
+		addRenderableWidget(new NumberButton(getGuiLeft() + 48, topSectionTop + 41, 24, 12, pickupDelay, 0, 1200,
+				Component.translatable("justdirethings.screen.pickupdelay"), b -> {
+					pickupDelay = ((NumberButton) b).getValue(); // The value is updated in the mouseClicked method
+																	// below
+					saveSettings();
+				}));
 	}
 
 	@Override
@@ -90,7 +99,7 @@ public class DropperT2Screen extends BaseMachineScreen<DropperT2Container> {
 	@Override
 	public void saveSettings() {
 		super.saveSettings();
-		PacketHandler.CHANNEL.sendToServer(new DropperSettingPayload(dropCount));
+		PacketHandler.CHANNEL.sendToServer(new DropperSettingPayload(dropCount, pickupDelay));
 	}
 
 	@Override

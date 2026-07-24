@@ -8,6 +8,7 @@ import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.TierUpgradeRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipeTag;
 import com.direwolf20.justdirethings.setup.Registration;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -73,7 +74,8 @@ public class JEIIntegration implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		IJeiHelpers jeiHelpers = registration.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper), new FluidDropRecipeCategory(guiHelper),
+		registration.addRecipeCategories(new GooSpreadRecipeCategory(guiHelper),
+				new GooSpreadRecipeTagCategory(guiHelper), new FluidDropRecipeCategory(guiHelper),
 				new OreToResourceRecipeCategory(guiHelper));
 	}
 
@@ -84,6 +86,10 @@ public class JEIIntegration implements IModPlugin {
 		List<GooSpreadRecipe> goospreadrecipes = recipeManager
 				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get());
 		registration.addRecipes(GooSpreadRecipeCategory.TYPE, goospreadrecipes);
+
+		List<GooSpreadRecipeTag> goospreadrecipetags = recipeManager
+				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE_TAG.get());
+		registration.addRecipes(GooSpreadRecipeTagCategory.TYPE, goospreadrecipetags);
 
 		List<FluidDropRecipe> fluidDropRecipes = recipeManager
 				.getAllRecipesFor(Registration.FLUID_DROP_RECIPE_TYPE.get());
@@ -110,6 +116,10 @@ public class JEIIntegration implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier2.get()), GooSpreadRecipeCategory.TYPE);
 		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier3.get()), GooSpreadRecipeCategory.TYPE);
 		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier4.get()), GooSpreadRecipeCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier1.get()), GooSpreadRecipeTagCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier2.get()), GooSpreadRecipeTagCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier3.get()), GooSpreadRecipeTagCategory.TYPE);
+		registry.addRecipeCatalyst(new ItemStack(Registration.GooBlock_Tier4.get()), GooSpreadRecipeTagCategory.TYPE);
 	}
 
 	@Override

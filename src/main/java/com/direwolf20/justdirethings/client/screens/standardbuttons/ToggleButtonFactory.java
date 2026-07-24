@@ -460,15 +460,15 @@ public class ToggleButtonFactory {
 	}
 
 	/** Hide Render button **/
-	private static final ResourceLocation HIDE_RENDER_BUTTON = new ResourceLocation(JustDireThings.MODID,
-			"textures/gui/buttons/showfakeplayer.png");
-	private static final Component HIDE_RENDER_LOCALIZATION = Component
-			.translatable("justdirethings.screen.showrender");
+	private static final List<TextureLocalization> HIDE_RENDER_TEXTURES = List.of(
+			new TextureLocalization(new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/decoy.png"),
+					Component.translatable("justdirethings.screen.hiderender")),
+			new TextureLocalization(
+					new ResourceLocation(JustDireThings.MODID, "textures/gui/buttons/showfakeplayer.png"),
+					Component.translatable("justdirethings.screen.showrender")));
 
-	public static GrayscaleButton HIDE_RENDER_ABILITY_BUTTON(int x, int y, boolean startingValue,
-			Button.OnPress onPress) {
-		return new GrayscaleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, HIDE_RENDER_BUTTON, HIDE_RENDER_LOCALIZATION,
-				startingValue, onPress);
+	public static ToggleButton HIDE_RENDER_ABILITY_BUTTON(int x, int y, int startingValue, Button.OnPress onPress) {
+		return new ToggleButton(x, y, STANDARD_WIDTH, STANDARD_HEIGHT, HIDE_RENDER_TEXTURES, startingValue, onPress);
 	}
 
 	/** Filter Only button **/

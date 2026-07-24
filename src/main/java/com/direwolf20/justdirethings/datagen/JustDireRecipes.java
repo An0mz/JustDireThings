@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.datagen;
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.common.blocks.baseblocks.BaseMachineBlock;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipeBuilder;
+import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipeTagBuilder;
 import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -243,6 +244,16 @@ public class JustDireRecipes extends RecipeProvider {
 				.unlockedBy("has_goo_block_t1",
 						InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier1_ITEM.get()))
 				.save(consumer);
+
+		// GooSpread Tagged Recipes - matches any block in the tag, not just the vanilla
+		// block
+		GooSpreadRecipeTagBuilder
+				.shapeless(new ResourceLocation(JustDireThings.MODID, "coal_block_t1_tag"),
+						Tags.Blocks.STORAGE_BLOCKS_COAL, Registration.RawCoal_T1.get().defaultBlockState(), 1, 2400)
+				.group("justdirethings")
+				.unlockedBy("has_goo_block_t1",
+						InventoryChangeTrigger.TriggerInstance.hasItems(Registration.GooBlock_Tier1_ITEM.get()))
+				.save(consumer, new ResourceLocation(JustDireThings.MODID, "coal_block_t1_tag-goospread_tag"));
 		GooSpreadRecipeBuilder
 				.shapeless(new ResourceLocation(JustDireThings.MODID, "coal_block_t2"),
 						Registration.CoalBlock_T1.get().defaultBlockState(),

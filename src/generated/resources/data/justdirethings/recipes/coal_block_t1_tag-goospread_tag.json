@@ -1,0 +1,13 @@
+{
+  "type": "justdirethings:goospread_tag",
+  "craftingDuration": 2400,
+  "id": "justdirethings:coal_block_t1_tag-goospread_tag",
+  "input": "forge:storage_blocks/coal",
+  "output": {
+    "Name": "justdirethings:raw_coal_t1_ore",
+    "Properties": {
+      "facing": "north"
+    }
+  },
+  "tierRequirement": 1
+}

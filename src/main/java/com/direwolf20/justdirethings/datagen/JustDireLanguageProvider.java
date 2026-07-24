@@ -157,7 +157,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 
 		// Misc
 		add("sound.justdirethings.beep", "Beep");
-		add("justdirethings.missingupgrade", " (Missing)");
+		add("justdirethings.missingupgrade", " (Missing Upgrade)");
 		add("justdirethings.shiftmoreinfo", "Hold Shift for details");
 		add("justdirethings.presshotkey", "<Press %s>");
 		add("justdirethings.enabled", "Enabled");
@@ -169,7 +169,13 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.pocketgeneratorburntime", "Burn Time: %f / %f");
 		add("justdirethings.pocketgeneratorfuelstack", "Fuel: %f %s");
 		add("justdirethings.pocketgeneratornofuel", "Fuel Empty");
-		add("justdirethings.festored", "Energy: %s / %s");
+		add("justdirethings.festored", "Forge Energy: %s / %s");
+		add("entity.justdirethings.decoy_entity", "Decoy Entity");
+		add("entity.justdirethings.paradox_entity", "Paradox");
+		add("entity.justdirethings.creature_catcher", "Creature Catcher");
+		add("sound.justdirethings.portal_gun_close", "Portal Gun Close");
+		add("sound.justdirethings.portal_gun_open", "Portal Gun Open");
+		add("sound.justdirethings.paradox_ambient", "Paradox Machine Ambient");
 		add("justdirethings.boundto", "Bound to: %s:%s");
 		add("justdirethings.boundto-missing", "Bound to (MISSING BLOCK): %s:%s");
 		add("justdirethings.unbound", " -Not Bound");
@@ -185,7 +191,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		// Keys
 		add("justdirethings.key.category", "Just Dire Things");
 		add("justdirethings.key.toggle_tool", "Toggle Tool Abilities");
-		add("justdirethings.key.tool_ui", "Open Tool UI");
+		add("justdirethings.key.tool_ui", "Open Tool Settings UI");
 
 		// Abilities
 		add(Ability.MOBSCANNER.getLocalization(), "Mob Scanner");
@@ -198,8 +204,8 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Ability.SMELTER.getLocalization(), "Auto Smelter");
 		add(Ability.SMOKER.getLocalization(), "Auto Smoker");
 		add(Ability.LAVAREPAIR.getLocalization(), "Lava Repair");
-		add(Ability.POLYMORPH_RANDOM.getLocalization(), "Polymorph Random");
-		add(Ability.POLYMORPH_TARGET.getLocalization(), "Polymorph Target");
+		add(Ability.POLYMORPH_RANDOM.getLocalization(), "Random Polymorph");
+		add(Ability.POLYMORPH_TARGET.getLocalization(), "Targeted Polymorph");
 		add(Ability.CAUTERIZEWOUNDS.getLocalization(), "Cauterize Wounds");
 		add(Ability.HAMMER.getLocalization(), "Hammer");
 		add(Ability.HAMMER.getLocalization() + "_off", "Hammer: Disabled");
@@ -220,17 +226,17 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Ability.MINDFOG.getLocalization(), "Mind Fog");
 		add(Ability.INVULNERABILITY.getLocalization(), "Invulnerability");
 		add(Ability.POTIONARROW.getLocalization(), "Potion Arrow");
-		add(Ability.SPLASH.getLocalization(), "Splash Arrow");
-		add(Ability.LINGERING.getLocalization(), "Lingering Arrow");
+		add(Ability.SPLASH.getLocalization(), "Splash");
+		add(Ability.LINGERING.getLocalization(), "Lingering");
 		add(Ability.HOMING.getLocalization(), "Homing Arrow");
-		add(Ability.EPICARROW.getLocalization(), "Epic Arrow");
+		add(Ability.EPICARROW.getLocalization(), "Yondu Arrow");
 		add(Ability.SWIMSPEED.getLocalization(), "Swim Speed");
 		add(Ability.GROUNDSTOMP.getLocalization(), "Ground Stomp");
 		add(Ability.EXTINGUISH.getLocalization(), "Extinguish");
 		add(Ability.STUPEFY.getLocalization(), "Stupefy");
 		add(Ability.NEGATEFALLDAMAGE.getLocalization(), "Negate Fall Damage");
 		add(Ability.NIGHTVISION.getLocalization(), "Night Vision");
-		add(Ability.ELYTRA.getLocalization(), "Elytra Flight");
+		add(Ability.ELYTRA.getLocalization(), "Elytra");
 		add(Ability.DECOY.getLocalization(), "Decoy");
 		add(Ability.WATERBREATHING.getLocalization(), "Water Breathing");
 		add(Ability.DEATHPROTECTION.getLocalization(), "Death Protection");
@@ -248,7 +254,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Registration.PortalGun.get(), "Portal Gun");
 		add(Registration.PortalGunV2.get(), "Advanced Portal Gun");
 		add(Registration.PolymorphicWandV2.get(), "Advanced Polymorphic Wand");
-		add("entity.justdirethings.time_wand_entity", "Time Wand Effect");
+		add("entity.justdirethings.time_wand_entity", "Time Wand Entity");
 		add("entity.justdirethings.portal_projectile", "Portal Projectile");
 		add("entity.justdirethings.portal_entity", "DirePortal");
 		add("justdirethings.lowenergy", "Insufficient Energy");
@@ -260,10 +266,10 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		// GUI
 		add("justdirethings.screen.energy", "Energy: %s/%s FE");
 		add("justdirethings.screen.energycost", "Energy Cost: %s");
-		add("justdirethings.screen.fluid", "Fluid: %s (%s/%s mB)");
-		add("justdirethings.screen.paradoxfluidcost", "Fluid Cost: %s mB");
+		add("justdirethings.screen.fluid", "%s: %s/%s MB");
+		add("justdirethings.screen.paradoxfluidcost", "Fluid Cost: %s mb");
 		add("justdirethings.screen.paradoxenergycost", "Energy Cost: %s FE");
-		add("justdirethings.paradoxenergy", "Paradox Energy: %s/%s");
+		add("justdirethings.paradoxenergy", "Paradox Energy: %s / %s");
 		add("justdirethings.screen.fepertick", "FE/T: %s");
 		add("justdirethings.screen.no_fuel", "Fuel source empty");
 		add("justdirethings.screen.burn_time", "Burn time left: %ss");
@@ -285,6 +291,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.screen.filter-block", "Filter: Block");
 		add("justdirethings.screen.filter-item", "Filter: Item");
 		add("justdirethings.screen.tickspeed", "Speed (Ticks)");
+		add("justdirethings.screen.pickupdelay", "Pickup Delay (Ticks)");
 		add("justdirethings.screen.click-right", "Right Click");
 		add("justdirethings.screen.click-left", "Left Click");
 		add("justdirethings.screen.click-custom", "Custom Binding");
@@ -314,12 +321,13 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.screen.dropcount", "Drop Amount");
 		add("justdirethings.screen.showparticles", "Show Particles");
 		add("justdirethings.screen.respectpickupdelay", "Respect Item Pickup Delay");
-		add("justdirethings.screen.storeexp", "Store EXP");
-		add("justdirethings.screen.retrieveexp", "Retrieve EXP");
+		add("justdirethings.screen.storeexp", "Store Level");
+		add("justdirethings.screen.retrieveexp", "Retrieve Level");
 		add("justdirethings.screen.owneronly", "Owner Only");
-		add("justdirethings.screen.collectexp", "Collect EXP");
+		add("justdirethings.screen.collectexp", "Collect Experience");
 		add("justdirethings.screen.targetexp", "Target Level");
 		add("justdirethings.screen.showrender", "Show Render");
+		add("justdirethings.screen.hiderender", "Hide Render");
 		add("justdirethings.screen.burnspeedmultiplier", "Burn Speed Multiplier: %s");
 		add("justdirethings.screen.click-hold", "Hold Click");
 		add("justdirethings.screen.click-hold-for", "Hold Click For (ticks)");
@@ -339,15 +347,17 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings.fluidname", "Fluid: %s");
 		add("justdirethings.fluidamt", "Amount: %s mB");
 		add("justdirethings.fillmode", "Fill Mode: %s");
+		add("justdirethings.fillmode.changed", "Fill Mode Set to: %s");
 		add("justdirethings.settingscopied", "Settings Copied");
 		add("justdirethings.settingspasted", "Settings Pasted");
-		add("justdirethings.polymorphicfluidamt", "Polymorphic Fluid: %s / %s mB");
+		add("justdirethings.polymorphicfluidamt", "Polymorphic Fluid: %s / %s");
 		add("justdirethings.polymorphset", "Polymorph Target: %s");
 		add("justdirethings.invalidpolymorphentity", "Invalid Entity for Polymorphing");
 		add("justdirethings.polymorphsuccess", "Transformed into: %s");
 		add("justdirethings.polymorphblacklisted",
 				"That entity is blacklisted and cannot be created by the Polymorphic Wand");
-		add("justdirethings.hint.dropinwater", "Drop in water to restore");
+		add("justdirethings.hint.dropinwater", "Drop in Water");
+		add("justdirethings.requiresfeeding", "Click on the block with its food to activate it");
 		add("justdirethings.paradox.snapshot_accepted", "Snapshot taken: %d blocks, %d entities");
 
 		// Buttons
@@ -358,81 +368,80 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 
 		add("justdirethings.screen.copyarea", "Copy Area");
 		add("justdirethings.screen.copyoffset", "Copy Offset");
-		add("justdirethings.screen.copyfilter", "Copy Filter");
+		add("justdirethings.screen.copyfilter", "Copy Filters");
 		add("justdirethings.screen.copyredstone", "Copy Redstone");
-		add("justdirethings.screen.filteronlytrue", "Filter Only");
-		add("justdirethings.screen.comparecounts", "Compare Counts");
+		add("justdirethings.screen.filteronlytrue", "Filtered Items Only");
+		add("justdirethings.screen.comparecounts", "Compare Stack Sizes");
 		add("justdirethings.screen.renderparadox", "Render Paradox");
-		add("justdirethings.screen.paradoxall", "Paradox: All");
-		add("justdirethings.screen.paradoxblock", "Paradox: Blocks");
-		add("justdirethings.screen.paradoxentity", "Paradox: Entities");
+		add("justdirethings.screen.paradoxall", "Revert Blocks and Entities");
+		add("justdirethings.screen.paradoxblock", "Revert Blocks");
+		add("justdirethings.screen.paradoxentity", "Revert Entities");
 		add("justdirethings.screen.snapshotarea", "Snapshot Area");
-		add("justdirethings.screen.senditems", "Send Items");
+		add("justdirethings.screen.senditems", "Push Items");
 		add("justdirethings.screen.pullitems", "Pull Items");
 		add("justdirethings.screen.swapitems", "Swap Items");
 
 		// Upgrade Smithing Templates
-		add(Registration.TEMPLATE_FERRICORE.get(), "Ferricore Smithing Template");
-		add(Registration.TEMPLATE_BLAZEGOLD.get(), "Blazegold Smithing Template");
-		add(Registration.TEMPLATE_CELESTIGEM.get(), "Celestigem Smithing Template");
-		add(Registration.TEMPLATE_ECLIPSEALLOY.get(), "Eclipse Alloy Smithing Template");
+		add(Registration.TEMPLATE_FERRICORE.get(), "Template: Ferricore");
+		add(Registration.TEMPLATE_BLAZEGOLD.get(), "Template: Blazegold");
+		add(Registration.TEMPLATE_CELESTIGEM.get(), "Template: Celestigem");
+		add(Registration.TEMPLATE_ECLIPSEALLOY.get(), "Template: Eclipse Alloy");
 
 		// Upgrades
-		add(Registration.UPGRADE_BASE.get(), "Blank Upgrade");
-		add(Registration.UPGRADE_MOBSCANNER.get(), "Mob Scanner Upgrade");
-		add(Registration.UPGRADE_ORESCANNER.get(), "Ore Scanner Upgrade");
-		add(Registration.UPGRADE_OREMINER.get(), "Ore Miner Upgrade");
-		add(Registration.UPGRADE_LAWNMOWER.get(), "Lawnmower Upgrade");
-		add(Registration.UPGRADE_SKYSWEEPER.get(), "Sky Sweeper Upgrade");
-		add(Registration.UPGRADE_TREEFELLER.get(), "Tree Feller Upgrade");
-		add(Registration.UPGRADE_LEAFBREAKER.get(), "Leaf Breaker Upgrade");
-		add(Registration.UPGRADE_SMELTER.get(), "Auto Smelter Upgrade");
-		add(Registration.UPGRADE_SMOKER.get(), "Auto Smoker Upgrade");
-		add(Registration.UPGRADE_HAMMER.get(), "Hammer Upgrade");
-		add(Registration.UPGRADE_CAUTERIZEWOUNDS.get(), "Cauterize Wounds Upgrade");
-		add(Registration.UPGRADE_OREXRAY.get(), "X-Ray Upgrade");
-		add(Registration.UPGRADE_DROPTELEPORT.get(), "Drops Teleporter Upgrade");
-		add(Registration.UPGRADE_GLOWING.get(), "Mob X-Ray Upgrade");
-		add(Registration.UPGRADE_INSTABREAK.get(), "Instant Break Upgrade");
-		add(Registration.UPGRADE_RUNSPEED.get(), "Run Speed Upgrade");
-		add(Registration.UPGRADE_WALKSPEED.get(), "Walk Speed Upgrade");
-		add(Registration.UPGRADE_STEPHEIGHT.get(), "Step Assist Upgrade");
-		add(Registration.UPGRADE_JUMPBOOST.get(), "Jump Boost Upgrade");
-		add(Registration.UPGRADE_MINDFOG.get(), "Mind Fog Upgrade");
-		add(Registration.UPGRADE_INVULNERABILITY.get(), "Invulnerability Upgrade");
-		add(Registration.UPGRADE_POTIONARROW.get(), "Potion Arrow Upgrade");
-		add(Registration.UPGRADE_SPLASH.get(), "Splash Arrow Upgrade");
-		add(Registration.UPGRADE_LINGERING.get(), "Lingering Arrow Upgrade");
-		add(Registration.UPGRADE_HOMING.get(), "Homing Arrow Upgrade");
-		add(Registration.UPGRADE_EPICARROW.get(), "Epic Arrow Upgrade");
-		add(Registration.UPGRADE_SWIMSPEED.get(), "Swim Speed Upgrade");
-		add(Registration.UPGRADE_GROUNDSTOMP.get(), "Ground Stomp Upgrade");
-		add(Registration.UPGRADE_EXTINGUISH.get(), "Extinguish Upgrade");
-		add(Registration.UPGRADE_STUPEFY.get(), "Stupefy Upgrade");
-		add(Registration.UPGRADE_NEGATEFALLDAMAGE.get(), "Negate Fall Damage Upgrade");
-		add(Registration.UPGRADE_NIGHTVISION.get(), "Night Vision Upgrade");
-		add(Registration.UPGRADE_ELYTRA.get(), "Elytra Flight Upgrade");
-		add(Registration.UPGRADE_DECOY.get(), "Decoy Upgrade");
-		add(Registration.UPGRADE_WATERBREATHING.get(), "Water Breathing Upgrade");
-		add(Registration.UPGRADE_DEATHPROTECTION.get(), "Death Protection Upgrade");
-		add(Registration.UPGRADE_DEBUFFREMOVER.get(), "Debuff Remover Upgrade");
-		add(Registration.UPGRADE_EARTHQUAKE.get(), "Earthquake Upgrade");
+		add(Registration.UPGRADE_BASE.get(), "Upgrade: Blank");
+		add(Registration.UPGRADE_MOBSCANNER.get(), "Upgrade: Mob Scanner");
+		add(Registration.UPGRADE_ORESCANNER.get(), "Upgrade: Ore Scanner");
+		add(Registration.UPGRADE_OREMINER.get(), "Upgrade: Ore Miner");
+		add(Registration.UPGRADE_LAWNMOWER.get(), "Upgrade: Lawnmower");
+		add(Registration.UPGRADE_SKYSWEEPER.get(), "Upgrade: Skysweeper");
+		add(Registration.UPGRADE_TREEFELLER.get(), "Upgrade: Treefeller");
+		add(Registration.UPGRADE_LEAFBREAKER.get(), "Upgrade: Leafbreaker");
+		add(Registration.UPGRADE_SMELTER.get(), "Upgrade: Smelter");
+		add(Registration.UPGRADE_SMOKER.get(), "Upgrade: Smoker");
+		add(Registration.UPGRADE_HAMMER.get(), "Upgrade: Hammer");
+		add(Registration.UPGRADE_CAUTERIZEWOUNDS.get(), "Upgrade: Cauterize Wounds");
+		add(Registration.UPGRADE_OREXRAY.get(), "Upgrade: Ore X-Ray");
+		add(Registration.UPGRADE_DROPTELEPORT.get(), "Upgrade: Drops Teleport");
+		add(Registration.UPGRADE_GLOWING.get(), "Upgrade: Mob X-Ray");
+		add(Registration.UPGRADE_INSTABREAK.get(), "Upgrade: Instant Break");
+		add(Registration.UPGRADE_RUNSPEED.get(), "Upgrade: Run Speed");
+		add(Registration.UPGRADE_WALKSPEED.get(), "Upgrade: Walk Speed");
+		add(Registration.UPGRADE_STEPHEIGHT.get(), "Upgrade: Step Assist");
+		add(Registration.UPGRADE_JUMPBOOST.get(), "Upgrade: Jump Boost");
+		add(Registration.UPGRADE_MINDFOG.get(), "Upgrade: Mind Fog");
+		add(Registration.UPGRADE_INVULNERABILITY.get(), "Upgrade: Invulnerability");
+		add(Registration.UPGRADE_POTIONARROW.get(), "Upgrade: Potion Arrow");
+		add(Registration.UPGRADE_SPLASH.get(), "Upgrade: Splash");
+		add(Registration.UPGRADE_LINGERING.get(), "Upgrade: Lingering");
+		add(Registration.UPGRADE_HOMING.get(), "Upgrade: Homing Arrow");
+		add(Registration.UPGRADE_EPICARROW.get(), "Upgrade: Yondu Arrow");
+		add(Registration.UPGRADE_SWIMSPEED.get(), "Upgrade: Swim Speed");
+		add(Registration.UPGRADE_GROUNDSTOMP.get(), "Upgrade: Ground Stomp");
+		add(Registration.UPGRADE_EXTINGUISH.get(), "Upgrade: Extinguish");
+		add(Registration.UPGRADE_STUPEFY.get(), "Upgrade: Stupefy");
+		add(Registration.UPGRADE_NEGATEFALLDAMAGE.get(), "Upgrade: Negate Fall Damage");
+		add(Registration.UPGRADE_NIGHTVISION.get(), "Upgrade: Night Vision");
+		add(Registration.UPGRADE_ELYTRA.get(), "Upgrade: Elytra");
+		add(Registration.UPGRADE_DECOY.get(), "Upgrade: Decoy");
+		add(Registration.UPGRADE_WATERBREATHING.get(), "Upgrade: Water Breathing");
+		add(Registration.UPGRADE_DEATHPROTECTION.get(), "Upgrade: Death Protection");
+		add(Registration.UPGRADE_DEBUFFREMOVER.get(), "Upgrade: Debuff Remover");
+		add(Registration.UPGRADE_EARTHQUAKE.get(), "Upgrade: Earthquake");
 		add(Registration.UPGRADE_NOAI.get(), "Upgrade: Mental Obliteration");
-		add(Registration.UPGRADE_FLIGHT.get(), "Flight Upgrade");
-		add(Registration.UPGRADE_LAVAIMMUNITY.get(), "Lava Immunity Upgrade");
-		add(Registration.UPGRADE_PHASE.get(), "Phase Upgrade");
-		add(Registration.UPGRADE_TIMEPROTECTION.get(), "Time Protection Upgrade");
+		add(Registration.UPGRADE_FLIGHT.get(), "Upgrade: Flight");
+		add(Registration.UPGRADE_LAVAIMMUNITY.get(), "Upgrade: Lava Immunity");
+		add(Registration.UPGRADE_PHASE.get(), "Upgrade: Phase");
+		add(Registration.UPGRADE_TIMEPROTECTION.get(), "Upgrade: Time Protection");
 
 		// Recipes
 		add("justdirethings.goospreadrecipe.title", "Goo Spreading Recipes");
-		add("justdirethings.fluiddroprecipe.title", "Drop in Fluid Recipes");
+		add("justdirethings.goospreadrecipetag.title", "Tagged Goo Spreading Recipes");
+		add("justdirethings.fluiddroprecipe.title", "Fluid Drop Recipes");
 		add("justdirethings.oretoresource.title", "Ores to Resources");
 
 		// Time Crystal tooltips
-		add("justdirethings.timecrystaltooltip",
-				"The crystal pulses with temporal energy, accelerating or slowing time around you.");
-		add("justdirethings.timecrystaltooltiptwo",
-				"A sliver of crystallized time. Its effects are unpredictable but undeniably powerful.");
+		add("justdirethings.timecrystaltooltip", "Wibbly Wobbly");
+		add("justdirethings.timecrystaltooltiptwo", "Timey Wimey");
 
 		// Upgrade Tooltip Details (detailtext = green, flavortext = gray italic)
 		add("justdirethings." + Ability.MOBSCANNER.getName() + ".detailtext", "Show the location of nearby mobs");
@@ -452,6 +461,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add("justdirethings." + Ability.STEPHEIGHT.getName() + ".detailtext", "Automatically step up 1 block");
 		add("justdirethings." + Ability.JUMPBOOST.getName() + ".detailtext", "Jump Higher");
 		add("justdirethings." + Ability.MINDFOG.getName() + ".detailtext", "Mobs are less likely to notice you");
+		add("justdirethings." + Ability.MINDFOG.getName() + ".flavortext", "Be vewy vewy quiet!");
 		add("justdirethings." + Ability.INVULNERABILITY.getName() + ".detailtext",
 				"Activate for a few seconds of invulnerability");
 		add("justdirethings." + Ability.INVULNERABILITY.getName() + ".flavortext", "Bring it!!");

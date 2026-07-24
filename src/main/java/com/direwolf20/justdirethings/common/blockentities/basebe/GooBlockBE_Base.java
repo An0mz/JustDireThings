@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.blockentities.basebe;
 import com.direwolf20.justdirethings.client.particles.gooexplodeparticle.GooExplodeParticleData;
 import com.direwolf20.justdirethings.common.blocks.gooblocks.GooBlock_Base;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipeTag;
 import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -117,6 +118,9 @@ public class GooBlockBE_Base extends BlockEntity {
 			return;
 		for (Direction direction : Direction.values()) {
 			GooSpreadRecipe gooSpreadRecipe = findRecipe(getBlockPos().relative(direction));
+			GooSpreadRecipeTag gooSpreadRecipeTag = gooSpreadRecipe == null
+					? findRecipeTag(getBlockPos().relative(direction))
+					: null;
 			int sideCounter = sidedCounters.get(direction);
 			if (gooSpreadRecipe != null) {
 				if (sideCounter == -1 && getBlockState().getValue(GooBlock_Base.ALIVE)) {
@@ -125,7 +129,17 @@ public class GooBlockBE_Base extends BlockEntity {
 					sidedDurations.put(direction, sideCounter);
 					markDirtyClient();
 				} else if (sideCounter == 0) { // Crafting done!
-					setBlockToTarget(gooSpreadRecipe, direction);
+					setBlockToTarget(gooSpreadRecipe.getOutput(), direction);
+					markDirtyClient();
+				}
+			} else if (gooSpreadRecipeTag != null) {
+				if (sideCounter == -1 && getBlockState().getValue(GooBlock_Base.ALIVE)) {
+					sideCounter = gooSpreadRecipeTag.getCraftingDuration();
+					updateSideCounter(direction, sideCounter);
+					sidedDurations.put(direction, sideCounter);
+					markDirtyClient();
+				} else if (sideCounter == 0) { // Crafting done!
+					setBlockToTarget(gooSpreadRecipeTag.getOutput(), direction);
 					markDirtyClient();
 				}
 			} else { // No valid recipe — cancel any running timer
@@ -139,12 +153,12 @@ public class GooBlockBE_Base extends BlockEntity {
 		}
 	}
 
-	public void setBlockToTarget(GooSpreadRecipe gooSpreadRecipe, Direction direction) {
-		if (gooSpreadRecipe.getOutput().hasProperty(BlockStateProperties.FACING))
+	public void setBlockToTarget(BlockState output, Direction direction) {
+		if (output.hasProperty(BlockStateProperties.FACING))
 			level.setBlockAndUpdate(getBlockPos().relative(direction),
-					gooSpreadRecipe.getOutput().setValue(BlockStateProperties.FACING, direction));
+					output.setValue(BlockStateProperties.FACING, direction));
 		else
-			level.setBlockAndUpdate(getBlockPos().relative(direction), gooSpreadRecipe.getOutput());
+			level.setBlockAndUpdate(getBlockPos().relative(direction), output);
 		updateSideCounter(direction, -1);
 		sidedDurations.put(direction, -1);
 		level.playSound(null, getBlockPos(), SoundEvents.SCULK_BLOCK_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -173,6 +187,21 @@ public class GooBlockBE_Base extends BlockEntity {
 				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE.get())) {
 			if (gooSpreadRecipe.matches(getLevel(), coords, this, state) && isDimensionAllowed(gooSpreadRecipe)) {
 				return gooSpreadRecipe;
+			}
+		}
+
+		return null;
+	}
+
+	@Nullable
+	private GooSpreadRecipeTag findRecipeTag(BlockPos coords) {
+		BlockState state = getLevel().getBlockState(coords);
+		RecipeManager recipeManager = getLevel().getRecipeManager();
+
+		for (GooSpreadRecipeTag gooSpreadRecipeTag : recipeManager
+				.getAllRecipesFor(Registration.GOO_SPREAD_RECIPE_TYPE_TAG.get())) {
+			if (gooSpreadRecipeTag.matches(getLevel(), coords, this, state)) {
+				return gooSpreadRecipeTag;
 			}
 		}
 

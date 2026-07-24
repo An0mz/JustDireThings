@@ -15,10 +15,12 @@ import net.minecraft.world.entity.player.Inventory;
 import com.direwolf20.justdirethings.common.network.PacketHandler;
 public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
 	protected int dropCount;
+	protected int pickupDelay;
 	public DropperT1Screen(DropperT1Container container, Inventory inv, Component name) {
 		super(container, inv, name);
 		if (baseMachineBE instanceof DropperT1BE dropper) {
 			this.dropCount = dropper.dropCount;
+			this.pickupDelay = dropper.pickupDelay;
 		}
 	}
 
@@ -34,6 +36,13 @@ public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
 		addRenderableWidget(new NumberButton(getGuiLeft() + 50, topSectionTop + 41, 24, 12, dropCount, 1, 64,
 				Component.translatable("justdirethings.screen.dropcount"), b -> {
 					dropCount = ((NumberButton) b).getValue(); // The value is updated in the mouseClicked method below
+					saveSettings();
+				}));
+
+		addRenderableWidget(new NumberButton(getGuiLeft() + 78, topSectionTop + 41, 24, 12, pickupDelay, 0, 1200,
+				Component.translatable("justdirethings.screen.pickupdelay"), b -> {
+					pickupDelay = ((NumberButton) b).getValue(); // The value is updated in the mouseClicked method
+																	// below
 					saveSettings();
 				}));
 	}
@@ -56,6 +65,6 @@ public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
 	@Override
 	public void saveSettings() {
 		super.saveSettings();
-		PacketHandler.CHANNEL.sendToServer(new DropperSettingPayload(dropCount));
+		PacketHandler.CHANNEL.sendToServer(new DropperSettingPayload(dropCount, pickupDelay));
 	}
 }

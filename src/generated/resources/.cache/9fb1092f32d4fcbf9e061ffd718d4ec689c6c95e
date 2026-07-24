@@ -1,4 +1,4 @@
-// 1.20.1	2026-07-18T13:32:31.1445813	Recipes
+// 1.20.1	2026-07-24T13:18:10.8760661	Recipes
 c6ff5e88cd81a298d446a8bac214c342aa04312f data/justdirethings/advancements/recipes/building_blocks/blazegold_ingot_9x9.json
 1884e5d7def6742e25d4883edb9682acdfb7ceec data/justdirethings/advancements/recipes/building_blocks/celestigem_9x9.json
 a7ae9c1243e565a8fb4ac362e1dcea5d5236751a data/justdirethings/advancements/recipes/building_blocks/coal_t1_9x9.json
@@ -135,6 +135,7 @@ ebd18270f093d1a8225cd962937fa47e70b28345 data/justdirethings/recipes/coalblock_t
 ace6c2da3956038ad4cab49055dc5e9c1fd373bc data/justdirethings/recipes/coalblock_t2_9x9.json
 4bdd98b41880a78d681fe504ec7e0bf033f6426f data/justdirethings/recipes/coalblock_t3_9x9.json
 0cc1cf7c701c9f485f3c23149acdf23deca6f3f4 data/justdirethings/recipes/coalblock_t4_9x9.json
+1b33a20cc79468c57f55df9847712c4489d5f741 data/justdirethings/recipes/coal_block_t1_tag-goospread_tag.json
 7f128b557e318f3a6d1553b553fda6286dac1a71 data/justdirethings/recipes/coal_t1_9x9.json
 6db118564a0c29e7e0e1c8ab22512188527a3c40 data/justdirethings/recipes/coal_t2_9x9.json
 55e45771cd0b9bbdd17c0a935902d24d43acc443 data/justdirethings/recipes/coal_t3_9x9.json

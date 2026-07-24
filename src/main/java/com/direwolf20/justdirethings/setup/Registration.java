@@ -69,6 +69,7 @@ import com.direwolf20.justdirethings.datagen.recipes.AbilityRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.TierUpgradeRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.FluidDropRecipe;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipe;
+import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipeTag;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -133,11 +134,15 @@ public class Registration {
 			MODID);
 	public static final Supplier<RecipeType<GooSpreadRecipe>> GOO_SPREAD_RECIPE_TYPE = RECIPE_TYPES
 			.register("goospreadrecipe", () -> RecipeType.simple(new ResourceLocation(MODID, "goospreadrecipe")));
+	public static final Supplier<RecipeType<GooSpreadRecipeTag>> GOO_SPREAD_RECIPE_TYPE_TAG = RECIPE_TYPES.register(
+			"goospreadrecipe_tag", () -> RecipeType.simple(new ResourceLocation(MODID, "goospreadrecipe_tag")));
 
 	public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister
 			.create(Registries.RECIPE_SERIALIZER, JustDireThings.MODID);
 	public static final Supplier<GooSpreadRecipe.Serializer> GOO_SPREAD_RECIPE_SERIALIZER = RECIPE_SERIALIZERS
 			.register("goospread", GooSpreadRecipe.Serializer::new);
+	public static final Supplier<GooSpreadRecipeTag.Serializer> GOO_SPREAD_RECIPE_SERIALIZER_TAG = RECIPE_SERIALIZERS
+			.register("goospread_tag", GooSpreadRecipeTag.Serializer::new);
 	public static final Supplier<FluidDropRecipe.Serializer> FLUID_DROP_RECIPE_SERIALIZER = RECIPE_SERIALIZERS
 			.register("fluiddrop", FluidDropRecipe.Serializer::new);
 
@@ -173,20 +178,20 @@ public class Registration {
 	// Gooblocks
 	public static final RegistryObject<GooBlock_Tier1> GooBlock_Tier1 = BLOCKS.register("gooblock_tier1",
 			GooBlock_Tier1::new);
-	public static final RegistryObject<BlockItem> GooBlock_Tier1_ITEM = ITEMS.register("gooblock_tier1",
-			() -> new BlockItem(GooBlock_Tier1.get(), new Item.Properties()));
+	public static final RegistryObject<GooBlock_Item> GooBlock_Tier1_ITEM = ITEMS.register("gooblock_tier1",
+			() -> new GooBlock_Item(GooBlock_Tier1.get(), new Item.Properties()));
 	public static final RegistryObject<GooBlock_Tier2> GooBlock_Tier2 = BLOCKS.register("gooblock_tier2",
 			GooBlock_Tier2::new);
-	public static final RegistryObject<BlockItem> GooBlock_Tier2_ITEM = ITEMS.register("gooblock_tier2",
-			() -> new BlockItem(GooBlock_Tier2.get(), new Item.Properties()));
+	public static final RegistryObject<GooBlock_Item> GooBlock_Tier2_ITEM = ITEMS.register("gooblock_tier2",
+			() -> new GooBlock_Item(GooBlock_Tier2.get(), new Item.Properties()));
 	public static final RegistryObject<GooBlock_Tier3> GooBlock_Tier3 = BLOCKS.register("gooblock_tier3",
 			GooBlock_Tier3::new);
-	public static final RegistryObject<BlockItem> GooBlock_Tier3_ITEM = ITEMS.register("gooblock_tier3",
-			() -> new BlockItem(GooBlock_Tier3.get(), new Item.Properties()));
+	public static final RegistryObject<GooBlock_Item> GooBlock_Tier3_ITEM = ITEMS.register("gooblock_tier3",
+			() -> new GooBlock_Item(GooBlock_Tier3.get(), new Item.Properties()));
 	public static final RegistryObject<GooBlock_Tier4> GooBlock_Tier4 = BLOCKS.register("gooblock_tier4",
 			GooBlock_Tier4::new);
-	public static final RegistryObject<BlockItem> GooBlock_Tier4_ITEM = ITEMS.register("gooblock_tier4",
-			() -> new BlockItem(GooBlock_Tier4.get(), new Item.Properties()));
+	public static final RegistryObject<GooBlock_Item> GooBlock_Tier4_ITEM = ITEMS.register("gooblock_tier4",
+			() -> new GooBlock_Item(GooBlock_Tier4.get(), new Item.Properties()));
 
 	public static final RegistryObject<GooPatternBlock> GooPatternBlock = BLOCKS.register("goopatternblock",
 			GooPatternBlock::new);
