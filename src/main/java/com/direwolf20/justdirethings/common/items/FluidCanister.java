@@ -232,6 +232,11 @@ public class FluidCanister extends Item implements FluidContainingItem {
 			}
 			return false;
 		}
+		FluidStack fluidStack = new FluidStack(fluid, 1000);
+		if (fluid.getFluidType().isVaporizedOnPlacement(level, pos, fluidStack)) {
+			fluid.getFluidType().onVaporize(player, level, pos, fluidStack);
+			return true;
+		}
 		if (!level.isClientSide && canBeReplaced && !blockState.liquid()) {
 			level.destroyBlock(pos, true);
 		}
