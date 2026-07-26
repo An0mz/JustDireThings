@@ -24,6 +24,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -522,6 +524,14 @@ public interface ToggleableTool extends ToggleableItem {
 				if (ability.action.execute(level, player, itemStack))
 					anyRan = true;
 			}
+		}
+		// Phase gives spectator-style full-bright vision while active, on top of
+		// whatever the Night Vision ability itself grants - no separate durability
+		// cost.
+		if (!level.isClientSide && hasAbility(Ability.PHASE) && canUseAbilityAndDurability(itemStack, Ability.PHASE)) {
+			MobEffectInstance current = player.getEffect(MobEffects.NIGHT_VISION);
+			if (current == null || current.getDuration() < 220)
+				player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, false, false));
 		}
 		tickCooldowns(itemStack, player);
 		return anyRan;

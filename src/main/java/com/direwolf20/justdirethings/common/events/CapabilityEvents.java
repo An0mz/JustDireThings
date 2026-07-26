@@ -1,8 +1,10 @@
 package com.direwolf20.justdirethings.common.events;
 
 import com.direwolf20.justdirethings.JustDireThings;
+import com.direwolf20.justdirethings.common.capabilities.EnergyStorageItemStackNoReceive;
 import com.direwolf20.justdirethings.common.capabilities.EnergyStorageItemstack;
 import com.direwolf20.justdirethings.common.capabilities.FluidHandlerItemStack;
+import com.direwolf20.justdirethings.common.items.PocketGenerator;
 import com.direwolf20.justdirethings.common.items.interfaces.FluidContainingItem;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredItem;
 import net.minecraft.core.Direction;
@@ -32,7 +34,9 @@ public class CapabilityEvents {
 
 		if (stack.getItem() instanceof PoweredItem poweredItem) {
 			int capacity = poweredItem.getMaxEnergy();
-			EnergyStorageItemstack storage = new EnergyStorageItemstack(stack, capacity);
+			EnergyStorageItemstack storage = stack.getItem() instanceof PocketGenerator
+					? new EnergyStorageItemStackNoReceive(stack, capacity)
+					: new EnergyStorageItemstack(stack, capacity);
 			LazyOptional<IEnergyStorage> holder = LazyOptional.of(() -> storage);
 			event.addCapability(ENERGY_CAP_KEY, new ICapabilityProvider() {
 				@Nonnull

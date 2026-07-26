@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.items;
 
 import com.direwolf20.justdirethings.common.blocks.resources.CoalBlock_T1;
+import com.direwolf20.justdirethings.common.capabilities.EnergyStorageItemStackNoReceive;
 import net.minecraft.world.level.block.Blocks;
 import com.direwolf20.justdirethings.common.containers.PocketGeneratorContainer;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredItem;
@@ -113,7 +114,7 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
 	}
 
 	public void tryBurn(IEnergyStorage energyStorage, ItemStack itemStack) {
-		boolean canInsertEnergy = energyStorage.receiveEnergy(fePerTick(itemStack), true) > 0;
+		boolean canInsertEnergy = forceReceiveEnergy(energyStorage, fePerTick(itemStack), true) > 0;
 		if (NBTHelpers.getIntValue(itemStack, COUNTER) > 0 && canInsertEnergy) {
 			burn(energyStorage, itemStack);
 		} else if (canInsertEnergy) {
@@ -122,8 +123,14 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
 		}
 	}
 
+	private int forceReceiveEnergy(IEnergyStorage energyStorage, int maxReceive, boolean simulate) {
+		if (energyStorage instanceof EnergyStorageItemStackNoReceive noReceive)
+			return noReceive.forceReceiveEnergy(maxReceive, simulate);
+		return energyStorage.receiveEnergy(maxReceive, simulate);
+	}
+
 	private void burn(IEnergyStorage energyStorage, ItemStack itemStack) {
-		energyStorage.receiveEnergy(fePerTick(itemStack), false);
+		forceReceiveEnergy(energyStorage, fePerTick(itemStack), false);
 		int counter = NBTHelpers.getIntValue(itemStack, COUNTER);
 		counter--;
 		NBTHelpers.setIntValue(itemStack, COUNTER, counter);

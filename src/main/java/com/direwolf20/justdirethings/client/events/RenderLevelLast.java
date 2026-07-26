@@ -8,6 +8,7 @@ import com.direwolf20.justdirethings.common.blockentities.basebe.AreaAffectingBE
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.util.NBTHelpers;
+import com.direwolf20.justdirethings.util.PhaseCollisionHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RenderBlockScreenEffectEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Matrix4f;
@@ -29,6 +31,14 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class RenderLevelLast {
+	@SubscribeEvent
+	static void onRenderBlockScreenEffect(RenderBlockScreenEffectEvent evt) {
+		if (evt.getOverlayType() != RenderBlockScreenEffectEvent.OverlayType.BLOCK)
+			return;
+		if (PhaseCollisionHelper.shouldPassThroughWalls(evt.getPlayer()))
+			evt.setCanceled(true);
+	}
+
 	@SubscribeEvent
 	static void renderWorldLastEvent(RenderLevelStageEvent evt) {
 		if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {

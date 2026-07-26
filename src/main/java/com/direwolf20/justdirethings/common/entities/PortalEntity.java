@@ -3,11 +3,14 @@ package com.direwolf20.justdirethings.common.entities;
 import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
@@ -41,6 +45,9 @@ public class PortalEntity extends Entity {
 			EntityDataSerializers.INT);
 
 	private UUID gunUUID = UUID.randomUUID();
+	private UUID partnerUUID;
+	private ResourceKey<Level> partnerDimension;
+	private ChunkPos partnerChunkPos;
 	private int lifespanTicks = -1;
 	private int age;
 	private final Map<UUID, Integer> teleportCooldowns = new HashMap<>();
@@ -322,8 +329,31 @@ public class PortalEntity extends Entity {
 		return new Vec2(xrot, yrot);
 	}
 
+	// Mutually records each portal's partner (UUID + last-known dimension/chunk),
+	// so findPartner can jump straight to it and force-load its chunk on demand
+	// instead of depending on both chunks happening to already be loaded.
+	public void linkPartner(PortalEntity partner) {
+		this.partnerUUID = partner.getUUID();
+		this.partnerDimension = partner.level().dimension();
+		this.partnerChunkPos = partner.chunkPosition();
+		partner.partnerUUID = this.getUUID();
+		partner.partnerDimension = this.level().dimension();
+		partner.partnerChunkPos = this.chunkPosition();
+	}
+
 	private PortalEntity findPartner(ServerLevel level) {
 		MinecraftServer server = level.getServer();
+		if (partnerUUID != null && partnerDimension != null) {
+			ServerLevel partnerLevel = server.getLevel(partnerDimension);
+			if (partnerLevel != null) {
+				if (partnerChunkPos != null)
+					partnerLevel.getChunk(partnerChunkPos.x, partnerChunkPos.z); // Blocking force-load if unloaded
+				if (partnerLevel.getEntity(partnerUUID) instanceof PortalEntity p)
+					return p;
+			}
+		}
+		// Fallback for portals placed before partner-linking existed, or if the
+		// stored partner reference no longer resolves (e.g. re-linked elsewhere).
 		for (ServerLevel serverLevel : server.getAllLevels()) {
 			for (net.minecraft.world.entity.Entity entity : serverLevel.getAllEntities()) {
 				if (entity instanceof PortalEntity p && p != this && p.gunUUID.equals(this.gunUUID)
@@ -362,6 +392,13 @@ public class PortalEntity extends Entity {
 		compound.putInt("LifespanTicks", lifespanTicks);
 		compound.putLong("GunUUIDMost", gunUUID.getMostSignificantBits());
 		compound.putLong("GunUUIDLeast", gunUUID.getLeastSignificantBits());
+		if (partnerUUID != null) {
+			compound.putLong("PartnerUUIDMost", partnerUUID.getMostSignificantBits());
+			compound.putLong("PartnerUUIDLeast", partnerUUID.getLeastSignificantBits());
+			compound.putString("PartnerDimension", partnerDimension.location().toString());
+			compound.putInt("PartnerChunkX", partnerChunkPos.x);
+			compound.putInt("PartnerChunkZ", partnerChunkPos.z);
+		}
 		compound.putInt("Facing", entityData.get(FACING_ID));
 		compound.putInt("Alignment", entityData.get(ALIGNMENT_ID));
 		compound.putInt("Color", entityData.get(PORTAL_COLOR));
@@ -373,6 +410,12 @@ public class PortalEntity extends Entity {
 		age = compound.getInt("Age");
 		lifespanTicks = compound.getInt("LifespanTicks");
 		gunUUID = new UUID(compound.getLong("GunUUIDMost"), compound.getLong("GunUUIDLeast"));
+		if (compound.contains("PartnerUUIDMost")) {
+			partnerUUID = new UUID(compound.getLong("PartnerUUIDMost"), compound.getLong("PartnerUUIDLeast"));
+			partnerDimension = ResourceKey.create(Registries.DIMENSION,
+					new ResourceLocation(compound.getString("PartnerDimension")));
+			partnerChunkPos = new ChunkPos(compound.getInt("PartnerChunkX"), compound.getInt("PartnerChunkZ"));
+		}
 		entityData.set(FACING_ID, compound.getInt("Facing"));
 		if (compound.contains("Alignment"))
 			entityData.set(ALIGNMENT_ID, compound.getInt("Alignment"));

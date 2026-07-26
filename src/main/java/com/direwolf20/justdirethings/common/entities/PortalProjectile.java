@@ -173,6 +173,7 @@ public class PortalProjectile extends ThrowableItemProjectile {
 		}
 
 		clearMyPortals(server);
+		sourcePortal.linkPartner(destinationPortal);
 		sourceLevel.addFreshEntity(sourcePortal);
 		destinationLevel.addFreshEntity(destinationPortal);
 		this.discard();
@@ -187,7 +188,22 @@ public class PortalProjectile extends ThrowableItemProjectile {
 			return;
 
 		clearMatchingPortal(serverLevel.getServer(), primaryType);
+		linkExistingPartnerIfAny(serverLevel.getServer(), portal);
 		serverLevel.addFreshEntity(portal);
+	}
+
+	// The basic gun spawns one portal per shot, so unlike spawnAdvancedPortals it
+	// doesn't have both ends in hand at once - look for the other end (same gun,
+	// opposite slot) placed by an earlier shot and link to it if found.
+	private void linkExistingPartnerIfAny(MinecraftServer server, PortalEntity portal) {
+		for (ServerLevel serverLevel : server.getAllLevels()) {
+			List<? extends PortalEntity> existing = serverLevel.getEntities(Registration.PortalEntity.get(),
+					p -> p.getGunUUID().equals(gunUUID) && p.isPrimaryType() != portal.isPrimaryType());
+			if (!existing.isEmpty()) {
+				portal.linkPartner(existing.get(0));
+				return;
+			}
+		}
 	}
 
 	// Blocks placement on top of another existing portal. When excludeAllOwnPortals
