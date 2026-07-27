@@ -15,7 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * While phasing the player's box genuinely overlaps solid blocks, so suppress
  * isInWall (suffocation damage) and filter the pose-fit check.
  */
-@Mixin(Entity.class)
+// Default value is 1000 but if another mod
+// uses it too then it will crash. Making
+// the priority higher will fix the crash
+@Mixin(value = Entity.class, priority = 1100)
 public abstract class EntityMixin {
 
 	@Inject(method = "isInWall", at = @At("HEAD"), cancellable = true)
