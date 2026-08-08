@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.items.tools;
 
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.Helpers;
 import com.direwolf20.justdirethings.common.items.tools.basetools.BaseHoe;
 import com.direwolf20.justdirethings.common.items.tools.utils.GooTier;
@@ -11,6 +12,7 @@ public class BlazegoldHoe extends BaseHoe {
 	public BlazegoldHoe() {
 		super(GooTier.BLAZEGOLD, -2, -1.0F, new Properties().fireResistant());
 		registerAbility(Ability.LAVAREPAIR);
+		registerAbility(Ability.HAMMER, new AbilityParams(3, 3, 2));
 	}
 
 	@Override
