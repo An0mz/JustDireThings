@@ -24,6 +24,15 @@ public class EnergyStorageItemStackNoReceive extends EnergyStorageItemstack {
 	}
 
 	public int forceReceiveEnergy(int maxReceive, boolean simulate) {
-		return super.receiveEnergy(maxReceive, simulate);
+		// Can't call receiveEnergy()/super.receiveEnergy() here: EnergyStorage's
+		// implementation gates on canReceive(), which we override to false above.
+		// That check is virtual, so even a super call would still resolve to our
+		// override and always return 0. Replicate the insertion math directly instead.
+		int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
+		if (!simulate && energyReceived > 0) {
+			energy += energyReceived;
+			save();
+		}
+		return energyReceived;
 	}
 }

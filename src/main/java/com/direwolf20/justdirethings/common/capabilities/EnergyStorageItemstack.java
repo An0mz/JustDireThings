@@ -38,7 +38,7 @@ public class EnergyStorageItemstack extends EnergyStorage {
 		return result;
 	}
 
-	private void save() {
+	protected void save() {
 		stack.getOrCreateTag().putInt(NBT_KEY, energy);
 	}
 }
