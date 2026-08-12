@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.6
+- Fixed pocket generator not generating power
+
 ## 1.1.5
 - Hammer upgrade on hoes can now be used correctly
 
