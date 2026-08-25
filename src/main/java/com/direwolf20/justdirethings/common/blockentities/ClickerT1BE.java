@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.common.blockentities;
 import com.direwolf20.justdirethings.common.blockentities.basebe.BaseMachineBE;
 import com.direwolf20.justdirethings.common.blockentities.basebe.RedstoneControlledBE;
 import com.direwolf20.justdirethings.datagen.JustDireBlockTags;
+import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.FakePlayerUtil;
 import com.direwolf20.justdirethings.util.MiscHelpers;
@@ -38,6 +39,7 @@ public class ClickerT1BE extends BaseMachineBE implements RedstoneControlledBE {
 	public boolean sneaking = false;
 	public boolean showFakePlayer = false;
 	public int maxHoldTicks = 1;
+	private long lastClickGameTime = Long.MIN_VALUE;
 
 	public enum CLICK_TARGET {
 		BLOCK, AIR, HOSTILE, PASSIVE, ADULT, CHILD, PLAYER, LIVING;
@@ -87,6 +89,12 @@ public class ClickerT1BE extends BaseMachineBE implements RedstoneControlledBE {
 	@Override
 	public void tickServer() {
 		super.tickServer();
+		if (Config.CLICKER_LIMIT_TICK_ACCELERATION.get() && level != null) {
+			long gameTime = level.getGameTime();
+			if (gameTime == lastClickGameTime)
+				return;
+			lastClickGameTime = gameTime;
+		}
 		doClick();
 	}
 

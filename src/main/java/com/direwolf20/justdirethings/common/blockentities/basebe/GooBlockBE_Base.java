@@ -33,6 +33,7 @@ import java.util.Random;
 public class GooBlockBE_Base extends BlockEntity {
 	public final Map<Direction, Integer> sidedCounters = new Object2IntOpenHashMap<>();
 	public final Map<Direction, Integer> sidedDurations = new Object2IntOpenHashMap<>();
+	private long lastClientGameTime = Long.MIN_VALUE;
 
 	public GooBlockBE_Base(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -71,6 +72,12 @@ public class GooBlockBE_Base extends BlockEntity {
 	}
 
 	public void tickClient() {
+		if (level == null)
+			return;
+		long gameTime = level.getGameTime();
+		if (gameTime == lastClientGameTime)
+			return;
+		lastClientGameTime = gameTime;
 		tickCounters();
 	}
 

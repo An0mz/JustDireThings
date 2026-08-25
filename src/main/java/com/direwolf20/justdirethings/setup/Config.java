@@ -14,6 +14,7 @@ public class Config {
 
 	public static final String CATEGORY_GENERAL = "general";
 	public static ForgeConfigSpec.IntValue MINIMUM_MACHINE_TICK_SPEED;
+	public static ForgeConfigSpec.BooleanValue CLICKER_LIMIT_TICK_ACCELERATION;
 
 	public static final String CATEGORY_GENERATOR_T1 = "generator_t1";
 	public static ForgeConfigSpec.IntValue GENERATOR_T1_FE_PER_FUEL_TICK;
@@ -164,6 +165,11 @@ public class Config {
 		MINIMUM_MACHINE_TICK_SPEED = COMMON_BUILDER
 				.comment("The minimum tick speed machines can be set to. Defaults to 1, meaning every tick")
 				.defineInRange("minimum_machine_tick_speed", 1, 1, 100);
+		CLICKER_LIMIT_TICK_ACCELERATION = COMMON_BUILDER.comment(
+				"If true, Clickers (T1/T2) will only perform their click once per real game tick, even if a tick-accelerator mod invokes them multiple times within the same tick.",
+				"Each click simulates a full player interaction, so tick accelerators can multiply a Clicker's CPU cost; this caps that cost, but Clickers will no longer be sped up beyond their configured tick speed by tick accelerators.",
+				"Defaults to true to protect server performance. Set to false to let tick accelerators fully speed up Clickers again, at the cost of the CPU multiplication this guards against.")
+				.define("clicker_limit_tick_acceleration", true);
 		COMMON_BUILDER.pop();
 	}
 
