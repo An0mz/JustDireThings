@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.7
+- Clickers no longer get their per-click cost multiplied by tick-accelerator mods, fixing a major source of server lag when Clickers are boosted. Controlled by the new `clicker_limit_tick_acceleration` config option (default `true`); set it to `false` to let tick accelerators fully speed up Clickers again.
+
 ## 1.1.6
 - Fixed pocket generator not generating power
 
