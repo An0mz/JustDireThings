@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.9
+- Fluid drop crafting (dropping items into fluids) now runs only for ticking item entities instead of scanning every entity each tick, reducing server overhead with many loose items.
+- Fluids produced by fluid drop crafting now vaporize where they should (e.g. water in the Nether).
+
 ## 1.1.8
 - Fixed Just Dire Things fluids not being recognized as liquids, so AE2 Annihilation Planes (and other mods that check for liquids) can now pick them up. Pistons now also break these fluids like vanilla water instead of pushing them.
 
