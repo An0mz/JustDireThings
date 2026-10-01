@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.8
+- Fixed Just Dire Things fluids not being recognized as liquids, so AE2 Annihilation Planes (and other mods that check for liquids) can now pick them up. Pistons now also break these fluids like vanilla water instead of pushing them.
+
 ## 1.1.7
 - Clickers no longer get their per-click cost multiplied by tick-accelerator mods, fixing a major source of server lag when Clickers are boosted. Controlled by the new `clicker_limit_tick_acceleration` config option (default `true`); set it to `false` to let tick accelerators fully speed up Clickers again.
 
