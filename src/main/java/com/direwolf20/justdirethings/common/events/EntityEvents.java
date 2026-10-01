@@ -6,21 +6,21 @@ import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -40,27 +40,26 @@ public class EntityEvents {
 		}
 	}
 
-	@SubscribeEvent
-	public static void levelTick(TickEvent.LevelTickEvent event) {
-		if (event.phase != TickEvent.Phase.END)
+	public static void handleFluidDrop(ItemEntity itemEntity) {
+		Level level = itemEntity.level();
+		if (level.isClientSide() || itemEntity.isRemoved())
 			return;
-		Level level = event.level;
-		if (level.isClientSide())
+		BlockState blockState = itemEntity.getFeetBlockState();
+		if (!(blockState.getBlock() instanceof LiquidBlock))
 			return;
-		if (!(level instanceof ServerLevel serverLevel))
+		BlockState fluidDropOutput = findRecipe(blockState, itemEntity);
+		if (fluidDropOutput == null || fluidDropOutput.isAir())
 			return;
-		for (Entity entity : serverLevel.getAllEntities()) {
-			if (!(entity instanceof ItemEntity itemEntity))
-				continue;
-			BlockPos blockPos = itemEntity.blockPosition();
-			BlockState blockState = level.getBlockState(blockPos);
-			if (!(blockState.getBlock() instanceof LiquidBlock))
-				continue;
-			BlockState fluidDropOutput = findRecipe(blockState, itemEntity);
-			if (fluidDropOutput == null || fluidDropOutput.isAir())
-				continue;
-			if (level.setBlockAndUpdate(blockPos, fluidDropOutput)) {
-				itemEntity.getItem().shrink(1);
+		BlockPos blockPos = itemEntity.blockPosition();
+		if (level.setBlockAndUpdate(blockPos, fluidDropOutput)) {
+			itemEntity.getItem().shrink(1);
+			FluidState fluidState = level.getFluidState(blockPos);
+			FluidStack fluidStack = new FluidStack(fluidState.getType(), 1000);
+			FluidType fluidType = fluidState.getType().getFluidType();
+			if (!fluidState.isEmpty() && fluidType.isVaporizedOnPlacement(level, blockPos, fluidStack)) {
+				level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+				fluidType.onVaporize(null, level, blockPos, fluidStack);
+			} else {
 				level.playSound(null, blockPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
 			}
 		}

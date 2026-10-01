@@ -5,6 +5,7 @@
   "refmap": "mixins.justdirethings.refmap.json",
   "mixins": [
     "EntityMixin",
+    "ItemEntityMixin",
     "BlockStateBaseMixin",
     "PlayerMovementMixin"
   ],
