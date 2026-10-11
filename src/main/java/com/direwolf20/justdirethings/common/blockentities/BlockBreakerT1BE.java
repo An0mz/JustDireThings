@@ -298,6 +298,7 @@ public class BlockBreakerT1BE extends BaseMachineBE implements RedstoneControlle
 					});
 			}
 		}
+		setChanged();
 	}
 
 	public void sendPackets(int pBreakerId, BlockPos pPos, int pProgress) {

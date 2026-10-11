@@ -15,24 +15,20 @@ public interface AreaAffectingBE {
 	AreaAffectingData getAreaAffectingData();
 
 	/**
-	 * Ticks down and reports whether the last full-area scan is still on cooldown.
-	 * Call before doing an expensive rescan; if this returns true, skip the scan
-	 * this tick.
+	 * Reports whether the last full-area scan is still on cooldown. Call before
+	 * doing an expensive rescan; if this returns true, skip the scan this tick.
 	 */
 	default boolean isEmptyScanOnCooldown() {
-		if (getAreaAffectingData().emptyScanCooldown > 0) {
-			getAreaAffectingData().emptyScanCooldown--;
-			return true;
-		}
-		return false;
+		return getBlockEntity().getLevel().getGameTime() < getAreaAffectingData().emptyScanCooldownUntil;
 	}
 
 	/**
 	 * Call after a full-area scan comes back with nothing to do, so the next scan
-	 * is delayed instead of re-running every tick while idle.
+	 * is delayed instead of re-running every tick while idle. Measured in game
+	 * ticks - machines that only scan every tickSpeed ticks must not multiply it.
 	 */
 	default void setEmptyScanCooldown(int ticks) {
-		getAreaAffectingData().emptyScanCooldown = ticks;
+		getAreaAffectingData().emptyScanCooldownUntil = getBlockEntity().getLevel().getGameTime() + ticks;
 	}
 
 	default AABB getAABBOffsetOnly(BlockPos relativePos) {
