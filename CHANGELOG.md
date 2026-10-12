@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.10
+- Fixed Advanced (T2) machines taking up to ~20 seconds to notice new blocks after their area was empty. The idle rescan delay was multiplied by the machine's tick speed; it is now a flat 1 second. Affects the Advanced Block Breaker, Block Placer, Clicker, Fluid Collector, and Fluid Placer.
+- Block Breakers now save the tool's durability reliably after breaking a block, instead of it sometimes resetting after a relog or chunk reload.
+
 ## 1.1.9
 - Fluid drop crafting (dropping items into fluids) now runs only for ticking item entities instead of scanning every entity each tick, reducing server overhead with many loose items.
 - Fluids produced by fluid drop crafting now vaporize where they should (e.g. water in the Nether).
