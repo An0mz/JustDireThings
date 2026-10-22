@@ -87,7 +87,7 @@ public class JustDireBlockTags extends BlockTagsProvider {
 		tag(PARADOX_ABSORB_DENY).add(Blocks.BEDROCK).add(Blocks.END_PORTAL_FRAME).add(Blocks.END_PORTAL)
 				.add(Blocks.NETHER_PORTAL).addTag(BlockTags.PORTALS);
 		tag(PARADOX_DENY).add(Blocks.BEDROCK).add(Blocks.END_PORTAL_FRAME).add(Blocks.END_PORTAL)
-				.add(Blocks.NETHER_PORTAL).addTag(BlockTags.PORTALS);
+				.add(Blocks.NETHER_PORTAL).addTag(BlockTags.PORTALS).add(Registration.ParadoxMachine.get());
 		tag(NO_AUTO_CLICK);
 		tag(SWAPPERDENY).add(Blocks.PISTON_HEAD).add(Blocks.MOVING_PISTON).add(Blocks.BEDROCK)
 				.add(Blocks.END_PORTAL_FRAME).add(Blocks.CANDLE_CAKE).addTag(BlockTags.BEDS).addTag(BlockTags.PORTALS)
