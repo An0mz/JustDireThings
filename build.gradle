@@ -14,7 +14,6 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
-    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 // Generates mixins.justdirethings.refmap.json at build time and bundles it in
@@ -217,16 +216,6 @@ tasks.named('jar', Jar).configure {
         attributes([
                 'MixinConfigs': 'mixins.justdirethings.json'
         ])
-    }
-}
-
-spotless {
-    java {
-        target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
-        eclipse('4.33')
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
     }
 }
 
