@@ -38,11 +38,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GooBlockRender_Base<T extends GooBlockBE_Base> implements BlockEntityRenderer<T> {
 	private final static float percentageDivisor = (float) 100 / GooPatternBlock.GOOSTAGE.getPossibleValues().size();
@@ -84,7 +85,9 @@ public class GooBlockRender_Base<T extends GooBlockBE_Base> implements BlockEnti
 		if (tag == null)
 			return ItemStack.EMPTY;
 
-		List<Item> items = ForgeRegistries.ITEMS.tags().getTag(tag).stream().collect(Collectors.toList());
+		List<Item> items = new ArrayList<>();
+		for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag))
+			items.add(holder.value());
 		if (items.isEmpty())
 			return ItemStack.EMPTY;
 

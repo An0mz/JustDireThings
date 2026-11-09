@@ -122,7 +122,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> PLAYER_ACCESSOR_BLACKLISTED_DIMENSIONS;
 
 	public static void register() {
-		// registerServerConfigs();
+		registerServerConfigs();
 		registerCommonConfigs();
 		// registerClientConfigs();
 	}
@@ -140,7 +140,6 @@ public class Config {
 		energyTransmitter();
 		fuelCanisterConfig();
 		pocketGeneratorConfig();
-		timeCrystalConfig();
 		fluidFuelConfig();
 		paradoxConfig();
 		timeWandConfig();
@@ -156,7 +155,7 @@ public class Config {
 	}
 
 	private static void registerServerConfigs() {
-
+		timeCrystalConfig();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
 	}
 
@@ -248,23 +247,23 @@ public class Config {
 	}
 
 	private static void timeCrystalConfig() {
-		COMMON_BUILDER.comment("Time Crystals").push(CATEGORY_TIME_CRYSTAL);
-		TIME_CRYSTAL_CUSTOM_DIMENSIONS = COMMON_BUILDER.comment(
+		SERVER_BUILDER.comment("Time Crystals").push(CATEGORY_TIME_CRYSTAL);
+		TIME_CRYSTAL_CUSTOM_DIMENSIONS = SERVER_BUILDER.comment(
 				"Do you want to customize Time Crystal Growth Dimensions? If set to true, the following 3 fields MUST be populated. Defaults to false, which means normal growth rules: Stage 1 = Overworld, Stage 2 = Nether, Stage 3 = End.")
 				.define("time_crystal_custom_dimensions", false);
-		TIME_CRYSTAL_STAGE1_DIMENSIONS = COMMON_BUILDER
+		TIME_CRYSTAL_STAGE1_DIMENSIONS = SERVER_BUILDER
 				.comment("Dimensions where Stage 0 -> Stage 1 growth occurs. Example: [\"minecraft:overworld\"]")
 				.defineListAllowEmpty(List.of("time_crystal_stage1_dimensions"), () -> List.of("minecraft:overworld"),
 						s -> s instanceof String);
-		TIME_CRYSTAL_STAGE2_DIMENSIONS = COMMON_BUILDER
+		TIME_CRYSTAL_STAGE2_DIMENSIONS = SERVER_BUILDER
 				.comment("Dimensions where Stage 1 -> Stage 2 growth occurs. Example: [\"minecraft:the_nether\"]")
 				.defineListAllowEmpty(List.of("time_crystal_stage2_dimensions"), () -> List.of("minecraft:the_nether"),
 						s -> s instanceof String);
-		TIME_CRYSTAL_STAGE3_DIMENSIONS = COMMON_BUILDER
+		TIME_CRYSTAL_STAGE3_DIMENSIONS = SERVER_BUILDER
 				.comment("Dimensions where Stage 2 -> Stage 3 growth occurs. Example: [\"minecraft:the_end\"]")
 				.defineListAllowEmpty(List.of("time_crystal_stage3_dimensions"), () -> List.of("minecraft:the_end"),
 						s -> s instanceof String);
-		COMMON_BUILDER.pop();
+		SERVER_BUILDER.pop();
 	}
 
 	private static void generatorFluidT1Config() {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.12
+- Fixed dead Goo blocks not showing the floating "feed me" item on dedicated servers (feeding still worked, only the hint was missing).
+- Time Crystal dimension settings (`time_crystal_custom_dimensions` and the three stage dimension lists) moved from the common config to the server config, matching 1.21.1. The server now syncs them to clients, so the growth particles always match the server's rules. **If you customized these, set them again in each world's `serverconfig/justdirethings-server.toml`.** To make Time Crystals grow in modded dimensions, enable `time_crystal_custom_dimensions` and add those dimension IDs to the stage lists.
+
 ## 1.1.11
 - Fixed the `justdirethings:paradox_deny` block tag failing to load because it referenced a nonexistent block ID (`paradox_machine` instead of `paradoxmachine`). This removes the "Couldn't load certain entries" error on world load and /reload.
 
