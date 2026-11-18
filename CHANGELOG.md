@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.13
+- Time Wand, Polymorphic Wands and Advanced Portal Gun now only accept their own fluid (Time, Polymorphic and Portal Fluid). Before, right-clicking a fluid or piping one in could fill them with water, XP or any other fluid.
+
 ## 1.1.12
 - Fixed dead Goo blocks not showing the floating "feed me" item on dedicated servers (feeding still worked, only the hint was missing).
 - Time Crystal dimension settings (`time_crystal_custom_dimensions` and the three stage dimension lists) moved from the common config to the server config, matching 1.21.1. The server now syncs them to clients, so the growth particles always match the server's rules. **If you customized these, set them again in each world's `serverconfig/justdirethings-server.toml`.** To make Time Crystals grow in modded dimensions, enable `time_crystal_custom_dimensions` and add those dimension IDs to the stage lists.
