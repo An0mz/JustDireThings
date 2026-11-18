@@ -63,6 +63,11 @@ public class PortalGunV2 extends BasePoweredItem implements FluidContainingItem 
 		return Config.PORTAL_GUN_MAX_FLUID.get();
 	}
 
+	@Override
+	public boolean isFluidValid(FluidStack fluidStack) {
+		return fluidStack.getFluid().isSame(Registration.PORTAL_FLUID_SOURCE.get());
+	}
+
 	public static UUID getOrCreateGunUUID(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
 		if (tag.contains(UUID_MOST)) {

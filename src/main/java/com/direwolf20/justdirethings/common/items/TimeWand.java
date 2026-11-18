@@ -4,6 +4,7 @@ import com.direwolf20.justdirethings.common.entities.TimeWandEntity;
 import com.direwolf20.justdirethings.common.items.interfaces.FluidContainingItem;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredItem;
 import com.direwolf20.justdirethings.setup.Config;
+import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MagicHelpers;
 import com.direwolf20.justdirethings.util.MiscTools;
 import net.minecraftforge.common.util.FakePlayer;
@@ -26,6 +27,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import static com.direwolf20.justdirethings.util.TooltipHelpers.appendFEText;
@@ -48,6 +50,11 @@ public class TimeWand extends BasePoweredItem implements FluidContainingItem {
 	@Override
 	public int getMaxMB() {
 		return Config.TIME_WAND_MAX_FLUID.get();
+	}
+
+	@Override
+	public boolean isFluidValid(FluidStack fluidStack) {
+		return fluidStack.getFluid().isSame(Registration.TIME_FLUID_SOURCE.get());
 	}
 
 	@Override

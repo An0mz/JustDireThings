@@ -21,6 +21,10 @@ public interface FluidContainingItem {
 		return 8000;
 	}
 
+	default boolean isFluidValid(FluidStack fluidStack) {
+		return true;
+	}
+
 	static int getAvailableFluid(ItemStack stack) {
 		IFluidHandlerItem handler = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).orElse(null);
 		if (handler == null)

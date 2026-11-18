@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.capabilities;
 
+import com.direwolf20.justdirethings.common.items.interfaces.FluidContainingItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -42,12 +43,12 @@ public class FluidHandlerItemStack implements IFluidHandlerItem {
 
 	@Override
 	public boolean isFluidValid(int tank, @NotNull FluidStack fluid) {
-		return true;
+		return !(container.getItem() instanceof FluidContainingItem item) || item.isFluidValid(fluid);
 	}
 
 	@Override
 	public int fill(FluidStack resource, FluidAction action) {
-		if (resource.isEmpty())
+		if (resource.isEmpty() || !isFluidValid(0, resource))
 			return 0;
 		FluidStack existing = getFluidInTank(0);
 		if (!existing.isEmpty() && !existing.isFluidEqual(resource))

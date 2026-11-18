@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.common.items;
 
 import com.direwolf20.justdirethings.common.items.interfaces.*;
 import com.direwolf20.justdirethings.setup.Config;
+import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MagicHelpers;
 import com.direwolf20.justdirethings.util.MiscTools;
 import com.direwolf20.justdirethings.util.PolymorphicEntitySanitizer;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nullable;
@@ -44,6 +46,11 @@ public class PolymorphicWandV2 extends BaseToggleableTool
 	@Override
 	public int getMaxMB() {
 		return Config.POLYMORPHIC_WAND_V2_MAX_FLUID.get();
+	}
+
+	@Override
+	public boolean isFluidValid(FluidStack fluidStack) {
+		return fluidStack.getFluid().isSame(Registration.POLYMORPHIC_FLUID_SOURCE.get());
 	}
 
 	@Override

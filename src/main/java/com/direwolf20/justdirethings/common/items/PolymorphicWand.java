@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.common.items;
 
 import com.direwolf20.justdirethings.common.items.interfaces.*;
 import com.direwolf20.justdirethings.setup.Config;
+import com.direwolf20.justdirethings.setup.Registration;
 import com.direwolf20.justdirethings.util.MagicHelpers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nullable;
@@ -35,6 +37,11 @@ public class PolymorphicWand extends BaseToggleableTool implements LeftClickable
 	@Override
 	public int getMaxMB() {
 		return Config.POLYMORPHIC_WAND_MAX_FLUID.get();
+	}
+
+	@Override
+	public boolean isFluidValid(FluidStack fluidStack) {
+		return fluidStack.getFluid().isSame(Registration.POLYMORPHIC_FLUID_SOURCE.get());
 	}
 
 	@Override
