@@ -16,9 +16,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -272,13 +270,7 @@ public class SensorT1BE extends BaseMachineBE implements FilterableBE {
 			return false;
 		if (sense_target.equals(SENSE_TARGET.ITEM) && !(entity instanceof ItemEntity))
 			return false;
-		Item eggItem = SpawnEggItem.byId(entity.getType());
-		ItemStack eggItemStack;
-		if (eggItem == null)
-			eggItemStack = ItemStack.EMPTY;
-		else
-			eggItemStack = new ItemStack(eggItem);
-		return isStackValidFilter(eggItemStack);
+		return isEntityValidFilter(entity, this.level);
 	}
 
 	public boolean senseEntity(List<Entity> entityList) {
