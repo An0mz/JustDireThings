@@ -8,6 +8,7 @@ import com.direwolf20.justdirethings.common.items.interfaces.PoweredItem;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableItem;
 import com.direwolf20.justdirethings.common.items.resources.Coal_T1;
 import com.direwolf20.justdirethings.setup.Config;
+import com.direwolf20.justdirethings.util.CuriosCompat;
 import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,6 +46,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,20 +95,28 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
 			tryBurn(energyStorage, itemStack);
 			if (energyStorage.getEnergyStored() >= (getFEPerTick() / 10)) { // If we have 1/10th the max transfer speed,
 																			// go ahead and let it rip
-				for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-					ItemStack slotStack = player.getInventory().getItem(i);
-					if (player.isUsingItem() && player.getUseItem() == slotStack)
-						continue;
-					IEnergyStorage slotEnergy = slotStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
-					if (slotEnergy != null) {
-						int acceptedEnergy = slotEnergy.receiveEnergy(getFEPerTick(), true);
-						if (acceptedEnergy > 0) {
-							int extractedEnergy = energyStorage.extractEnergy(acceptedEnergy, false);
-							slotEnergy.receiveEnergy(extractedEnergy, false);
-						}
-					}
+				for (int i = 0; i < player.getInventory().getContainerSize(); i++)
+					transferEnergy(player, player.getInventory().getItem(i), energyStorage);
+				if (ModList.get().isLoaded("curios")) {
+					IItemHandler curios = CuriosCompat.getEquippedCurios(player);
+					if (curios != null)
+						for (int i = 0; i < curios.getSlots(); i++)
+							transferEnergy(player, curios.getStackInSlot(i), energyStorage);
 				}
 			}
+		}
+	}
+
+	private void transferEnergy(Player player, ItemStack slotStack, IEnergyStorage energyStorage) {
+		if (player.isUsingItem() && player.getUseItem() == slotStack)
+			return;
+		IEnergyStorage slotEnergy = slotStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
+		if (slotEnergy == null)
+			return;
+		int acceptedEnergy = slotEnergy.receiveEnergy(getFEPerTick(), true);
+		if (acceptedEnergy > 0) {
+			int extractedEnergy = energyStorage.extractEnergy(acceptedEnergy, false);
+			slotEnergy.receiveEnergy(extractedEnergy, false);
 		}
 	}
 
