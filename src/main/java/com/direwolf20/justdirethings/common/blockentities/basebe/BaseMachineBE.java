@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class BaseMachineBE extends BlockEntity {
+public class BaseMachineBE extends BlockEntity implements Clearable {
 	public int MACHINE_SLOTS = 0;
 	public int ANYSIZE_FILTER_SLOTS = 0;
 	public static final UUID defaultFakePlayerUUID = UUID.fromString("4191a6f5-37fe-45d9-8ba3-4549be778e54");
@@ -97,6 +98,13 @@ public class BaseMachineBE extends BlockEntity {
 			};
 		}
 		return machineHandler;
+	}
+
+	@Override
+	public void clearContent() {
+		ItemStackHandler handler = getMachineHandler();
+		for (int i = 0; i < handler.getSlots(); i++)
+			handler.setStackInSlot(i, ItemStack.EMPTY);
 	}
 
 	public void tickClient() {
