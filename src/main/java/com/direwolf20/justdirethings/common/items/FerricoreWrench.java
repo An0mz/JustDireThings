@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.items;
 
 import com.direwolf20.justdirethings.common.blockentities.BlockSwapperT1BE;
+import com.direwolf20.justdirethings.common.blockentities.basebe.AreaAffectingBE;
 import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -44,9 +45,10 @@ public class FerricoreWrench extends Item {
 			return InteractionResult.SUCCESS;
 		if (!level.isClientSide) {
 			for (Property<?> prop : state.getProperties()) {
-				if (prop instanceof DirectionProperty && prop.getName().equals("facing")) {
-					// Rotate the block using the improved logic.
-					BlockState rotatedState = rotateBlock(state, (DirectionProperty) prop, state.getValue(prop));
+				if (prop instanceof DirectionProperty directionProp && prop.getName().equals("facing")) {
+					BlockState rotatedState = rotateBlock(state, directionProp, state.getValue(directionProp));
+					if (level.getBlockEntity(pos) instanceof AreaAffectingBE areaAffectingBE)
+						areaAffectingBE.handleRotate(state.getValue(directionProp), rotatedState.getValue(directionProp));
 					level.setBlock(pos, rotatedState, 3);
 					level.playSound(null, pos, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, 1.0F, 1.0F);
 					return InteractionResult.SUCCESS;

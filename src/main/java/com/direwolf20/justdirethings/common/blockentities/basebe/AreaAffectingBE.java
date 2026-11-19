@@ -2,6 +2,7 @@ package com.direwolf20.justdirethings.common.blockentities.basebe;
 
 import com.direwolf20.justdirethings.util.interfacehelpers.AreaAffectingData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -48,6 +49,17 @@ public interface AreaAffectingBE {
 						+ (getAreaAffectingData().yRadius != Math.floor(getAreaAffectingData().yRadius) ? 0.5 : 1),
 				relativePos.getZ() + zOffset
 						+ (getAreaAffectingData().zRadius != Math.floor(getAreaAffectingData().zRadius) ? 0.5 : 1));
+	}
+
+	default void handleRotate(Direction oldDirection, Direction newDirection) {
+		AreaAffectingData current = getAreaAffectingData();
+		AreaAffectingData defaultData = new AreaAffectingData(oldDirection);
+		defaultData.renderArea = current.renderArea;
+		if (oldDirection == newDirection || !current.equals(defaultData))
+			return;
+		AreaAffectingData rotated = new AreaAffectingData(newDirection);
+		setAreaSettings(rotated.xRadius, rotated.yRadius, rotated.zRadius, rotated.xOffset, rotated.yOffset,
+				rotated.zOffset, current.renderArea);
 	}
 
 	default AABB getAABB(BlockPos relativePos) {
