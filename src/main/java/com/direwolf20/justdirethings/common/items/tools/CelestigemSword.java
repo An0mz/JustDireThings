@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.items.tools;
 
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.PoweredTool;
 import com.direwolf20.justdirethings.common.items.tools.basetools.BaseSword;
 import com.direwolf20.justdirethings.common.items.tools.utils.GooTier;
@@ -10,7 +11,7 @@ public class CelestigemSword extends BaseSword implements PoweredTool {
 	public CelestigemSword() {
 		super(GooTier.CELESTIGEM, 3, -2.0F, new Properties().fireResistant());
 		registerAbility(Ability.MOBSCANNER);
-		registerAbility(Ability.CAUTERIZEWOUNDS);
+		registerAbility(Ability.CAUTERIZEWOUNDS, new AbilityParams(1, 1, 1, 1, 0, 1200));
 		registerAbility(Ability.DROPTELEPORT);
 		registerAbility(Ability.SMOKER);
 	}

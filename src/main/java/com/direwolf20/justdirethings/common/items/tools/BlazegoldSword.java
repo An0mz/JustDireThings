@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.common.items.tools;
 
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
+import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.Helpers;
 import com.direwolf20.justdirethings.common.items.tools.basetools.BaseSword;
 import com.direwolf20.justdirethings.common.items.tools.utils.GooTier;
@@ -12,7 +13,7 @@ public class BlazegoldSword extends BaseSword {
 		super(GooTier.BLAZEGOLD, 3, -2.0F, new Properties().fireResistant());
 		registerAbility(Ability.MOBSCANNER);
 		registerAbility(Ability.LAVAREPAIR);
-		registerAbility(Ability.CAUTERIZEWOUNDS);
+		registerAbility(Ability.CAUTERIZEWOUNDS, new AbilityParams(1, 1, 1, 1, 0, 1200));
 		registerAbility(Ability.SMOKER);
 	}
 
