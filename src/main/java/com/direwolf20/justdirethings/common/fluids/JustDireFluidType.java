@@ -1,5 +1,6 @@
 package com.direwolf20.justdirethings.common.fluids;
 
+import com.direwolf20.justdirethings.JustDireThings;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -10,9 +11,9 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("removal")
 public class JustDireFluidType extends FluidType {
-	private static final ResourceLocation STILL_TEXTURE = new ResourceLocation("minecraft", "block/water_still");
-	private static final ResourceLocation FLOW_TEXTURE = new ResourceLocation("minecraft", "block/water_flow");
-	private static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation("minecraft", "block/water_overlay");
+	private static final ResourceLocation STILL_TEXTURE = new ResourceLocation(JustDireThings.MODID, "block/fluid_source");
+	private static final ResourceLocation FLOW_TEXTURE = new ResourceLocation(JustDireThings.MODID, "block/fluid_flowing");
+	private static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(JustDireThings.MODID, "block/fluid_overlay");
 
 	private final int tintColor;
 
