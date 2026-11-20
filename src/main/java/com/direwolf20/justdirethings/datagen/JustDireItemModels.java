@@ -3,13 +3,19 @@ package com.direwolf20.justdirethings.datagen;
 import com.direwolf20.justdirethings.JustDireThings;
 import com.direwolf20.justdirethings.setup.Registration;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 @SuppressWarnings("removal")
 public class JustDireItemModels extends ItemModelProvider {
+	private static final String[] TRIM_MATERIALS = {"quartz", "iron", "netherite", "redstone", "copper", "gold",
+			"emerald", "diamond", "lapis", "amethyst"};
+
 	public JustDireItemModels(PackOutput output, ExistingFileHelper existingFileHelper) {
 		super(output, JustDireThings.MODID, existingFileHelper);
 	}
@@ -202,8 +208,18 @@ public class JustDireItemModels extends ItemModelProvider {
 
 	public void registerArmors() {
 		for (var armor : Registration.ARMORS.getEntries()) {
-			singleTexture(armor.getId().getPath(), mcLoc("item/generated"), "layer0",
-					modLoc("item/" + armor.getId().getPath()));
+			String name = armor.getId().getPath();
+			ArmorItem armorItem = (ArmorItem) armor.get();
+			ItemModelBuilder builder = singleTexture(name, mcLoc("item/generated"), "layer0", modLoc("item/" + name));
+			for (int i = 0; i < TRIM_MATERIALS.length; i++) {
+				String trimId = TRIM_MATERIALS[i];
+				ResourceLocation trimTexture = mcLoc("trims/items/" + armorItem.getType().getName() + "_trim_" + trimId);
+				existingFileHelper.trackGenerated(trimTexture, TEXTURE);
+				ItemModelBuilder trimModel = singleTexture(name + "_" + trimId + "_trim", mcLoc("item/generated"),
+						"layer0", modLoc("item/" + name)).texture("layer1", trimTexture);
+				builder.override().predicate(ItemModelGenerators.TRIM_TYPE_PREDICATE_ID, (i + 1) / 10F)
+						.model(trimModel).end();
+			}
 		}
 	}
 
