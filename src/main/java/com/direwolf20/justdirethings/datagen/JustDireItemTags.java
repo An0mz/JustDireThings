@@ -63,6 +63,14 @@ public class JustDireItemTags extends ItemTagsProvider {
 			.create(new ResourceLocation(JustDireThings.MODID, "goo_revive_tier_3"));
 	public static final TagKey<Item> GOO_REVIVE_TIER_4 = ItemTags
 			.create(new ResourceLocation(JustDireThings.MODID, "goo_revive_tier_4"));
+	public static final TagKey<Item> GOO_RECIPE_TIER_1 = modTag("goorecipe_tier/1");
+	public static final TagKey<Item> GOO_RECIPE_TIER_2 = modTag("goorecipe_tier/2");
+	public static final TagKey<Item> GOO_RECIPE_TIER_3 = modTag("goorecipe_tier/3");
+	public static final TagKey<Item> GOO_RECIPE_TIER_4 = modTag("goorecipe_tier/4");
+
+	private static TagKey<Item> modTag(String name) {
+		return ItemTags.create(new ResourceLocation(JustDireThings.MODID, name));
+	}
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
@@ -74,6 +82,10 @@ public class JustDireItemTags extends ItemTagsProvider {
 		tag(GOO_REVIVE_TIER_2).add(Items.NETHER_WART).add(Items.BLAZE_POWDER);
 		tag(GOO_REVIVE_TIER_3).add(Items.CHORUS_FRUIT).add(Items.ENDER_PEARL);
 		tag(GOO_REVIVE_TIER_4).add(Items.SCULK).add(Items.SCULK_CATALYST);
+		tag(GOO_RECIPE_TIER_1).add(Registration.GooBlock_Tier1_ITEM.get()).addTag(GOO_RECIPE_TIER_2);
+		tag(GOO_RECIPE_TIER_2).add(Registration.GooBlock_Tier2_ITEM.get()).addTag(GOO_RECIPE_TIER_3);
+		tag(GOO_RECIPE_TIER_3).add(Registration.GooBlock_Tier3_ITEM.get()).addTag(GOO_RECIPE_TIER_4);
+		tag(GOO_RECIPE_TIER_4).add(Registration.GooBlock_Tier4_ITEM.get());
 		tag(ItemTags.SWORDS).add(Registration.FerricoreSword.get()).add(Registration.BlazegoldSword.get())
 				.add(Registration.CelestigemSword.get()).add(Registration.EclipseAlloySword.get());
 		tag(ItemTags.PICKAXES).add(Registration.FerricorePickaxe.get()).add(Registration.BlazegoldPickaxe.get())
