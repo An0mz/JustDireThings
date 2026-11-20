@@ -17,7 +17,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -521,7 +520,7 @@ public class JustDireArrow extends AbstractArrow {
 	}
 
 	private void makeAreaOfEffectCloud() {
-		AreaEffectCloud cloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
+		JustDireAreaEffectCloud cloud = new JustDireAreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 		if (this.getOwner() instanceof LivingEntity owner) {
 			cloud.setOwner(owner);
 		}

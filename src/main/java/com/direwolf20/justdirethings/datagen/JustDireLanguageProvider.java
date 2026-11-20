@@ -248,6 +248,7 @@ public class JustDireLanguageProvider extends net.minecraftforge.common.data.Lan
 		add(Ability.PHASE.getLocalization(), "Phase");
 		add(Ability.TIMEPROTECTION.getLocalization(), "Time Protection");
 		add("entity.justdirethings.justdire_arrow", "JustDire Arrow");
+		add("entity.justdirethings.justdire_area_effect_cloud", "JustDire Area Effect Cloud");
 
 		// Time Wand & Portal Guns
 		add(Registration.TimeWand.get(), "Time Wand");

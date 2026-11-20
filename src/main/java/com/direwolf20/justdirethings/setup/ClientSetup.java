@@ -30,6 +30,7 @@ import com.direwolf20.justdirethings.util.NBTHelpers;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BowItem;
@@ -238,5 +239,6 @@ public class ClientSetup {
 		event.registerEntityRenderer(Registration.PortalProjectile.get(), PortalProjectileRenderer::new);
 		event.registerEntityRenderer(Registration.JustDireArrow.get(), JustDireArrowRenderer::new);
 		event.registerEntityRenderer(Registration.DecoyEntity.get(), DecoyEntityRender::new);
+		event.registerEntityRenderer(Registration.JustDireAreaEffectCloud.get(), NoopRenderer::new);
 	}
 }

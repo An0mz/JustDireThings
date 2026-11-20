@@ -18,6 +18,7 @@ import com.direwolf20.justdirethings.common.containers.*;
 import com.direwolf20.justdirethings.common.entities.CreatureCatcherEntity;
 import com.direwolf20.justdirethings.common.entities.DecoyEntity;
 import com.direwolf20.justdirethings.common.entities.ParadoxEntity;
+import com.direwolf20.justdirethings.common.entities.JustDireAreaEffectCloud;
 import com.direwolf20.justdirethings.common.entities.JustDireArrow;
 import com.direwolf20.justdirethings.common.entities.TimeWandEntity;
 import com.direwolf20.justdirethings.common.entities.PortalProjectile;
@@ -661,6 +662,12 @@ public class Registration {
 	public static final RegistryObject<EntityType<JustDireArrow>> JustDireArrow = ENTITY_TYPES
 			.register("justdire_arrow", () -> EntityType.Builder.<JustDireArrow>of(JustDireArrow::new, MobCategory.MISC)
 					.sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build("justdire_arrow"));
+
+	public static final RegistryObject<EntityType<JustDireAreaEffectCloud>> JustDireAreaEffectCloud = ENTITY_TYPES
+			.register("justdire_area_effect_cloud",
+					() -> EntityType.Builder.<JustDireAreaEffectCloud>of(JustDireAreaEffectCloud::new, MobCategory.MISC)
+							.fireImmune().sized(6.0F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE)
+							.build("justdire_area_effect_cloud"));
 
 	public static final RegistryObject<EntityType<DecoyEntity>> DecoyEntity = ENTITY_TYPES.register("decoy_entity",
 			() -> EntityType.Builder.<DecoyEntity>of(DecoyEntity::new, MobCategory.MISC).sized(0.6F, 1.8F)
