@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_template_celestigem": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "justdirethings:template_celestigem"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "justdirethings:template_celestigem-duplicate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_template_celestigem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "justdirethings:template_celestigem-duplicate"
+    ]
+  }
+}
