@@ -25,7 +25,19 @@ import java.util.List;
 public class ToolSettingContainer extends BaseContainer {
 	public Player playerEntity;
 	public final List<Slot> dynamicSlots = new ArrayList<>();
-	public ItemStackHandler currentCanisterHandler;
+	private ItemStack selectedBow = ItemStack.EMPTY;
+	private final ItemStackHandler canisterHandler = new ItemStackHandler(BaseBow.CANISTER_SLOTS) {
+		@Override
+		protected void onContentsChanged(int slot) {
+			if (!selectedBow.isEmpty())
+				BaseBow.setPotionCanister(selectedBow, getStackInSlot(slot), slot);
+		}
+
+		@Override
+		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+			return stack.isEmpty() || stack.getItem() instanceof PotionCanister;
+		}
+	};
 
 	public static final ResourceLocation EMPTY_ARMOR_SLOT_HELMET = new ResourceLocation("item/empty_armor_slot_helmet");
 	public static final ResourceLocation EMPTY_ARMOR_SLOT_CHESTPLATE = new ResourceLocation(
@@ -96,17 +108,26 @@ public class ToolSettingContainer extends BaseContainer {
 
 		addPlayerSlots(playerInventory, 8, 84);
 
+		addCanisterSlots();
 		refreshSlots(player.getMainHandItem());
 	}
 
-	private void addSelectedItemSlots() {
-		for (int i = 0; i < currentCanisterHandler.getSlots(); i++) {
-			int x = 134 + (i % 2) * 18;
-			int y = 66 - (i / 2) * 18;
-			Slot slot = new SlotItemHandler(currentCanisterHandler, i, x, y) {
+	private void addCanisterSlots() {
+		for (int i = 0; i < canisterHandler.getSlots(); i++) {
+			Slot slot = new SlotItemHandler(canisterHandler, i, 134 + (i % 2) * 18, 66 - (i / 2) * 18) {
+				@Override
+				public boolean isActive() {
+					return !selectedBow.isEmpty();
+				}
+
 				@Override
 				public boolean mayPlace(ItemStack stack) {
-					return stack.getItem() instanceof PotionCanister;
+					return isActive() && stack.getItem() instanceof PotionCanister;
+				}
+
+				@Override
+				public boolean mayPickup(Player player) {
+					return isActive();
 				}
 			};
 			this.addSlot(slot);
@@ -115,42 +136,17 @@ public class ToolSettingContainer extends BaseContainer {
 	}
 
 	public void refreshSlots(ItemStack selectedStack) {
-		// In 1.20.1 Forge, slot removal after construction is not safely supported
-		// (remoteSlots is private and there is no NeoForge sync API).
-		// Dynamic slots are populated once at construction; this is a no-op after that.
-		if (!dynamicSlots.isEmpty() || currentCanisterHandler != null)
-			return;
-		currentCanisterHandler = getItemHandler(selectedStack);
-		if (currentCanisterHandler != null)
-			addSelectedItemSlots();
-	}
-
-	public ItemStackHandler getItemHandler(ItemStack itemStack) {
-		if (!(itemStack.getItem() instanceof BaseBow))
-			return null;
-		final ItemStack liveBow = itemStack;
-		ItemStackHandler handler = new ItemStackHandler(BaseBow.CANISTER_SLOTS) {
-			@Override
-			protected void onContentsChanged(int slot) {
-				BaseBow.setPotionCanister(liveBow, getStackInSlot(slot), slot);
-			}
-
-			@Override
-			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				return stack.isEmpty() || stack.getItem() instanceof PotionCanister;
-			}
-		};
-		for (int i = 0; i < BaseBow.CANISTER_SLOTS; i++) {
-			ItemStack existing = BaseBow.getPotionCanister(itemStack, i);
-			if (!existing.isEmpty())
-				handler.setStackInSlot(i, existing);
-		}
-		return handler;
+		selectedBow = ItemStack.EMPTY;
+		boolean isBow = selectedStack.getItem() instanceof BaseBow;
+		for (int i = 0; i < canisterHandler.getSlots(); i++)
+			canisterHandler.setStackInSlot(i, isBow ? BaseBow.getPotionCanister(selectedStack, i) : ItemStack.EMPTY);
+		if (isBow)
+			selectedBow = selectedStack;
 	}
 
 	@Override
 	public ItemStack quickMoveStack(Player playerIn, int index) {
-		if (dynamicSlots.isEmpty())
+		if (selectedBow.isEmpty())
 			return ItemStack.EMPTY;
 		int playerInvStart = 5; // armor(4) + offhand(1) = 5 fixed slots
 		int playerInvEnd = playerInvStart + Inventory.INVENTORY_SIZE; // 5-40

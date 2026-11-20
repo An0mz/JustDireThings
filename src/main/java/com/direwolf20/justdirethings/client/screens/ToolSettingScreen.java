@@ -11,6 +11,7 @@ import com.direwolf20.justdirethings.common.items.interfaces.AbilityParams;
 import com.direwolf20.justdirethings.common.items.interfaces.LeftClickableTool;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
 import com.direwolf20.justdirethings.common.network.data.ToggleToolLeftRightClickPayload;
+import com.direwolf20.justdirethings.common.network.data.ToggleToolRefreshSlotsPayload;
 import com.direwolf20.justdirethings.common.network.data.ToggleToolSlotPayload;
 import com.direwolf20.justdirethings.util.MiscTools;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -306,7 +307,13 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 		if (this.tool.getItem() instanceof ToggleableTool toggleableTool) {
 			this.abilities = toggleableTool.getAbilities();
 			refreshButtons();
+			refreshToolAndSlots();
 		}
+	}
+
+	public void refreshToolAndSlots() {
+		container.refreshSlots(tool);
+		PacketHandler.CHANNEL.sendToServer(new ToggleToolRefreshSlotsPayload(toolSlot));
 	}
 
 	@Override
@@ -321,9 +328,8 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 		int relY = (this.height - this.imageHeight) / 2;
 		guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 		for (net.minecraft.world.inventory.Slot slot : container.dynamicSlots) {
-			// Blit from settings.png at the UV of the first pre-drawn armor slot (44,66)
-			// so the dynamic slot matches the texture's existing slot appearance exactly.
-			guiGraphics.blit(GUI, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 43, 65, 18, 18);
+			if (slot.isActive())
+				guiGraphics.blit(GUI, getGuiLeft() + slot.x - 1, getGuiTop() + slot.y - 1, 43, 65, 18, 18);
 		}
 		if (renderablesChanged)
 			updateRenderables();
@@ -379,6 +385,7 @@ public class ToolSettingScreen extends BaseScreen<ToolSettingContainer> {
 			toolSlot = hoveredSlot.getSlotIndex();
 			this.abilities = toggleableTool.getAbilities();
 			refreshButtons();
+			refreshToolAndSlots();
 			return true;
 		}
 		if (btn == 1) {

@@ -90,5 +90,7 @@ public class PacketHandler {
 				ClientSoundPacket::handle);
 		CHANNEL.registerMessage(nextId(), ParadoxSyncPayload.class, ParadoxSyncPayload::write, ParadoxSyncPayload::new,
 				ParadoxSyncPacket::handle);
+		CHANNEL.registerMessage(nextId(), ToggleToolRefreshSlotsPayload.class, ToggleToolRefreshSlotsPayload::write,
+				ToggleToolRefreshSlotsPayload::new, ToggleToolRefreshSlotsPacket::handle);
 	}
 }
