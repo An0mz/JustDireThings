@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+- Added the Earthquake upgrade to the Eclipse Alloy Boots (it was implemented but no item could use it). Boots Ground Stomp cooldown is now 200 ticks, matching 1.21.1.
+- Lingering potion arrows now use their own effect cloud: harmful effects never hit the shooter and beneficial effects only affect the shooter.
+- Goo Soil auto-harvest now also harvests nether wart, sweet berry bushes and other bush-type crops, and pumpkin/melon fruit from attached stems.
+- The Tool Settings screen now updates the potion canister slots when you click a different tool, instead of only showing them for the tool held when the screen opened.
+- The Pocket Generator now also charges items in Curios slots when Curios is installed.
+- Rotating a machine with the Ferricore Wrench now turns its default area with it.
+- Machine filters now accept Creature Catchers for entity filtering, with optional NBT comparison.
+- Machines now implement `Clearable`, so `/fill` and `/setblock` clear their contents.
+- Ability tuning now matches 1.21.1: Cauterize Wounds on swords has a 1200 tick cooldown, and the Airburst and Eclipsegate abilities on the Blazejet, Voidshift and Eclipsegate wands use the 1.21.1 ranges.
+- Just Dire Things fluids now use their own animated textures instead of tinted water.
+- Armor now shows trims on its inventory icon.
+- Crafting recipes that previously never unlocked in the recipe book now unlock when you pick up their ingredients.
+- Added the `justdirethings:goorecipe_tier/1` to `/4` item tags.
+
 ## 1.1.13
 - Time Wand, Polymorphic Wands and Advanced Portal Gun now only accept their own fluid (Time, Polymorphic and Portal Fluid). Before, right-clicking a fluid or piping one in could fill them with water, XP or any other fluid.
 
