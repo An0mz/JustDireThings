@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
 - Added the Earthquake upgrade to the Eclipse Alloy Boots (it was implemented but no item could use it). Boots Ground Stomp cooldown is now 200 ticks, matching 1.21.1.
 - Lingering potion arrows now use their own effect cloud: harmful effects never hit the shooter and beneficial effects only affect the shooter.
 - Goo Soil auto-harvest now also harvests nether wart, sweet berry bushes and other bush-type crops, and pumpkin/melon fruit from attached stems.

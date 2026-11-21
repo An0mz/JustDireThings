@@ -10,7 +10,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 @SuppressWarnings("removal")
 public class PacketHandler {
-	private static final String PROTOCOL = "1";
+	private static final String PROTOCOL = "2";
 	public static SimpleChannel CHANNEL;
 	private static int packetId = 0;
 
