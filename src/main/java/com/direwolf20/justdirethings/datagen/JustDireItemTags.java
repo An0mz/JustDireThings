@@ -14,6 +14,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("removal")
@@ -67,6 +68,8 @@ public class JustDireItemTags extends ItemTagsProvider {
 	public static final TagKey<Item> GOO_RECIPE_TIER_2 = modTag("goorecipe_tier/2");
 	public static final TagKey<Item> GOO_RECIPE_TIER_3 = modTag("goorecipe_tier/3");
 	public static final TagKey<Item> GOO_RECIPE_TIER_4 = modTag("goorecipe_tier/4");
+	public static final List<TagKey<Item>> GOO_RECIPE_TIERS = List.of(GOO_RECIPE_TIER_1, GOO_RECIPE_TIER_2,
+			GOO_RECIPE_TIER_3, GOO_RECIPE_TIER_4);
 
 	private static TagKey<Item> modTag(String name) {
 		return ItemTags.create(new ResourceLocation(JustDireThings.MODID, name));

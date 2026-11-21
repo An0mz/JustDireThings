@@ -16,6 +16,7 @@
 - Added the `justdirethings:goorecipe_tier/1` to `/4` item tags.
 - Empty Creature Catchers now stack to 64, and entities that cannot be saved can no longer be captured.
 - The Creature Catcher now renders in hands, on the ground, in item frames and in the GUI the way it does in 1.21.1.
+- The JEI goo recipe pages now read their goo tier lists from the `goorecipe_tier` tags.
 
 ## 1.1.13
 - Time Wand, Polymorphic Wands and Advanced Portal Gun now only accept their own fluid (Time, Polymorphic and Portal Fluid). Before, right-clicking a fluid or piping one in could fill them with water, XP or any other fluid.

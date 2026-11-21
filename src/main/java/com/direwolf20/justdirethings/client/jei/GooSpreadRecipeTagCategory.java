@@ -1,6 +1,7 @@
 package com.direwolf20.justdirethings.client.jei;
 
 import com.direwolf20.justdirethings.JustDireThings;
+import com.direwolf20.justdirethings.datagen.JustDireItemTags;
 import com.direwolf20.justdirethings.datagen.recipes.GooSpreadRecipeTag;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -17,8 +18,10 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -87,16 +90,9 @@ public class GooSpreadRecipeTagCategory implements IRecipeCategory<GooSpreadReci
 		}
 		inputSlotBuilder.addItemStacks(inputList);
 
-		List<ItemStack> catalystlist = new ArrayList<>();
-		if (recipe.getTierRequirement() <= 1)
-			catalystlist.add(new ItemStack(Registration.GooBlock_Tier1.get()));
-		if (recipe.getTierRequirement() <= 2)
-			catalystlist.add(new ItemStack(Registration.GooBlock_Tier2.get()));
-		if (recipe.getTierRequirement() <= 3)
-			catalystlist.add(new ItemStack(Registration.GooBlock_Tier3.get()));
-		if (recipe.getTierRequirement() <= 4)
-			catalystlist.add(new ItemStack(Registration.GooBlock_Tier4.get()));
-		builder.addSlot(RecipeIngredientRole.CATALYST, 29, 12).addItemStacks(catalystlist);
+		int tierIndex = Mth.clamp(recipe.getTierRequirement(), 1, JustDireItemTags.GOO_RECIPE_TIERS.size()) - 1;
+		builder.addSlot(RecipeIngredientRole.CATALYST, 29, 12)
+				.addIngredients(Ingredient.of(JustDireItemTags.GOO_RECIPE_TIERS.get(tierIndex)));
 
 		BlockState output = recipe.getOutput();
 		FluidState outputFluid = output.getFluidState();
