@@ -3,8 +3,8 @@ package com.direwolf20.justdirethings.common.items;
 import com.direwolf20.justdirethings.client.renderers.JustDireItemRenderer;
 import com.direwolf20.justdirethings.common.entities.CreatureCatcherEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 
 public class CreatureCatcher extends Item {
 	public CreatureCatcher() {
-		super(new Properties().stacksTo(1));
+		super(new Properties());
 	}
 
 	@Override
@@ -46,17 +46,16 @@ public class CreatureCatcher extends Item {
 	}
 
 	public static boolean hasEntity(ItemStack itemStack) {
-		return !itemStack.getOrCreateTag().isEmpty(); // Any tag will be an entity
+		CompoundTag tag = itemStack.getTag();
+		return tag != null && tag.contains("entityType");
 	}
 
 	@Override
 	public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> tooltip,
 			TooltipFlag flagIn) {
 		super.appendHoverText(stack, level, tooltip, flagIn);
-		Minecraft mc = Minecraft.getInstance();
-		if (level == null || mc.player == null) {
+		if (level == null)
 			return;
-		}
 		Mob mob = CreatureCatcherEntity.getEntityFromItemStack(stack, level);
 		if (mob == null)
 			return;

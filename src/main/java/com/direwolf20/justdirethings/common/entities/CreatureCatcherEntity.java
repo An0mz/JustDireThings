@@ -209,13 +209,12 @@ public class CreatureCatcherEntity extends ThrowableItemProjectile {
 		Entity entity = getEntityFromItemStack(itemStack, this.level());
 		Vec3 location = getPosition(0);
 		entity.moveTo(location);
-		itemStack.setTag(new CompoundTag());
 		level().addFreshEntity(entity);
 	}
 
 	public static Mob getEntityFromItemStack(ItemStack itemStack, Level level) {
-		CompoundTag tag = itemStack.getOrCreateTag();
-		if (tag.isEmpty() || !tag.contains("entityType"))
+		CompoundTag tag = itemStack.getTag();
+		if (tag == null || !tag.contains("entityType"))
 			return null;
 		EntityType<?> type = EntityType.byString(tag.getString("entityType")).orElse(null);
 		if (type == null)
@@ -235,6 +234,8 @@ public class CreatureCatcherEntity extends ThrowableItemProjectile {
 		if (entity instanceof PartEntity<?>)
 			return false;
 		if (entity.getType().is(JustDireEntityTags.CREATURE_CATCHER_DENY))
+			return false;
+		if (!entity.save(new CompoundTag()))
 			return false;
 		return true;
 	}
