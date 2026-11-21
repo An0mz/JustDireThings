@@ -34,6 +34,7 @@ public class Config {
 	public static final String CATEGORY_POCKET_GENERATOR = "pocket_generator";
 	public static ForgeConfigSpec.IntValue POCKET_GENERATOR_FE_PER_FUEL_TICK;
 	public static ForgeConfigSpec.IntValue POCKET_GENERATOR_BURN_SPEED_MULTIPLIER;
+	public static ForgeConfigSpec.IntValue POCKET_GENERATOR_COAL_BLOCK_MULTIPLIER;
 	public static ForgeConfigSpec.IntValue POCKET_GENERATOR_MAX_FE;
 	public static ForgeConfigSpec.IntValue POCKET_GENERATOR_FE_PER_TICK;
 
@@ -237,6 +238,9 @@ public class Config {
 		POCKET_GENERATOR_BURN_SPEED_MULTIPLIER = COMMON_BUILDER.comment(
 				"The multiplier for the burn speed, making the generator run faster. Coal is 1600 ticks to burn, if you set this to 10, it will burn in 160 ticks")
 				.defineInRange("pocket_gen_burn_speed_multiplier", 4, 1, 1000);
+		POCKET_GENERATOR_COAL_BLOCK_MULTIPLIER = COMMON_BUILDER.comment(
+				"Extra burn speed multiplier applied when a vanilla Coal Block is used as fuel in the Pocket Generator. Stacks with the burn speed multiplier above")
+				.defineInRange("pocket_gen_vanilla_coal_block_multiplier", 1, 1, 1000);
 		POCKET_GENERATOR_MAX_FE = COMMON_BUILDER
 				.comment("The maximum amount of Energy the generator can hold in its buffer")
 				.defineInRange("pocket_gen_max_fe", 1000000, 1, Integer.MAX_VALUE);

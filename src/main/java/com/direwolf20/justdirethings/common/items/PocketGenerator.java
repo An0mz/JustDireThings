@@ -169,7 +169,7 @@ public class PocketGenerator extends Item implements PoweredItem, ToggleableItem
 				setFuelMultiplier(itemStack, coalBlock.getBurnSpeedMultiplier());
 			} else if (fuelStack.getItem() instanceof BlockItem blockItem
 					&& blockItem.getBlock() == Blocks.COAL_BLOCK) {
-				setFuelMultiplier(itemStack, 9);
+				setFuelMultiplier(itemStack, Config.POCKET_GENERATOR_COAL_BLOCK_MULTIPLIER.get());
 			} else if (fuelStack.getItem() instanceof FuelCanister) {
 				setFuelMultiplier(itemStack, FuelCanister.getBurnSpeedMultiplier(fuelStack));
 			} else {
