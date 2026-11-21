@@ -398,7 +398,7 @@ public abstract class BaseMachineScreen<T extends BaseMachineContainer> extends 
 		if (baseMachineBE instanceof FluidMachineBE fluidMachineBE) {
 			if (MiscTools.inBounds(topSectionLeft + getFluidBarOffset(), topSectionTop + 5, 18, 72, pX, pY)) {
 				FluidStack fluidStack = container.getFluidStack();
-				Component fluidName = fluidStack.isEmpty() ? Component.literal("Empty") : fluidStack.getDisplayName();
+				Component fluidName = fluidStack.isEmpty() ? Component.translatable("justdirethings.screen.empty") : fluidStack.getDisplayName();
 				if (hasShiftDown())
 					pGuiGraphics.renderTooltip(font,
 							Language.getInstance()

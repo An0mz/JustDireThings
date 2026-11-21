@@ -18,6 +18,7 @@
 - The Creature Catcher now renders in hands, on the ground, in item frames and in the GUI the way it does in 1.21.1.
 - The JEI goo recipe pages now read their goo tier lists from the `goorecipe_tier` tags.
 - The Pocket Generator now burns a vanilla Coal Block at normal speed like 1.21.1 instead of 9 times faster. The extra speed is the `pocket_gen_vanilla_coal_block_multiplier` config option (default 1).
+- The "Empty" label on fluid bar tooltips is now translatable.
 
 ## 1.1.13
 - Time Wand, Polymorphic Wands and Advanced Portal Gun now only accept their own fluid (Time, Polymorphic and Portal Fluid). Before, right-clicking a fluid or piping one in could fill them with water, XP or any other fluid.

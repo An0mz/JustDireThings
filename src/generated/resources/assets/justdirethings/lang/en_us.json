@@ -394,6 +394,7 @@
   "justdirethings.screen.direction-west": "West",
   "justdirethings.screen.dropcount": "Drop Amount",
   "justdirethings.screen.edit_favorite": "Edit Favorite",
+  "justdirethings.screen.empty": "Empty",
   "justdirethings.screen.energy": "Energy: %s/%s FE",
   "justdirethings.screen.energycost": "Energy Cost: %s",
   "justdirethings.screen.entity-all": "All Entities",
