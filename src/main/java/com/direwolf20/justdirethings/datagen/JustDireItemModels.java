@@ -152,8 +152,6 @@ public class JustDireItemModels extends ItemModelProvider {
 				modLoc("item/voidshift_wand"));
 		singleTexture(Registration.EclipsegateWand.getId().getPath(), mcLoc("item/generated"), "layer0",
 				modLoc("item/eclipsegate_wand"));
-		singleTexture(Registration.CreatureCatcher.getId().getPath() + "_base", mcLoc("item/generated"), "layer0",
-				modLoc("item/creaturecatcher"));
 		getBuilder(Registration.CreatureCatcher.getId().getPath())
 				.parent(new ModelFile.UncheckedModelFile("builtin/entity"));
 		// .texture("layer0", modLoc("item/creaturecatcher"));

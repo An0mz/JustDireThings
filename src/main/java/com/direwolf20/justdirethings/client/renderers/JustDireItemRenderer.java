@@ -30,8 +30,6 @@ public class JustDireItemRenderer extends BlockEntityWithoutLevelRenderer {
 
 	private static final ResourceLocation CREATURE_CATCHER_BASE = new ResourceLocation(JustDireThings.MODID,
 			"item/creaturecatcher_base");
-	private static final ResourceLocation CREATURE_CATCHER = new ResourceLocation(JustDireThings.MODID,
-			"item/creaturecatcher");
 
 	@Override
 	public void renderByItem(ItemStack pStack, ItemDisplayContext pDisplayContext, PoseStack pPoseStack,
@@ -41,27 +39,19 @@ public class JustDireItemRenderer extends BlockEntityWithoutLevelRenderer {
 			BakedModel base = irenderer.getItemModelShaper().getModelManager().getModel(CREATURE_CATCHER_BASE);
 			pPoseStack.pushPose();
 			if (pDisplayContext == ItemDisplayContext.GUI) {
-				pPoseStack.translate(0.5F, 0.5F, 0.5F);
+				pPoseStack.translate(0.95F, 0.25F, 0);
 				pPoseStack.mulPose(Axis.XP.rotationDegrees(30));
 				pPoseStack.mulPose(Axis.YP.rotationDegrees(225));
-				float scale = 0.7F;
+				float scale = 0.625F;
 				pPoseStack.scale(scale, scale, scale);
-				pPoseStack.translate(-0.5F, -0.5F, -0.5F);
-			} else if (pDisplayContext == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
-					|| pDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
-					|| pDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
-					|| pDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
-				pPoseStack.translate(1, 0.5F, 0);
-				float scale = 0.5F;
+			} else if (pDisplayContext == ItemDisplayContext.FIXED) {
+				pPoseStack.translate(0.0, 0.0, 0.5);
+				pPoseStack.mulPose(Axis.XN.rotationDegrees(90));
+			} else {
+				pPoseStack.translate(0.2, 0.5, 0.5);
+				float scale = 0.4F;
 				pPoseStack.scale(scale, scale, scale);
-				pPoseStack.translate(-1.5F, -0.5F, 0.5F);
-				// No X rotation — jar stays upright
-			} else { // GROUND, FIXED, and others
-				pPoseStack.translate(0.5F, 0.125F, 0.5F);
-				float scale = 0.25F;
-				pPoseStack.scale(scale, scale, scale);
-				pPoseStack.translate(-0.5F, 1F, -0.5F);
-				// No X rotation — jar stays upright
+				pPoseStack.mulPose(Axis.YP.rotationDegrees(45));
 			}
 			for (var model : base.getRenderPasses(pStack, true)) {
 				for (var rendertype : model.getRenderTypes(pStack, true)) {
@@ -92,11 +82,10 @@ public class JustDireItemRenderer extends BlockEntityWithoutLevelRenderer {
 		float scale = 0.25F / (float) maxDimension; // Adjust this factor based on your UI needs
 
 		if (type == ItemDisplayContext.FIXED) {
-			// matrix.translate(0, -0.5, 0);
-			// matrix.translate(0, 1.45, 0);
+			matrix.translate(0.0, 0.0, -0.125);
 			matrix.mulPose(Axis.XN.rotationDegrees(90));
 			matrix.mulPose(Axis.YN.rotationDegrees(180));
-			matrix.scale(scale, scale, scale);
+			matrix.scale(scale * 2, scale * 2, scale * 2);
 		} else if (type == ItemDisplayContext.GUI) {
 			// matrix.translate(0, -0.25, 0);
 			matrix.translate(0, -entityHeight / 2 * scale * 2, 0); // Centering entity vertically
