@@ -39,7 +39,7 @@ public class DropperT1Screen extends BaseMachineScreen<DropperT1Container> {
 					saveSettings();
 				}));
 
-		addRenderableWidget(new NumberButton(getGuiLeft() + 78, topSectionTop + 41, 24, 12, pickupDelay, 0, 1200,
+		addRenderableWidget(new NumberButton(getGuiLeft() + 50, topSectionTop + 27, 24, 12, pickupDelay, 0, 1200,
 				Component.translatable("justdirethings.screen.pickupdelay"), b -> {
 					pickupDelay = ((NumberButton) b).getValue(); // The value is updated in the mouseClicked method
 																	// below
