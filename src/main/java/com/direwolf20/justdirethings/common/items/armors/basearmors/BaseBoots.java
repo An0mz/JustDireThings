@@ -39,7 +39,7 @@ public class BaseBoots extends ArmorItem implements ToggleableTool, LeftClickabl
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

@@ -38,7 +38,7 @@ public abstract class BaseToggleableTool extends Item implements ToggleableTool 
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

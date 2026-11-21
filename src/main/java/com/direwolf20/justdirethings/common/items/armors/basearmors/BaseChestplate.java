@@ -40,7 +40,7 @@ public class BaseChestplate extends ArmorItem implements ToggleableTool, LeftCli
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

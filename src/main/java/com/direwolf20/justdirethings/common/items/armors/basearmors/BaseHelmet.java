@@ -41,7 +41,7 @@ public class BaseHelmet extends ArmorItem implements ToggleableTool, LeftClickab
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

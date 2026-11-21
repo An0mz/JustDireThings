@@ -96,7 +96,7 @@ public class BaseAxe extends AxeItem implements ToggleableTool, LeftClickableToo
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

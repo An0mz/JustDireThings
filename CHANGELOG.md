@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `pocket_gen_vanilla_coal_block_multiplier` config option (default 1): extra burn speed when a vanilla Coal Block is used as fuel in the Pocket Generator.
 - `justdirethings:goorecipe_tier/1` to `/4` item tags.
 - Armor now shows trims on its inventory icon.
+- An on/off option for every ability in a new `abilities` section of `justdirethings-common.toml`, like in 1.21.1. A disabled ability disappears from its tools and armor and its upgrade can no longer be applied.
 
 ### Changed
 - Boots Ground Stomp cooldown is now 200 ticks, matching 1.21.1.

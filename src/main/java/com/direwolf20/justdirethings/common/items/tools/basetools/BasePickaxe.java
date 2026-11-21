@@ -96,7 +96,7 @@ public class BasePickaxe extends PickaxeItem implements ToggleableTool, LeftClic
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

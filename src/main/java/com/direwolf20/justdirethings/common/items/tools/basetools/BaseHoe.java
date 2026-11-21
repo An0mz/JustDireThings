@@ -119,7 +119,7 @@ public class BaseHoe extends HoeItem implements ToggleableTool, LeftClickableToo
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

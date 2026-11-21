@@ -113,7 +113,7 @@ public class BaseShovel extends ShovelItem implements ToggleableTool, LeftClicka
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

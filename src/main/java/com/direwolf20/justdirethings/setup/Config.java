@@ -1,10 +1,13 @@
 package com.direwolf20.justdirethings.setup;
 
+import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("removal")
 public class Config {
@@ -111,6 +114,11 @@ public class Config {
 	public static ForgeConfigSpec.IntValue OVERLAY_X;
 	public static ForgeConfigSpec.IntValue OVERLAY_Y;
 
+	public static ForgeConfigSpec COMMON_CONFIG;
+
+	public static final String CATEGORY_ABILITIES = "abilities";
+	public static final Map<Ability, ForgeConfigSpec.BooleanValue> AVAILABLE_ABILITY_MAP = new EnumMap<>(Ability.class);
+
 	public static final String CATEGORY_TOOLS = "tools";
 	public static ForgeConfigSpec.IntValue TOOL_MAX_BREAK_FERRICORE;
 	public static ForgeConfigSpec.IntValue TOOL_MAX_BREAK_BLAZEGOLD;
@@ -150,9 +158,11 @@ public class Config {
 		swapperConfig();
 		overlayConfig();
 		toolLimitsConfig();
+		abilityConfig();
 		playerAccessorConfig();
 
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
+		COMMON_CONFIG = COMMON_BUILDER.build();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
 	}
 
 	private static void registerServerConfigs() {
@@ -417,6 +427,17 @@ public class Config {
 		OVERLAY_Y = COMMON_BUILDER
 				.comment("The Y position of the cooldown overlay - this is pixels up from the bottom of the screen")
 				.defineInRange("overlay_y_position", 70, 0, 500);
+		COMMON_BUILDER.pop();
+	}
+
+	public static boolean isAbilityEnabled(Ability ability) {
+		return !COMMON_CONFIG.isLoaded() || AVAILABLE_ABILITY_MAP.get(ability).get();
+	}
+
+	private static void abilityConfig() {
+		COMMON_BUILDER.comment("Ability settings: For disabling certain abilities").push(CATEGORY_ABILITIES);
+		for (Ability ability : Ability.values())
+			AVAILABLE_ABILITY_MAP.put(ability, COMMON_BUILDER.comment(ability.getName()).define(ability.getName(), true));
 		COMMON_BUILDER.pop();
 	}
 

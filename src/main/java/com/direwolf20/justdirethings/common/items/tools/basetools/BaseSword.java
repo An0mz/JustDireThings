@@ -92,7 +92,7 @@ public class BaseSword extends SwordItem implements ToggleableTool, LeftClickabl
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

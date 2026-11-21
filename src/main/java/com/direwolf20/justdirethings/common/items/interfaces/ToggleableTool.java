@@ -42,12 +42,18 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.direwolf20.justdirethings.common.items.interfaces.AbilityMethods.handleDrops;
 import static com.direwolf20.justdirethings.common.items.interfaces.Helpers.*;
 
 public interface ToggleableTool extends ToggleableItem {
-	EnumSet<Ability> getAbilities();
+	EnumSet<Ability> getAllAbilities();
+
+	default EnumSet<Ability> getAbilities() {
+		return getAllAbilities().stream().filter(Config::isAbilityEnabled)
+				.collect(Collectors.toCollection(() -> EnumSet.noneOf(Ability.class)));
+	}
 
 	Map<Ability, AbilityParams> getAbilityParamsMap();
 
@@ -56,16 +62,16 @@ public interface ToggleableTool extends ToggleableItem {
 	}
 
 	default void registerAbility(Ability ability) {
-		getAbilities().add(ability);
+		getAllAbilities().add(ability);
 	}
 
 	default void registerAbility(Ability ability, AbilityParams abilityParams) {
-		getAbilities().add(ability);
+		getAllAbilities().add(ability);
 		getAbilityParamsMap().put(ability, abilityParams);
 	}
 
 	default boolean hasAbility(Ability ability) {
-		return getAbilities().contains(ability);
+		return getAllAbilities().contains(ability) && Config.isAbilityEnabled(ability);
 	}
 
 	default List<Ability> getUseOnAbilities(ItemStack itemStack) {

@@ -43,7 +43,7 @@ public class BaseLeggings extends ArmorItem implements ToggleableTool, LeftClick
 	}
 
 	@Override
-	public EnumSet<Ability> getAbilities() {
+	public EnumSet<Ability> getAllAbilities() {
 		return abilities;
 	}
 

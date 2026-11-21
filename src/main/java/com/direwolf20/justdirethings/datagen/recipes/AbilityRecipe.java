@@ -3,6 +3,7 @@ package com.direwolf20.justdirethings.datagen.recipes;
 import com.direwolf20.justdirethings.common.items.abilityupgrades.Upgrade;
 import com.direwolf20.justdirethings.common.items.interfaces.Ability;
 import com.direwolf20.justdirethings.common.items.interfaces.ToggleableTool;
+import com.direwolf20.justdirethings.setup.Config;
 import com.direwolf20.justdirethings.setup.Registration;
 import com.google.gson.JsonObject;
 import net.minecraft.core.RegistryAccess;
@@ -75,7 +76,7 @@ public class AbilityRecipe implements SmithingRecipe {
 		if (additionItems.length == 0)
 			return ItemStack.EMPTY;
 		Ability ability = Ability.getAbilityFromUpgradeItem(additionItems[0].getItem());
-		if (ability == null)
+		if (ability == null || !Config.isAbilityEnabled(ability))
 			return ItemStack.EMPTY;
 		CompoundTag tag = itemstack.getOrCreateTag();
 		tag.putBoolean("upgrade_" + ability.getName(), true);
